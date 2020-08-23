@@ -1,0 +1,62 @@
+server:
+  disable: true
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /var/log/promtail/positions.yaml
+
+clients:
+  - url: http://localhost:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: container_logs       
+
+  pipeline_stages:
+
+#parsing docker json
+  - json: 
+      expressions:
+        log: log
+        stream: stream
+        docker_time: time
+        attrs: attrs
+  - json:
+      expressions:
+        container_info: tag
+      source: attrs
+  - json:
+      expressions:
+        container_name: name
+        instance: id #container_id
+      source: container_info
+
+#parsing the actual log
+  - json:
+      expressions:
+        application: source
+        level: level
+      source: log
+  - output:
+      source: log
+  - labels:
+      instance:
+      application:
+      level:
+      container_name:
+  - timestamp:
+      source: docker_time
+      format: RFC3339
+
+  static_configs:
+  - targets:
+    labels:
+      job: container_logs
+      __path__: /var/lib/docker/containers/*/*-json.log
+
+# - job_name: promtail
+#   static_configs: 
+#   - targets:
+#     labels: 
+#       job: promtail_logs
+#       __path__: /var/log/promtail/promtail.log

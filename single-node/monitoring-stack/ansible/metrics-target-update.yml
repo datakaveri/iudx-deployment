@@ -1,0 +1,14 @@
+- hosts: managers
+  tasks:
+    - name: make metrics directory
+      file:
+        path: /tmp/metrics-targets
+        state: directory
+    - name: update targets for system metrics
+      template:
+        src: templates/node-exporter-targets.j2
+        dest: /tmp/metrics-targets/node-exporter.json
+    - name: update targets for docker metrics
+      template:
+        src: templates/docker-targets.j2
+        dest: /tmp/metrics-targets/docker.json

@@ -1,0 +1,20 @@
+groups:
+- name: Server
+  rules:
+  - alert: ServerDown
+    expr: up{job="servers"} == 0
+    for: 5s
+    labels:
+      severity: page
+    annotations:
+      summary: "Server {{ $labels.inventory_name }}({{ $labels.instance }}) down"
+      description: "Server has been down for more than 5 seconds"
+
+- name: Docker
+  rules:
+  - alert: DockerDown
+    expr: up{job="docker"} == 0
+    for: 5s
+    annotations:
+      summary: "Docker daemon at {{ $labels.inventory_name }}({{ $labels.instance }}) down"
+      description: "Docker daemon has been down for more than 5 seconds"

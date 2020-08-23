@@ -1,0 +1,83 @@
+version: "3.2"
+
+networks:
+  default:
+    external:
+      name: calc-net
+
+services:
+  zookeeper:
+    image: zookeeper
+    restart: always
+
+  vertx_sd:
+    image: abhiurn/vertx_sd
+    restart: always
+    volumes:
+      - type: bind
+        source: /tmp/metrics-targets
+        target: /tmp/metrics-targets
+    depends_on:
+      - zookeeper
+
+  prometheus:
+    image: abhiurn/prometheus:latest
+    restart: always
+    user: root
+    ports:
+      - "9090:9090"
+    volumes:
+      - type: volume
+        source: prometheus-volume
+        target: /prometheus
+        volume:
+          nocopy: true
+      - type: bind
+        source: /tmp/metrics-targets
+        target: /tmp/metrics-targets
+        read_only: true
+    depends_on:
+      - zookeeper
+      - vertx_sd
+ 
+  loki:
+    image: abhiurn/loki:latest
+    ports:
+      - "3100:3100"
+    user: root
+    volumes:
+      - type: volume
+        source: loki-volume
+        target: /data/loki
+        volume:
+          nocopy: true
+    command: -config.file=/usr/share/loki-conf/loki-config.yaml
+    restart: always
+
+  grafana:
+    image: abhiurn/grafana:latest
+    restart: always
+    user: root
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: volume
+        source: grafana-volume
+        target: /var/lib/grafana
+        volume:
+          nocopy: true
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${admin_passwd}
+      - GF_PATHS_CONFIG=/usr/share/grafana-conf/custom.ini
+      - GF_PATHS_DATA=/var/lib/grafana 
+      - GF_PATHS_PROVISIONING=/usr/share/grafana-conf/provisioning 
+
+    depends_on:
+      - prometheus
+      - loki
+
+volumes:
+  prometheus-volume:
+  grafana-volume:
+  loki-volume:
