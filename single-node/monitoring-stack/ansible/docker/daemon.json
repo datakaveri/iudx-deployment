@@ -1,0 +1,11 @@
+{ 
+  "metrics-addr":"127.0.0.1:9323",
+  "experimental": true,
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "2m",
+    "max-file": "1",
+    "tag":"{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+  }
+}
+

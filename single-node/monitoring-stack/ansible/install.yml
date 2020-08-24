@@ -1,0 +1,25 @@
+- hosts: cluster
+  tasks:
+#Installing promtail
+  - name: copy promtail-config
+    copy:
+      src: ../promtail/conf/promtail-local-config.yaml
+      dest: /usr/local/etc
+  - name: install promtail using script 
+    script: scripts/promtail.sh -a install
+# Installing node-exporter
+  - name: install node-exporter
+    script: scripts/node-exporter-manager.sh -a install
+# Updating docker daemon for logging and expose of metrics
+  - name: copy daemon.json
+    copy: 
+       src: docker/daemon.json
+       dest: /etc/docker/
+  - name: replace mertics-addr
+    lineinfile:
+      path: /etc/docker/daemon.json
+      regexp: "^(.*)metrics-addr(.*)$"  
+      line: "  \"metrics-addr\":\"{{ ansible_host }}:9323\"," 
+  - name: restarting the daemon
+    shell: systemctl restart docker && ufw allow 9323 
+      
