@@ -5,7 +5,7 @@ docker build -t <repository>/grafana:<tag> .
 ```
 ## Run 
 ```sh
-docker run -p 3000:3000 --user root  --name grafana -v grafana-volume:/var/lib/grafana \
+docker run --net=<network> -p 3000:3000 --user root  --name grafana -v grafana-volume:/var/lib/grafana \
 -e GF_SECURITY_ADMIN_USER=admin \
 -e GF_SECURITY_ADMIN_PASSWORD=${admin_passwd} \
 -e GF_PATHS_CONFIG=/usr/share/grafana-conf/custom.ini \
