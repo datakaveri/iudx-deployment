@@ -1,4 +1,4 @@
-version: "3.2"
+version: "3.4"
 
 networks:
   default:
@@ -8,21 +8,39 @@ networks:
 services:
   zookeeper:
     image: zookeeper
-    restart: always
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.stack==monitoring"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+
 
   vertx_sd:
     image: abhiurn/vertx_sd
-    restart: always
+    # restart: always
     volumes:
       - type: bind
         source: /tmp/metrics-targets
         target: /tmp/metrics-targets
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.stack==monitoring"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
     depends_on:
       - zookeeper
 
   prometheus:
-    image: abhiurn/prometheus:latest
-    restart: always
+    image: prom/prometheus:latest
+    # restart: always
     user: root
     ports:
       - "9090:9090"
@@ -33,15 +51,29 @@ services:
         volume:
           nocopy: true
       - type: bind
-        source: /tmp/metrics-targets
+        source: /tmp/metrics-targetsabhiurn
         target: /tmp/metrics-targets
         read_only: true
+    configs:
+      - source: prometheus-config
+        target: /etc/prometheus/prometheus.yml
+      - source: alert-config
+        target: /etc/prometheus/alertrules.yml   
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.stack==monitoring"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
     depends_on:
       - zookeeper
       - vertx_sd
  
   loki:
-    image: abhiurn/loki:latest
+    image: grafana/loki:1.6.0
     ports:
       - "3100:3100"
     user: root
@@ -51,12 +83,23 @@ services:
         target: /data/loki
         volume:
           nocopy: true
-    command: -config.file=/usr/share/loki-conf/loki-config.yaml
-    restart: always
+    configs: 
+      - source: loki-config
+        target:  /usr/share/loki-conf/loki-config.yml
+    command: -config.file=/usr/share/loki-conf/loki-config.yml
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.stack==monitoring"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+
 
   grafana:
     image: abhiurn/grafana:latest
-    restart: always
     user: root
     ports:
       - "3000:3000"
@@ -66,18 +109,89 @@ services:
         target: /var/lib/grafana
         volume:
           nocopy: true
+    secrets:
+      - grafana_admin_passwd
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=${admin_passwd}
+      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_admin_passwd
       - GF_PATHS_CONFIG=/usr/share/grafana-conf/custom.ini
       - GF_PATHS_DATA=/var/lib/grafana 
       - GF_PATHS_PROVISIONING=/usr/share/grafana-conf/provisioning 
-
+    configs:
+      - source: grafana-config
+        target: /usr/share/grafana-conf/custom.ini
+      - source: dashboards-config
+        target: /usr/share/grafana-conf/provisioning/dashboards/config.yml
+      - source: datasources-config
+        target: /usr/share/grafana-conf/provisioning/datasources/config.yml
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.stack==monitoring"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+        
     depends_on:
       - prometheus
       - loki
+  
+  promtail:
+    image: grafana/promtail:1.6.0
+    entrypoint: /run.sh
+    user: root
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+      
+    configs:
+    - source: promtail-config 
+      target: /usr/share/promtail-conf/promtail-config.yml
+    - source: promtail-run-config
+      target: /run.sh
+      mode: 0755
+    volumes:
+      - type: bind
+        source: /var/log/  #this is to store postions.yml
+        target: /var/log/
+      - type: bind
+        source: /var/lib/docker/containers/ # all conatiner logs
+        target: /var/lib/docker/containers/
+        read_only: true
+    environment:
+      - NODE_HOSTNAME={{.Node.Hostname}}
+      
 
+ 
 volumes:
   prometheus-volume:
   grafana-volume:
   loki-volume:
+
+configs:
+  loki-config:
+    file: loki/conf/loki-config.yml
+  grafana-config:
+    file:  grafana/conf/custom.ini
+  dashboards-config:
+    file:  grafana/conf/provisioning/dashboards/config.yml
+  datasources-config:
+    file: grafana/conf/provisioning/datasources/config.yml
+  promtail-config:
+    file:  promtail/conf/promtail-local-config.yml  
+  promtail-run-config:
+    file: promtail/run.sh
+  alert-config:
+    file:  prometheus/conf/alertrules.yml
+  prometheus-config:
+    file:  prometheus/conf/prometheus.yml
+
+secrets:
+  grafana_admin_passwd:
+    external: true
+    

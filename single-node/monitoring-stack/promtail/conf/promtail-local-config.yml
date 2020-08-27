@@ -4,10 +4,10 @@ server:
   grpc_listen_port: 0
 
 positions:
-  filename: /var/log/promtail/positions.yaml
+  filename: /var/log/positions.yml
 
 clients:
-  - url: http://localhost:3100/loki/api/v1/push
+  - url: http://loki:3100/loki/api/v1/push
 
 scrape_configs:
 - job_name: container_logs       
@@ -54,9 +54,3 @@ scrape_configs:
       job: container_logs
       __path__: /var/lib/docker/containers/*/*-json.log
 
-# - job_name: promtail
-#   static_configs: 
-#   - targets:
-#     labels: 
-#       job: promtail_logs
-#       __path__: /var/log/promtail/promtail.log

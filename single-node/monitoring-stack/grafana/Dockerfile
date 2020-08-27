@@ -1,3 +1,3 @@
 FROM grafana/grafana:latest
 
-COPY conf/  /usr/share/grafana-conf/
+COPY conf/dashboards/  /usr/share/grafana-conf/dashboards/

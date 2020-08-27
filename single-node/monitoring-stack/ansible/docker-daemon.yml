@@ -1,0 +1,13 @@
+- hosts: cluster
+  tasks:
+  - name: copy daemon.json
+    copy: 
+       src: daemon.json
+       dest: /etc/docker/
+  - name: replace mertics-addr
+    lineinfile:
+      path: /etc/docker/daemon.json
+      regexp: "^(.*)metrics-addr(.*)$"  
+      line: "  \"metrics-addr\":\"{{ ansible_host }}:9323\"," 
+  - name: restarting the daemon
+    shell: systemctl restart docker    
