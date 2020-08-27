@@ -35,14 +35,12 @@ scrape_configs:
   - json:
       expressions:
         application: source
-        level: level
       source: log
   - output:
       source: log
   - labels:
       instance:
       application:
-      level:
       container_name:
   - timestamp:
       source: docker_time

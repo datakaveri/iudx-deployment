@@ -39,7 +39,7 @@ services:
       - zookeeper
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus
     # restart: always
     user: root
     ports:
@@ -51,7 +51,7 @@ services:
         volume:
           nocopy: true
       - type: bind
-        source: /tmp/metrics-targetsabhiurn
+        source: /tmp/metrics-targets
         target: /tmp/metrics-targets
         read_only: true
     configs:
