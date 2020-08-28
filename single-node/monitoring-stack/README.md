@@ -1,10 +1,11 @@
 # Monitoring-stack-Installation
-### Installation of Prometheus, Loki, Grafana at Manager node
+Installation of Zookeeper, Vertx_SD, Prometheus, Loki, Grafana services with replicas one at node with "node.labels.stack=monitoring" .
+Promtail service installed in global mode i.e. all nodes have one promtail task running.
 ```sh
 # Zookeeper + Prometheus + Loki + Grafana
 ./install.sh
 ```
-### Installation of Node-Exporter and Promtail 
+### Installation of Node-Exporter
 Done Through Ansible. Refer [here](https://github.com/abhilashvenkatesh/iudx-deployment/tree/master/single-node/monitoring-stack/ansible#ansible)
 
 ## Description
