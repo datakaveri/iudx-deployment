@@ -18,9 +18,9 @@ ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh 
 ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a status"
 ```
 ## Playbooks
-### Installation of Node-exporter, promtail, daemon.json
+### update of daemon.json (only log info opts)
 ```yml
-ansible-playbook install.yml -i inventory.yml
+ansible-playbook docker-daemon.yml -i inventory.yml
 ```
 ### metrics-target-update
 * Updates `/tmp/metrics-targets/node-exporter.json` on all manager nodes with node-exporter targets from inventory group `nodes-with-exporter`
