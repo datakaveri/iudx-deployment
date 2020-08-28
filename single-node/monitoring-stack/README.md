@@ -29,4 +29,4 @@ Done Through Ansible. Refer [here](https://github.com/abhilashvenkatesh/iudx-dep
    first time, and the password is saved to db (i.e. grafana-volume). Subsequent
    running/restarting the docker with new admin credentials doesn't overwrite
    the password stored in Grafana db.
-3. Parsing for labels  might be different for each application , this can be done using [match stage](https://grafana.com/docs/loki/latest/clients/promtail/stages/match/)
+3. Pipeline stages might be different for each application , this can be done using [match stage](https://grafana.com/docs/loki/latest/clients/promtail/stages/match/)
