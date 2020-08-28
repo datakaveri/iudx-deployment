@@ -1,16 +1,27 @@
 # Monitoring-stack-Installation
-Installation of Zookeeper, Vertx_SD, Prometheus, Loki, Grafana services with replicas one at node with "node.labels.stack=monitoring" .
-Promtail service installed in global mode i.e. all nodes have one promtail task running.
+## Steps to install entire Monitoring-stack
+1. The node where the monitoring stack needs to be installed needs to labeled as follows:
 ```sh
-# Zookeeper + Prometheus + Loki + Grafana
+docker node update --label-add stack=monitoring
+```
+2. Updation of overlay network
+- Change the overlay network name "calc-net" in compose file : "manager-infra.yml" to appropriate overlay network.
+3. Run the following script at swarm manager node:
+```sh
+# Zookeeper + Vertx_SD + Prometheus + Loki + Grafana + Promtail
 ./install.sh
 ```
 ### Installation of Node-Exporter
 Done Through Ansible. Refer [here](https://github.com/abhilashvenkatesh/iudx-deployment/tree/master/single-node/monitoring-stack/ansible#ansible)
 
 ## Description
- install.sh  creates random Grafana admin password and installs Prometheus, Loki, Grafana (with the generated admin password) using docker-compose of "manager-infra.yml".
-Then, install.sh calls another script "grafana_users_install.sh"  which creates (by default 2, can be changed by passing no as parameter) Grafana users with one user as editor and all others as viewer access roles. The Grafana admin and user details are saved in secrets.txt during installation.
+ - install.sh  creates random Grafana admin password in docker secrets  
+- ``` docker stack deploy -c manager-infra.yml mon_stack ``` from install.sh.
+ installs Zookeeper, Vertx_SD, Prometheus, Loki, Grafana swarm services with replicas as one at node with "node.labels.stack==monitoring" .
+- Promtail service installed in global mode i.e. all nodes have one promtail task running.
+- Then, install.sh calls another script "grafana_users_install.sh"  which creates (by default 2, can be changed by passing no as parameter) Grafana users with one user as editor and all others as viewer access roles. 
+- The Grafana admin and user details are saved in secrets.txt during installation.
+
 
 ## Note  
 1. Change the overlay network name "calc-net" in compose file : "manager-infra.yml" to appropriate overlay network.
@@ -18,3 +29,4 @@ Then, install.sh calls another script "grafana_users_install.sh"  which creates 
    first time, and the password is saved to db (i.e. grafana-volume). Subsequent
    running/restarting the docker with new admin credentials doesn't overwrite
    the password stored in Grafana db.
+3. Parsing for labels  might be different for each application , this can be done using [match stage](https://grafana.com/docs/loki/latest/clients/promtail/stages/match/)
