@@ -1,4 +1,5 @@
 #!/bin/bash
+#Requirements: docker, manager node of swarm, overlay network
 # Random password generation and creation of docker secrets
 export admin_passwd=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=' | head -c 12) 
 echo -n "$admin_passwd" | docker secret  create grafana_admin_passwd -
