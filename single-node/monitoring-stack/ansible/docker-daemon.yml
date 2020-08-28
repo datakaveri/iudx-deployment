@@ -2,7 +2,7 @@
   tasks:
   - name: copy daemon.json
     copy: 
-       src: daemon.json
+       src: docker/daemon.json
        dest: /etc/docker/
   - name: replace mertics-addr
     lineinfile:
