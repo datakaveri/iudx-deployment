@@ -18,26 +18,6 @@ services:
         delay: 5s
         window: 10s
 
-
-  vertx_sd:
-    image: abhiurn/vertx_sd
-    # restart: always
-    volumes:
-      - type: bind
-        source: /tmp/metrics-targets
-        target: /tmp/metrics-targets
-    deploy:
-      placement:
-        constraints:
-          - "node.labels.stack==monitoring"
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        window: 10s
-    depends_on:
-      - zookeeper
-
   prometheus:
     image: prom/prometheus
     # restart: always
@@ -72,7 +52,7 @@ services:
         window: 10s
     depends_on:
       - zookeeper
-      - vertx_sd
+      
  
   loki:
     image: grafana/loki:1.6.0

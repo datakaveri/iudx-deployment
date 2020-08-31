@@ -9,7 +9,7 @@ echo "admin details : username is admin and password is $admin_passwd" >>secrets
 mkdir  /tmp/metrics-targets
 # deploying the monitoring-stack : Zookeeper, vertx_SD, Prometheus, Grafana,
 # Loki, Promtail
-docker stack deploy -c manager-infra.yml mon_stack
+docker stack deploy -c manager-infra-no-vertx.yml mon_stack
 
 sleep 5 && echo "awake"
 # creation of 2 grafana users
