@@ -35,8 +35,8 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-User=prometheus
-ExecStart=$bin_dst/$bin
+User=root
+ExecStart=$bin_dst/$bin --web.listen-address="127.0.0.1:9100"  
 
 [Install]
 WantedBy=default.target
