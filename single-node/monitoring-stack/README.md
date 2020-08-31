@@ -8,7 +8,7 @@ docker node update --label-add stack=monitoring
 - Change the overlay network name "calc-net" in compose file : "manager-infra.yml" to appropriate overlay network.
 3. Run the following script at swarm manager node:
 ```sh
-# Zookeeper + Vertx_SD + Prometheus + Loki + Grafana + Promtail
+# Zookeeper + Prometheus + Loki + Grafana + Promtail
 ./install.sh
 ```
 ### Installation of Node-Exporter
@@ -16,7 +16,7 @@ Done Through Ansible. Refer [here](https://github.com/abhilashvenkatesh/iudx-dep
 
 ## Description
  - install.sh  creates random Grafana admin password in docker secrets  
-- ``` docker stack deploy -c manager-infra.yml mon_stack ``` from install.sh.
+- ``` docker stack deploy -c manager-infra-no-vertx.yml mon_stack ``` from install.sh.
  installs Zookeeper, Vertx_SD, Prometheus, Loki, Grafana swarm services with replicas as one at node with "node.labels.stack==monitoring" .
 - Promtail service installed in global mode i.e. all nodes have one promtail task running.
 - Then, install.sh calls another script "grafana_users_install.sh"  which creates (by default 2, can be changed by passing no as parameter) Grafana users with one user as editor and all others as viewer access roles. 
@@ -30,3 +30,4 @@ Done Through Ansible. Refer [here](https://github.com/abhilashvenkatesh/iudx-dep
    running/restarting the docker with new admin credentials doesn't overwrite
    the password stored in Grafana db.
 3. Pipeline stages might be different for each application , this can be done using [match stage](https://grafana.com/docs/loki/latest/clients/promtail/stages/match/)
+4. manager-infra.yml contains additional service vertx_sd, which discover vertx instances from zookeeper for prometheus
