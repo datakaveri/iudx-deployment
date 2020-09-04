@@ -5,7 +5,7 @@
 docker node update --label-add stack=monitoring
 ```
 2. Updation of overlay network
-- Change the overlay network name "calc-net" in compose file : "manager-infra.yml" to appropriate overlay network.
+- Change the overlay network name "calc-net" in compose file : "manager-infra.yml/manager-infra-no-vertx.yml" to appropriate overlay network.
 3. Run the following script at swarm manager node:
 ```sh
 # Zookeeper + Prometheus + Loki + Grafana + Promtail

@@ -2,8 +2,6 @@
 ## Ad-hocs
 ### Manage node exporters
 ```sh
-# Install node exporter
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a install"
 
 # Unnstall node exporter
 ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a uninstall"
@@ -18,15 +16,19 @@ ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh 
 ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a status"
 ```
 ## Playbooks
-### update of daemon.json (only log info opts)
+### install of node-exporter and update of daemon.json.
 ```yml
-ansible-playbook docker-daemon.yml -i inventory.yml
+ansible-playbook install.yml -i inventory.yml
 ```
 ### metrics-target-update
+```yml
+ansible-playbook metrics-target-update.yml -i inventory.yml
+```
 * Updates `/tmp/metrics-targets/node-exporter.json` on all manager nodes with node-exporter targets from inventory group `nodes-with-exporter`
 * Updates `/tmp/metrics-targets/docker.json` on all manager nodes with node-exporter targets from inventory group `nodes-with-docker`
 
 ## Template Inventory
+manager: the node where prometheus runs
 ```yml
 all:
   hosts:
