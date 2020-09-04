@@ -1,0 +1,77 @@
+version: "3.4"
+
+networks:
+  single_node-net:
+    external: true
+    driver: overlay
+
+services:
+  rabbitmq:
+    image: rabbitmq:management # using ubuntu based images as its officially supported
+    #setting the hostname, so that when same/new container restarts it uses the same directory to save i.e "/var/lib/rabbitmq/rabbit@hostname"
+    hostname: rabbitmq
+    #storing rabbitmq in named volume, so that when same/new container restarts it uses the same volume to save data
+    volumes:
+      - type: volume
+        source: rabbitmq-volume
+        target: /var/lib/rabbitmq
+    ports:
+      - target: 15671
+        published: 15671
+        mode: host
+      - target: 5671
+        published: 5671
+        mode: host
+    # uid and gid of 'rabbitmq' is 999 in ubuntu based, uid=100, gid-101 in alpine based
+    secrets: 
+      - source: rabbitmq_ca_cert.pem #needed for ssl
+        uid: '999' 
+        gid: '999' 
+        mode: 0600 #by default it will be 0444
+      - source: rabbitmq_server_cert.pem #needed for ssl
+        uid: '999'
+        gid: '999'
+        mode: 0600
+      - source: rabbitmq_server_key.pem #needed for ssl
+        uid: '999' 
+        gid: '999'
+        mode: 0600
+      - source: rabbitmq_definition.json #provision admin user, vhost
+        uid: '999' 
+        gid: '999'
+        mode: 0600 
+    configs:
+    - source: rabbitmq-config
+      target: /etc/rabbitmq/rabbitmq.conf
+    
+    networks:
+      - single_node-net
+    deploy:
+      replicas: 1
+      #placing in particular node with label 'stack=rabbitmq'
+      placement:
+        constraints:
+          - "node.labels.stack==rabbitmq"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    
+volumes:
+  rabbitmq-volume:
+
+configs:
+  rabbitmq-config:
+    file:  conf/rabbitmq.conf
+
+secrets:
+  rabbitmq_ca_cert.pem:
+    external: true
+  rabbitmq_server_cert.pem:
+    external: true
+  rabbitmq_server_key.pem:
+    external: true
+  rabbitmq_definition.json:
+    external: true
+
+    

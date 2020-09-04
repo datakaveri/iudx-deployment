@@ -1,0 +1,91 @@
+version: "3.4"
+
+networks:
+  single_node-net:
+    external: true
+    driver: overlay
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.stack==database"
+    networks:
+      - single_node-net
+    ports:
+      - target: 9200
+        published: 9200
+        mode: host
+    environment:
+      - transport.publish_host={{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - cluster.name=elastic-cluster
+      - node.name=es
+      - discovery.type=single-node
+      # - bootstrap.memory_lock=true
+    volumes:
+      - type: volume
+        source: elastic-volume
+        target: /usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.8.1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.stack==database"
+    ports:
+      - target: 5601
+        published: 5601
+        mode: host
+    networks:
+      - single_node-net
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_SSL_ENABLED=true
+      - SERVER_SSL_CERTIFICATE=/run/secrets/kibana_tls_cert.pem
+      - SERVER_SSL_KEY=/run/secrets/kibana_tls_key.pem
+      - LOGGING_JSON=true # json logging 
+    secrets:
+      - kibana_tls_cert.pem
+      - kibana_tls_key.pem
+      
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.8.1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.stack==database"
+    networks:
+      - single_node-net
+    # environment:
+    configs:
+      - source: logstash-pipeline-config
+        target: /usr/share/logstash/config/pipelines.yml
+      - source: logstash-config
+        target: /usr/share/logstash/config/logstash.yml
+      - source: logstash-rabbitmq-config
+        target: /usr/share/logstash/pipeline/rabbitmq.cfg
+
+secrets:
+  kibana_tls_cert.pem:
+    external: true
+  kibana_tls_key.pem:
+    external: true
+
+volumes:
+ elastic-volume:
+
+configs:
+  logstash-pipeline-config:
+    file: settings/pipelines.yml
+  logstash-config:
+    file: settings/logstash.yml
+  logstash-rabbitmq-config:
+    file: pipeline/rabbitmq.cfg
+
