@@ -64,15 +64,20 @@ services:
     networks:
       - single_node-net
     # environment:
+    secrets:
+      - source: logstash_keystore
+        target: /usr/share/logstash/config/logstash.keystore
     configs:
       - source: logstash-pipeline-config
         target: /usr/share/logstash/config/pipelines.yml
       - source: logstash-config
-        target: /usr/share/logstash/config/logstash.yml
+        target: /usr/share/logstash/config/logstash.yml 
       - source: logstash-rabbitmq-config
         target: /usr/share/logstash/pipeline/rabbitmq.cfg
 
 secrets:
+  logstash_keystore:
+    external: true
   kibana_tls_cert.pem:
     external: true
   kibana_tls_key.pem:
