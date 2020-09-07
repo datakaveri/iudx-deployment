@@ -5,7 +5,8 @@ export admin_passwd=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=
 echo -n "$admin_passwd" | docker secret  create grafana_admin_passwd -
 echo "------------Grafana_details------------" >secrets.txt
 echo "admin details : username is admin and password is $admin_passwd" >>secrets.txt
-
+docker secret create  grafana_server_cert.pem grafana/secrets/grafana_server_cert.pem
+docker secret create grafana_server_key.pem grafana/secrets/grafana_server_key.pem
 mkdir  /tmp/metrics-targets
 # deploying the monitoring-stack : Zookeeper, vertx_SD, Prometheus, Grafana,
 # Loki, Promtail

@@ -1,0 +1,4 @@
+- pipeline.id: test-pipeline
+  path.config: "/usr/share/logstash/pipeline/rabbitmq.cfg"
+  queue.type: persisted
+  queue.max_bytes: 75mb
