@@ -12,7 +12,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.stack==database"
+          - "node.labels.database_node==true"
     networks:
       - single_node-net
     ports:
@@ -37,7 +37,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.stack==database"
+          - "node.labels.database_node==true"
     ports:
       - target: 5601
         published: 5601
@@ -60,7 +60,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.stack==database"
+          - "node.labels.database_node==true"
     networks:
       - single_node-net
     # environment:

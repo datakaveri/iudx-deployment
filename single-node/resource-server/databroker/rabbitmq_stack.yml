@@ -51,7 +51,7 @@ services:
       #placing in particular node with label 'stack=rabbitmq'
       placement:
         constraints:
-          - "node.labels.stack==rabbitmq"
+          - "node.labels.databroker_node==true"
       restart_policy:
         condition: on-failure
         delay: 5s

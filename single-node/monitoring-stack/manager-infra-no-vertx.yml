@@ -10,13 +10,16 @@ services:
   zookeeper:
     image: zookeeper
     deploy:
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
       replicas: 1
       restart_policy:
         condition: on-failure
         delay: 5s
         window: 10s
 
-prometheus:
+  prometheus:
     image: prom/prometheus
     # restart: always
     user: root
@@ -42,7 +45,7 @@ prometheus:
     deploy:
       placement:
         constraints:
-          - "node.labels.stack==monitoring"
+          - "node.labels.monitoring_node==true"
       replicas: 1
       restart_policy:
         condition: on-failure
@@ -50,7 +53,7 @@ prometheus:
         window: 10s
     depends_on:
       - zookeeper
-      
+  
   loki:
     image: grafana/loki:1.6.0
     #transfer of logs to loki over overlay
@@ -72,7 +75,7 @@ prometheus:
     deploy:
       placement:
         constraints:
-          - "node.labels.stack==monitoring"
+          - "node.labels.monitoring_node==true"
       replicas: 1
       restart_policy:
         condition: on-failure
@@ -114,7 +117,7 @@ prometheus:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.stack==monitoring"
+          - "node.labels.monitoring_node==true"
       restart_policy:
         condition: on-failure
         delay: 5s
@@ -177,5 +180,3 @@ secrets:
     external: true  
   grafana_server_key.pem:
     external: true
-  
-    
