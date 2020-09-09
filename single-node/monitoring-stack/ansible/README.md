@@ -2,8 +2,9 @@
 ## Ad-hocs
 ### Manage node exporters
 ```sh
-
-# Unnstall node exporter
+# Install node exporter
+ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a install"
+# Uinstall node exporter
 ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a uninstall"
 
 # Start node exporter

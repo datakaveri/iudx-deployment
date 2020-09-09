@@ -3,13 +3,7 @@
 # Installing node-exporter
   - name: install node-exporter
     script: scripts/node-exporter-manager.sh -a install
-  - name: replace expose web-adress metrics
-    lineinfile:
-      path: /etc/systemd/system/node_exporter.service
-      regexp: "^(.*)ExecStart(.*)$"  
-      line: 'ExecStart=/usr/local/bin/node_exporter --web.listen-address="{{ansible_host}}":9100'
-  - name: restart node_exporter
-    shell: systemctl daemon-reload && systemctl restart node_exporter 
+    
   # Updating docker daemon for logging 
   - name: copy daemon.json
     copy: 

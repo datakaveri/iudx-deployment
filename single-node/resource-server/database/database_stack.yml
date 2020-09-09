@@ -15,10 +15,6 @@ services:
           - "node.labels.database_node==true"
     networks:
       - single_node-net
-    ports:
-      - target: 9200
-        published: 9200
-        mode: host
     environment:
       - transport.publish_host={{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"

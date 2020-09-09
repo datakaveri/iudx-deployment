@@ -41,26 +41,27 @@ ExecStart=$bin_dst/$bin --web.listen-address="127.0.0.1:9100"
 [Install]
 WantedBy=default.target
 EOF
-
+	private_ip=`ifconfig | grep 'inet 10.139.\d*.\d*' | awk '{print $2}'`
+	sed -i "/--web.listen-address/c\ExecStart=$bin_dst/$bin --web.listen-address=\"$private_ip:9100\"" $service_path
 	systemctl daemon-reload
 	systemctl start $bin
 	systemctl enable $bin
-	ufw allow 9100
+	# ufw allow 9100
 
 elif [[ $action == "uninstall" ]]; then
 	systemctl stop $bin
 	systemctl disable $bin
 	rm $service_path
 	rm $bin_dst/$bin
-	ufw deny 9100
+	# ufw deny 9100
 
 elif [[ $action == "start" ]]; then
 	systemctl start $bin
-	ufw allow 9100
+	# ufw allow 9100
 
 elif [[ $action == "stop" ]]; then
 	systemctl stop $bin
-	ufw deny 9100
+	# ufw deny 9100
 
 elif [[ $action == "status" ]]; then
 	systemctl is-active $bin
