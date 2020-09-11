@@ -48,7 +48,7 @@ services:
       - single_node-net
     deploy:
       replicas: 1
-      #placing in particular node with label 'stack=rabbitmq'
+      #placing in particular node with label 'databroker_node=true'
       placement:
         constraints:
           - "node.labels.databroker_node==true"
@@ -56,9 +56,49 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-    
+  backup:
+    image: abhiurn/backup:latest
+    hostname: backup
+    volumes:
+      - type: volume
+        source: rabbitmq-volume
+        target: /var/lib/rabbitmq
+        read_only: true 
+      - type: volume
+        source: backup-volume
+        target: /var/lib/backup
+    secrets:
+      - source: backup_ssh_privkey
+        target: /root/.ssh/iudx_log
+        mode: 0600 
+      - source: backup_ssh_pubkey
+        target: /root/.ssh/iudx_log.pub
+        mode: 0600 
+      - rabbitmq_passwd
+    networks:
+      - single_node-net
+    environment:
+      - rabbitmq_url=https://rabbitmq:15671
+      - remote_machine=                       #mention remote machine url/ip to backup 
+      - remote_user=root
+      - rabbitmq_user=admin
+      - rabbitmq_passwd_file=/run/secrets/rabbitmq_passwd
+      - remote_backup_dir=/root/rabbitmq_backup
+
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.databroker_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+
 volumes:
   rabbitmq-volume:
+  backup-volume:
+
 
 configs:
   rabbitmq-config:
@@ -73,5 +113,9 @@ secrets:
     external: true
   rabbitmq_definition.json:
     external: true
-
-    
+  backup_ssh_privkey: #remote machine private key
+    external: true
+  backup_ssh_pubkey: #remote machine public key
+      external: true
+  rabbitmq_passwd: # rabbimq passwd of admin user
+      external: true
