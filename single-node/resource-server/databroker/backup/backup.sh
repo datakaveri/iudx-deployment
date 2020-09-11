@@ -1,5 +1,7 @@
 #!/bin/sh
- # Script called when there change in LATEST.LOG file of rabbtmq 
+ # Script called when there change in LATEST.LOG file of rabbtmq and 
+ #scp to remote machine on change in backup files
+ #Environment variables: that needs to be specified
 # rabbitmq_url: rabbitmq management url
 # remote_machine: machine to backup to
 # remote_user: user of the backup machine 
@@ -22,9 +24,12 @@ if [[ $check_curl -eq 0 ]]; then
 	
 	if [[ $check_hash -ne 0 ]]; then
 		timestamp=`date -I'seconds'`
+		#making backup file read_only
+		chmod a-w /var/lib/backup/definitions.json
 		scp -q  -i /root/.ssh/iudx_log -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /var/lib/backup/definitions.json "$remote_user@$remote_machine:$remote_backup_dir/definitions-$timestamp.json"
 		check_scp=$?
-		
+		chmod u+w /var/lib/backup/definitions.json
+
 		if [[ $check_scp -ne 0 ]]; then
 			echo "{\"source\":\"rabbitmq_backup\",\"level\": \"error\",\"message\":\"scp failed\"}"
 			exit 1

@@ -1,8 +1,9 @@
+#This python script watches for the changes in file LATEST.LOG and backup the definition
+#by calling the backup.sh
 import time 
 import os
 from watchdog.observers import Observer 
 from watchdog.events import FileSystemEventHandler 
-
 
 class OnMyWatch: 
 	# Set the directory to watch 
@@ -12,6 +13,7 @@ class OnMyWatch:
 		self.observer = Observer() 
 	def run(self): 
 		event_handler = Handler() 
+		#recursively watch files in watchDirectory
 		self.observer.schedule(event_handler, self.watchDirectory, recursive = True) 
 		self.observer.start() 
 		try: 
@@ -31,14 +33,9 @@ class Handler(FileSystemEventHandler):
 		if event.is_directory: 
 			return None
 		elif event.event_type == 'modified' and file_name ==  'LATEST.LOG': 
-			
+			#executes the backup script in shell on change of LATEST.LOG file
 			os.system(self.exec_string)
 			
-			
-			
-
-			
-
 if __name__ == '__main__': 
 	watch = OnMyWatch() 
 	watch.run() 
