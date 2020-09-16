@@ -1,5 +1,5 @@
 #!/bin/bash
-#Requirements: docker, manager node of swarm, overlay network
+#Requirements: docker, manager node of swarm, overlay network "single_node-net"
 # Random password generation and creation of docker secrets
 export admin_passwd=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=' | head -c 12) 
 echo -n "$admin_passwd" | docker secret  create grafana_admin_passwd -
@@ -10,7 +10,7 @@ docker secret create grafana_server_key.pem grafana/secrets/grafana_server_key.p
 mkdir  /tmp/metrics-targets
 # deploying the monitoring-stack : Zookeeper, vertx_SD, Prometheus, Grafana,
 # Loki, Promtail
-docker stack deploy -c manager-infra-no-vertx.yml mon_stack
+docker stack deploy -c mon_stack.yml mon_stack
 
 sleep 5 && echo "awake"
 # creation of 2 grafana users

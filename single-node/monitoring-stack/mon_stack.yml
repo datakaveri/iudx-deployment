@@ -3,7 +3,7 @@ version: "3.4"
 networks:
   default:
     external:
-      name: calc-net
+      name: single_node-net
     driver: overlay
     
 services:
