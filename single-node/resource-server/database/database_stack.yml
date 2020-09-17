@@ -13,6 +13,10 @@ services:
       placement:
         constraints:
           - "node.labels.database_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
     networks:
       - single_node-net
     environment:
@@ -21,6 +25,7 @@ services:
       - cluster.name=elastic-cluster
       - node.name=es
       - discovery.type=single-node
+      - action.auto_create_index=.*
       # - bootstrap.memory_lock=true
     volumes:
       - type: volume
@@ -34,6 +39,10 @@ services:
       placement:
         constraints:
           - "node.labels.database_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
     ports:
       - target: 5601
         published: 5601
@@ -57,6 +66,15 @@ services:
       placement:
         constraints:
           - "node.labels.database_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+
+    volumes:
+      - type: volume
+        source: logstash-volume
+        target: /usr/share/logstash/data
     networks:
       - single_node-net
     # environment:
@@ -64,12 +82,18 @@ services:
       - source: logstash_keystore
         target: /usr/share/logstash/config/logstash.keystore
     configs:
-      - source: logstash-pipeline-config
+      - source: logstash-pipelines
         target: /usr/share/logstash/config/pipelines.yml
-      - source: logstash-config
-        target: /usr/share/logstash/config/logstash.yml 
-      - source: logstash-rabbitmq-config
-        target: /usr/share/logstash/pipeline/rabbitmq.cfg
+      - source: logstash-settings
+        target: /usr/share/logstash/config/logstash.yml
+      - source: logstash-adaptor-logs-pipeline
+        target: /usr/share/logstash/pipeline/adaptor-logs.cfg
+      - source: logstash-database-queue-intake-pipeline
+        target: /usr/share/logstash/pipeline/database-queue-intake.cfg
+      - source: logstash-resource-group-pipeline
+        target: /usr/share/logstash/pipeline/resource-group.cfg
+      - source: logstash-latest-data-pipeline
+        target: /usr/share/logstash/pipeline/latest-data.cfg
 
 secrets:
   logstash_keystore:
@@ -81,12 +105,19 @@ secrets:
 
 volumes:
  elastic-volume:
+ logstash-volume:
 
 configs:
-  logstash-pipeline-config:
+  logstash-pipelines:
     file: settings/pipelines.yml
-  logstash-config:
+  logstash-settings:
     file: settings/logstash.yml
-  logstash-rabbitmq-config:
-    file: pipeline/rabbitmq.cfg
+  logstash-adaptor-logs-pipeline:
+    file: pipeline/adaptor-logs.cfg
+  logstash-database-queue-intake-pipeline:
+    file: pipeline/database-queue-intake.cfg
+  logstash-resource-group-pipeline:
+    file: pipeline/resource-group.cfg
+  logstash-latest-data-pipeline:
+    file: pipeline/latest-data.cfg
 
