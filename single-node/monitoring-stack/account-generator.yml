@@ -9,17 +9,17 @@ services:
   grafna-account-gen:
     image: ubuntu:latest
     configs: 
-      - source: grafana-users-install
+      - source: grafana-account-gen
         target: /run.sh
         mode: 0755
     command: /run.sh
     user: "root"
     volumes:
       - type: bind
-        source: grafana/secrets/passwords/
-        target: /grafana/secrets/passwords/
+        source: secrets/passwords/
+        target: secrets/passwords/
 
 
 configs:
-    grafana-users-install:
-      file: grafana/grafana-users-install.sh
+    grafana-account-gen:
+      file: grafana-account-gen.sh

@@ -199,9 +199,9 @@ configs:
 
 secrets:
   grafana-super-admin-passwd:
-    file: grafana/secrets/passwords/grafana-super-admin-passwd
+    file: secrets/passwords/grafana-super-admin-passwd
   grafana-server-cert.pem:
-    file: grafana/secrets/pki/grafana-server-cert.pem
+    file: secrets/pki/grafana-server-cert.pem
   grafana-server-key.pem:
-    file: grafana/secrets/pki/grafana-server-key.pem
+    file: secrets/pki/grafana-server-key.pem
   
