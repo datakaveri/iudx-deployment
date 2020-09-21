@@ -2,16 +2,16 @@
 #Requirements : jq, curl tools
 
 apt update && apt install -y --no-install-recommends jq curl &> /dev/null 
-adduser_url="https://grafana:3000/api/admin/users"
-access_url="https://grafana:3000/api/orgs/$org_id/users"
-org_url="https://grafana:3000/api/orgs/$org_id"
+adduser_url="https://tasks.grafana:3000/api/admin/users"
+access_url="https://tasks.grafana:3000/api/orgs/$org_id/users"
+org_url="https://tasks.grafana:3000/api/orgs/$org_id"
 org_id=1
-passwd_path="/grafana/secrets/passwords"
+passwd_path="/secrets/passwords"
 admin_username="iudx_super_admin"
 admin_passwd=`cat $passwd_path/grafana-super-admin-passwd`
 update_org() {
 	org_name=$1
-	json_body=$(printf "{\"name\":\"$org_name\" }" | jq .)
+	json_body=$(printf "{\"name\":\"$org_name\"}" | jq .)
 	org_res=`curl -k -s -XPUT -H 'Content-Type: application/json' --user "$admin_username":"$admin_passwd" -d "$json_body" "$org_url"`
 	if [[ $(echo "$org_res" | jq .message) == '"Organization updated"' ]]; then
 		echo "Grafana org updated with $org_name"
