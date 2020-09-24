@@ -44,7 +44,7 @@ change_password \
 
 create_simple_role "logstash-role" "[\"create\"]"
 create_simple_role "rs-role" "[\"read\"]"
-create_simple_role "cat-role" "[\"create\"]"
+create_simple_role "cat-role" "[\"create\",\"read\",\"delete\"]"
 
 create_user \
     $(cat /run/secrets/kibana-admin-username) \
