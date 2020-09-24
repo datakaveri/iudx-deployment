@@ -1,7 +1,7 @@
 version: "3.4"
 
 networks:
-  single_node-net:
+  overlay-net:
     external: true
     driver: overlay
 
@@ -18,19 +18,23 @@ services:
         delay: 5s
         window: 10s
     networks:
-      - single_node-net
+      - overlay-net
     environment:
-      - transport.publish_host={{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
       - cluster.name=elastic-cluster
       - node.name=es
       - discovery.type=single-node
       - action.auto_create_index=.*
-      # - bootstrap.memory_lock=true
+      - xpack.security.enabled=true
+      - xpack.security.audit.enabled=true
+      - xpack.security.transport.ssl.enabled=true
     volumes:
       - type: volume
         source: elastic-volume
         target: /usr/share/elasticsearch/data
+    secrets:
+      - source: elasticsearch.keystore
+        target: /usr/share/elasticsearch/config/elasticsearch.keystore
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.8.1
@@ -48,17 +52,19 @@ services:
         published: 5601
         mode: host
     networks:
-      - single_node-net
+      - overlay-net
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - SERVER_SSL_ENABLED=true
-      - SERVER_SSL_CERTIFICATE=/run/secrets/kibana_tls_cert.pem
-      - SERVER_SSL_KEY=/run/secrets/kibana_tls_key.pem
-      - LOGGING_JSON=true # json logging 
+      - SERVER_SSL_CERTIFICATE=/run/secrets/kibana-tls-cert
+      - SERVER_SSL_KEY=/run/secrets/kibana-tls-key
+      - LOGGING_JSON=true
     secrets:
-      - kibana_tls_cert.pem
-      - kibana_tls_key.pem
-      
+      - source: kibana.keystore
+        target: /usr/share/kibana/data/kibana.keystore
+      - kibana-tls-cert
+      - kibana-tls-key
+
   logstash:
     image: docker.elastic.co/logstash/logstash:7.8.1
     deploy:
@@ -70,16 +76,14 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-
     volumes:
       - type: volume
         source: logstash-volume
         target: /usr/share/logstash/data
     networks:
-      - single_node-net
-    # environment:
+      - overlay-net
     secrets:
-      - source: logstash_keystore
+      - source: logstash.keystore
         target: /usr/share/logstash/config/logstash.keystore
     configs:
       - source: logstash-pipelines
@@ -96,28 +100,32 @@ services:
         target: /usr/share/logstash/pipeline/latest-data.cfg
 
 secrets:
-  logstash_keystore:
-    external: true
-  kibana_tls_cert.pem:
-    external: true
-  kibana_tls_key.pem:
-    external: true
+  elasticsearch.keystore:
+    file: secrets/keystores/elasticsearch.keystore
+  kibana.keystore:
+    file: secrets/keystores/kibana.keystore
+  logstash.keystore:
+    file: secrets/keystores/logstash.keystore
+
+  kibana-tls-cert:
+    file: secrets/pki/kibana-tls-cert
+  kibana-tls-key:
+    file: secrets/pki/kibana-tls-key
 
 volumes:
- elastic-volume:
- logstash-volume:
+  elastic-volume:
+  logstash-volume:
 
 configs:
   logstash-pipelines:
-    file: settings/pipelines.yml
+    file: logstash/settings/pipelines.yml
   logstash-settings:
-    file: settings/logstash.yml
+    file: logstash/settings/logstash.yml
   logstash-adaptor-logs-pipeline:
-    file: pipeline/adaptor-logs.cfg
+    file: logstash/pipeline/adaptor-logs.cfg
   logstash-database-queue-intake-pipeline:
-    file: pipeline/database-queue-intake.cfg
+    file: logstash/pipeline/database-queue-intake.cfg
   logstash-resource-group-pipeline:
-    file: pipeline/resource-group.cfg
+    file: logstash/pipeline/resource-group.cfg
   logstash-latest-data-pipeline:
-    file: pipeline/latest-data.cfg
-
+    file: logstash/pipeline/latest-data.cfg
