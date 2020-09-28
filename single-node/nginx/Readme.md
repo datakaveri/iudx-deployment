@@ -1,7 +1,7 @@
-secrets directory
-``sh
+## Required secrets
+```sh
 secrets/
 └── pki
     ├── https-certificate.pem
     └── https-key.pem
-``sh
+```sh
