@@ -1,0 +1,25 @@
+version: "3.4"
+networks:
+  default:
+    external:
+      name: overlay-net
+    driver: overlay
+
+services: 
+  grafna-account-gen:
+    image: ubuntu:latest
+    configs: 
+      - source: grafana-account-gen
+        target: /run.sh
+        mode: 0755
+    command: /run.sh
+    user: "root"
+    volumes:
+      - type: bind
+        source: secrets/passwords/
+        target: secrets/passwords/
+
+
+configs:
+    grafana-account-gen:
+      file: grafana-account-gen.sh
