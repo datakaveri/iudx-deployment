@@ -1,9 +1,8 @@
 version: "3.4"
-
 networks:
   default:
     external:
-      name: single_node-net
+      name: overlay-net
     driver: overlay
     
 services:
@@ -58,10 +57,10 @@ services:
         target: /tmp/metrics-targets
         read_only: true
     configs:
-      - source: prometheus-config
+      - source: prometheus-settings
         target: /etc/prometheus/prometheus.yml
-      - source: alert-config
-        target: /etc/prometheus/alertrules.yml   
+      # - source: alert-config
+      #   target: /etc/prometheus/alertrules.yml   
     deploy:
       placement:
         constraints:
@@ -90,7 +89,7 @@ services:
         volume:
           nocopy: true
     configs: 
-      - source: loki-config
+      - source: loki-settings
         target:  /usr/share/loki-conf/loki-config.yml
     command: -config.file=/usr/share/loki-conf/loki-config.yml
     deploy:
@@ -118,21 +117,21 @@ services:
         volume:
           nocopy: true
     secrets:
-      - grafana_admin_passwd
-      - grafana_server_cert.pem
-      - grafana_server_key.pem
+      - grafana-super-admin-passwd
+      - grafana-server-cert.pem
+      - grafana-server-key.pem
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_admin_passwd
+      - GF_SECURITY_ADMIN_USER=iudx_super_admin
+      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana-super-admin-passwd
       - GF_PATHS_CONFIG=/usr/share/grafana-conf/custom.ini
       - GF_PATHS_DATA=/var/lib/grafana 
       - GF_PATHS_PROVISIONING=/usr/share/grafana-conf/provisioning
     configs:
-      - source: grafana-config
+      - source: grafana-settings
         target: /usr/share/grafana-conf/custom.ini
-      - source: dashboards-config
+      - source: grafana-dashboards
         target: /usr/share/grafana-conf/provisioning/dashboards/config.yml
-      - source: datasources-config
+      - source: grafana-datasources
         target: /usr/share/grafana-conf/provisioning/datasources/config.yml
     deploy:
       replicas: 1
@@ -149,7 +148,8 @@ services:
       - loki
   
   promtail:
-    image: abhiurn/promtail:1.6.0
+    image: grafana/promtail:1.6.0
+    entrypoint: /run.sh
     user: root
     deploy:
       mode: global
@@ -158,8 +158,11 @@ services:
         delay: 5s
         window: 10s
     configs:
-    - source: promtail-config 
+    - source: promtail-settings
       target: /usr/share/promtail-conf/promtail-config.yml
+    - source: promtail-script
+      target: /run.sh
+      mode: 0755  
     volumes:
       - type: bind
         source: /var/log/  #this is to store postions.yml
@@ -177,28 +180,28 @@ volumes:
   loki-volume:
 
 configs:
-  loki-config:
+  loki-settings:
     file: loki/conf/loki-config.yml
-  grafana-config:
+  grafana-settings:
     file:  grafana/conf/custom.ini
-  dashboards-config:
+  grafana-dashboards:
     file:  grafana/conf/provisioning/dashboards/config.yml
-  datasources-config:
+  grafana-datasources:
     file: grafana/conf/provisioning/datasources/config.yml
-  promtail-config:
+  promtail-settings:
     file:  promtail/conf/promtail-local-config.yml  
-  promtail-run-config:
+  promtail-script:
     file: promtail/run.sh
-  alert-config:
-    file:  prometheus/conf/alertrules.yml
-  prometheus-config:
+  # alert-config:
+  #   file:  prometheus/conf/alertrules.yml
+  prometheus-settings:
     file:  prometheus/conf/prometheus.yml
 
 secrets:
-  grafana_admin_passwd:
-    external: true
-  grafana_server_cert.pem:
-    external: true  
-  grafana_server_key.pem:
-    external: true
+  grafana-super-admin-passwd:
+    file: secrets/passwords/grafana-super-admin-passwd
+  grafana-server-cert.pem:
+    file: secrets/pki/grafana-server-cert.pem
+  grafana-server-key.pem:
+    file: secrets/pki/grafana-server-key.pem
   

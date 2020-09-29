@@ -1,19 +1,23 @@
 #!/bin/bash
 #Requirements: docker, manager node of swarm, overlay network "single_node-net"
+
 # Random password generation and creation of docker secrets
-export admin_passwd=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=' | head -c 12) 
-echo -n "$admin_passwd" | docker secret  create grafana_admin_passwd -
-echo "------------Grafana_details------------" >secrets.txt
-echo "admin details : username is admin and password is $admin_passwd" >>secrets.txt
-docker secret create  grafana_server_cert.pem grafana/secrets/grafana_server_cert.pem
-docker secret create grafana_server_key.pem grafana/secrets/grafana_server_key.pem
-mkdir  /tmp/metrics-targets
+passwd_path="secrets/passwords"
+mkdir $passwd_path
+admin_username="iudx_super_admin"
+admin_passwd=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=' | head -c 12) 
+
+echo -n "$admin_passwd" > $passwd_path/grafana-super-admin-passwd
+echo "------------Grafana_details------------" > $passwd_path/secrets.txt
+echo "Grafana super admin details : username is iudx_super_admin and password is $admin_passwd" >> $passwd_path/secrets.txt
+mkdir  /tmp/metrics-targets # shift to vertx_sd python file
+
 # deploying the monitoring-stack : Zookeeper, vertx_SD, Prometheus, Grafana,
 # Loki, Promtail
-docker stack deploy -c mon_stack.yml mon_stack
+docker stack deploy -c mon-stack.yml mon-stack
 
-sleep 5 && echo "awake"
-# creation of 2 grafana users
-./grafana_users_install.sh 2
+sleep 10 && echo "awake"
 
-unset admin_passwd
+# creation of 3 grafana users
+
+
