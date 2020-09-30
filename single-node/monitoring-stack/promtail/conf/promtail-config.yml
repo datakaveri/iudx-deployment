@@ -54,7 +54,7 @@ scrape_configs:
       host: auth-node # A `host` label will help identify logs from this machine vs others
       __path__: /var/log/debug.log  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
       source: auth
-      sourceUrl:  authorization.iudx.org.in       #mention url of auth
+      sourceUrl:        #mention url of auth
   pipeline_stages:
   - match:
       selector: '{job="auth-logs"}'
