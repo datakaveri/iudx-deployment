@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mkdir -p secrets/keystores
-# chown -R 1000:0 secrets/keystores
+sudo chown -R 1000:0 secrets/keystores
 
 docker run \
     --rm -it \
@@ -21,4 +21,4 @@ docker run \
     -v $(pwd)/secrets:/usr/share/logstash/secrets \
     docker.elastic.co/logstash/logstash:7.8.1 ./run.sh
 
-sudo chown -R $USER:$USER secrets/keystores
+sudo chown -R 1000:0 secrets/keystores
