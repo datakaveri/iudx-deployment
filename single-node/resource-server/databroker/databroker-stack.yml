@@ -1,0 +1,158 @@
+version: "3.4"
+
+networks:
+  default:
+    external:
+      name: overlay-net
+    driver: overlay
+
+
+services:
+  rabbitmq:
+    image: rabbitmq:management # using ubuntu based images as its officially supported
+    #setting the hostname, so that when same/new container restarts it uses the same directory to save i.e "/var/lib/rabbitmq/rabbit@hostname"
+    hostname: rabbitmq
+  # volume stores metadata of queues, excahnges and also persistent queue messages
+    volumes:
+      - type: volume
+        source: rabbitmq-volume
+        target: /var/lib/rabbitmq
+    # ports:
+    #   - target: 15671
+    #     published: 15671
+    #     mode: host
+    #   - target: 5671
+    #     published: 5671
+    #     mode: host
+
+    # uid and gid of 'rabbitmq' is 999 in ubuntu based, uid=100, gid-101 in alpine based
+    secrets: 
+      - source: rabbitmq-ca-cert.pem 
+        uid: '999' 
+        gid: '999' 
+        mode: 0600 #by default it will be 0444
+      - source: rabbitmq-server-cert.pem 
+        uid: '999'
+        gid: '999'
+        mode: 0600
+      - source: rabbitmq-server-key.pem 
+        uid: '999' 
+        gid: '999'
+        mode: 0600
+      - source: rabbitmq-definitions.json #provision admin user, vhost
+        uid: '999' 
+        gid: '999'
+        mode: 0600 
+    configs:
+    - source: rabbitmq-config
+      target: /etc/rabbitmq/rabbitmq.conf
+    
+    deploy:
+      replicas: 1
+      #placing in particular node with label 'databroker_node=true'
+      placement:
+        constraints:
+          - "node.labels.databroker_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+      
+  backup:
+    image: abhiurn/backup:latest
+    hostname: backup
+    volumes:
+      - type: volume
+        source: rabbitmq-volume
+        target: /var/lib/rabbitmq
+        read_only: true 
+      - type: volume
+        source: backup-volume
+        target: /var/lib/backup
+    secrets:
+      - source: backup-ssh-privkey
+        target: /root/.ssh/id_rsa
+        mode: 0600 
+      - source: backup-ssh-pubkey
+        target: /root/.ssh/id_rsa.pub
+        mode: 0600 
+      - rabbitmq-admin-passwd
+
+    environment:
+      - rabbitmq_url=https://rabbitmq:15671
+      - remote_machine=localhost                       
+      - remote_user=root
+      - rabbitmq_user=admin
+      - rabbitmq_passwd_file=/run/secrets/rabbitmq-admin-passwd
+      - remote_backup_dir=/root/rabbitmq-backup
+
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.databroker_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+
+  auth_cred_db:
+    image: postgres:10.14
+    volumes: 
+      - type: volume
+        source: db-volume
+        target: /var/lib/postgresql/data
+    secrets:
+      - source: sql-dump
+        target: /docker-entrypoint-initdb.d/auth-cred-db-schema.sql
+        mode: 0755
+      - auth-cred-db-passwd
+    environment: 
+      - POSTGRES_PASSWORD_FILE=/run/secrets/auth-cred-db-passwd
+      - POSTGRES_USER=iudx_user
+      - POSTGRES_DB=iudx
+    deploy:
+        replicas: 1
+        placement:
+          constraints:
+          - "node.labels.auth_cred_db_node==true"
+        restart_policy:
+          condition: on-failure
+          delay: 5s
+          window: 10s
+
+
+volumes:
+  rabbitmq-volume:
+  backup-volume:
+  db-volume:
+
+
+configs:
+  rabbitmq-config:
+    file:  rabbitmq/conf/rabbitmq.conf
+
+secrets:
+  rabbitmq-ca-cert.pem:
+    file: secrets/pki/rabbitmq-ca-cert.pem
+  rabbitmq-server-cert.pem:
+    file: secrets/pki/rabbitmq-server-cert.pem
+  rabbitmq-server-key.pem:
+    file: secrets/pki/rabbitmq-server-key.pem
+  rabbitmq-definitions.json:
+    file: secrets/passwords/rabbitmq-definitions.json
+
+  backup-ssh-privkey: #remote machine backup's private key
+    file: secrets/pki/backup-ssh-privkey
+  backup-ssh-pubkey: #remote machine backup's public key
+    file: secrets/pki/backup-ssh-pubkey
+  rabbitmq-admin-passwd: # rabbimq passwd of admin user
+    file: secrets/passwords/rabbitmq-admin-passwd
+
+  auth-cred-db-passwd:
+    file: secrets/passwords/auth-cred-db-passwd
+  sql-dump:
+    file: secrets/files/pg-dump.sql
+      
+    
+    

@@ -26,7 +26,7 @@ if [[ $check_curl -eq 0 ]]; then
 		timestamp=`date -I'seconds'`
 		#making backup file read_only
 		chmod a-w /var/lib/backup/definitions.json
-		scp -q  -i /root/.ssh/iudx_log -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /var/lib/backup/definitions.json "$remote_user@$remote_machine:$remote_backup_dir/definitions-$timestamp.json"
+		scp -q  -i /root/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /var/lib/backup/definitions.json "$remote_user@$remote_machine:$remote_backup_dir/definitions-$timestamp.json"
 		check_scp=$?
 		chmod u+w /var/lib/backup/definitions.json
 
