@@ -2,8 +2,8 @@
 # backup_dir: rabbitmq backup directory in the current machine
 #Assumption that backup is only modified at creation of backup and no time else, this ensured by making the backups read_only 
 # retention_time: deletion of files after the specified retention time, in months(m) and days(d)
-# usage eg: backup_deletion.sh -d /root/rabbitmq_backup -t 12m, deletion after 12months of backup creation
-# usage eg: backup_deletion.sh -d /root/rabbitmq_backup -t 60d, deletion after 60days or 2 months of backup creation
+# usage eg: backup-deletion.sh -d /root/rabbitmq-backup -t 12m, deletion of all  files after 12months of backup creation
+# usage eg: backup-deletion.sh -d /root/rabbitmq-backup -t 60d, deletion of all  files after  60days or 2 months of backup creation
 while getopts ":d:t:" opt; do
   case $opt in
     d)
