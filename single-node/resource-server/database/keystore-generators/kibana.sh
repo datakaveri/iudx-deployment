@@ -1,7 +1,7 @@
 #!/bin/bash
 
-keystore="./keystores"
-passwords="./passwords"
+keystore="./secrets/keystores"
+passwords="./secrets/passwords"
 
 kibana-keystore create
 
