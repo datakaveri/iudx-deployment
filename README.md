@@ -3,8 +3,6 @@
 # iudx-deployment
 Installation and setup scripts for single and multi node (clustered) IUDX services.
 
-As a design choice on the architecture, keeping scalability for microservices in mind we chose the Service Mesh Architecture for Catalogue Server and Resource Server. In a service mesh architecture, each microservice is a well-defined module that can be containerized and discovered using service discovery. The orchestration of the services can be such that data-intensive modules are residing closer to the database which also helps in better response times, limits the bandwidth and reduces the cost. Also, it helps in scaling of a specific microservice at ease. 
-
 # Components
 
 The IUDX system will consist of the following services and servers:
@@ -26,6 +24,9 @@ The IUDX system will consist of the following services and servers:
 </p>
 
 Note: For simplicity, all the modules are not mentioned in the figure. 
+
+As a design choice on the architecture, keeping scalability for microservices in mind we chose the Service Mesh Architecture for Catalogue Server and Resource Server. In a service mesh architecture, each microservice is a well-defined module that can be containerized and discovered using service discovery. The orchestration of the services can be such that data-intensive modules are residing closer to the database which also helps in better response times, limits the bandwidth and reduces the cost. Also, it helps in scaling of a specific microservice at ease. 
+
 
 # Features
 
