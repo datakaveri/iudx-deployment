@@ -4,21 +4,20 @@
 secrets
 |-- passwords
 |   |-- elasticsearch-cat-password
-|   |-- elasticsearch-cat-username
 |   |-- elasticsearch-rs-password
-|   |-- elasticsearch-rs-username
 |   |-- elasticsearch-su-password
 |   |-- kibana-admin-password
 |   |-- kibana-admin-username
 |   |-- kibana-system-password
 |   |-- logstash-internal-password
-|   |-- logstash-internal-username
 |   |-- logstash-rabbitmq-password
 |   |-- logstash-rabbitmq-username
 |   `-- logstash-system-password
 `-- pki
     |-- kibana-tls-cert
-    `-- kibana-tls-key
+    |-- kibana-tls-key
+    |-- s3-access-key
+    `-- s3-secret-key
 ```
 
 ## Generate keystores
