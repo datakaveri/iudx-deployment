@@ -1,0 +1,100 @@
+server:
+  disable: true
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /var/log/positions.yml
+  
+clients:
+  - url: http://tasks.loki:3100/loki/api/v1/push
+  
+scrape_configs:
+ #----------------- All containers except cat --------------------------------------------
+- job_name: container
+  static_configs:
+  - targets:
+    labels:
+      job: other-container-logs
+      __path__: /var/lib/docker/containers/*/*-json.log  
+  pipeline_stages:
+  - json:
+      expressions:
+        log: log
+        stream: stream
+        docker_time: time
+        attrs: attrs
+  - json:
+      expressions:
+        container_info: tag
+        source: attrs
+  - json:
+      expressions:
+        container_name: name
+        instance: id #container_id
+        source: container_info
+  - labels:
+      instance:
+      container_name: 
+  - match: 
+      selector: '{container_name=~"iudx-catalogue-server_*"}'
+      action: drop 
+  - output:
+      source: log
+  - timestamp:
+      source: docker_time
+      format: RFC3339
+
+#-----------------------------------------authorisation logs-------------------------------------
+- job_name: system_auth
+  static_configs:
+  - targets:
+    labels: 
+      job: auth-logs  # A `job` label is fairly standard in prometheus and useful for linking metrics and logs.
+      host: auth-node # A `host` label will help identify logs from this machine vs others
+      __path__: /var/log/debug.log  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
+      source: auth
+      sourceUrl:  authorization.iudx.org.in       #mention url of auth
+  pipeline_stages:
+  - match:
+      selector: '{job="auth-logs"}'
+      stages:
+      - json:
+          expressions:
+            level: level
+            type: type
+            notify: notify
+            details: details
+      - labels:
+          level:
+          type:
+  #-------------------------------  cat server logs----------------------------------------------
+- job_name: system_cat
+  static_configs:
+  - targets:
+    labels: 
+      job: cat-logs  
+      host: catalogue
+      __path__: /tmp/iudx/cat.log
+  pipeline_stages:
+  - match:
+      selector: '{job="cat-logs"}'
+      stages:
+      - json:
+          expressions:
+            time: timeMillis
+            source: source
+            sourceUrl: sourceURL
+            level: level
+            origin: loggerName #class from which its logged
+            message: message
+      - labels:
+          source:
+          sourceUrl:
+          #level:        # level will create more streams, 5x times
+          origin:
+      - timestamp:
+          source: time
+          format: UnixMs
+    
+  

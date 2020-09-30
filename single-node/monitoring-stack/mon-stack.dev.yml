@@ -1,0 +1,10 @@
+version: "3.4"
+
+
+services:
+  grafana:
+    ports:
+      - target: 3000
+        published: 3000
+        mode: host    
+    

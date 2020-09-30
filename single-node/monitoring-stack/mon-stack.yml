@@ -21,7 +21,6 @@ services:
 
   vertx_sd:
     image: abhiurn/vertx_sd
-    # restart: always
     volumes:
       - type: bind
         source: /tmp/metrics-targets
@@ -40,7 +39,6 @@ services:
 
   prometheus:
     image: prom/prometheus
-    # restart: always
     user: root
     # ports:
     #   - target: 9090
@@ -106,10 +104,10 @@ services:
   grafana:
     image: abhiurn/grafana:latest
     user: root
-    ports:
-      - target: 3000
-        published: 3000
-        mode: host
+    # ports:
+    #   - target: 3000
+    #     published: 3000
+    #     mode: host
     volumes:
       - type: volume
         source: grafana-volume
@@ -146,7 +144,7 @@ services:
     depends_on:
       - prometheus
       - loki
-  
+    
   promtail:
     image: grafana/promtail:1.6.0
     entrypoint: /run.sh
@@ -162,15 +160,19 @@ services:
       target: /usr/share/promtail-conf/promtail-config.yml
     - source: promtail-script
       target: /run.sh
-      mode: 0755  
+      mode: 0755
     volumes:
       - type: bind
-        source: /var/log/  #this is to store postions.yml
+        source: /var/log/  #this is to store postions.yml,auth logs
         target: /var/log/
       - type: bind
         source: /var/lib/docker/containers/ # all conatiner logs
         target: /var/lib/docker/containers/
         read_only: true
+      - type: bind
+        source: /tmp/         # cat and rs logs
+        target: /tmp/
+        read_only: true                                                                                                              
     environment:
       - NODE_HOSTNAME={{.Node.Hostname}}
       
@@ -189,7 +191,7 @@ configs:
   grafana-datasources:
     file: grafana/conf/provisioning/datasources/config.yml
   promtail-settings:
-    file:  promtail/conf/promtail-local-config.yml  
+    file:  promtail/conf/promtail-config.yml  
   promtail-script:
     file: promtail/run.sh
   # alert-config:

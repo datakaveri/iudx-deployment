@@ -17,10 +17,8 @@ ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh 
 ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a status"
 ```
 ## Playbooks
-### install of node-exporter and update of daemon.json.
-```yml
-ansible-playbook install.yml -i inventory.yml
-```
+
+
 ### metrics-target-update
 ```yml
 ansible-playbook metrics-target-update.yml -i inventory.yml

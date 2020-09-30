@@ -1,9 +1,0 @@
-{ 
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "2m",
-    "max-file": "1",
-    "tag":"{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
-  }
-}
-
