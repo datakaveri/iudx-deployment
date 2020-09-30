@@ -27,22 +27,15 @@ services:
       - kibana-admin-username
       - kibana-admin-password
       - logstash-system-password
-      - logstash-internal-username
       - logstash-internal-password
-      - elasticsearch-rs-username
       - elasticsearch-rs-password
-      - elasticsearch-cat-username
       - elasticsearch-cat-password
 
 secrets:
   elasticsearch-su-password:
     file: secrets/passwords/elasticsearch-su-password
-  elasticsearch-rs-username:
-    file: secrets/passwords/elasticsearch-rs-username
   elasticsearch-rs-password:
     file: secrets/passwords/elasticsearch-rs-password
-  elasticsearch-cat-username:
-    file: secrets/passwords/elasticsearch-cat-username
   elasticsearch-cat-password:
     file: secrets/passwords/elasticsearch-cat-password
 
@@ -55,8 +48,6 @@ secrets:
 
   logstash-system-password:
     file: secrets/passwords/logstash-system-password
-  logstash-internal-username:
-    file: secrets/passwords/logstash-internal-username
   logstash-internal-password:
     file: secrets/passwords/logstash-internal-password
 

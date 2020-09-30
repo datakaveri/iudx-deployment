@@ -52,16 +52,16 @@ create_user \
     "[\"kibana_admin\",\"superuser\"]"
 
 create_user \
-    $(cat /run/secrets/logstash-internal-username) \
+    logstash-internal \
     $(cat /run/secrets/logstash-internal-password) \
     "[\"logstash-role\"]"
 
 create_user \
-    $(cat /run/secrets/elasticsearch-rs-username) \
+    rs-user \
     $(cat /run/secrets/elasticsearch-rs-password) \
     "[\"rs-role\"]"
 
 create_user \
-    $(cat /run/secrets/elasticsearch-cat-username) \
+    cat-user \
     $(cat /run/secrets/elasticsearch-cat-password) \
     "[\"cat-role\"]"
