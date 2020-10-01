@@ -159,7 +159,7 @@ services:
       - type: bind
         source: /tmp/         # cat and rs logs
         target: /tmp/
-        read_only: true                                                                                                              
+        read_only: true
     environment:
       - NODE_HOSTNAME={{.Node.Hostname}}
       
