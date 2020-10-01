@@ -1,4 +1,9 @@
 version: "3.4"
+networks:
+  default:
+    external:
+      name: overlay-net
+    driver: overlay
 
 services:
   zookeeper:
@@ -13,9 +18,3 @@ services:
         delay: 5s
         window: 10s
 
-  grafana:
-    ports:
-      - target: 3000
-        published: 3000
-        mode: host    
-    
