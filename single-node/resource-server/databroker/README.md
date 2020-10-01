@@ -1,6 +1,6 @@
-#Install
+# Install
 
-##Required secrets
+## Required secrets
 ```sh
 secrets/
 |-- files
