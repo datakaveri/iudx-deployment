@@ -18,7 +18,9 @@ scrape_configs:
       job: other-container-logs
       __path__: /var/lib/docker/containers/*/*-json.log  
   pipeline_stages:
-  - json:
+
+#parsing docker json
+  - json: 
       expressions:
         log: log
         stream: stream
@@ -27,20 +29,24 @@ scrape_configs:
   - json:
       expressions:
         container_info: tag
-        source: attrs
+      source: attrs
   - json:
       expressions:
         container_name: name
         instance: id #container_id
-        source: container_info
+      source: container_info
+
   - labels:
       instance:
-      container_name: 
+      container_name:
+  
   - match: 
       selector: '{container_name=~"iudx-catalogue-server_*"}'
-      action: drop 
+      action : drop
+              
   - output:
       source: log
+
   - timestamp:
       source: docker_time
       format: RFC3339
@@ -54,7 +60,7 @@ scrape_configs:
       host: auth-node # A `host` label will help identify logs from this machine vs others
       __path__: /var/log/debug.log  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
       source: auth
-      sourceUrl:        #mention url of auth
+      sourceUrl: auth.test        #mention url of auth
   pipeline_stages:
   - match:
       selector: '{job="auth-logs"}'
