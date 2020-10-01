@@ -6,19 +6,6 @@ networks:
     driver: overlay
     
 services:
-  zookeeper:
-    image: zookeeper
-    deploy:
-      placement:
-        constraints:
-          - "node.labels.monitoring_node==true"
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        window: 10s
-
-
   vertx_sd:
     image: abhiurn/vertx_sd
     volumes:
