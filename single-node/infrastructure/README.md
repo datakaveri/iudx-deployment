@@ -1,13 +1,15 @@
-# Provisioning docker Swarm 
+# Provisioning Docker Swarm 
 ## Pre-Requisites
-1) Provisioning of VMs 
+1) Provisioning of VMs
 
-2) Firewall rules to setup docker swarm 
-- Ssh port 22 needs to open in all VMs
-Every physical node needs to expose the following ports for docker swarm:
-- TCP port 2377 for cluster management communications
-- TCP and UDP port 7946 for communication among nodes
-- UDP port 4789 for overlay network traffic
+2) Preparation of inventory.yml file using template shown at the end.
+
+3) Firewall rules to setup docker swarm 
+- Ssh port 22 needs to open in all VMs.
+- Every physical node needs to expose the following ports for Docker swarm:
+  - TCP port 2377 for cluster management communications
+  - TCP and UDP port 7946 for communication among nodes
+  - UDP port 4789 for overlay network traffic
 
 ## Install
 
