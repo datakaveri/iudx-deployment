@@ -14,6 +14,14 @@ nginx
     `-- rs-key
 ```
 
+## Design
+* Setting the domain name in a variable and an explicit DNS resolver with TTL. [Ref](https://www.nginx.com/blog/dns-service-discovery-nginx-plus/#Methods-for-Service-Discovery-with-DNS-for-NGINX-and-NGINX%C2%A0Plus)
+    * NGINX re-resolves the name according to the TTL, thus handling change in IP addresses of service containers
+    * NGINX startup or reload operation doesn't fail when the domain name can't be resolved
+    * Round-robin loadbalancing on resolved IP addresses by default
+* HTTP to HTTPS redirection
+* SSL optimization
+
 # Install
 
 ## Required secrets
