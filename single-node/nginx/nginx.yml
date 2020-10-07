@@ -50,6 +50,10 @@ services:
       - target: 80
         published: 80
         mode: host
+    volumes:
+      - type: bind
+        source: /usr/share/app/dk-customer-ui
+        target: /usr/share/app/dk-customer-ui
     secrets:
       - source: cat-key
         target: /etc/ssl/cat-key
