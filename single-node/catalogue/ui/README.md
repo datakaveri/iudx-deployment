@@ -1,11 +1,12 @@
 # Directory Structure
+```sh
 .
 |-- README.md
 `-- docker
     |-- Dockerfile 
     |-- copy-ui.sh (copies the built ui to mounted location in production)
     `-- docker-build.sh (script build and push the docker image)
-
+```
 # Build 
 ```sh
 # this builds docker image with UI and has script to copy the built UI to mounted location
