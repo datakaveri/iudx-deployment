@@ -1,17 +1,19 @@
 # NGINX
 ## Project structure
 ```sh
-nginx
+.
 |-- README.md
+|-- cat-nginx.yml
 |-- conf
 |   |-- cat.conf
 |   `-- rs.conf
-|-- nginx.yml
+|-- rs-nginx.yml
 `-- secrets
     |-- cat-cert
     |-- cat-key
     |-- rs-cert
     `-- rs-key
+
 ```
 
 ## Design
@@ -47,10 +49,12 @@ docker node update --label-add cat_nginx_node=true <hostname/ID>
 On a docker-swarm master node, run
 ```sh
 # Deploy stack
-docker stack deploy -c nginx.yml nginx
+docker stack deploy -c rs-nginx.yml rs-nginx.yml
+docker stack deploy -c cat-nginx.yml cat-nginx
 
 # Remove stack
-docker stack rm nginx
+docker stack rm rs-nginx
+docker stack rm cat-nginx
 ```
 
 # Configuration
