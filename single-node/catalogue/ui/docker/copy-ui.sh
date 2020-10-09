@@ -4,3 +4,4 @@ set -e
 mkdir -p /mnt/app/
 cp -r dk-customer-ui/ /mnt/app/
 echo "successfully copied the files"
+
