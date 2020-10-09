@@ -53,7 +53,8 @@ docker stack deploy -c rs-nginx.yml rs-nginx.yml
 docker stack deploy -c cat-nginx.yml cat-nginx
 
 # Remove stack
-docker stack rm nginx
+docker stack rm rs-nginx
+docker stack rm cat-nginx
 ```
 
 # Configuration
