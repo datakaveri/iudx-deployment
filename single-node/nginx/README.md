@@ -69,7 +69,7 @@ limit_conn rs_conn_per_ip <max-number-of-active-connections-to-RS-per-IP>;
 ### Limit overall request rate
 ```sh
 limit_req_zone $server_name zone=rs_req_total:<size> rate=<max-request-rate-to-RS>;
-limit_req zone=rs_req_total;
+limit_req zone=rs_req_total burst=<number-of-burst-requests-allowed> nodelay;
 ```
 ### Limit request rate per IP
 ```sh
@@ -91,7 +91,7 @@ limit_conn cat_conn_per_ip <max-number-of-active-connections-to-CAT-per-IP>;
 ### Limit overall request rate
 ```sh
 limit_req_zone $server_name zone=cat_req_total:<size> rate=<max-request-rate-to-CAT>;
-limit_req zone=cat_req_total;
+limit_req zone=cat_req_total burst=<number-of-burst-requests-allowed> nodelay;
 ```
 ### Limit request rate per IP
 ```sh
