@@ -14,6 +14,14 @@ nginx
     `-- rs-key
 ```
 
+## Design
+* Setting the domain name in a variable and an explicit DNS resolver with TTL. [Ref](https://www.nginx.com/blog/dns-service-discovery-nginx-plus/#Methods-for-Service-Discovery-with-DNS-for-NGINX-and-NGINX%C2%A0Plus)
+    * NGINX re-resolves the name according to the TTL, thus handling change in IP addresses of service containers
+    * NGINX startup or reload operation doesn't fail when the domain name can't be resolved
+    * Round-robin loadbalancing on resolved IP addresses by default
+* HTTP to HTTPS redirection
+* SSL optimization
+
 # Install
 
 ## Required secrets
@@ -61,7 +69,7 @@ limit_conn rs_conn_per_ip <max-number-of-active-connections-to-RS-per-IP>;
 ### Limit overall request rate
 ```sh
 limit_req_zone $server_name zone=rs_req_total:<size> rate=<max-request-rate-to-RS>;
-limit_req zone=rs_req_total;
+limit_req zone=rs_req_total burst=<number-of-burst-requests-allowed> nodelay;
 ```
 ### Limit request rate per IP
 ```sh
@@ -83,7 +91,7 @@ limit_conn cat_conn_per_ip <max-number-of-active-connections-to-CAT-per-IP>;
 ### Limit overall request rate
 ```sh
 limit_req_zone $server_name zone=cat_req_total:<size> rate=<max-request-rate-to-CAT>;
-limit_req zone=cat_req_total;
+limit_req zone=cat_req_total burst=<number-of-burst-requests-allowed> nodelay;
 ```
 ### Limit request rate per IP
 ```sh
