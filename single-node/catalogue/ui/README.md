@@ -1,4 +1,4 @@
-#Directory Structure
+# Directory Structure
 .
 |-- README.md
 `-- docker
@@ -6,12 +6,12 @@
     |-- copy-ui.sh (copies the built ui to mounted location in production)
     `-- docker-build.sh (script build and push the docker image)
 
-#Build 
+# Build 
 ```sh
 # this builds docker image with UI and has script to copy the built UI to mounted location
 ./docker/docker-build.sh
-
-#Note
+```
+# Note
 1) When CI/CD pipeline with local docker registry is functional,placing this build scripts in dk-customer-ui repo makes sense.
  - Whenever there is change is prod branch of UI, CI/CD pipeline triggers this
    build scripts and push the docker image to docker local registry
