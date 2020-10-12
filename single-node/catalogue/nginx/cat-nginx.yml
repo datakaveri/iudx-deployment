@@ -23,7 +23,7 @@ services:
       - overlay-net
 
   nginx:
-    image: nginx:alpine
+    image: nginx:mainline-alpine
     deploy:
       replicas: 1
       placement:

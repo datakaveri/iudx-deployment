@@ -21,7 +21,8 @@
 * HTTP to HTTPS redirection
 * SSL optimization
 * Use of environment variables in the nginx config. 
-    * Environment variables are supplied through .env file.
+    * Environment variables are supplied through .env file (example file
+      provided in the directory)
     * Working: env variables of config  placed in  templates directory (NGINX_ENVSUBST_TEMPLATE_DIR) are subsituted with 
       values and is put in /etc/nginx directory (NGINX_ENVSUBST_OUTPUT_DIR).
     * This avoids in changing the actual config and instead it can be set as varaibles in .env file
@@ -36,6 +37,8 @@ secrets
 |-- cat-cert
 |-- cat-key
 ```
+## Required environment variables
+Change the example environment file in the directory appropriately.
 
 ## Node labels
 On a docker-swarm master node, run
@@ -76,17 +79,6 @@ limit_req zone=cat_req_total burst=<number-of-burst-requests-allowed> nodelay;
 limit_req_zone $binary_remote_addr zone=cat_req_per_ip:<size> rate=<max-request-rate-to-CAT-per-IP>r/s;
 limit_req zone=cat_req_per_ip burst=<number-of-burst-requests-allowed> nodelay;
 ```
-
-# .env file template
-
-```sh
-NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
-NGINX_ENVSUBST_TEMPLATE_SUFFIX=.template
-NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/
-#change required in below fields 
-API_SERVER_NAME=api.catalogue.io.test 
-API_SERVICE_NAME=calc  
-API_SERVICE_PORT=8080
-API_SERVER_PROTOCOL=http
-UI_SERVER_NAME="~\b(?!api\.)(\w+(?:-\w+)*)(?=\.catalogue\.io\.test\b)" catalogue.io.test
-```
+# Note 
+    *   Don't use nginx 1.19 (mainline) experimental features as it might
+        contain bugs.
