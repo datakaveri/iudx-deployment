@@ -3,13 +3,16 @@
 # Installing docker
   - name: install docker
     script: scripts/docker-install.sh
+    become: yes
 # Updating docker daemon for logging 
   - name: copy daemon.json
     copy: 
        src: files/docker-daemon.json
        dest: /etc/docker/daemon.json
+    become: yes
   - name: restarting the daemon
-    shell: systemctl restart docker && systemctl status docker | grep "Active"
+    shell:  systemctl restart docker &&  systemctl status docker | grep "Active"
+    become: yes
  
 
     
