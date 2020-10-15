@@ -21,7 +21,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1602761590098,
+  "iteration": 1602791949754,
   "links": [],
   "panels": [
     {
@@ -41,7 +41,7 @@
             "query": {
               "params": [
                 "A",
-                "1m",
+                "10m",
                 "now"
               ]
             },
@@ -64,7 +64,7 @@
             "query": {
               "params": [
                 "B",
-                "1m",
+                "10m",
                 "now"
               ]
             },
@@ -139,7 +139,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "count_over_time(({container_name=~\"database_logstash.*.*\"}|~`\"message\":\"JSON parse error*`)[1m])  ",
+          "expr": "count_over_time(({container_name=~\"database_logstash.*.*\"}|~`\"message\":\"JSON parse error*`)[1m])   ",
           "interval": "",
           "legendFormat": "ERROR: json-parse error,  LOC: container  '{{container_name}}' at host '{{host}}'",
           "refId": "A"
@@ -356,5 +356,5 @@
   "timezone": "",
   "title": "Database",
   "uid": "OYWgQeFMk",
-  "version": 3
+  "version": 5
 }
