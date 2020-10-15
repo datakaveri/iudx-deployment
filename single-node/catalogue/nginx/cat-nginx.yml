@@ -23,7 +23,7 @@ services:
       - overlay-net
 
   nginx:
-    image: nginx:stable-alpine
+    image: nginx:mainline-alpine
     deploy:
       replicas: 1
       placement:
@@ -51,9 +51,11 @@ services:
         target: /etc/ssl/cat-cert
     configs:
       - source: cat-conf
-        target: /etc/nginx/nginx.conf
+        target: /etc/nginx/templates/nginx.conf.template
     networks:
       - overlay-net
+    env_file:
+      - ./.env
 
   
 
