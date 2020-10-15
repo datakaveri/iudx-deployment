@@ -21,16 +21,10 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-    depends_on:
-      - zookeeper
 
   prometheus:
     image: prom/prometheus
     user: root
-    # ports:
-    #   - target: 9090
-    #     published: 9090
-    #     mode: host
     volumes:
       - type: volume
         source: prometheus-volume
@@ -44,8 +38,6 @@ services:
     configs:
       - source: prometheus-settings
         target: /etc/prometheus/prometheus.yml
-      # - source: alert-config
-      #   target: /etc/prometheus/alertrules.yml   
     deploy:
       placement:
         constraints:
@@ -55,17 +47,10 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-    depends_on:
-      - zookeeper
-      - vertx_sd
  
   loki:
     image: grafana/loki:1.6.0
     #transfer of logs to loki over overlay
-    #ports:
-      # - target: 3100
-      #   published: 3100
-      #   mode: host
     user: root
     volumes:
       - type: volume
@@ -91,10 +76,6 @@ services:
   grafana:
     image: abhiurn/grafana:latest
     user: root
-    # ports:
-    #   - target: 3000
-    #     published: 3000
-    #     mode: host
     volumes:
       - type: volume
         source: grafana-volume
@@ -118,6 +99,8 @@ services:
         target: /usr/share/grafana-conf/provisioning/dashboards/config.yml
       - source: grafana-datasources
         target: /usr/share/grafana-conf/provisioning/datasources/config.yml
+      - source: grafana-notifiers
+        target: /usr/share/grafana-conf/provisioning/notifiers/config.yml
     deploy:
       replicas: 1
       placement:
@@ -127,11 +110,9 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-        
-    depends_on:
-      - prometheus
-      - loki
-    
+    env_file: 
+     - ./.grafana.env 
+
   promtail:
     image: grafana/promtail:1.6.0
     entrypoint: /run.sh
@@ -177,12 +158,12 @@ configs:
     file:  grafana/conf/provisioning/dashboards/config.yml
   grafana-datasources:
     file: grafana/conf/provisioning/datasources/config.yml
+  grafana-notifiers:
+    file: grafana/conf/provisioning/notifiers/config.yml
   promtail-settings:
     file:  promtail/conf/promtail-config.yml  
   promtail-script:
     file: promtail/run.sh
-  # alert-config:
-  #   file:  prometheus/conf/alertrules.yml
   prometheus-settings:
     file:  prometheus/conf/prometheus.yml
 

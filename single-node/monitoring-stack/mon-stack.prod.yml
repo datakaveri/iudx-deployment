@@ -6,4 +6,3 @@ services:
       - target: 3000
         published: 443
         mode: host    
-    
