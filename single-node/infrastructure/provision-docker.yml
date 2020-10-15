@@ -4,15 +4,18 @@
   - name: install docker
     script: scripts/docker-install.sh
     become: yes
+    become_user: root
 # Updating docker daemon for logging 
   - name: copy daemon.json
     copy: 
        src: files/docker-daemon.json
        dest: /etc/docker/daemon.json
     become: yes
+    become_user: root
   - name: restarting the daemon
     shell:  systemctl restart docker &&  systemctl status docker | grep "Active"
     become: yes
+    become_user: root
  
 
     

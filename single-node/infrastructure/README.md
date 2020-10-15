@@ -14,20 +14,20 @@
 ## Install
 
 ```yml
-# installation of docker and updation of docker daemon.json  in ubuntu hosts
+# installation of docker and updation of docker daemon.json  in ubuntu hosts as root user 
 ansible-playbook -v  provision-docker.yml -i inventory.yml 
 
 # create a docker swarm from one of the manager-nodes
-ansible -v <manager-node> -i inventory.yml -m shell -a "docker swarm init --advertise-addr=<private-address>"
+ansible -v <manager-node> -i inventory.yml -m shell -a "sudo docker swarm init --advertise-addr=<private-address>"
 
 # join manager-nodes to swarm
-ansible -v manager-nodes  -i inventory.yml -m shell -a "docker swarm join --token <manager-token> <advertise-addr>"
+ansible -v manager-nodes  -i inventory.yml -m shell -a "sudo docker swarm join --token <manager-token> <advertise-addr>"
 
 #join worker-nodes to swarm
-ansible -v worker-nodes  -i inventory.yml -m shell -a "docker swarm join --token <worker-token> <advertise-addr>"
+ansible -v worker-nodes  -i inventory.yml -m shell -a "sudo docker swarm join --token <worker-token> <advertise-addr>"
 
 #create attachable docker overlay-network named "overlay-net" from one of the manager nodes
-ansible -v <manager-node>  -i inventory.yml -m shell -a "docker network create --subnet=<subnet> -d overlay --attachable overlay-net"
+ansible -v <manager-node>  -i inventory.yml -m shell -a "sudo docker network create --subnet=<subnet> -d overlay --attachable overlay-net"
 
 ```
 
@@ -35,19 +35,27 @@ ansible -v <manager-node>  -i inventory.yml -m shell -a "docker network create -
 ```yml
 all:
  hosts:
-   ... 
+  node1:
+    ansible_host: 
+  node2:
+    ansible_host:
+  .... 
  vars: 
    ansible_python_interpreter: /usr/bin/python3
-   ansible_user: root
+   ansible_user: username			 #  username with which one has ssh access to machines
 
  children:
-   manager-nodes:
+   manager-nodes:				 # nodes that needs to be manager
      hosts:
+       node1:
        ...
-   worker-nodes:
+   worker-nodes:				 # nodes that needs to be a worker
      hosts:
+       node2:
        ...
-   cluster:
+   cluster:					 # all docker swarm nodes
      hosts:
+       node1:
+       node2:
        ...
 ```
