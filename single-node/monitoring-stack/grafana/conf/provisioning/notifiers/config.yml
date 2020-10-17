@@ -10,7 +10,7 @@ notifiers:
     is_default: true
     send_reminder: false
     frequency: 1h
-    disable_resolve_message: false
+    disable_resolve_message: true
     # See `Supported Settings` section for settings supported for each
     # alert notification type.
     settings:

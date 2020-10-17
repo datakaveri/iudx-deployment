@@ -20,8 +20,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1602791949754,
+  "id": 8,
+  "iteration": 1602848564439,
   "links": [],
   "panels": [
     {
@@ -41,7 +41,7 @@
             "query": {
               "params": [
                 "A",
-                "10m",
+                "15m",
                 "now"
               ]
             },
@@ -64,7 +64,7 @@
             "query": {
               "params": [
                 "B",
-                "10m",
+                "15m",
                 "now"
               ]
             },
@@ -282,7 +282,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 11
       },
@@ -315,7 +315,7 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "Loki",
           "value": "Loki"
         },
@@ -335,7 +335,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
@@ -356,5 +356,5 @@
   "timezone": "",
   "title": "Database",
   "uid": "OYWgQeFMk",
-  "version": 5
+  "version": 9
 }
