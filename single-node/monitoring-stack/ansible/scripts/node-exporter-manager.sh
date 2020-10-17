@@ -36,8 +36,7 @@ After=network-online.target
 
 [Service]
 User=root
-ExecStart=$bin_dst/$bin --web.listen-address="127.0.0.1:9100"  
-
+ExecStart=$bin_dst/$bin --web.listen-address="127.0.0.1:9100" --log.format=json --collector.filesystem.ignored-mount-points="^/(dev|proc|sys|run|boot|etc|var/lib/docker/.+)($|/)" ----collector.filesystem.ignored-fs-types="^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$"  
 [Install]
 WantedBy=default.target
 EOF

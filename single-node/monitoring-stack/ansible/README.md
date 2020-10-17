@@ -3,25 +3,23 @@
 ### Manage node exporters
 ```sh
 # Install node exporter
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a install"
+ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a install"
 # Uinstall node exporter
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a uninstall"
+ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a uninstall"
 
 # Start node exporter
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a start"
+ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a start"
 
 # Stop node exporter
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a stop"
+ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a stop"
 
 # Check status
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a status"
+ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a status"
 ```
 ## Playbooks
-
-
 ### metrics-target-update
 ```yml
-ansible-playbook metrics-target-update.yml -i inventory.yml
+ansible-playbook -i inventory.yml metrics-target-update.yml
 ```
 * Updates `/tmp/metrics-targets/node-exporter.json` on all manager nodes with node-exporter targets from inventory group `nodes-with-exporter`
 * Updates `/tmp/metrics-targets/docker.json` on all manager nodes with node-exporter targets from inventory group `nodes-with-docker`
@@ -34,8 +32,6 @@ all:
     ...
   children:
     managers:
-      ...
-    cluster:
       ...
     nodes-with-docker:
       hosts:
