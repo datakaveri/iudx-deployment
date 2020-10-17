@@ -41,7 +41,7 @@ ExecStart=$bin_dst/$bin --web.listen-address="127.0.0.1:9100" --log.format=json 
 WantedBy=default.target
 EOF
 	private_ip=`ifconfig | grep 'inet 10.139.\d*.\d*' | awk '{print $2}'`
-	sed -i "/--web.listen-address/c\ExecStart=$bin_dst/$bin --web.listen-address=\"$private_ip:9100\"" $service_path
+	sed -i "/--web.listen-address/c\ExecStart=$bin_dst/$bin --web.listen-address=\"$private_ip:9100\" --log.format=json --collector.filesystem.ignored-mount-points=\"^/(dev|proc|sys|run|boot|etc|var/lib/docker/.+)($|/)\" --collector.filesystem.ignored-fs-types=\"^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$\"   " $service_path
 	systemctl daemon-reload
 	systemctl start $bin
 	systemctl enable $bin
