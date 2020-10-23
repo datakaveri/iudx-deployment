@@ -8,6 +8,4 @@ services:
       - target: 5671
         published: 24567
         mode: host
-  backup:
-    environment:
-      - remote_machine=    #mention remote machine url/ip to backup 
+

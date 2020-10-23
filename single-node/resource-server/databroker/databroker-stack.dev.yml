@@ -18,3 +18,9 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
+  auth_cred_db:
+    ports:
+      - target: 5432
+        published: 5433
+        mode: host
+

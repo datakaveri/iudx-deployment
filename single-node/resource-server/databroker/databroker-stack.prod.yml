@@ -8,6 +8,9 @@ services:
       - target: 5671
         published: 24567
         mode: host
-  backup:
-    environment:
-      - remote_machine=    #mention remote machine url/ip to backup 
+  auth_cred_db:
+    ports:
+      - target: 5432
+        published: 5432
+        mode: host
+

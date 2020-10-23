@@ -17,13 +17,6 @@ services:
       - type: volume
         source: rabbitmq-volume
         target: /var/lib/rabbitmq
-    # ports:
-    #   - target: 15671
-    #     published: 15671
-    #     mode: host
-    #   - target: 5671
-    #     published: 5671
-    #     mode: host
 
     # uid and gid of 'rabbitmq' is 999 in ubuntu based, uid=100, gid-101 in alpine based
     secrets: 
@@ -48,7 +41,7 @@ services:
       target: /etc/rabbitmq/rabbitmq.conf
     
     deploy:
-      replicas: 1
+      replicas: 0
       #placing in particular node with label 'databroker_node=true'
       placement:
         constraints:
@@ -80,14 +73,11 @@ services:
 
     environment:
       - rabbitmq_url=https://rabbitmq:15671
-      - remote_machine=localhost                       
-      - remote_user=root
       - rabbitmq_user=admin
       - rabbitmq_passwd_file=/run/secrets/rabbitmq-admin-passwd
-      - remote_backup_dir=/root/rabbitmq-backup
 
     deploy:
-      replicas: 1
+      replicas: 0
       placement:
         constraints:
           - "node.labels.databroker_node==true"
@@ -95,6 +85,8 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
+    env_file:
+        - ./.rabbitmq-backup.env
 
   auth_cred_db:
     image: postgres:10.14
@@ -103,14 +95,18 @@ services:
         source: db-volume
         target: /var/lib/postgresql/data
     secrets:
-      - source: sql-dump
+      - source: auth-cred-db-user
+        target: /docker-entrypoint-initdb.d/auth-cred-db-user.sh
+        mode: 0755
+      - source: auth-cred-db-schema
         target: /docker-entrypoint-initdb.d/auth-cred-db-schema.sql
         mode: 0755
       - auth-cred-db-passwd
+      - postgres-super-user-passwd
     environment: 
-      - POSTGRES_PASSWORD_FILE=/run/secrets/auth-cred-db-passwd
-      - POSTGRES_USER=iudx_user
-      - POSTGRES_DB=iudx
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres-super-user-passwd
+      - POSTGRES_USER=iudx_psql_super_user
+      - AUTH_CRED_DB_USER=iudx_user
     deploy:
         replicas: 1
         placement:
@@ -149,10 +145,14 @@ secrets:
   rabbitmq-admin-passwd: # rabbimq passwd of admin user
     file: secrets/passwords/rabbitmq-admin-passwd
 
+  postgres-super-user-passwd:
+    file: secrets/passwords/postgres-super-user-passwd
   auth-cred-db-passwd:
     file: secrets/passwords/auth-cred-db-passwd
-  sql-dump:
-    file: secrets/files/pg-dump.sql
+  auth-cred-db-schema:
+    file: secrets/config/auth-cred-db-schema.sql
+  auth-cred-db-user:
+    file: secrets/config/auth-cred-db-user.sh
       
     
     
