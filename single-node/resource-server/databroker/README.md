@@ -3,18 +3,23 @@
 ## Required secrets
 ```sh
 secrets/
+|-- config
+|   |-- auth-cred-db-schema.sql
+|   `-- auth-cred-db-user.sh
 |-- files
-|   `-- pg-dump.sql
+|   `-- pg_dump_data.sql
 |-- passwords
 |   |-- auth-cred-db-passwd
+|   |-- postgres-super-user-passwd
 |   |-- rabbitmq-admin-passwd
 |   `-- rabbitmq-definitions.json
 `-- pki
     |-- backup-ssh-privkey
     |-- backup-ssh-pubkey
-    |-- rabbitmq-ca-cert.pem  (letsencrpt chain.pem)
-    |-- rabbitmq-server-cert.pem (letsencrpt fullchain.pem)
-    `-- rabbitmq-server-key.pem (letsencrypt privkey.pem)
+    |-- rabbitmq-ca-cert.pem
+    |-- rabbitmq-server-cert.pem
+    `-- rabbitmq-server-key.pem
+
 ```
 ## Assign node labels
 docker node update --label-add databroker_node=true <node_name>
