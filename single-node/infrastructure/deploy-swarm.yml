@@ -1,0 +1,118 @@
+#------------------------------------------Pre-requisites-----------------------------------#
+- hosts: swarm-all-nodes
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+  tasks:   
+  #changing hostname
+  - name: change hostname
+    shell: hostname {{ host_name }}
+    when: ansible_hostname != host_name
+
+  # Installing docker and other packages 
+  - name: install docker and other packages
+    script: files/packages-docker-install.sh
+    tags:
+    - install-docker
+
+  - name:  private ip of nodes
+    shell:  ip addr | grep -P "inet {{ private_subnet }}"| awk '{print $2}' | cut -d '/' -f 1
+    register: private_ip
+
+  # Updating docker daemon
+  - name: copy daemon.json
+    copy:
+       src: files/docker-daemon.json
+       dest: /etc/docker/daemon.json
+    register: docker_daemon_status
+  - name: replace mertics-addr
+    lineinfile:
+      path: /etc/docker/daemon.json
+      regexp: "^(.*)metrics-addr(.*)$"  
+      line: "  \"metrics-addr\":\"{{ private_ip['stdout']  }}:9323\"," 
+
+  - name: restarting the daemon
+    shell:  systemctl restart docker &>/dev/null &&  systemctl status docker | grep "Active"
+    #when: docker_daemon_status == true
+    tags: 
+    - restart-daemon 
+
+  # storing docker info
+  - name: docker info
+    shell: docker info
+    register: docker_info
+
+#-----------------------------------------------Swarm creation------------------------------#
+- hosts: swarm-first-manager-node 
+  become_user: root
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  tasks: 
+  # swarm creation  
+  - name:  private ip of swarm manager 
+    shell:  ip addr | grep -P "inet {{ private_subnet }}"| awk '{print $2}' | cut -d '/' -f 1
+    register: swarm_manager_private_ip
+
+  - name: "create primary swarm manager"
+    shell: "docker swarm init --advertise-addr {{ swarm_manager_private_ip['stdout'] }}"
+    when: "docker_info.stdout.find('Swarm: inactive') != -1"
+
+  - name: "get docker swarm manager token"
+    shell: docker swarm join-token -q manager
+    register: manager_token
+
+  - name: "get docker swarm worker token"
+    shell: docker swarm join-token -q worker
+    register: worker_token
+  
+  # overlay-net creation
+  - name: List networks
+    shell: docker network ls
+    register: docker_networks
+  - name: Create network when not there
+    shell: docker network create --driver overlay --subnet {{ swarm_overlay_subnet }} --attachable overlay-net
+    when: "docker_networks.stdout.find('overlay-net' ) == -1"
+
+
+- hosts: swarm-manager-nodes
+  become_user: root
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  tasks:
+  - name: "join as a manager"
+    shell: "docker swarm join --token {{ hostvars[item]['manager_token']['stdout'] }} {{ hostvars[item]['swarm_manager_private_ip']['stdout'] }}:2377"
+    when: "docker_info.stdout.find('Swarm: inactive') != -1"
+    loop: "{{ groups['swarm-first-manager-node'] }}"
+
+- hosts: swarm-worker-nodes
+  become_user: root
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  tasks:
+  - name: "join as a worker"
+    shell: "docker swarm join --token {{ hostvars[item]['worker_token']['stdout'] }} {{ hostvars[item]['swarm_manager_private_ip']['stdout'] }}:2377"
+    when: "docker_info.stdout.find('Swarm: inactive') != -1"
+    loop: "{{ groups['swarm-first-manager-node'] }}"
+
+#-------------------------------------------------------------------------------------------#
+
+# add node labels to swarm nodes
+- hosts: swarm-first-manager-node
+  become_user: root
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  tasks:
+  - name: nodes status
+    shell:  docker node ls
+
+  - name: add docker node labels
+    include_tasks: tasks/docker-labels-per-node.yml 
+    loop: "{{ groups['swarm-all-nodes'] }}"
+    loop_control:
+      loop_var: node
+    ignore_errors: yes

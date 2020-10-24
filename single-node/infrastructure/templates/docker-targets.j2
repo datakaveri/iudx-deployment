@@ -1,0 +1,12 @@
+{% set output = [] %}
+{% for host in groups['swarm-all-nodes']%} 
+  {{ 
+    output.append({
+      "targets": [
+        hostvars[host]['private_ip']['stdout'] ~ ":" ~ hostvars[host]['docker_metrics_port']
+      ],
+      "labels": {"host": hostvars[host]['ansible_hostname']}
+    }) 
+  }}
+{% endfor %} 
+{{ output | to_nice_json(indent=4) }}
