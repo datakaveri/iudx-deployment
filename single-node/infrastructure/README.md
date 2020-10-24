@@ -62,7 +62,7 @@ all:
     ansible_python_interpreter: /usr/bin/python3        
     ansible_user:                                       # user with which ansible must login as 
     ansible_host_key_checking: false
-    ansible_ssh_private_key_file: 
+    ansible_ssh_private_key_file:                       # ssh private key file location
     private_subnet:                                     # specify the private subnet in regex. 
 							# Eg. 10.20.1.\d+\/24 for 10.20.1.0/24 for subnet
 
@@ -71,10 +71,10 @@ all:
       hosts:
         monitoring:
       vars:
-        swarm_overlay_subnet:                           # specify the ovelay subnet, caution not to clash with private subnet
+        swarm_overlay_subnet: 10.0.1.0/24               # specify the ovelay subnet, caution not to clash with private subnet
         swarm_overlay_name: overlay-net                 # name of overlay network 
             
-    swarm-manager-nodes:
+    swarm-manager-nodes:                                
       hosts:
         monitoring:
 
