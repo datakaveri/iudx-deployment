@@ -1,6 +1,17 @@
 #!/bin/bash
 # put private_ip,user port defualt values if not defined
 action="install"
+if [[ -z "$private_ip" ]]; then
+	private_ip="127.0.0.1"
+fi
+
+if [[ -z "$user" ]]; then
+	user="root"
+fi
+
+if [[ -z "$port" ]]; then
+	port="9100"
+fi
 
 while getopts ":a:" opt; do
 	case $opt in

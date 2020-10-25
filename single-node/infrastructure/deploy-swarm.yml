@@ -26,17 +26,22 @@
        src: files/docker-daemon.json
        dest: /etc/docker/daemon.json
     register: docker_daemon_status
+    tags:
+    - docker-daemon
+
   - name: replace mertics-addr
     lineinfile:
       path: /etc/docker/daemon.json
       regexp: "^(.*)metrics-addr(.*)$"  
       line: "  \"metrics-addr\":\"{{ private_ip['stdout']  }}:9323\"," 
+    tags:
+    - docker-daemon
 
   - name: restarting the daemon
     shell:  systemctl restart docker &>/dev/null &&  systemctl status docker | grep "Active"
     #when: docker_daemon_status == true
     tags: 
-    - restart-daemon 
+    - docker-daemon 
 
   # storing docker info
   - name: docker info
