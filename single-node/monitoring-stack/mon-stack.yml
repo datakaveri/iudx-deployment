@@ -49,7 +49,7 @@ services:
         window: 10s
  
   loki:
-    image: grafana/loki:1.6.0
+    image: grafana/loki:2.0.0
     #transfer of logs to loki over overlay
     user: root
     volumes:
@@ -114,7 +114,7 @@ services:
      - ./.grafana.env 
 
   promtail:
-    image: grafana/promtail:1.6.0
+    image: grafana/promtail:2.0.0
     entrypoint: /run.sh
     user: root
     deploy:
