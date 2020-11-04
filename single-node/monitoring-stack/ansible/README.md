@@ -1,47 +1,36 @@
-# Ansible
-## Ad-hocs
-### Manage node exporters
-```sh
-# Install node exporter
-ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a install"
-# Uinstall node exporter
-ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a uninstall"
+# Provisioning node-exporter, docker daemon metrics
+
+## Directory Structure
+.
+|-- README.md
+|-- deploy-node-exporter-docker-metrics.yml
+|-- example-inventory.yml
+|-- files
+|   `-- node-exporter-manager.sh
+`-- templates
+    |-- docker-targets.j2
+    `-- node-exporter-targets.j2
+
+## Inventory
+Prepare inventory.yml using the example-inventory.yml file.
+## Provisioning Node-exporter and docker daemon metrics
+
+```yml
+
+# installs & starts node-exporter. Also updates targets for node-exporter and docker daemon metrics in the prometheus-node.
+ansible-playbook -v deploy-node-exporter-docker-metrics.yml -i inventory.yml
 
 # Start node exporter
-ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a start"
+ansible nodes-with-exporter -i inventory.yml --become -m script -a  "files/node-exporter-manager.sh -a start" 
 
 # Stop node exporter
-ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a stop"
+ansible nodes-with-exporter -i inventory.yml --become -m script -a  "files/node-exporter-manager.sh -a stop"
 
 # Check status
-ansible nodes-with-exporter -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a status"
-```
-## Playbooks
-### metrics-target-update
-```yml
-ansible-playbook -i inventory.yml metrics-target-update.yml
-```
-* Updates `/tmp/metrics-targets/node-exporter.json` on all manager nodes with node-exporter targets from inventory group `nodes-with-exporter`
-* Updates `/tmp/metrics-targets/docker.json` on all manager nodes with node-exporter targets from inventory group `nodes-with-docker`
+ansible nodes-with-exporter -i inventory.yml --become -m script -a  "files/node-exporter-manager.sh -a status"
 
-## Template Inventory
-manager: the node where prometheus runs
-```yml
-all:
-  hosts:
-    ...
-  children:
-    managers:
-      ...
-    nodes-with-docker:
-      hosts:
-        ...
-      vars:
-        docker_metrics_port: 9323
+# uninstall node-exporter 
+ansible  nodes-with-exporter -i inventory.yml --become  -m script -a  "files/node-exporter-manager.sh -a uninstall"
 
-    nodes-with-exporter:
-      hosts:
-        ...
-      vars:
-        exporter_metrics_port: 9100
 ```
+
