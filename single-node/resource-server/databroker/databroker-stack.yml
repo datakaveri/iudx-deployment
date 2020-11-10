@@ -41,7 +41,7 @@ services:
       target: /etc/rabbitmq/rabbitmq.conf
     
     deploy:
-      replicas: 0
+      replicas: 1 
       #placing in particular node with label 'databroker_node=true'
       placement:
         constraints:
@@ -73,11 +73,10 @@ services:
 
     environment:
       - rabbitmq_url=https://rabbitmq:15671
-      - rabbitmq_user=admin
       - rabbitmq_passwd_file=/run/secrets/rabbitmq-admin-passwd
 
     deploy:
-      replicas: 0
+      replicas: 1
       placement:
         constraints:
           - "node.labels.databroker_node==true"
@@ -94,19 +93,19 @@ services:
       - type: volume
         source: db-volume
         target: /var/lib/postgresql/data
-    secrets:
-      - source: auth-cred-db-user
-        target: /docker-entrypoint-initdb.d/auth-cred-db-user.sh
+    configs:
+      - source: auth-cred-db-user-creation
+        target: /docker-entrypoint-initdb.d/auth-cred-db-user-creation.sh
         mode: 0755
       - source: auth-cred-db-schema
         target: /docker-entrypoint-initdb.d/auth-cred-db-schema.sql
         mode: 0755
+    secrets:
       - auth-cred-db-passwd
       - postgres-super-user-passwd
     environment: 
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres-super-user-passwd
       - POSTGRES_USER=iudx_psql_super_user
-      - AUTH_CRED_DB_USER=iudx_user
     deploy:
         replicas: 1
         placement:
@@ -127,6 +126,10 @@ volumes:
 configs:
   rabbitmq-config:
     file:  rabbitmq/conf/rabbitmq.conf
+  auth-cred-db-user-creation:
+    file: auth-cred-db/conf/auth-cred-db-user-creation.sh
+  auth-cred-db-schema:
+    file: auth-cred-db/conf/auth-cred-db-schema.sql
 
 secrets:
   rabbitmq-ca-cert.pem:
@@ -149,10 +152,6 @@ secrets:
     file: secrets/passwords/postgres-super-user-passwd
   auth-cred-db-passwd:
     file: secrets/passwords/auth-cred-db-passwd
-  auth-cred-db-schema:
-    file: secrets/config/auth-cred-db-schema.sql
-  auth-cred-db-user:
-    file: secrets/config/auth-cred-db-user.sh
       
     
     
