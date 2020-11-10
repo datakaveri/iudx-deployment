@@ -14,7 +14,7 @@ secrets/
 docker node update --label-add monitoring_node=true <hostname/ID>
 ```
 ## Create .grafana.env file 
-Define env variablle for grafana in .grafana.env using following template. 
+Define env variables specific to production/testing environment for Grafana in .grafana.env using following template. 
 ```sh
 GF_SERVER_ROOT_URL=https://<domain-name>:3000/
 TELEGRAM_CHAT_ID=-78222322                      # configure telegram chat ID 
