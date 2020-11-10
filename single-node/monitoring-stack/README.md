@@ -37,9 +37,9 @@ docker stack deploy -c mon-stack.yml -c mon-stack.dev.yml  mon-stack
 ```
 
 ## Description
-- ``` docker stack deploy -c mon-stack.yml mon-stack ``` 
- installs Zookeeper, Vertx_SD, Prometheus, Loki, Grafana swarm services with replicas as one at node with "node.labels.monitoring_node==true" .
-- Promtail service installed in global mode i.e. all nodes have one promtail task running.
+* ``` docker stack deploy -c mon-stack.yml -c mon-stack.prod.yml mon-stack ``` 
+ installs Vertx_SD, Prometheus, Loki, Grafana swarm services with replicas as one at node with "node.labels.monitoring_node==true" .
+* Promtail service installed in global mode i.e. all nodes have one promtail task running.
 
 
 ## Note  
