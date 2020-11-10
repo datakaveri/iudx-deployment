@@ -1,5 +1,0 @@
-- name: assign docker node labels for one node
-  shell:  "docker node update --label-add {{ item }} {{ hostvars[node]['ansible_hostname'] }}"
-  loop: "{{ hostvars[node]['swarm_node_labels'] }}"
-  ignore_errors: yes
-
