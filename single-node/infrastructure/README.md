@@ -39,3 +39,10 @@ ansible-playbook -v leave-swarm.yml -i inventory.yml
 ```
 
 ## Description
+
+The playbook deploy-swarm.yml does following things:
+* Installation of docker, other packages: vim, dnsutils, net-tools iputils-ping
+* Docker swarm creation 
+* Overlay-net creation 
+* Assign hostnames (for labels in grafana) 
+* Assign docker node labels for placement of databroker, database, nginx, mon-stack components appropriately to the desginated nodes.
