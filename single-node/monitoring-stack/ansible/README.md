@@ -1,51 +1,37 @@
-# Ansible
-## Ad-hocs
-### Manage node exporters
+# Provisioning node-exporter, docker daemon metrics
+
+## Directory Structure
 ```sh
-# Install node exporter
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a install"
-# Uinstall node exporter
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a uninstall"
+.
+|-- README.md
+|-- deploy-node-exporter-docker-metrics.yml
+|-- example-inventory.yml
+|-- files
+|   `-- node-exporter-manager.sh
+`-- templates
+    |-- docker-targets.j2
+    `-- node-exporter-targets.j2
+```
+## Inventory
+Prepare inventory.yml using the example-inventory.yml file.
+## Provisioning Node-exporter and docker daemon metrics
+
+```yml
+
+# installs & starts node-exporter. Also updates targets for node-exporter and docker daemon metrics in the prometheus-node.
+ansible-playbook -v deploy-node-exporter-docker-metrics.yml -i inventory.yml
 
 # Start node exporter
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a start"
+ansible nodes-with-exporter -i inventory.yml --become -m script -a  "files/node-exporter-manager.sh -a start" 
 
 # Stop node exporter
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a stop"
+ansible nodes-with-exporter -i inventory.yml --become -m script -a  "files/node-exporter-manager.sh -a stop"
 
 # Check status
-ansible cluster -i inventory.yml -m script -a "scripts/node-exporter-manager.sh -a status"
+ansible nodes-with-exporter -i inventory.yml --become -m script -a  "files/node-exporter-manager.sh -a status"
+
+# uninstall node-exporter 
+ansible  nodes-with-exporter -i inventory.yml --become  -m script -a  "files/node-exporter-manager.sh -a uninstall"
+
 ```
-## Playbooks
 
-
-### metrics-target-update
-```yml
-ansible-playbook metrics-target-update.yml -i inventory.yml
-```
-* Updates `/tmp/metrics-targets/node-exporter.json` on all manager nodes with node-exporter targets from inventory group `nodes-with-exporter`
-* Updates `/tmp/metrics-targets/docker.json` on all manager nodes with node-exporter targets from inventory group `nodes-with-docker`
-
-## Template Inventory
-manager: the node where prometheus runs
-```yml
-all:
-  hosts:
-    ...
-  children:
-    managers:
-      ...
-    cluster:
-      ...
-    nodes-with-docker:
-      hosts:
-        ...
-      vars:
-        docker_metrics_port: 9323
-
-    nodes-with-exporter:
-      hosts:
-        ...
-      vars:
-        exporter_metrics_port: 9100
-```

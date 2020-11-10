@@ -1,11 +1,11 @@
 {% set output = [] %}
-{% for host in groups['nodes-with-docker']%} 
+{% for host in groups['docker-nodes']%} 
   {{ 
     output.append({
       "targets": [
-        hostvars[host]['ansible_host'] ~ ":" ~ hostvars[host]['docker_metrics_port']
+        hostvars[host]['private_ip']['stdout'] ~ ":" ~ hostvars[host]['docker_metrics_port']
       ],
-      "labels": {"inventory_name": host}
+      "labels": {"host": hostvars[host]['ansible_hostname']}
     }) 
   }}
 {% endfor %} 

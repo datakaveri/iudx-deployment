@@ -4,6 +4,5 @@ services:
   grafana:
     ports:
       - target: 3000
-        published: 443
+        published: 3000
         mode: host    
-    

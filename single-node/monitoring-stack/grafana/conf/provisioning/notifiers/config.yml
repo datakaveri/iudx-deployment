@@ -1,1 +1,20 @@
 apiVersion: 1
+
+notifiers:
+  - name: Telegram-notification
+    type: telegram
+    uid: notifier1
+    # either
+    org_id: 1
+    # or
+    is_default: true
+    send_reminder: false
+    frequency: 1h
+    disable_resolve_message: true
+    # See `Supported Settings` section for settings supported for each
+    # alert notification type.
+    settings:
+      chatid: $TELEGRAM_CHAT_ID
+    # Secure settings that will be encrypted in the database (supported since Grafana v7.2). See `Supported Settings` section for secure settings supported for each notifier.
+    secure_settings:
+      bottoken: $TELEGRAM_BOT_TOKEN

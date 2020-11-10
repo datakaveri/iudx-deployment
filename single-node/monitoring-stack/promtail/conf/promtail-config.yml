@@ -10,7 +10,7 @@ clients:
   - url: http://tasks.loki:3100/loki/api/v1/push
   
 scrape_configs:
- #----------------- All containers except cat --------------------------------------------
+ #----------------- other-container-logs(except rs,cat,auth) --------------------------------------------
 - job_name: container
   static_configs:
   - targets:
@@ -25,25 +25,33 @@ scrape_configs:
         log: log
         stream: stream
         docker_time: time
-        attrs: attrs
-  - json:
-      expressions:
-        container_info: tag
-      source: attrs
-  - json:
+        container_info: attrs.tag
+
+  - json: 
       expressions:
         container_name: name
-        instance: id #container_id
+        instance: id
       source: container_info
 
   - labels:
       instance:
       container_name:
-  
+
   - match: 
-      selector: '{container_name=~"iudx-catalogue-server_*"}'
+      selector: '{container_name=~"iudx-(catalogue|resource)-server\\w+"}'
       action : drop
-              
+  - match: 
+      selector: '{container_name=~"database_logstash.*.*"}|~ "WARN"'
+      stages:
+      - json:     
+          expressions:
+            index: logEvent.action[2].metaClass.metaClass.metaClass.response.index._index
+            error_type: logEvent.action[2].metaClass.metaClass.metaClass.response.index.error.type
+          source: log
+      - labels:
+          index:
+          error_type:
+      
   - output:
       source: log
 
@@ -57,10 +65,10 @@ scrape_configs:
   - targets:
     labels: 
       job: auth-logs  # A `job` label is fairly standard in prometheus and useful for linking metrics and logs.
-      host: auth-node # A `host` label will help identify logs from this machine vs others
+      host: authorization-node # A `host` label will help identify logs from this machine vs others
       __path__: /var/log/debug.log  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
       source: auth
-      sourceUrl: auth.test        #mention url of auth
+      sourceUrl: authorization.iudx.org.in        #mention url of auth
   pipeline_stages:
   - match:
       selector: '{job="auth-logs"}'
@@ -74,33 +82,40 @@ scrape_configs:
       - labels:
           level:
           type:
-  #-------------------------------  cat server logs----------------------------------------------
-- job_name: system_cat
+  #-------------------------------  cat&rs server logs----------------------------------------------
+- job_name: system_cat&rs
   static_configs:
   - targets:
     labels: 
-      job: cat-logs  
-      host: catalogue
-      __path__: /tmp/iudx/cat.log
+      job: cat&rs-logs  
+      __path__: /tmp/iudx/*.log
   pipeline_stages:
   - match:
-      selector: '{job="cat-logs"}'
+      selector: '{filename="/tmp/iudx/cat.log"}'
       stages:
-      - json:
-          expressions:
-            time: timeMillis
-            source: source
-            sourceUrl: sourceURL
-            level: level
-            origin: loggerName #class from which its logged
-            message: message
-      - labels:
-          source:
-          sourceUrl:
-          #level:        # level will create more streams, 5x times
-          origin:
-      - timestamp:
-          source: time
-          format: UnixMs
-    
-  
+      - labels: 
+          host: catalogue-node
+  - match:
+      selector: '{filename="/tmp/iudx/rs.log"}'
+      stages:
+      - labels: 
+          host: resource-server-node
+  - json:
+      expressions:
+        time: timeMillis
+        source: source
+        sourceUrl: sourceURL
+        level: level
+        origin: loggerName #class from which its logged
+        message: message
+  - labels:
+      source:
+      sourceUrl:
+      #level:        # level will create more streams, 5x times
+      #origin:
+  - timestamp:
+      source: time
+      format: UnixMs
+
+ 
+ 

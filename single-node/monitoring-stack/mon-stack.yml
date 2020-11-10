@@ -21,16 +21,10 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-    depends_on:
-      - zookeeper
 
   prometheus:
     image: prom/prometheus
     user: root
-    # ports:
-    #   - target: 9090
-    #     published: 9090
-    #     mode: host
     volumes:
       - type: volume
         source: prometheus-volume
@@ -44,8 +38,6 @@ services:
     configs:
       - source: prometheus-settings
         target: /etc/prometheus/prometheus.yml
-      # - source: alert-config
-      #   target: /etc/prometheus/alertrules.yml   
     deploy:
       placement:
         constraints:
@@ -55,17 +47,10 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-    depends_on:
-      - zookeeper
-      - vertx_sd
  
   loki:
-    image: grafana/loki:1.6.0
+    image: grafana/loki:2.0.0
     #transfer of logs to loki over overlay
-    #ports:
-      # - target: 3100
-      #   published: 3100
-      #   mode: host
     user: root
     volumes:
       - type: volume
@@ -89,12 +74,8 @@ services:
 
 
   grafana:
-    image: abhiurn/grafana:latest
+    image: abhiurn/grafana:7.2.0
     user: root
-    # ports:
-    #   - target: 3000
-    #     published: 3000
-    #     mode: host
     volumes:
       - type: volume
         source: grafana-volume
@@ -103,10 +84,11 @@ services:
           nocopy: true
     secrets:
       - grafana-super-admin-passwd
+      - grafana-super-admin-username
       - grafana-server-cert.pem
       - grafana-server-key.pem
     environment:
-      - GF_SECURITY_ADMIN_USER=iudx_super_admin
+      - GF_SECURITY_ADMIN_USER__FILE=/run/secrets/grafana-super-admin-username
       - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana-super-admin-passwd
       - GF_PATHS_CONFIG=/usr/share/grafana-conf/custom.ini
       - GF_PATHS_DATA=/var/lib/grafana 
@@ -118,6 +100,8 @@ services:
         target: /usr/share/grafana-conf/provisioning/dashboards/config.yml
       - source: grafana-datasources
         target: /usr/share/grafana-conf/provisioning/datasources/config.yml
+      - source: grafana-notifiers
+        target: /usr/share/grafana-conf/provisioning/notifiers/config.yml
     deploy:
       replicas: 1
       placement:
@@ -127,13 +111,11 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-        
-    depends_on:
-      - prometheus
-      - loki
-    
+    env_file: 
+     - ./.grafana.env 
+
   promtail:
-    image: grafana/promtail:1.6.0
+    image: grafana/promtail:2.0.0
     entrypoint: /run.sh
     user: root
     deploy:
@@ -177,18 +159,20 @@ configs:
     file:  grafana/conf/provisioning/dashboards/config.yml
   grafana-datasources:
     file: grafana/conf/provisioning/datasources/config.yml
+  grafana-notifiers:
+    file: grafana/conf/provisioning/notifiers/config.yml
   promtail-settings:
     file:  promtail/conf/promtail-config.yml  
   promtail-script:
     file: promtail/run.sh
-  # alert-config:
-  #   file:  prometheus/conf/alertrules.yml
   prometheus-settings:
     file:  prometheus/conf/prometheus.yml
 
 secrets:
   grafana-super-admin-passwd:
     file: secrets/passwords/grafana-super-admin-passwd
+  grafana-super-admin-username:
+    file: secrets/passwords/grafana-super-admin-username
   grafana-server-cert.pem:
     file: secrets/pki/grafana-server-cert.pem
   grafana-server-key.pem:
