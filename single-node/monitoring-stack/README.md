@@ -1,5 +1,6 @@
 # Monitoring-stack-Installation
 ## Required secrets
+```sh
 secrets/
 |-- passwords
 |   |-- grafana-super-admin-passwd
@@ -7,6 +8,7 @@ secrets/
 `-- pki
     |-- grafana-server-cert.pem  (letsencrpt fullchain.pem)
     `-- grafana-server-key.pem   (letsencrypt privkey.pem)
+ ```
 ## Assign node labels 
 ```sh
 docker node update --label-add monitoring_node=true
