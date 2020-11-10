@@ -1,7 +1,7 @@
 # Provisioning Swarm, node-exporter, docker daemon metrics
 
 ## Directory Structure
-
+```sh
 .
 |-- README.md
 |-- deploy-swarm.yml
@@ -12,7 +12,7 @@
 |-- leave-swarm.yml
 `-- tasks
     `-- docker-labels-per-node.yml
-
+```
 ## Pre-Requisites
 1) Provisioning of VMs
 
