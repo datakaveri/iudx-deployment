@@ -9,4 +9,7 @@ datasources:
     type: loki
     access: proxy
     url: "http://tasks.loki:3100/"
-
+  - name: Prometheus-Loki
+    type: prometheus
+    access: proxy
+    url: "http://tasks.loki:3100/loki"

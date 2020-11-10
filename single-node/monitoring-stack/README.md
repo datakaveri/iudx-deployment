@@ -1,31 +1,54 @@
 # Monitoring-stack-Installation
-## Steps to install entire Monitoring-stack
-1. The node where the monitoring stack needs to be installed needs to labeled as follows:
+## Required secrets
+```sh
+secrets/
+|-- passwords
+|   |-- grafana-super-admin-passwd
+|   `-- grafana-super-admin-username
+`-- pki
+    |-- grafana-server-cert.pem  (letsencrpt fullchain.pem)
+    `-- grafana-server-key.pem   (letsencrypt privkey.pem)
+ ```
+## Assign node labels 
 ```sh
 docker node update --label-add monitoring_node=true
 ```
-2. Run the following script at swarm manager node:
+## Installation of Node-Exporter and docker daemon metrics
+Done Through Ansible. Refer [here](ansible/README.md)
+
+## Deploy
+
+### Production
+```sh
+# Prometheus + Loki + Grafana + Promtail+ Vertx_SD (assumes zookeeper to be running)
+docker stack deploy -c mon-stack.yml -c mon-stack.prod.yml  mon-stack
+
+```
+### Testing
+```sh
+# Prometheus + Loki + Grafana + Promtail+ Vertx_SD (assumes zookeeper to be running)
+docker stack deploy -c mon-stack.yml -c mon-stack.test.yml  mon-stack
+
+```
+### Development
 ```sh
 # Zookeeper + Prometheus + Loki + Grafana + Promtail+ Vertx_SD
-./install.sh
+docker stack deploy -c mon-stack.yml -c mon-stack.dev.yml  mon-stack
 ```
-### Installation of Node-Exporter
-Done Through Ansible. Refer [here](https://github.com/abhilashvenkatesh/iudx-deployment/tree/master/single-node/monitoring-stack/ansible#ansible)
 
 ## Description
- - install.sh  creates random Grafana admin password in docker secrets  
-- ``` docker stack deploy -c mon_stack.yml mon_stack ``` from install.sh.
- installs Zookeeper, Vertx_SD, Prometheus, Loki, Grafana swarm services with replicas as one at node with "node.labels.monitoring_node==true" .
-- Promtail service installed in global mode i.e. all nodes have one promtail task running.
-- Then, install.sh calls another script "grafana_users_install.sh"  which creates (by default 2, can be changed by passing no as parameter) Grafana users with one user as editor and all others as viewer access roles. 
-- The Grafana admin and user details are saved in secrets.txt during installation.
+* ``` docker stack deploy -c mon-stack.yml -c mon-stack.prod.yml mon-stack ``` 
+ installs Vertx_SD, Prometheus, Loki, Grafana swarm services with replicas as one at node with "node.labels.monitoring_node==true" .
+* Promtail service installed in global mode i.e. all nodes have one promtail task running.
 
 
 ## Note  
 
-1. Grafana creates admin credentials from its environment variables when it is run for the
+1. Grafana creates super admin  when it is run for the
    first time, and the password is saved to db (i.e. grafana-volume). Subsequent
    running/restarting the docker with new admin credentials doesn't overwrite
    the password stored in Grafana db.
 2. Pipeline stages might be different for each application , this can be done using [match stage](https://grafana.com/docs/loki/latest/clients/promtail/stages/match/)
-3. mon_stack.yml contains additional service vertx_sd, which discover vertx instances from zookeeper for prometheus
+3. mon-stack.yml contains additional service vertx_sd, which discover vertx instances from zookeeper for prometheus.
+4. Config Telegrambot for grafana's alerts is detailed [here](https://gist.github.com/abhilashvenkatesh/50478502ccd257a28d2c441ac51a8d65).
+
