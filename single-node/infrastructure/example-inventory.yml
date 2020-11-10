@@ -1,0 +1,95 @@
+all:
+  hosts:
+    database:
+      #ip/domain name  of host
+      ansible_host: w.x.y.z   
+      # specify the hostname to set in the node
+      host_name: database-node                                    
+      # list of docker swarm node labels for placement policy
+      swarm_node_labels:
+        - database_node=true
+
+    databroker:
+      ansible_host: w.x.y.z
+      host_name: databroker-node
+      swarm_node_labels:
+        - databroker_node=true
+
+    catalogue: 
+      ansible_host: w.x.y.z
+      host_name: catalogue-api-nginx-node
+      swarm_node_labels:  
+        - catalogue_api_node=true 
+        - cat_nginx_node=true
+    
+    resource: 
+      ansible_host: w.x.y.z
+      host_name: resource-server-api-nginx-node
+      swarm_node_labels: 
+        - rs_api_node=true
+        - rs_nginx_node=true
+
+    postgres-db:
+      ansible_host: w.x.y.z
+      host_name: postgres-db
+      swarm_node_labels:  
+        - auth_cred_db_node=true 
+
+    monitoring: 
+      ansible_host: w.x.y.z
+      host_name: monitoring-node
+      swarm_node_labels: 
+        - monitoring_node=true
+
+    auth:
+      ansible_host: w.x.y.z
+      host_name: authorization-node
+      swarm_node_labels:
+        - none=true
+
+  vars: 
+    ansible_python_interpreter: /usr/bin/python3
+    # user with which ansible must remote login as
+    ansible_user:                                       
+    ansible_host_key_checking: false 
+    # ssh private key file location    
+    ansible_ssh_private_key_file:               
+    # specify the private subnet in regex. Eg. 10.20.1.\d+\/24 for 10.20.1.0/24 for subnet
+    private_subnet:                                      
+						
+
+  children: 
+
+    # swarm init node and the deployment node
+    swarm-first-manager-node:                           
+      hosts:
+        monitoring:
+      vars:
+        # specify the ovelay subnet like 10.1.0.0/16, caution not to clash with private subnet
+        swarm_overlay_subnet:           
+        # name of overlay network        
+        swarm_overlay_name: overlay-net  
+    
+    swarm-manager-nodes:                        
+      hosts:
+        monitoring:
+        postgres-db:
+        databroker:
+
+    swarm-worker-nodes:                         
+      hosts:
+        database:
+        catalogue:
+        resource:
+        auth:
+                
+    swarm-all-nodes:                            
+      hosts:
+        database:
+        databroker:
+        catalogue:
+        resource:
+        postgres-db:
+        monitoring:
+        auth:
+
