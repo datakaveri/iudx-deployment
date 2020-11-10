@@ -10,11 +10,11 @@ secrets/
 |   |-- rabbitmq-admin-passwd
 |   `-- rabbitmq-definitions.json
 `-- pki
-    |-- backup-ssh-privkey
+    |-- backup-ssh-privkey 
     |-- backup-ssh-pubkey
-    |-- rabbitmq-ca-cert.pem
-    |-- rabbitmq-server-cert.pem
-    `-- rabbitmq-server-key.pem
+    |-- rabbitmq-ca-cert.pem   (letsencrpt chain.pem)
+    |-- rabbitmq-server-cert.pem (letsencrpt fullchain.pem)
+    `-- rabbitmq-server-key.pem  (letsencrypt privkey.pem)
 ```
 ## Assign node labels
 
@@ -30,14 +30,17 @@ is shown at the end.
 
 ### Production
 ```sh
+# rabbitmq + auth_cred_db postgres + backup
 docker stack deploy -c databroker-stack.yml -c databroker-stack.prod.yml  databroker
 ```
 ### Testing
 ```sh
+# rabbitmq + auth_cred_db postgres + backup
 docker stack deploy -c databroker-stack.yml -c databroker-stack.test.yml  databroker
 ```
 ### Development
 ```sh
+# rabbitmq + auth_cred_db postgres
 docker stack deploy -c databroker-stack.yml -c databroker-stack.dev.yml  databroker
 ```
 ## Template of .rabbitmq-backup.env
