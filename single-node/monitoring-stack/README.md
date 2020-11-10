@@ -50,3 +50,5 @@ docker stack deploy -c mon-stack.yml -c mon-stack.dev.yml  mon-stack
    the password stored in Grafana db.
 2. Pipeline stages might be different for each application , this can be done using [match stage](https://grafana.com/docs/loki/latest/clients/promtail/stages/match/)
 3. mon-stack.yml contains additional service vertx_sd, which discover vertx instances from zookeeper for prometheus.
+4. Config Telegrambot for grafana's alerts is detailed [here](https://gist.github.com/abhilashvenkatesh/50478502ccd257a28d2c441ac51a8d65).
+
