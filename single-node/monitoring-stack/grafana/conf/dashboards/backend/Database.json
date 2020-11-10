@@ -9,19 +9,29 @@
         "hide": false,
         "iconColor": "#E02F44",
         "limit": 100,
-        "name": "Annotations & Alerts",
+        "name": "Logstash Alerts",
         "showIn": 0,
         "tags": [],
         "target": {},
         "type": "dashboard"
+      },
+      {
+        "datasource": "$DS_LOKI",
+        "enable": true,
+        "expr": "{container_name=~\"database_elasticsearch.*.*\"} |~ `\"level\": \"ERROR\"`",
+        "hide": false,
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "name": "Elasticsearch alerts",
+        "showIn": 0,
+        "target": {}
       }
     ]
   },
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 8,
-  "iteration": 1602848564439,
+  "id": 4,
+  "iteration": 1604949377502,
   "links": [],
   "panels": [
     {
@@ -41,13 +51,13 @@
             "query": {
               "params": [
                 "A",
-                "15m",
+                "5m",
                 "now"
               ]
             },
             "reducer": {
               "params": [],
-              "type": "avg"
+              "type": "min"
             },
             "type": "query"
           },
@@ -64,13 +74,36 @@
             "query": {
               "params": [
                 "B",
-                "15m",
+                "5m",
                 "now"
               ]
             },
             "reducer": {
               "params": [],
-              "type": "avg"
+              "type": "min"
+            },
+            "type": "query"
+          },
+          {
+            "evaluator": {
+              "params": [
+                0
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "or"
+            },
+            "query": {
+              "params": [
+                "D",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "min"
             },
             "type": "query"
           }
@@ -80,7 +113,7 @@
         "frequency": "1m",
         "handler": 1,
         "message": "",
-        "name": "logstash alert",
+        "name": "Database Alert",
         "noDataState": "ok",
         "notifications": []
       },
@@ -89,10 +122,24 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus-Loki",
-      "description": "",
+      "description": "Database Alerts based on error and warn log count",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
         "overrides": []
       },
@@ -100,7 +147,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 11,
-        "w": 12,
+        "w": 13,
         "x": 0,
         "y": 0
       },
@@ -122,6 +169,11 @@
           "targetBlank": true,
           "title": "Logstash logs",
           "url": "d/OYWgQeFMk/database?orgId=1&refresh=10s&var-DS_LOKI=Loki&viewPanel=6"
+        },
+        {
+          "targetBlank": true,
+          "title": "Elasticsearch logs",
+          "url": "d/OYWgQeFMk/database?orgId=1&refresh=10s&viewPanel=16"
         }
       ],
       "nullPointMode": "null",
@@ -139,28 +191,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "count_over_time(({container_name=~\"database_logstash.*.*\"}|~`\"message\":\"JSON parse error*`)[1m])   ",
+          "expr": "count_over_time({container_name=~\"database_logstash.*.*\"} |~ `\"level\":\"ERROR\"` | regexp `({\".*)(\"error\":\")(?P<reason>.*)(\"}}.*)`[1m]) ",
           "interval": "",
-          "legendFormat": "ERROR: json-parse error,  LOC: container  '{{container_name}}' at host '{{host}}'",
+          "legendFormat": "ERROR=json-parse error  REASON={{reason}}  LOC=container  '{{container_name}}' at host '{{host}}'",
           "refId": "A"
         },
         {
-          "expr": "count_over_time(({container_name=~\"database_logstash.*.*\"}|=`\"level\":\"WARN\"`)[1m])",
+          "expr": "count_over_time({container_name=~\"database_logstash.*.*\"} |~ `\"level\":\"WARN\"`| regexp `(\\{.*)({\"message\":.*)(\"error\":{\"type\":\"(mapper_parsing_exception|strict_dynamic_mapping_exception|index_not_found_exception|\\w+)\",\"reason\":\")(?P<reason>.*)(\"}}.*)`[1m])",
           "interval": "",
-          "legendFormat": "ERROR: '{{error_type}}' for index '{{index}}', LOC: container '{{container_name}}' at host '{{host}}' ",
+          "legendFormat": "ERROR='{{error_type}}' for index '{{index}}'  REASON={{reason}}  LOC=container '{{container_name}}' at host '{{host}}' ",
           "refId": "B"
         },
         {
-          "expr": "count_over_time({container_name=~\"database_logstash.*.*\"}|~`\"level\":\"ERROR\"`!~`\"message\":\"JSON parse error*`[1m])",
-          "hide": false,
+          "expr": "count_over_time({container_name=~\"database_elasticsearch.*.*\"} |~ `\"level\": \"ERROR\"`| regexp `(\\{.*)(\"level\": \")(?P<level>\\w+)(.*)(\"component\": \")(?P<component>[^\"]+)(\",\\s+)(\"cluster\\.name\": \")(?P<cluster_name>[^\"]+)(\",\\s+)(\"node\\.name\": \")(?P<node_name>[^\"]+)(\",\\s+)(\"message\": \")(?P<message>.*)(\",\\s+)(\"cluster\\.uuid\": \".*)` [1m]) ",
           "interval": "",
-          "legendFormat": "ERROR: ' Miscellaneous errors', LOC: container '{{container_name}}' at host '{{host}}' ",
-          "refId": "C"
-        },
-        {
-          "expr": "",
-          "interval": "",
-          "legendFormat": "ERROR: strict_dynamic_mapping_exception for index '{{index}}' , CAUSE: unmapped fields, LOC: container '{{container_name}}' at host '{{host}}'",
+          "legendFormat": "ERROR=es error at {{component}}  REASON={{message}}  LOC=container '{{container_name}}' at host '{{host}}' ",
           "refId": "D"
         }
       ],
@@ -186,10 +231,10 @@
         }
       ],
       "timeShift": null,
-      "title": "Logstash Error and Warn Logs Count",
+      "title": "Database Alerts Panel",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transformations": [],
@@ -203,14 +248,16 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:834",
           "format": "short",
-          "label": null,
+          "label": "Log Count",
           "logBase": 1,
           "max": null,
           "min": null,
           "show": true
         },
         {
+          "$$hashKey": "object:835",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -237,8 +284,8 @@
       "folderId": null,
       "gridPos": {
         "h": 11,
-        "w": 12,
-        "x": 12,
+        "w": 11,
+        "x": 13,
         "y": 0
       },
       "id": 4,
@@ -251,8 +298,88 @@
       "stateFilter": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Logstash Alert Notifications",
+      "title": "Alert Notifications",
       "type": "alertlist"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Elasticsearch",
+      "type": "row"
+    },
+    {
+      "datasource": "$DS_LOKI",
+      "description": "Displays warn and error logs of elasticsearch",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 16,
+      "options": {
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "pluginVersion": "7.2.1",
+      "targets": [
+        {
+          "expr": "{container_name=~\"database_elasticsearch.*.*\"} | regexp `(\\{.*)(\"level\": \")(?P<level>\\w+)(.*)(\"component\": \")(?P<component>[^\"]+)(\",\\s+)(\"cluster\\.name\": \")(?P<cluster_name>[^\"]+)(\",\\s+)(\"node\\.name\": \")(?P<node_name>[^\"]+)(\",\\s+)(\"message\": \")(?P<message>.*)(\",\\s+)(\"cluster\\.uuid\": \".*)`  | line_format \"LOCATION={{.container_name}} in {{.host}} node  CLUSTER={{.cluster_name}}  NODE={{.node_name}}  LEVEL={{ToLower .level}}  COMPONENT={{.component}}\\nMESSAGE=\\\"{{.message}}\\\"\"",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Elasticsearch logs ",
+      "type": "logs"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Logstash",
+      "type": "row"
     },
     {
       "datasource": "$DS_LOKI",
@@ -284,7 +411,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 22
       },
       "id": 6,
       "options": {
@@ -296,7 +423,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "{container_name=~\"database_logstash.*.*\"}|~`\"level\":\"(ERROR|WARN)\"`",
+          "expr": "{container_name=~\"database_logstash.*.*\"} | regexp `(\\{.*)(\"level\":\")(?P<level>\\w+)(.*)(\"loggerName\":\")(?P<loggerName>[\\w\\.]+)(.*)(\"logEvent\":{\"message\":\")(?P<message>.*)(\"}}.*)` | line_format \"LOCATION={{.container_name}} in {{.host}} node  LEVEL={{ToLower .level}}  LOGGERNAME={{.loggerName}}\\nMESSAGE={{.message}}\"",
           "legendFormat": "",
           "refId": "A"
         }
@@ -307,7 +434,7 @@
       "type": "logs"
     }
   ],
-  "refresh": "10s",
+  "refresh": "1m",
   "schemaVersion": 26,
   "style": "dark",
   "tags": [],
@@ -315,7 +442,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "Loki",
           "value": "Loki"
         },
@@ -335,7 +462,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
@@ -356,5 +483,5 @@
   "timezone": "",
   "title": "Database",
   "uid": "OYWgQeFMk",
-  "version": 9
+  "version": 15
 }

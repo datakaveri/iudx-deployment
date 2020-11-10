@@ -74,7 +74,7 @@ services:
 
 
   grafana:
-    image: abhiurn/grafana:latest
+    image: abhiurn/grafana:7.2.0
     user: root
     volumes:
       - type: volume
@@ -84,10 +84,11 @@ services:
           nocopy: true
     secrets:
       - grafana-super-admin-passwd
+      - grafana-super-admin-username
       - grafana-server-cert.pem
       - grafana-server-key.pem
     environment:
-      - GF_SECURITY_ADMIN_USER=iudx_super_admin
+      - GF_SECURITY_ADMIN_USER__FILE=/run/secrets/grafana-super-admin-username
       - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana-super-admin-passwd
       - GF_PATHS_CONFIG=/usr/share/grafana-conf/custom.ini
       - GF_PATHS_DATA=/var/lib/grafana 
@@ -170,6 +171,8 @@ configs:
 secrets:
   grafana-super-admin-passwd:
     file: secrets/passwords/grafana-super-admin-passwd
+  grafana-super-admin-username:
+    file: secrets/passwords/grafana-super-admin-username
   grafana-server-cert.pem:
     file: secrets/pki/grafana-server-cert.pem
   grafana-server-key.pem:
