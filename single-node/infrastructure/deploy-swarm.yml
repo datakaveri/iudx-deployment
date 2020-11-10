@@ -7,7 +7,7 @@
   tasks:   
   #changing hostname
   - name: change hostname
-    shell: hostname {{ host_name }}
+    shell: hostnamectl set-hostname  {{ host_name }}
     when: ansible_hostname != host_name
 
   # Installing docker and other packages 
