@@ -11,12 +11,20 @@ secrets/
  ```
 ## Assign node labels 
 ```sh
-docker node update --label-add monitoring_node=true
+docker node update --label-add monitoring_node=true <hostname/ID>
 ```
-## Installation of Node-Exporter and docker daemon metrics
-Done Through Ansible. Refer [here](ansible/README.md)
+## Create .grafana.env file 
+Define env variablle for grafana in .grafana.env using following template. 
+```sh
+GF_SERVER_ROOT_URL=https://<domain-name>:3000/
+TELEGRAM_CHAT_ID=-78222322                      # configure telegram chat ID 
+TELEGRAM_BOT_TOKEN=22222920290sws               # configure Telegram bot token 
+```
 
 ## Deploy
+
+### Installation of Node-Exporter and docker daemon metrics
+Done Through Ansible. Refer [here](ansible/README.md)
 
 ### Production
 ```sh
