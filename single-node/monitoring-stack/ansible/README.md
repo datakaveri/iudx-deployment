@@ -1,6 +1,7 @@
 # Provisioning node-exporter, docker daemon metrics
 
 ## Directory Structure
+```sh
 .
 |-- README.md
 |-- deploy-node-exporter-docker-metrics.yml
@@ -10,7 +11,7 @@
 `-- templates
     |-- docker-targets.j2
     `-- node-exporter-targets.j2
-
+```
 ## Inventory
 Prepare inventory.yml using the example-inventory.yml file.
 ## Provisioning Node-exporter and docker daemon metrics
