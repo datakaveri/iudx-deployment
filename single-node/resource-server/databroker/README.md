@@ -24,8 +24,16 @@ docker node update --label-add auth_cred_db_node=true <node_name>
 ```
 ## Create .rabbitmq-backup.env file 
 Assign env variables required for backup in .rabbitmq-backup.env file. Template
-is shown at the end.
+is shown below.
 
+```sh
+
+# need to assign appropiate values to following fields
+remote_machine=x.y.z.a						 #ip of remote machine
+remote_user=xyz							 #remote machine login user
+rabbitmq_user=wyz						 #rabbitmq username
+remote_backup_dir=/home/rabbitmq-backup				 #backup directory path in remote machine
+```
 ## Deploy
 
 ### Production
@@ -43,12 +51,5 @@ docker stack deploy -c databroker-stack.yml -c databroker-stack.test.yml  databr
 # rabbitmq + auth_cred_db postgres
 docker stack deploy -c databroker-stack.yml -c databroker-stack.dev.yml  databroker
 ```
-## Template of .rabbitmq-backup.env
-```sh
-rabbitmq_passwd_file=/run/secrets/rabbitmq-admin-passwd
-# need to assign appropiate values to following fields
-remote_machine=x.y.z.a						 #ip of remote machine
-remote_user=xyz							 #remote machine login user
-rabbitmq_user=wyz						 #rabbitmq username
-remote_backup_dir=/home/rabbitmq-backup				 #backup directory path in remote machine
-```
+
+

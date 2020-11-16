@@ -56,8 +56,8 @@ all:
     ansible_ssh_private_key_file:               
     # specify the private subnet in regex. Eg. 10.20.1.\d+\/24 for 10.20.1.0/24 for subnet
     private_subnet:                                      
-						
-
+    
+    
   children: 
 
     # swarm init node and the deployment node

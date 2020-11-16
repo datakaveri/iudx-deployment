@@ -22,7 +22,7 @@ services:
     networks:
       - overlay-net
 
-  nginx:
+  cat-nginx:
     image: nginx:mainline-alpine
     deploy:
       replicas: 1
