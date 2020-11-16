@@ -9,7 +9,7 @@ networks:
 
 services:
   rabbitmq:
-    image: rabbitmq:management # using ubuntu based images as its officially supported
+    image: rabbitmq:3.8.9-management # using ubuntu based images as its officially supported
     #setting the hostname, so that when same/new container restarts it uses the same directory to save i.e "/var/lib/rabbitmq/rabbit@hostname"
     hostname: rabbitmq
   # volume stores metadata of queues, excahnges and also persistent queue messages
@@ -71,10 +71,6 @@ services:
         mode: 0600 
       - rabbitmq-admin-passwd
 
-    environment:
-      - rabbitmq_url=https://rabbitmq:15671
-      - rabbitmq_passwd_file=/run/secrets/rabbitmq-admin-passwd
-
     deploy:
       replicas: 1
       placement:
@@ -87,49 +83,16 @@ services:
     env_file:
         - ./.rabbitmq-backup.env
 
-  auth_cred_db:
-    image: postgres:10.14
-    volumes: 
-      - type: volume
-        source: db-volume
-        target: /var/lib/postgresql/data
-    configs:
-      - source: auth-cred-db-user-creation
-        target: /docker-entrypoint-initdb.d/auth-cred-db-user-creation.sh
-        mode: 0755
-      - source: auth-cred-db-schema
-        target: /docker-entrypoint-initdb.d/auth-cred-db-schema.sql
-        mode: 0755
-    secrets:
-      - auth-cred-db-passwd
-      - postgres-super-user-passwd
-    environment: 
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres-super-user-passwd
-      - POSTGRES_USER=iudx_psql_super_user
-    deploy:
-        replicas: 1
-        placement:
-          constraints:
-          - "node.labels.auth_cred_db_node==true"
-        restart_policy:
-          condition: on-failure
-          delay: 5s
-          window: 10s
 
 
 volumes:
   rabbitmq-volume:
   backup-volume:
-  db-volume:
 
 
 configs:
   rabbitmq-config:
     file:  rabbitmq/conf/rabbitmq.conf
-  auth-cred-db-user-creation:
-    file: auth-cred-db/conf/auth-cred-db-user-creation.sh
-  auth-cred-db-schema:
-    file: auth-cred-db/conf/auth-cred-db-schema.sql
 
 secrets:
   rabbitmq-ca-cert.pem:
@@ -148,10 +111,6 @@ secrets:
   rabbitmq-admin-passwd: # rabbimq passwd of admin user
     file: secrets/passwords/rabbitmq-admin-passwd
 
-  postgres-super-user-passwd:
-    file: secrets/passwords/postgres-super-user-passwd
-  auth-cred-db-passwd:
-    file: secrets/passwords/auth-cred-db-passwd
       
     
     

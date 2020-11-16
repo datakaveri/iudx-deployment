@@ -11,11 +11,8 @@ SET standard_conforming_strings = on;
 -- Roles
 --
 
-CREATE ROLE iudx_user;
-ALTER ROLE iudx_user WITH NOSUPERUSER NOINHERIT NOCREATEROLE CREATEDB LOGIN NOREPLICATION BYPASSRLS;
-
-
-
+CREATE ROLE temp;
+ALTER ROLE temp WITH NOSUPERUSER NOINHERIT NOCREATEROLE CREATEDB LOGIN NOREPLICATION BYPASSRLS;
 
 
 
@@ -23,7 +20,7 @@ ALTER ROLE iudx_user WITH NOSUPERUSER NOINHERIT NOCREATEROLE CREATEDB LOGIN NORE
 -- Database creation
 --
 
-CREATE DATABASE iudx WITH TEMPLATE = template0 OWNER = iudx_user;
+CREATE DATABASE iudx WITH TEMPLATE = template0 OWNER = temp;
 REVOKE CONNECT,TEMPORARY ON DATABASE template1 FROM PUBLIC;
 GRANT CONNECT ON DATABASE template1 TO PUBLIC;
 
@@ -69,7 +66,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: databroker; Type: TABLE; Schema: public; Owner: iudx_user
+-- Name: databroker; Type: TABLE; Schema: public; Owner: 
 --
 
 CREATE TABLE public.databroker (
@@ -78,10 +75,10 @@ CREATE TABLE public.databroker (
 );
 
 
-ALTER TABLE public.databroker OWNER TO iudx_user;
+
 
 --
--- Name: file_server_token; Type: TABLE; Schema: public; Owner: iudx_user
+-- Name: file_server_token; Type: TABLE; Schema: public; Owner: 
 --
 
 CREATE TABLE public.file_server_token (
@@ -92,17 +89,17 @@ CREATE TABLE public.file_server_token (
 );
 
 
-ALTER TABLE public.file_server_token OWNER TO iudx_user;
+
 
 --
--- Name: COLUMN file_server_token.server_id; Type: COMMENT; Schema: public; Owner: iudx_user
+-- Name: COLUMN file_server_token.server_id; Type: COMMENT; Schema: public; Owner: 
 --
 
 COMMENT ON COLUMN public.file_server_token.server_id IS 'from which API is called';
 
 
 --
--- Name: registercallback; Type: TABLE; Schema: public; Owner: iudx_user
+-- Name: registercallback; Type: TABLE; Schema: public; Owner: 
 --
 
 CREATE TABLE public.registercallback (
@@ -117,10 +114,10 @@ CREATE TABLE public.registercallback (
 );
 
 
-ALTER TABLE public.registercallback OWNER TO iudx_user;
+
 
 --
--- Name: databroker databroker_pkey; Type: CONSTRAINT; Schema: public; Owner: iudx_user
+-- Name: databroker databroker_pkey; Type: CONSTRAINT; Schema: public; Owner: 
 --
 
 ALTER TABLE ONLY public.databroker
@@ -128,7 +125,7 @@ ALTER TABLE ONLY public.databroker
 
 
 --
--- Name: databroker databroker_username_key; Type: CONSTRAINT; Schema: public; Owner: iudx_user
+-- Name: databroker databroker_username_key; Type: CONSTRAINT; Schema: public; 
 --
 
 ALTER TABLE ONLY public.databroker
@@ -136,7 +133,7 @@ ALTER TABLE ONLY public.databroker
 
 
 --
--- Name: file_server_token file_server_token_pkey; Type: CONSTRAINT; Schema: public; Owner: iudx_user
+-- Name: file_server_token file_server_token_pkey; Type: CONSTRAINT; Schema: public; 
 --
 
 ALTER TABLE ONLY public.file_server_token
@@ -144,7 +141,7 @@ ALTER TABLE ONLY public.file_server_token
 
 
 --
--- Name: registercallback registercallback_pkey; Type: CONSTRAINT; Schema: public; Owner: iudx_user
+-- Name: registercallback registercallback_pkey; Type: CONSTRAINT; Schema: public; 
 --
 
 ALTER TABLE ONLY public.registercallback
@@ -152,10 +149,9 @@ ALTER TABLE ONLY public.registercallback
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: iudx_psql_super_user
+-- Name: SCHEMA public; Type: ACL; Schema: -; 
 --
 
-GRANT USAGE ON SCHEMA public TO iudx_user;
 
 
 --

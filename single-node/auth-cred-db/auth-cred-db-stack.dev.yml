@@ -1,0 +1,7 @@
+version: "3.4"
+services:
+  auth_cred_db:
+    ports:
+      - target: 5432
+        published: 5433
+        mode: host
