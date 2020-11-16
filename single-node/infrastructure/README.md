@@ -1,4 +1,4 @@
-# Provisioning Swarm, node-exporter, docker daemon metrics
+# Provisioning Infrastructure
 
 ## Directory Structure
 ```sh
