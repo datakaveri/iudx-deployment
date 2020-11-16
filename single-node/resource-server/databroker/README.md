@@ -37,17 +37,17 @@ remote_backup_dir=/home/rabbitmq-backup				 #backup directory path in remote mac
 
 ### Production
 ```sh
-# rabbitmq + backup
+# rabbitmq at random port + backup
 docker stack deploy -c databroker-stack.yml -c databroker-stack.prod.yml  databroker
 ```
 ### Testing
 ```sh
-# rabbitmq + backup
+# rabbitmq at random port + backup 
 docker stack deploy -c databroker-stack.yml -c databroker-stack.test.yml  databroker
 ```
 ### Development
 ```sh
-# rabbitmq 
+# rabbitmq at 443 port
 docker stack deploy -c databroker-stack.yml -c databroker-stack.dev.yml  databroker
 ```
 
