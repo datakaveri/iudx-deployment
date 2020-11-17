@@ -35,14 +35,14 @@ docker stack deploy -c auth-cred-db-stack.yml -c auth-cred-db-stack.test.yml aut
 docker stack deploy -c auth-cred-db-stack.yml -c auth-cred-db-stack.dev.yml auth-cred-db
 ```
 # Note
-* This service is split from databroker stack file. Assumes,
+1. This service is split from databroker stack file. Assumes,
   'databroker\_db-volume' named volume to be present already, if not need to
   create the volume and then deploy.
-* Command to dump only psql data from a particular database.
+2. Command to dump only psql data from a particular database of a dockerized psql.
 ```sh
-pg_dump -a -U <username/role name>  <db_name> > <dump-file>.sql
+docker exec <psqldb-container> pg_dump -a -U <username/role name>  <db_name> > <dump-file>.sql
 ```
-* Command to restore psql dump data (of a particular database) to dockerized  psql 
+3. Command to restore psql dump data (of a particular database) to dockerized  psql.
 
 ```sh
 cat <dump_file>.sql | docker exec -i <psqldb-container> psql -U <username/role> -d <dbname>
