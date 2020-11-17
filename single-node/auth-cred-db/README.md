@@ -19,14 +19,19 @@ docker node update --label-add auth_cred_db_node=true <node_name>
 
 ## Deploy
 
-### Production/testing
+### Production
 ```sh
-# auth-cred-db listening at port 5432
-docker stack deploy -c auth-cred-db-stack.yml -c auth-cred-db-stack.prod.yml 
+# auth-cred-db listening at host's port 5432 
+docker stack deploy -c auth-cred-db-stack.yml -c auth-cred-db-stack.prod.yml auth-cred-db
+```
+### Testing
+```sh
+# auth-cred-db, port not published to host
+docker stack deploy -c auth-cred-db-stack.yml -c auth-cred-db-stack.test.yml auth-cred-db
 ```
 ### Devlopment
 ```sh
-# auth-cred-db listening at port 5433
+# auth-cred-db listening at host's port 5433
 docker stack deploy -c auth-cred-db-stack.yml -c auth-cred-db-stack.dev.yml auth-cred-db
 ```
 # Note
