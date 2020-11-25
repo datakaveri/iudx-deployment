@@ -8,9 +8,4 @@ services:
       - target: 5671
         published: 24567
         mode: host
-  auth_cred_db:
-    ports:
-      - target: 5432
-        published: 5432
-        mode: host
 
