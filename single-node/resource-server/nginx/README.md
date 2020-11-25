@@ -38,8 +38,18 @@ secrets
 |-- rs-cert
 `-- rs-key
 ```
-## Required environment variables
-Add env variables in .env file from the template shown at the end.
+## Create Environment file
+Add env variables in .env file using the template shown below.
+
+```sh
+NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
+NGINX_ENVSUBST_TEMPLATE_SUFFIX=.template
+NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/
+API_SERVER_NAME=rs.io.test
+API_SERVICE_NAME=calc
+API_SERVICE_PORT=8080
+API_SERVER_PROTOCOL=http
+```
 
 ## Node labels
 On a docker-swarm master node, run
@@ -82,19 +92,9 @@ limit_req zone=rs_req_total burst=<number-of-burst-requests-allowed> nodelay;
 limit_req_zone $binary_remote_addr zone=rs_req_per_ip:<size> rate=<max-request-rate-to-RS-per-IP>r/s;
 limit_req zone=rs_req_per_ip burst=<number-of-burst-requests-allowed> nodelay;
 ```
-# template of .env file 
 
-```sh
-NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
-NGINX_ENVSUBST_TEMPLATE_SUFFIX=.template
-NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/
-API_SERVER_NAME=rs.io.test
-API_SERVICE_NAME=calc
-API_SERVICE_PORT=8080
-API_SERVER_PROTOCOL=http
-```
+
 
 # Note 
-    *   Don't use nginx 1.19 (mainline) experimental features as it might
-        contain bugs.
+  *  Don't use nginx 1.19 (mainline) experimental features as it might contain bugs.
 

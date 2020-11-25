@@ -28,10 +28,10 @@ assigned appropiate values.
 rabbitmq_url=https://rabbitmq:15671
 rabbitmq_passwd_file=/run/secrets/rabbitmq-admin-passwd
 # need to assign appropiate values to following fields
-remote_machine=x.y.z.a						 #ip of remote machine
-remote_user=xyz							 #remote machine login user
-rabbitmq_user=wyz						 #rabbitmq username
-remote_backup_dir=/home/rabbitmq-backup				 #backup directory path in remote machine
+remote_machine=x.y.z.a						               #ip of remote machine
+remote_user=xyz						                     	 #remote machine login user
+rabbitmq_user=wyz						                     #rabbitmq username
+remote_backup_dir=/home/rabbitmq-backup				   #backup directory path in remote machine
 ```
 ## Deploy
 
@@ -50,6 +50,3 @@ docker stack deploy -c databroker-stack.yml -c databroker-stack.test.yml  databr
 # rabbitmq at 443 port
 docker stack deploy -c databroker-stack.yml -c databroker-stack.dev.yml  databroker
 ```
-
-
-
