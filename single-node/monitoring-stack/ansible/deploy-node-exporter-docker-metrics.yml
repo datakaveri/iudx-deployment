@@ -37,7 +37,7 @@
     template:
       src: templates/node-exporter-targets.j2
       dest: /tmp/metrics-targets/node-exporter.json
- - name: update targets for docker metrics
+  - name: update targets for docker metrics
     template:
        src: templates/docker-targets.j2
        dest: /tmp/metrics-targets/docker.json
