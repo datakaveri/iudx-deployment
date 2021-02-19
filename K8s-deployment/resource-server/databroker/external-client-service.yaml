@@ -1,0 +1,25 @@
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: rabbitmq-test
+  name: rabbitmq-external-client
+  labels:
+    app: rabbitmq
+    type: LoadBalancer
+spec:
+  type: NodePort
+  ports:
+   - name: https
+     port: 15671
+     targetPort: 15671
+     nodePort: 31671
+     protocol: TCP
+
+   - name: amqps
+     port: 5671
+     targetPort: 5671
+     nodePort: 30671
+     protocol: TCP
+
+  selector:
+    app: rabbitmq
