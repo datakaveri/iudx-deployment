@@ -76,13 +76,16 @@ On a docker-swarm master node, run
 # Label the Catalogue Server NGINX node
 docker node update --label-add cat_nginx_node=true <hostname/ID>
 ```
-
+## Login into registry
+On a docker-swarm master node, run
+```sh
+docker login dockerhub.iudx.io
+```
 ## Deploy
 On a docker-swarm master node, run
 ```sh
 # Deploy stack, deploys mlayer, api, catalogue ui nginx
-docker stack deploy -c cat-nginx.yml cat-nginx
-
+docker stack deploy --with-registry-auth -c cat-nginx.yml cat-nginx
 # Remove stack
 docker stack rm cat-nginx
 ```
