@@ -2,7 +2,7 @@
 ## Required Secrets
 ```sh
 ../../secrets/
-├── passwords
+├── credentials
 │   ├── rabbitmq-definitions.json
 │   └── rabbitmq-erlang-cookie
 └── pki
@@ -12,8 +12,13 @@
 ```
 ## Required storage class
 ```sh
-# For ebs as storage class
+# For ebs as storage class, deploy ebs-storage class in K8s cluster if not present
 kubectl apply -f ../../K8s-cluster/cloud-specific/aws/ebs-storageclass.yaml
+```
+## Required cluster-autoscaler
+```sh
+# Deploy cluster-autoscaler if not present in K8s cluster
+kubectl apply -f ../../K8s-cluster/cloud-specific/aws/cluster-autoscaler-autodiscover.yaml
 ```
 ## Deploy
 #### Dependencies
@@ -45,10 +50,11 @@ kubectl logs -n rabbitmq-test -f POD_NAME
 ## To dos:
 1. Integration of cert-manager and TLS certs of RMQ
 2. Prometheus operator integration with RMQ monitoring
-3. Differentiate following things between env, mostly using Kustomize:
+3. Differentiate following things between environements - dev(mostly deployed in minikube), test and production mostly using Kustomize:
    - Persistent Volumes (PV)  
    - resource requests and limits
    - namespace naming
 ## References
 1. [RabbitMQ in k8s using StatefulSet in Minikube](https://github.com/rabbitmq/diy-kubernetes-examples/tree/master/minikube)
 2. [Rabbitmq in k8s using Statefulset in cloud-specific](https://github.com/rabbitmq/diy-kubernetes-examples/tree/master/gke)
+3. [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler/cloudprovider/aws)
