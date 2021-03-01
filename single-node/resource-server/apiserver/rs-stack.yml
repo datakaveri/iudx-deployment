@@ -1,0 +1,57 @@
+version: '3.7'
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  rs:
+    image: dockerhub.iudx.io/iudx/rs:latest
+    env_file:
+      - ./.rs-api.env
+    configs:
+      - source: apidoc-html
+        target: /usr/share/app/docs/apidoc.html
+      - source: iudx-png
+        target: /usr/share/app/docs/iudx.png
+      - source: openapi-yaml
+        target: /usr/share/app/docs/openapi.yaml
+      - source: rs_overview-png
+        target: /usr/share/app/docs/rs_overview.png
+    secrets:
+      - source: config-depl
+        target: /usr/share/app/secrets/credentials/all-verticles-configs/config.json
+      - source:  keystore
+        target: /usr/share/app/secrets/credentials/keystore.jks
+    expose:
+      - "80"
+      - "9000"
+    networks:
+      - overlay-net
+    command: bash -c "exec java $$RS_JAVA_OPTS  -jar ./fatjar.jar  --host $$(hostname) -c secrets/credentials/all-verticles-configs/config.json"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.rs_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+configs:
+  apidoc-html:
+    file: docs/apidoc.html
+  iudx-png:
+    file: docs/iudx.png
+  openapi-yaml:
+    file: docs/openapi.yaml
+  rs_overview-png:
+    file: docs/rs_overview.png
+
+secrets:
+  config-depl:
+    file:  secrets/credentials/all-verticles-configs/config-depl.json
+  keystore:
+    file: secrets/credentials/keystore.jks
+       

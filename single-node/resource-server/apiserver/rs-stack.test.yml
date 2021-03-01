@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  rs:
+    ports:
+    - "80:80"
+    - "9000:9000"
