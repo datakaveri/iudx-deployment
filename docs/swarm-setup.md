@@ -3,7 +3,6 @@
 ## Pre-Requisites
 0) One or more nodes needed to create docker swarm cluster
 1) Firewall rules to setup in docker swarm nodes 
-    - Ssh port 22 needs to open in all VMs.
     - Outbound traffic to download packages etc.
     - Every physical node needs to expose the following ports for Docker swarm:
         - TCP port 2377 for cluster management communications
