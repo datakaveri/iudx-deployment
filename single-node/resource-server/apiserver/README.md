@@ -16,7 +16,12 @@
     RS_URL=https://rs.iudx.io       # Default value is http://localhost
     LOG_LEVEL=INFO                  # LOG_LEVEL can be TRACE, DEBUG, INFO, WARN, ERROR,FATAL, OFF, ALL, default is DEBUG
     RS_JAVA_OPTS=-Xmx4096m          # RS_JAVA_OPTS can be any java options but as of now heap max size is sufficient, default is 2GiB
-    ```
+ 
+## Assign node labels
+
+```sh
+docker node update --label-add rs_node=true <node_name>   
+```
 ### Deploy
    - Set `rs_version` environment variable to deploy that tagged image:
     ```sh

@@ -100,7 +100,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.databroker_node==true"
+          - "node.labels.auth_cred_db_node==true"
       restart_policy:
         condition: on-failure
         delay: 5s
@@ -124,7 +124,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.rs_api_node==true"
+          - "node.labels.rs_authenticator_node==true"
       restart_policy:
         condition: on-failure
         delay: 5s
