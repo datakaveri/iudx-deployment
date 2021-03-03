@@ -7,7 +7,7 @@ networks:
 
 services:
   rs:
-    image: dockerhub.iudx.io/iudx/rs:latest
+    image: dockerhub.iudx.io/iudx/rs-depl:${rs_version:?err}
     env_file:
       - ./.rs-api.env
     configs:

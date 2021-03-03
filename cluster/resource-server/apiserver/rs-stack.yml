@@ -7,7 +7,7 @@ networks:
 
 services:
   rs-apiserver:
-    image: dockerhub.iudx.io/iudx/rs:latest
+    image: dockerhub.iudx.io/iudx/rs-depl:${rs_version:?err}
     env_file:
       - ./.rs-api.env
     configs:
@@ -41,7 +41,7 @@ services:
         window: 10s
 
   rs-databroker:
-    image: dockerhub.iudx.io/iudx/rs:latest
+    image: dockerhub.iudx.io/iudx/rs-depl:${rs_version:?err}
     env_file:
       - ./.rs-api.env
     secrets:
@@ -63,7 +63,7 @@ services:
         window: 10s
 
   rs-database:
-    image: dockerhub.iudx.io/iudx/rs:latest
+    image: dockerhub.iudx.io/iudx/rs-depl:${rs_version:?err}
     env_file:
       - ./.rs-api.env
     secrets:
@@ -85,7 +85,7 @@ services:
         window: 10s
 
   rs-callback:
-    image: dockerhub.iudx.io/iudx/rs:latest
+    image: dockerhub.iudx.io/iudx/rs-depl:${rs_version:?err}
     env_file:
       - ./.rs-api.env
     secrets:
@@ -107,7 +107,7 @@ services:
         window: 10s
 
   rs-authenticator:
-    image: dockerhub.iudx.io/iudx/rs:latest
+    image: dockerhub.iudx.io/iudx/rs-depl:${rs_version:?err}
     env_file:
       - ./.rs-api.env
     secrets:
