@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cat-database
+  namespace: cat-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cat-database
+  template:
+    metadata:
+      labels:
+        app: cat-database
+    spec:
+      containers:
+      - name: cat-database 
+        image: dockerhub.iudx.io/iudx/cat-prod:2.5.cb3bba6
+        volumeMounts:
+          - name: cat-config-database
+            mountPath: /usr/share/app/secrets/one-verticle-configs
+        ports:
+          - name: prometheus
+            containerPort: 9000
+            protocol: TCP
+          - name: hazelcast
+            containerPort: 5701
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9000
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 10
+        envFrom:
+          - configMapRef:
+              name: cat-env
+        env:
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        command: ["/bin/bash"]
+        args: ["-c","exec java $$CAT_JAVA_OPTS  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-database.json"]
+      imagePullSecrets:
+        - name: regcred    
+      volumes:
+        - name: cat-config-database
+          secret:
+            secretName: cat-config-database
