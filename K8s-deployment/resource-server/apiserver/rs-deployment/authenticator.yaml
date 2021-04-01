@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-authenticator
+  namespace: rs-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rs-authenticator
+  template:
+    metadata:
+      labels:
+        app: rs-authenticator
+    spec:
+      containers:
+      - name: rs-authenticator 
+        image: dockerhub.iudx.io/iudx/rs-depl:2.5.b69b75b 
+        volumeMounts:
+          - name: rs-config-authenticator
+            mountPath: /usr/share/app/secrets/one-verticle-configs
+          - name: rs-keystore
+            mountPath: /usr/share/app/secrets/
+        ports:
+          - name: prometheus
+            containerPort: 9000
+            protocol: TCP
+          - name: hazelcast
+            containerPort: 5701
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9000
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 10
+        envFrom:
+          - configMapRef:
+              name: rs-env
+        env:
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        command: ["/bin/bash"]
+        args: ["-c","exec java $$RS_JAVA_OPTS  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
+      imagePullSecrets:
+        - name: regcred    
+      volumes:
+        - name: rs-config-authenticator
+          secret:
+            secretName: rs-config-authenticator
+        - name: rs-keystore
+          secret:
+            secretName: rs-keystore
+
