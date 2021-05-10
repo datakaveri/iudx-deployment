@@ -6,11 +6,11 @@
 |-- .gitignore
 |-- README.md
 |-- conf
-|   `-- rs.conf
-|-- rs-nginx.yml
+|   `-- fs.conf
+|-- fs-nginx.yml
 `-- secrets
-    |-- rs-cert
-    `-- rs-key
+    |-- fs-cert
+    `-- fs-key
 
 ```
 
@@ -35,8 +35,8 @@
 ## Required secrets
 ```sh
 secrets
-|-- rs-cert
-`-- rs-key
+|-- fs-cert
+`-- fs-key
 ```
 ## Create Environment file
 Add env variables in .env file using the template shown below.
@@ -45,8 +45,8 @@ Add env variables in .env file using the template shown below.
 NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
 NGINX_ENVSUBST_TEMPLATE_SUFFIX=.template
 NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/
-API_SERVER_NAME=rs.io.test
-API_SERVICE_NAME=calc
+API_SERVER_NAME=fs.io.test
+API_SERVICE_NAME=fs
 API_SERVICE_PORT=8080
 API_SERVER_PROTOCOL=http
 ```
@@ -55,7 +55,7 @@ API_SERVER_PROTOCOL=http
 On a docker-swarm master node, run
 ```sh
 # Label the Resource Server NGINX node
-docker node update --label-add rs_nginx_node=true <hostname/ID>
+docker node update --label-add fs_nginx_node=true <hostname/ID>
 
 ```
 
@@ -63,10 +63,10 @@ docker node update --label-add rs_nginx_node=true <hostname/ID>
 On a docker-swarm master node, run
 ```sh
 # Deploy stack
-docker stack deploy -c rs-nginx.yml rs-nginx.yml
+docker stack deploy -c fs-nginx.yml fs-nginx
 
 # Remove stack
-docker stack rm rs-nginx
+docker stack rm fs-nginx
 ```
 
 # Configuration
@@ -74,23 +74,23 @@ docker stack rm rs-nginx
 ## Resource Server
 ### Limit total active connections
 ```sh
-limit_conn_zone $server_name zone=rs_conn_total:<size>;
-limit_conn rs_conn_total <max-number-of-active-connections-to-RS>;
+limit_conn_zone $server_name zone=fs_conn_total:<size>;
+limit_conn fs_conn_total <max-number-of-active-connections-to-fs>;
 ```
 ### Limit active connections per IP
 ```sh
-limit_conn_zone $binary_remote_addr zone=rs_conn_per_ip:<size>;
-limit_conn rs_conn_per_ip <max-number-of-active-connections-to-RS-per-IP>;
+limit_conn_zone $binary_remote_addr zone=fs_conn_per_ip:<size>;
+limit_conn fs_conn_per_ip <max-number-of-active-connections-to-fs-per-IP>;
 ```
 ### Limit overall request rate
 ```sh
-limit_req_zone $server_name zone=rs_req_total:<size> rate=<max-request-rate-to-RS>;
-limit_req zone=rs_req_total burst=<number-of-burst-requests-allowed> nodelay;
+limit_req_zone $server_name zone=fs_req_total:<size> rate=<max-request-rate-to-fs>;
+limit_req zone=fs_req_total bufst=<number-of-burst-requests-allowed> nodelay;
 ```
 ### Limit request rate per IP
 ```sh
-limit_req_zone $binary_remote_addr zone=rs_req_per_ip:<size> rate=<max-request-rate-to-RS-per-IP>r/s;
-limit_req zone=rs_req_per_ip burst=<number-of-burst-requests-allowed> nodelay;
+limit_req_zone $binary_remote_addr zone=fs_req_per_ip:<size> rate=<max-request-rate-to-fs-per-IP>r/s;
+limit_req zone=fs_req_per_ip burst=<number-of-burst-requests-allowed> nodelay;
 ```
 
 

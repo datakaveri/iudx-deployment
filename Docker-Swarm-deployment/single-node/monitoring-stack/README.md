@@ -2,12 +2,15 @@
 ## Required secrets
 ```sh
 secrets/
-|-- passwords
-|   |-- grafana-super-admin-passwd
-|   `-- grafana-super-admin-username
-`-- pki
-    |-- grafana-server-cert.pem  (letsencrpt fullchain.pem)
-    `-- grafana-server-key.pem   (letsencrypt privkey.pem)
+├── configs
+│   └── blackbox-targets.yml (only needed in test environment. Its a file_sd_config. See example below)
+├── passwords 
+│   ├── grafana-super-admin-passwd
+│   └── grafana-super-admin-username
+└── pki
+    ├── grafana-server-cert.pem (letsencrypt fullchain.pem)
+    └── grafana-server-key.pem (letsencrypt privkey.pem)
+
  ```
 ## Assign node labels 
 ```sh
@@ -20,6 +23,12 @@ GF_SERVER_ROOT_URL=https://<domain-name>:3000/
 TELEGRAM_CHAT_ID=-78222322                      # configure telegram chat ID 
 TELEGRAM_BOT_TOKEN=22222920290sws               # configure Telegram bot token 
 ```
+## Create blackbox-targets.yml file (only in test environment)
+```sh
+- targets:
+    - https://rs.io.test/apis
+    - https://catalogue.io.test/
+```
 
 ## Deploy
 
@@ -29,19 +38,23 @@ Done Through Ansible. Refer [here](ansible/README.md)
 ### Production
 ```sh
 # Prometheus + Loki + Grafana + Promtail+ Vertx_SD (assumes zookeeper to be running)
-docker stack deploy -c mon-stack.yml -c mon-stack.prod.yml  mon-stack
+docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.prod.yml  mon-stack
 
 ```
 ### Testing
 ```sh
 # Prometheus + Loki + Grafana + Promtail+ Vertx_SD (assumes zookeeper to be running)
-docker stack deploy -c mon-stack.yml -c mon-stack.test.yml  mon-stack
+docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.test.yml  mon-stack
 
 ```
 ### Development
 ```sh
 # Zookeeper + Prometheus + Loki + Grafana + Promtail+ Vertx_SD
-docker stack deploy -c mon-stack.yml -c mon-stack.dev.yml  mon-stack
+docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.dev.yml  mon-stack
+```
+### Any other custom deployment
+```sh
+docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.temp.yml  mon-stack
 ```
 
 ## Description

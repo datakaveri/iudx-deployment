@@ -20,7 +20,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.2.1"
+      "version": "7.2.0"
     },
     {
       "type": "panel",
@@ -58,7 +58,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1604949514352,
+  "iteration": 1620665641800,
   "links": [],
   "panels": [
     {
@@ -121,7 +121,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "targets": [
         {
           "expr": "sum(up{cluster=\"$cluster\"})",
@@ -202,7 +202,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "targets": [
         {
           "expr": "process_cpu_usage{instance=\"$instance\"} ",
@@ -314,7 +314,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "targets": [
         {
           "expr": "sum(jvm_memory_used_bytes{instance=\"$instance\", area=\"nonheap\"})*100/sum(jvm_memory_max_bytes{instance=\"$instance\", area=\"nonheap\"})",
@@ -391,7 +391,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "targets": [
         {
           "expr": "sum(jvm_memory_used_bytes{instance=\"$instance\", area=\"heap\"})*100/sum(jvm_memory_max_bytes{instance=\"$instance\", area=\"heap\"})",
@@ -473,7 +473,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -611,7 +611,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -747,7 +747,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -896,7 +896,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1024,7 +1024,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1150,7 +1150,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1286,7 +1286,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1398,7 +1398,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1480,7 +1480,7 @@
         "y": 24
       },
       "hiddenSeries": false,
-      "id": 4,
+      "id": 7,
       "legend": {
         "avg": false,
         "current": false,
@@ -1498,7 +1498,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1508,19 +1508,35 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "round(sum(rate(vertx_http_server_requestCount_total{cluster=\"$cluster\",instance=\"$instance\"}[1m])) by (code), 0.001)",
+          "expr": "sum(irate(vertx_http_server_responseTime_seconds_sum{cluster=\"$cluster\", instance=\"$instance\"}[1m])) by (code) / sum(irate(vertx_http_server_responseTime_seconds_count{cluster=\"$cluster\", instance=\"$instance\"}[1m])) by (code)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
-          "legendFormat": "",
+          "legendFormat": "{{code}} 1 m instant",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.5, sum(rate(vertx_http_server_responseTime_seconds_bucket{cluster=\"$cluster\", instance=\"$instance\"}[1m])) by (le,path))",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "{{path}} [med]",
           "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(vertx_http_server_responseTime_seconds_bucket{cluster=\"$cluster\", instance=\"$instance\"}[1m])) by (le,path))",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "{{path}} [99p]",
+          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Request count rate by error code",
+      "title": "Response time by code",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1536,8 +1552,8 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:2186",
-          "format": "ops",
+          "$$hashKey": "object:935",
+          "format": "s",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1545,7 +1561,7 @@
           "show": true
         },
         {
-          "$$hashKey": "object:2187",
+          "$$hashKey": "object:936",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1598,7 +1614,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1608,7 +1624,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "round(sum(rate(vertx_http_server_requestCount_total{cluster=\"$cluster\", instance=~\"$instance\"}[1m])) by (code,path), 0.001)",
+          "expr": "round(sum(rate(vertx_http_server_requestCount_total{cluster=\"$cluster\", instance=~\"$instance\"}[1m])) by (code), 0.001)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1620,7 +1636,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Request count rate by code and path",
+      "title": "Request count rate by code ",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1636,6 +1652,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:164",
           "format": "ops",
           "label": null,
           "logBase": 1,
@@ -1644,6 +1661,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:165",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1698,7 +1716,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1766,6 +1784,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:537",
           "format": "s",
           "label": null,
           "logBase": 1,
@@ -1774,122 +1793,7 @@
           "show": true
         },
         {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 8,
-        "y": 31
-      },
-      "hiddenSeries": false,
-      "id": 7,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.2.1",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(irate(vertx_http_server_responseTime_seconds_sum{cluster=\"$cluster\", instance=\"$instance\"}[1m])) by (path) / sum(irate(vertx_http_server_responseTime_seconds_count{cluster=\"$cluster\", instance=\"$instance\"}[1m])) by (path)",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "{{path}} 1 m instant",
-          "refId": "B"
-        },
-        {
-          "expr": "histogram_quantile(0.5, sum(rate(vertx_http_server_responseTime_seconds_bucket{cluster=\"$cluster\", instance=\"$instance\"}[1m])) by (le,path))",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "{{path}} [med]",
-          "refId": "A"
-        },
-        {
-          "expr": "histogram_quantile(0.99, sum(rate(vertx_http_server_responseTime_seconds_bucket{cluster=\"$cluster\", instance=\"$instance\"}[1m])) by (le,path))",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "{{path}} [99p]",
-          "refId": "C"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Response time by path",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:935",
-          "format": "s",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:936",
+          "$$hashKey": "object:538",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1941,7 +1845,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1951,15 +1855,15 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(vertx_http_server_responseTime_seconds_count{cluster=\"$cluster\", instance=\"$instance\",code=\"200\"}[1m]))  by (path) /sum(rate(vertx_http_server_responseTime_seconds_sum{cluster=\"$cluster\",code=\"200\"} [1m])) by ( path) ",
+          "expr": "sum(rate(vertx_http_server_responseTime_seconds_count{cluster=\"$cluster\", instance=\"$instance\",code=\"200\"}[1m]))  /sum(rate(vertx_http_server_responseTime_seconds_sum{cluster=\"$cluster\",code=\"200\"} [1m]))",
           "interval": "",
-          "legendFormat": "{{path}} 1miniute avg ",
+          "legendFormat": " 1miniute avg ",
           "refId": "A"
         },
         {
-          "expr": "sum(irate(vertx_http_server_responseTime_seconds_count{cluster=\"$cluster\", instance=\"$instance\", code=\"200\"}[1m]))  by (path) /sum(irate(vertx_http_server_responseTime_seconds_sum{cluster=\"$cluster\", instance=\"$instance\",code=\"200\"} [1m])) by (path) ",
+          "expr": "sum(irate(vertx_http_server_responseTime_seconds_count{cluster=\"$cluster\", instance=\"$instance\", code=\"200\"}[1m]))  /sum(irate(vertx_http_server_responseTime_seconds_sum{cluster=\"$cluster\", instance=\"$instance\",code=\"200\"} [1m])) ",
           "interval": "",
-          "legendFormat": "{{path}} 1minute instant ",
+          "legendFormat": "1minute instant ",
           "refId": "B"
         }
       ],
@@ -1967,7 +1871,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Throughput by path",
+      "title": "Throughput",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2045,7 +1949,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2172,7 +2076,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2315,7 +2219,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2416,7 +2320,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2516,7 +2420,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2632,7 +2536,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2748,7 +2652,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2872,7 +2776,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2958,7 +2862,7 @@
       }
     }
   ],
-  "refresh": "10s",
+  "refresh": "30s",
   "schemaVersion": 26,
   "style": "dark",
   "tags": [],
