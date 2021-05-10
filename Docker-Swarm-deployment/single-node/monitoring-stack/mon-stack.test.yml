@@ -6,4 +6,75 @@ services:
       - target: 3000
         published: 3000
         mode: host    
-    
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 500M
+        reservations:
+          cpus: '0.20'
+          memory: 300M  
+  prometheus:
+    deploy:
+      resources:
+        limits:
+          cpus: '1.75'
+          memory: 4096M
+        reservations:
+          cpus: '0.30'
+          memory: 700M
+    secrets:
+      - source: blackbox-targets
+        target: /metric-targets/blackbox-targets.yml
+  promtail:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.20'
+          memory: 500M
+        reservations:
+          cpus: '0.10'
+          memory: 300M
+  loki:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1024M
+        reservations:
+          cpus: '0.30'
+          memory: 700M
+
+  blackbox:
+    image: prom/blackbox-exporter:master
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s 
+      
+      resources:
+        limits:
+          cpus: '0.20'
+          memory: 200M
+        reservations:
+          cpus: '0.10'
+          memory: 100M
+  
+    configs: 
+      - source: blackbox-settings
+        target:  /config/blackbox.yml
+    command: --config.file=/config/blackbox.yml
+
+configs:
+  prometheus-settings:
+    file:  prometheus/conf/prometheus-test.yml
+  blackbox-settings:
+    file: prometheus/blackbox-exporter/blackbox.yml
+secrets:
+  blackbox-targets:
+    file: secrets/configs/blackbox-targets.yml
