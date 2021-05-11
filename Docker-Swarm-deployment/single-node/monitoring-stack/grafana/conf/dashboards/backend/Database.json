@@ -31,7 +31,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 4,
-  "iteration": 1604949377502,
+  "iteration": 1620665861373,
   "links": [],
   "panels": [
     {
@@ -181,7 +181,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.1",
+      "pluginVersion": "7.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -483,5 +483,5 @@
   "timezone": "",
   "title": "Database",
   "uid": "OYWgQeFMk",
-  "version": 15
+  "version": 1
 }
