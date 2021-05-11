@@ -10,7 +10,7 @@ clients:
   - url: http://tasks.loki:3100/loki/api/v1/push
   
 scrape_configs:
- #----------------- other-container-logs(except rs,cat,auth) --------------------------------------------
+ #----------------- other-container-logs(except auth) --------------------------------------------
 - job_name: container
   static_configs:
   - targets:
@@ -37,9 +37,6 @@ scrape_configs:
       instance:
       container_name:
 
-  - match: 
-      selector: '{container_name=~"iudx-(catalogue|resource)-server\\w+"}'
-      action : drop
   - match: 
       selector: '{container_name=~"database_logstash.*.*"}|~ "WARN"'
       stages:
@@ -82,40 +79,6 @@ scrape_configs:
       - labels:
           level:
           type:
-  #-------------------------------  cat&rs server logs----------------------------------------------
-- job_name: system_cat&rs
-  static_configs:
-  - targets:
-    labels: 
-      job: cat&rs-logs  
-      __path__: /tmp/iudx/*.log
-  pipeline_stages:
-  - match:
-      selector: '{filename="/tmp/iudx/cat.log"}'
-      stages:
-      - labels: 
-          host: catalogue-node
-  - match:
-      selector: '{filename="/tmp/iudx/rs.log"}'
-      stages:
-      - labels: 
-          host: resource-server-node
-  - json:
-      expressions:
-        time: timeMillis
-        source: source
-        sourceUrl: sourceURL
-        level: level
-        origin: loggerName #class from which its logged
-        message: message
-  - labels:
-      source:
-      sourceUrl:
-      #level:        # level will create more streams, 5x times
-      #origin:
-  - timestamp:
-      source: time
-      format: UnixMs
 
  
  

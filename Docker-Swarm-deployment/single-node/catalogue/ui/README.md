@@ -10,7 +10,7 @@
 # Reload-UI pipeline
 ## Build 
 ```sh
-# this builds the image with name abhiurn/cat-ui:latest and pushes it to abhiurn dockerhub repo
+# this builds the image with name dockerhub.iudx.io/iudx/cat-ui:latest and pushes it to dockerhub.iudx.io/iudx. 
 ./docker/docker-build.sh
 ```
 ## Reload UI
