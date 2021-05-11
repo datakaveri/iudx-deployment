@@ -1,0 +1,44 @@
+version: "3.4"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  fs-nginx:
+    image: nginx:1.19 
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.fs_nginx_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    ports:
+      - target: 443
+        published: 443
+        mode: host
+    secrets:
+      - source: fs-key
+        target: /etc/ssl/fs-key
+      - source: fs-cert
+        target: /etc/ssl/fs-cert
+    configs:
+      - source: rs-conf
+        target: /etc/nginx/templates/nginx.conf.template
+    networks:
+      - overlay-net
+    env_file:
+      - ./.env
+
+configs:
+  rs-conf:
+    file: conf/fs.conf
+secrets:
+  fs-key:
+    file: secrets/fs-key
+  fs-cert:
+    file: secrets/fs-cert

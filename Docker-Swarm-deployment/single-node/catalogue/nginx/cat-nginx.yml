@@ -42,8 +42,8 @@ services:
         mode: host
     volumes:
       - type: bind
-        source: /usr/share/app/dk-customer-ui
-        target: /usr/share/app/dk-customer-ui
+        source: /usr/share/app/iudx-catalogue-ui
+        target: /usr/share/app/iudx-catalogue-ui
     secrets:
       - source: cat-key
         target: /etc/ssl/cat-key
