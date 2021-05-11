@@ -17,7 +17,7 @@
 At the swarm master node, 
 ``` sh
 # reloads the ui (only when a new image is available in dockerhub)
-docker stack deploy -c ../nginx/cat-nginx.yml cat-nginx
+docker stack deploy --with-registry-auth -c ../nginx/cat-nginx.yml cat-nginx
 
 # to monitor successuful reload (see the latest timed log)
 docker service logs  -t  cat-nginx_copy-catalogue-ui 
