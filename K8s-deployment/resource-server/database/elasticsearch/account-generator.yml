@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: elk-auto-users
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+      - name: job
+        image: alpine
+        command: ["/usr/bin/share/account-generator.sh"]
+        env:
+          - name: ELASTICSEARCH_HOST
+            value: http://elasticsearch-mcd:9200
+        volumeMounts:
+          - name: elk-passwords
+            mountPath: /usr/share/secrets/
+          - name: account-generator
+            mountPath: /usr/bin/share/
+      restartPolicy: Never
+      volumes:
+        - name: elk-passwords
+          secret: 
+            secretName: elk-passwords
+        - name: account-generator
+          configMap: 
+            name: account-generator
+            defaultMode: 0555
+
+            
