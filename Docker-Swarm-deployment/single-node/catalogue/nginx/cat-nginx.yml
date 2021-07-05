@@ -23,7 +23,7 @@ services:
       - overlay-net
 
   cat-nginx:
-    image: nginx:1.19
+    image: dockerhub.iudx.io/iudx/nginx:1.20
     deploy:
       replicas: 1
       placement:
@@ -52,13 +52,16 @@ services:
     configs:
       - source: cat-conf
         target: /etc/nginx/templates/nginx.conf.template
+      - source: error-conf
+        target: /etc/nginx/conf.d/error.conf
+
     networks:
       - overlay-net
     env_file:
       - ./.cat-ui.env
 
   middle-layer-nginx:
-    image: nginx:1.19
+    image: dockerhub.iudx.io/iudx/nginx:1.20
     deploy:
       replicas: 1
       placement:
@@ -83,6 +86,9 @@ services:
     configs:
       - source: middle-layer-conf
         target: /etc/nginx/templates/nginx.conf.template
+      - source: error-conf
+        target: /etc/nginx/conf.d/error.conf
+
     networks:
       - overlay-net
     env_file:
@@ -92,6 +98,9 @@ configs:
     file: conf/cat.conf
   middle-layer-conf:
     file: conf/middle-layer.conf
+  error-conf:
+    file: conf/error.conf
+
 secrets:
   cat-key:
     file: secrets/cat-key
