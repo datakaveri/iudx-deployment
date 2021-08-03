@@ -262,18 +262,17 @@ postgresql:
 
   ## ConfigMap with extra environment variables
   ##
-  extraEnvVarsCM: psql-env
 
   ## Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: backup-s3-secret
 
   ## Extra volumes to add to the deployment
   ##
   extraVolumes: 
     - name: backup-s3-cfg
-      secret:
-        secretName: backup-s3-cfg
+      configMap:
+        name: backup-s3-cfg
         items:
         - key: s3cfg
           path: .s3cfg
@@ -650,7 +649,7 @@ pgpool:
 
   ## Secret with extra environment variables
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: 
 
   ## Extra volumes to add to the deployment
   ##
