@@ -10,8 +10,10 @@ spec:
         spec:
           containers:
           - name: pg-backup
-            image: dockerhub.iudx.io/iudx/postgresql-repmgr
-            imagePullPolicy: Always
+            image: dockerhub.iudx.io/iudx/postgresql-repmgr:11.12.0
+            imagePullPolicy: "IfNotPresent"
+            securityContext:
+              runAsUser: 1001
             env:
             - name: POSTGRES_PASSWORD
               valueFrom:
@@ -19,8 +21,8 @@ spec:
                   name: psql-passwords
                   key: postgresql-password
             envFrom:
-              - configMapRef:
-                  name: psql-env
+              - secretRef: 
+                  name: backup-s3-secret
             command: ["/bin/sh", "-c", "--"]
             args: ["/usr/bin/backup-script.sh"]
             volumeMounts:
@@ -34,8 +36,8 @@ spec:
           - name: regcred
           volumes:
             - name: backup-s3-cfg
-              secret:
-                secretName: backup-s3-cfg
+              configMap:
+                name: backup-s3-cfg
                 items:
                 - key: s3cfg
                   path: .s3cfg
