@@ -5,5 +5,5 @@ kubectl apply -f ../K8s-cluster/sealed-secrets/cluster-wide-sealed-secrets/docke
 kubectl apply -f sealed-secrets/
 sleep 10
 # install keycloak cluster  
-helm install -f keycloak-values.yaml -f resource-values.yaml keycloak  $@ bitnami/keycloak -n keycloak
+helm install -f keycloak-values.yaml -f resource-values.yaml keycloak  --version 4.0.1 $@ bitnami/keycloak -n keycloak
 
