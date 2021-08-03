@@ -8,14 +8,9 @@ Create S3 bucket and place the aws s3 access credentials as follows:
 
 ```
 secrets/
-├── aws-s3-access-id
-└── aws-s3-access-key
-```
-## Create Environment file .psql.env
-Create environment file as shown in the example below 
-
-```
-S3_BUCKET_NAME=x-y-z
+├── s3-access-id
+├── s3-access-key
+└── s3-bucket-name
 ```
 ## Create Sealed secrets
 0. Generate sealed secret for docker registry login if not generated, see [here](../K8s-cluster/sealed-secrets/README.md)
@@ -26,22 +21,22 @@ S3_BUCKET_NAME=x-y-z
 
 # secrets directory after generation of secrets
 secrets/
-├── aws-s3-access-id
-├── aws-s3-access-key
 ├── passwords
 ├── postgres-auth-password
 ├── postgres-keycloak-password
 ├── postgres-rs-password
 ├── postgresql-password
 ├── repmgr-password
+├── s3-access-id
+├── s3-access-key
+├── s3-bucket-name
 └── usernames
 
 # sealed-secrets
 sealed-secrets/
-├── backup-s3-cfg.yaml
+├── backup-s3-secret.yaml
 ├── pgpool-auth.yaml
 └── psql-passwords.yaml
-
 ```
 
 ## Define Appropriate values of resources
