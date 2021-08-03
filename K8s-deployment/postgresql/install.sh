@@ -3,9 +3,9 @@
 kubectl create namespace postgres
 kubectl apply -f ../K8s-cluster/sealed-secrets/cluster-wide-sealed-secrets/docker-registry-cred.yaml -n postgres
 kubectl apply -f sealed-secrets/
-kubectl create configmap psql-env --from-file=.psql.env -n postgres
+kubectl create configmap backup-s3-cfg --from-file=s3cfg=conf/backup-s3-cfg -n postgres
 kubectl create configmap init-scripts --from-file=./init-scripts/ -n postgres
-
+sleep 10
 # install postgres asynchronous cluster  
 helm install -f psql-async-values.yaml -f resource-values.yaml psql --version 7.7.3 $@ bitnami/postgresql-ha -n postgres
 sleep 100
