@@ -1,3 +1,11 @@
+# Deployment Architecture
+<p align="center">
+<img src="./img/redis-cluster-topology.png">
+</p>
+
+This helm chart deploys a 6-node Redis Cluster with sharding, having 3 masters and 3 slaves.
+
+
 # Installation
 This installs a  Redis clustered setup.
 The helm chart is based on bitnami : https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster
