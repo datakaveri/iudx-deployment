@@ -11,21 +11,25 @@ This installs a  Redis clustered setup.
 The helm chart is based on bitnami : https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster
 
 ## Create Custom Docker image
-Creating custom image to include the [ReJSON module](https://github.com/RedisJSON/JRedisJSON) on top of [bitnami redis-cluster docker image](https://github.com/bitnami/bitnami-docker-redis-cluster)
+Creating custom image to include the [ReJSON module](https://github.com/RedisJSON/JRedisJSON)  on top of [bitnami redis-cluster docker image](https://github.com/bitnami/bitnami-docker-redis-cluster)
+
+**Build docker image**
 ```
-# Build docker image
-docker build -t <registry-domain-name>/<repo-name>/redis-rejson:6.2.5-1.0.7 -f docker/Dockerfile docker/
-# push docker image
-docker push <registry-domain-name>/<repo-name>/redis-rejson:6.2.5-1.0.7
+docker build -t <registry-domain-name>/<repo-name>/redis-cluster-rejson:6.2.5-1.0.7 -f docker/Dockerfile docker/
+```
+**Push docker image**
+``
+docker push <registry-domain-name>/<repo-name>/redis-cluster-rejson:6.2.5-1.0.7
 ```
 
 ## Create Sealed secrets
 0. Generate sealed secret for docker registry login if not generated, see [here](../K8s-cluster/sealed-secrets/README.md) 
-1. Generate required secrets and create sealed secrets using follwing command:
-```
-# command
-./create_secrets.sh
+1. Generate required secrets and create sealed secrets using follwing script:
 
+```
+./create_secrets.sh
+```
+```
 # secrets directory after generation of secrets
 secrets/
 └── redis-password
@@ -83,7 +87,7 @@ Following is example of addding two nodes to existing 6 nodes redis cluster
 ```
 export REDIS_PASSWORD=$(kubectl get secret --namespace "redis" redis-passwords -o jsonpath="{.data.redis-password}" | base64 --decode)
 
-helm upgrade --timeout 600s --reuse-values --version 6.3.3  --set "password=${REDIS_PASSWORD},cluster.nodes=8,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" bitnami/redis-cluster
+helm upgrade --timeout 600s redis  --reuse-values --version 6.3.3  --set "password=${REDIS_PASSWORD},cluster.nodes=8,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=6" bitnami/redis-cluster -n redis 
 ```
 ### Rebalance the shards through redis-cli 
 
@@ -92,9 +96,9 @@ helm upgrade --timeout 600s --reuse-values --version 6.3.3  --set "password=${RE
  --env REDIS_PASSWORD=$REDIS_PASSWORD \
 --image <registry-domian-name>/<repo-name>/redis-cluster-rejson:6.2.5-1.0.7 -- bash
 
-2. redis-cli --cluster rebalance redis-redis-cluster:6379 --cluster-use-empty-masters
+2. redis-cli --cluster rebalance redis-redis-cluster:6379 --cluster-use-empty-masters -a $REDIS_PASSWORD
 
-3. checking the rebalance: redis-cli --cluster check redis-redis-cluster:6379
+3. checking the rebalance: redis-cli --cluster check redis-redis-cluster:6379 -a $REDIS_PASSWORD
 
 ```
 The adding of nodes results in creation of update job, which updates the cluster and restarts each pod one by one. The cluster will continue up while restarting pods one by one as the quorum is not lost.
@@ -124,7 +128,7 @@ velero backup describe <backup-name> --details
 velero restore create --from-backup <backup-name>
 ```
 
-**Creating schedules backups for redis**
+**Creating scheduled backups for redis**
 
 Example: To create a backup every 6 hours with 24 hour retention period-
 
@@ -132,5 +136,5 @@ Example: To create a backup every 6 hours with 24 hour retention period-
 velero schedule create redis-backup --schedule "0 */6 * * *" --include-resources=pvc,pv --selector app.kubernetes.io/name=redis-cluster --ttl 24h    
 ```
 
-This creates a backup object with the name redis-backup-<TIMESTAMP>.
+This creates a backup object with the name redis-backup-\<TIMESTAMP\>.
 
