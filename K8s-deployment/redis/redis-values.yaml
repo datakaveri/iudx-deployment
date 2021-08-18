@@ -394,9 +394,13 @@ redis:
   ## @param redis.configmap Additional Redis&trade; configuration for the nodes
   ## ref: https://redis.io/topics/config
   ##
+  ## cluster-require-full-coverage no --> "no" sets the subset of the cluster which is working,
+  ## to continue to accept queries for the part of the key space that is still covered
+  ## cluster-node-timeout --> amount of time in ms to wait before doing a relection master when a master 
+  ## is down, keeping it 90s, (higher than default 15s, so that helm upgrade won't change the master)
   configmap: |-
     cluster-require-full-coverage no 
-    
+    cluster-node-timeout 90000    
   ## @param redis.extraEnvVars An array to add extra environment variables
   ## For example:
   ##  - name: BEARER_AUTH
@@ -699,7 +703,7 @@ cluster:
 metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
   ##
-  enabled: false
+  enabled: true
   ## @param metrics.image.registry Redis&trade; exporter image registry
   ## @param metrics.image.repository Redis&trade; exporter image name
   ## @param metrics.image.tag Redis&trade; exporter image tag
