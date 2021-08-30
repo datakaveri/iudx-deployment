@@ -14,6 +14,8 @@ secrets/
     |-- rabbitmq-server-cert.pem (letsencrpt fullchain.pem)
     `-- rabbitmq-server-key.pem  (letsencrypt privkey.pem)
 ```
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root database directory  for demo or local testing purpose only! For other environment, please generate strong passwords and a correct certificate instead of self signed certificate. For example using [letsencrypt](https://certbot.eff.org/lets-encrypt/ubuntufocal-other) to generate a proper certificate
+
 ## Assign node labels
 
 ```sh
