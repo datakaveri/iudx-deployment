@@ -1,0 +1,64 @@
+USER-SUPPLIED VALUES:
+affinity: {}
+commandArgs:
+- --key-renew-period=0
+controller:
+  create: true
+  labels: {}
+  service:
+    labels: {}
+crd:
+  create: true
+  keep: true
+dashboards:
+  create: false
+  labels: null
+  namespace: null
+image:
+  pullPolicy: IfNotPresent
+  pullSecret: ""
+  repository: quay.io/bitnami/sealed-secrets-controller
+  tag: v0.16.0
+  tls: []
+namespace: "kube-system"
+networkPolicy: false
+podAnnotations: {}
+podLabels: {}
+priorityClassName: ""
+rbac:
+  create: true
+  labels: {}
+  pspEnabled: false
+resources:
+  limits:
+    cpu: 400m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+securityContext:
+  fsGroup: 65534
+  runAsUser: 1001
+serviceAccount:
+  create: true
+  labels: {}
+  name: ""
+serviceMonitor:
+  create: false
+  interval: null
+  labels: null
+  namespace: null
+  scrapeTimeout: null
+
+tolerations:
+  - effect: NoSchedule
+    operator: "Equal"
+    value: "true"
+    key: node-role.kubernetes.io/controlplane
+  - effect: NoExecute
+    key: node-role.kubernetes.io/etcd
+    operator: "Equal"
+    value: "true"
+nodeSelector:
+    node-role.kubernetes.io/controlplane: "true"
+
