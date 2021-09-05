@@ -531,6 +531,10 @@ redis:
 ## Cluster update job settings
 ##
 updateJob:
+  ## role for the node to be added to the cluster. master/slave.
+  nodeType: ""
+  ## node ID of the master which the new slave node should replicate.
+  masterID: ""
   ## @param updateJob.activeDeadlineSeconds Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.
   ##
   activeDeadlineSeconds: 600
@@ -539,7 +543,74 @@ updateJob:
   command: []
   ## @param updateJob.args Container args (using container default if not set)
   ##
-  args: []
+  args:
+    - |
+      echo "Node Type = {{.Values.updateJob.nodeType}}"
+      . /opt/bitnami/scripts/libnet.sh
+      . /opt/bitnami/scripts/libos.sh
+      # Backwards compatibility change
+      if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+          cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+      fi
+      firstNodeIP=$(wait_for_dns_lookup {{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless 120 5)
+      {{- if eq .Values.updateJob.nodeType "slave" }}
+        echo "creating slave for master {{ .Values.updateJob.masterID}}"
+        newNodeIndex="{{.Values.cluster.update.currentNumberOfNodes}}"
+        masterID="{{ .Values.updateJob.masterID}}"
+        newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
+        echo "node IP = $newNodeIP"
+        {{- if .Values.tls.enabled }}
+        echo "tls.enabled"
+        while [[ $(redis-cli -h "$newNodeIP" -p "$REDIS_TLS_PORT" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
+        {{- else }}
+        echo "tls.disabled"
+        while [[ $(redis-cli -h "$newNodeIP" -p "$REDIS_PORT" ping) != 'PONG' ]]; do
+        {{- end }}
+          echo "Node $newNodeIP not ready, waiting for all the nodes to be ready..."
+          newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
+          sleep 5
+        done
+        {{- if .Values.tls.enabled }}
+        while ! redis-cli --cluster add-node --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${newNodeIP}:${REDIS_TLS_PORT}" "${firstNodeIP}:${REDIS_TLS_PORT}" --cluster-slave --cluster-master-id ${masterID[@]}; do
+        {{- else }}
+        echo "adding node to cluster"
+        while ! redis-cli --cluster add-node "${newNodeIP}:${REDIS_PORT}" "${firstNodeIP}:${REDIS_PORT}" --cluster-slave --cluster-master-id ${masterID[@]}; do
+        {{- end }}
+          echo "Add-node ${newNodeIndex} ${newNodeIP} failed, retrying"
+          sleep 5
+          firstNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless" 120 5)
+          newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
+        done
+      {{- else if eq .Values.updateJob.nodeType "master"}}
+        for node in $(seq $((1+{{ .Values.cluster.update.currentNumberOfNodes }})) {{ .Values.cluster.nodes }}); do
+          newNodeIndex="$(($node - 1))"
+          newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
+          {{- if .Values.tls.enabled }}
+          while [[ $(redis-cli -h "$newNodeIP" -p "$REDIS_TLS_PORT" --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} ping) != 'PONG' ]]; do
+          {{- else }}
+          while [[ $(redis-cli -h "$newNodeIP" -p "$REDIS_PORT" ping) != 'PONG' ]]; do
+          {{- end }}
+            echo "Node $newNodeIP not ready, waiting for all the nodes to be ready..."
+            newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
+            sleep 5
+          done
+          slave=()
+          if (( $REDIS_CLUSTER_REPLICAS >= 1 )) && (( newNodeIndex % (( $REDIS_CLUSTER_REPLICAS + 1 )) )); then
+            slave+=("--cluster-slave")
+          fi
+          {{- if .Values.tls.enabled }}
+          while ! redis-cli --cluster add-node --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} "${newNodeIP}:${REDIS_TLS_PORT}" "${firstNodeIP}:${REDIS_TLS_PORT}" ${slave[@]}; do
+          {{- else }}
+          while ! redis-cli --cluster add-node "${newNodeIP}:${REDIS_PORT}" "${firstNodeIP}:${REDIS_PORT}" ${slave[@]}; do
+          {{- end }}
+            echo "Add-node ${newNodeIndex} ${newNodeIP} failed, retrying"
+            sleep 5
+            firstNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-0.{{ template "common.names.fullname" . }}-headless" 120 5)
+            newNodeIP=$(wait_for_dns_lookup "{{ template "common.names.fullname" . }}-${newNodeIndex}.{{ template "common.names.fullname" . }}-headless" 120 5)
+          done
+        done
+        {{- end }}
+
   ## @param updateJob.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -817,10 +888,15 @@ metrics:
 sysctlImage:
   ## @param sysctlImage.enabled Enable an init container to modify Kernel settings
   ##
-  enabled: false
+  enabled: true
   ## @param sysctlImage.command sysctlImage command to execute
   ##
-  command: []
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      sysctl -w net.core.somaxconn=10000
+      echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
   ## @param sysctlImage.registry sysctlImage Init container registry
   ## @param sysctlImage.repository sysctlImage Init container repository
   ## @param sysctlImage.tag sysctlImage Init container tag
@@ -841,7 +917,7 @@ sysctlImage:
   pullSecrets: []
   ## @param sysctlImage.mountHostSys Mount the host `/sys` folder to `/host-sys`
   ##
-  mountHostSys: false
+  mountHostSys: true
   ## Container resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ## @param sysctlImage.resources.limits The resources limits for the container
