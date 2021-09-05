@@ -1,0 +1,1028 @@
+openapi: 3.0.2
+info:
+  title: IUDX Catalogue Server APIs
+  version: 1.0.0
+  description: |
+    The Catalogue is IUDX's dataset discovery portal and metadata store. 
+    It enables *Providers* of datasources to describe them with IUDX based annotations
+    to make discovery and consumption of data both automatable and semantically describable. 
+    For search and discovery, it allows users to search through text and geo-based queries.
+    The catalogue is a [JSON-LD](https://json-ld.org/) document stored and based on the [RDF](https://www.w3.org/RDF/) information exchange model. 
+  contact:
+    name: Rakshit
+    email: rakshit.ramesh@datakaveri.org
+tags:
+  - name: Entity
+    x-displayName: Entity
+    description: |
+      Manage catalogue entities and perform Create/Update/Read/Delete operations on them.
+      These apis are intended to be used by IUDX Data *Providers*.
+  - name: Discovery
+    x-displayName: Discovery
+    description: |
+      Discovery IUDX Entities using a rich discovery api supporting property, text and geo-based queries.
+      These apis are intended to be used by IUDX Data *Consumers*.
+  - name: List
+    x-displayName: List
+    description: |
+      List IUDX Entities of a certain type.
+      These apis are intended to be used by User Interfaces.
+  - name: Relationship
+    x-displayName: Relationship
+    description: |
+      Discovery of entities through their relationships.
+      These apis are intended to be used by IUDX Data *Consumers*.
+  - name: Administrator
+    x-displayName: Administrator
+    description: |
+      Catalogue administrator specific apis.
+paths:
+  /iudx/cat/v1/search:
+    get:
+      tags:
+        - Discovery
+      parameters:
+        - name: property
+          description: 'Array of properties (strings) on which query is to be made. A logical "and" is performed between the properties. Only a maximum of 4 properties are allowed to be queried at once. The mapping between a property and a value is one-to-one. The only allowed properties to be queried are per the vocabulary schema mentioned in each sub-Class of [IUDXEntity](https://voc.iudx.org.in/IUDXEntity).'
+          schema:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 4
+            uniqueItems: true
+          in: query
+        - name: value
+          description: 'Values of the one-to-one mapped strings in property. A logical "or" is performed for each value which is mapped to a property. For each property, only a maximum of 4 values are allowed. For e.g for property=[id,type] then value=[[<some-id>], [<some-type>]].'
+          schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+            minItems: 1
+            maxItems: 4
+          in: query
+          required: false
+        - name: geoproperty
+          description: Name of the property if the query is on a geospatial property.
+          schema:
+            type: string
+            enum:
+              - location
+              - geocovers
+          in: query
+        - name: georel
+          description: Type of geoquery
+          schema:
+            type: string
+            enum:
+              - within
+              - intersects
+          in: query
+          required: false
+        - name: geometry
+          description: Geometry of the geo-query
+          schema:
+            type: string
+            enum:
+              - Point
+              - Polygon
+              - LineString
+              - bbox
+          in: query
+        - name: coordinates
+          description: 'Coordinates for the specific query type. For e.g, [[1,2], [3,4]]. Note: The data-type of this field is a string, therefore the coordinates are a string encoded multidimensional array.Precision supported is 6 decimal places.'
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 10
+            items:
+              type: number
+            format: double
+          in: query
+          required: false
+        - name: maxDistance
+          description: 'Maximum distance from center point in meters'
+          schema:
+            type: number
+            minimum: 0
+            maximum: 100000
+          in: query
+          required: false
+        - name: q
+          description: query for text/fuzzy search.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+          in: query
+          required: false
+        - name: limit
+          description: Limit number of records in search response.
+          schema:
+            type: integer
+            maximum: 10000
+            minimum: 1
+          in: query
+          required: false
+        - name: offset
+          description: Offset from where the next batch of results should be returned.
+          schema:
+            type: integer
+            maximum: 9999
+          in: query
+          required: false
+        - name: filter
+          description: Filter properties to display. This is an array of strings.
+          schema:
+            type: array
+            items:
+              type: string
+            minItems: 0
+            maxItems: 10
+          in: query
+        - name: instance
+          description: IUDX instance on which this query is to be made. Don't mention this if search on entire catalogue is to be made. Else mentioning a specific instance name here restricts search only to that instance.
+          schema:
+            type: string
+            example: 'pune, surat, varanasi'
+          in: header
+          required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResponseWithObjects'
+          description: All the query parameters yielded results.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardErrorResponse'
+          description: Bad query.
+      x-codeSamples:
+        - lang: by type
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/search?property=[type]&value=[[iudx:ResourceGroup]]
+        - lang: by circle
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/search?geoproperty=location&georel=within&maxDistance=5000&geometry=Point&coordinates=[73.927285,18.502712]
+        - lang: by text
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/search?q=aqm
+        - lang: complex
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/search?property=[type]&value=[[iudx:Resource]]&geoproperty=location&georel=within&maxDistance=5000&geometry=Point&coordinates=[73.927285,18.502712]
+      operationId: search
+      description: |
+        Generic catalogue search query. Searches for entites that meet the
+        query criteria. The search enpoint allows one to query a particular property of an
+        entity, or by its geo-location annotation, or by a full text-search or a combination of
+        all three.
+        #### Property Search
+        One may combine multiple properties in a search through a logical "&". For each such property
+        multiple possible values may be given. The syntax for a property query is -
+        `property=[<prop-1>,<prop-2>]&value=[[<prop-1-val-1>,<prop-1-val-2>],[<prop-2-val-1>]]`
+        Property search can be applied to only certain properties. These properties defined in the IUDX Schema Vocalbulary for all subClasses of [IUDXEntity](https://voc.iudx.org.in/IUDXEntity)
+        These perform exact matches in the case of keywords such as
+        `id`, `resourceGroup`, `provider`, `resourceServer`, `type`
+        and approximate matches (text based) for all other properties.
+        Some common uses are 
+          - tags: `property=[tags]&value=[[aqm,pollution]]`
+          - by type of entity: `property=[type]&value=[[iudx:ResourceGroup]]`. Valid entities are `iudx:Resource`, `iudx:ResourceGroup`, `iudx:Provider`, `iudx:ResourceServer`.
+          - a combination: `property=[tags,type]&value=[[aqm,pollution], [iudx:ResourceGroup]]
+          - resource belonging to a group: `property=[resourceGroup]&value=[[<group-id>]]`
+
+        #### Geo Search
+        Geo search accepts geojson based queries. The params and their accepted values are -
+          - geoproperty: Which geoproperty to query. Default is `location`.
+          - georel: Geo-relationship. One of `within`, `disjoint`, `intersects`.
+          - geometry: GeoJson geometries. One of `Point`(point and circle), `Polygon`, `LineString`(for interseaction with points and polygons), `bbox`.
+              - Point: Point and radius query
+                  - coordinates: The center point of the circle, for e.g, `[73,13]` (lon and lat)
+                  - maxDistance: Radius from the center point in meters, for e.g `100`
+                  - georel: `within`
+              - Polygon: Polygon/Multi-Polygon query
+                  - coordinates: Coordinates of the polygon/s, for e.g, `[[[73,13],[73,12],[73,13]]]`.  Note, (lon and lat) and the first coordinate must be same as last.
+                  - georel: `within, intersects, disjoint`
+              - LineString: Multi line string
+                  - coordinates: Coordinates of the multi-line, for e.g, `[[73,13],[74,15],[75,16]]`. 
+                  - georel: `intersects`
+              - bbox: Bounding box
+                  - coordinates: `[[top-left],[bottom-right]]`, `[[73,13],[74,12]]`. 
+                  - georel: `within`
+
+        #### Text search
+        This is a fuzzy full text based search. It searches across all entity types.
+          - q: Text to be queried
+
+        #### Complex search
+        A combination of the above is allowed to make searches more  complex.
+
+        #### Limits and filters
+          - Documents returned can be limited by specifying a limit and offset. For e.g, `limit=100&offset=10` gives 100 documents from the 10th search result.
+          - A subset of properties of returned documents can be filtered out. For e.g, `filter=[id]` returns documents with only the `id` property retained in them.
+  /iudx/cat/v1/count:
+    get:
+      tags:
+        - Discovery
+      parameters:
+        - name: property
+          description: 'Array of properties (strings) on which query is to be made. A logical "and" is performed between the properties. Only a maximum of 4 properties are allowed to be queried at once. The mapping between a property and a value is one-to-one. The only allowed properties to be queried are per the vocabulary schema mentioned in each sub-Class of [IUDXEntity](https://voc.iudx.org.in/IUDXEntity).'
+          schema:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 4
+            uniqueItems: true
+          in: query
+        - name: value
+          description: 'Values of the one-to-one mapped strings in property. A logical "or" is performed for each value which is mapped to a property. For each property, only a maximum of 4 values are allowed. For e.g for property=[id,type] then value=[[<some-id>], [<some-type>]].'
+          schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+            minItems: 1
+            maxItems: 4
+          in: query
+          required: false
+        - name: geoproperty
+          description: Name of the property if the query is on a geospatial property.
+          schema:
+            type: string
+            enum:
+              - location
+              - geocovers
+          in: query
+        - name: georel
+          description: 'Type of geoquery, for e.g, within, near, outside.'
+          schema:
+            type: string
+            enum:
+              - within
+              - near
+          in: query
+          required: false
+        - name: geometry
+          description: Geometry of the geo-query
+          schema:
+            type: string
+            enum:
+              - Point
+              - Polygon
+              - LineString
+              - bbox
+          in: query
+        - name: coordinates
+          description: 'Coordinates for the specific query type. For e.g, [[1,2], [3,4]]. Note: The data-type of this field is a string, therefore the coordinates are a string encoded multidimensional array.Precision supported is 6 decimal places.'
+          schema:
+            type: array
+            minItems: 1
+            maxItems: 10
+            items:
+              type: number
+            format: double
+          in: query
+          required: false
+        - name: maxDistance
+          description: 'Maximum distance from center point in meters'
+          schema:
+            type: number
+            minimum: 0
+            maximum: 100000
+          in: query
+          required: false  
+        - name: q
+          description: query for text/fuzzy search.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+          in: query
+          required: false
+        - name: limit
+          description: Limit number of records in search response.
+          schema:
+            type: integer
+            maximum: 10000
+            minimum: 1
+          in: query
+          required: false
+        - name: offset
+          description: Offset from where the next batch of results should be returned.
+          schema:
+            type: integer
+            maximum: 9999
+          in: query
+          required: false
+        - name: filter
+          description: Filter properties to display. This is an array of strings.
+          schema:
+            type: array
+            items:
+              type: string
+            minItems: 0
+            maxItems: 10
+          in: query
+        - name: instance
+          description: IUDX instance on which this query is to be made. Don't mention this if count on entire catalogue is to be made. Else mentioning a specific instance name here restricts search only to that instance.
+          schema:
+            type: string
+            example: 'pune, surat, varanasi'
+          in: header
+          required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResponseWithObjects'
+          description: All the query parameters yielded results.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardErrorResponse'
+          description: Bad query.
+      x-codeSamples:
+        - lang: by type
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/count?property=[type]&value=[[iudx:ResourceGroup]]
+        - lang: by circle
+          source: |
+            https://api.catalogue.iudx.org.in/count?geoproperty=location&georel=within&maxDistance=5000&geometry=Point&coordinates=[73.92728,18.50271]
+        - lang: by text
+          source: |
+            https://api.catalogue.iudx.org.in/count?q=aqm
+        - lang: complex
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/count?property=[type]&value=[[iudx:Resource]]&geoproperty=location&georel=within&maxDistance=5000&geometry=Point&coordinates=[73.927285,18.502712]
+      operationId: count
+      description: |
+        Generic catalogue count query. Searches for entites that meet the
+        query criteria. The count enpoint allows one to query a particular property of an
+        entity, or by its geo-location annotation, or by a full text-search or a combination of
+        all three and returns a *count* of the total entities that matches the query criteria.
+        #### Property Search
+        One may combine multiple properties in a search through a logical "&". For each such property
+        multiple possible values may be given. The syntax for a property query is -
+        `property=[<prop-1>,<prop-2>]&value=[[<prop-1-val-1>,<prop-1-val-2>],[<prop-2-val-1>]]`
+        Property search can be applied to any property
+        (including nested through `prop.subprop.subsubprop` syntax wherever applicable).
+        These perform exact matches in the case of keywords such as
+        `id`, `resourceGroup`, `provider`, `resourceServer`, `type`
+        and approximate matches (text based) for all other properties.
+        Some common uses are 
+          - tags: `property=[tags]&value=[["aqm", "pollution"]]`
+          - by type of entity: `property=[type]&value=[[iudx:ResourceGroup]]`. Valid entities are `iudx:Resource`, `iudx:ResourceGroup`, `iudx:Provider`, `iudx:ResourceServer`.
+          - resource belonging to a group: `property=[resourceGroup]&value=[[<group-id>]]`
+
+        #### Geo Search
+        Geo search accepts geojson based queries. The params and their accepted values are -
+          - geoproperty: Which geoproperty to query. Default is `location`.
+          - georel: Geo-relationship. One of `within`, `contains`, `disjoint`, `intersects`.
+          - geometry: GeoJson geometries. One of `Point`(point and circle), `Polygon`, `LineString`(for interseaction with points and polygons), `bbox`.
+              - Point: Point and radius query
+                  - coordinates: The center point of the circle, for e.g, `[73,13]` (lon and lat)
+                  - maxDistance: Radius from the center point in meters, for e.g `100`
+                  - georel: `within`
+              - Polygon: Polygon/Multi-Polygon query
+                  - coordinates: Coordinates of the polygon/s, for e.g, `[[[73,13],[73,12],[73,13]]]`.  Note, (lon and lat) and the first coordinate must be same as last.
+                  - georel: `within`
+              - LineString: Multi line string
+                  - coordinates: Coordinates of the multi-line, for e.g, `[[73,13],[74,15],[75,16]]`. 
+                  - georel: `intersects`
+              - bbox: Bounding box
+                  - coordinates: `[[top-left],[bottom-right]]`, `[[73,13],[74,12]]`. 
+                  - georel: `within`
+
+        #### Text search
+        This is a fuzzy full text based search. It searches across all entity types.
+          - q: Text to be queried
+
+        #### Complex search
+        A combination of the above is allowed to make searches more  complex.
+
+        #### Limits and filters
+          - Documents returned can be limited by specifying a limit and offset. For e.g, `limit=100&offset=10` gives 100 documents from the 10th search result.
+          - A subset of properties of returned documents can be filtered out. For e.g, `filter=[id]` returns documents with only the `id` property retained in them.
+  '/iudx/cat/v1/list/{type}':
+    description: |
+      List entities of a certain type or list all possible values of a property(tags only). 
+      If entites, then type must be `resourceGroup`, `resourceServer`, `provider`.
+      If properties then only `tags` is supported.
+      All documents in the catalogue are of type [IUDXEntity](https://voc.iudx.org.in/IUDXEntity).
+      The entities referenced as the name mentioned in above link in camel case with small case starting.
+      This endpoint essentially lists those entities (except Resource which will be too numerous. In addition, you may also list all the instances by 
+      specifying instance instead of an entity identified.
+      Adding `instance` in header will restrict the list to only that specific instance.
+    get:
+      tags:
+        - List
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResponseWithStrings'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardErrorResponse'
+          description: Fail
+      x-codeSamples:
+        - lang: by tags
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/list/tags
+        - lang: by resourceGroup
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/list/resourceGroup
+        - lang: by provider
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/list/provider
+      operationId: listTypes
+      description: List a particular type
+      parameters:
+        - schema:
+            type: string
+            example: 'pune, surat, varanasi'
+          in: header
+          name: instance
+          description: IUDX instance on which this query is to be made. Don't mention this is list on entire catalogue is to be made. Else mentioning a specific instance name here restricts search only to that instance.
+    parameters:
+      - name: type
+        description: 'If entites, then type must be resource, resourceGroup, resourceServer, provider. If properties then only tags is supported. Additionally all instances can also be mentioned as `instance`.'
+        schema:
+          type: string
+          minLength: 4
+          maxLength: 50
+          enum:
+            - tags
+            - resourceServer
+            - resourceGroup
+            - instance
+            - provider
+        in: path
+        required: true
+      - name: instance
+        description: IUDX instance on which this query is to be made. Don't mention this if list on entire catalogue is to be made. Else mentioning a specific instance name here restricts search only to that instance.
+        schema:
+          type: string
+        in: header
+        required: false
+  /iudx/cat/v1/item:
+    description: |
+      Operations on a specific catalogue entity. This endpoint is used to create/update/read/delete a catalogue IUDX Entity.
+      To see supported schemas, see subclasses of IUDXEntity [here](https://voc.iudx.org.in/IUDXEntity).
+    get:
+      tags:
+        - Entity
+      parameters:
+        - name: id
+          description: ID of the IUDX Entity
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 512
+          in: query
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResponseWithObjects'
+          description: Found the item.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardErrorResponse'
+          description: Didn't find the item.
+      x-codeSamples:
+        - lang: item by id
+          source: |
+            https://api.catalogue.iudx.org.in/iudx/cat/v1/item?id=<some-id>
+      operationId: getItem
+      description: Get an item given the id
+    put:
+      tags:
+        - Entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/exapmleEntityWId'
+        required: true
+      parameters:
+        - name: token
+          description: IUDX Auth token to process the request
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9\/\@\.]*$'
+            minLength: 0
+            maxLength: 512
+          in: header
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Invalid document
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Unauthorized access
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Document doesn't exist
+      x-codeSamples:
+        - lang: update item
+          source: |
+            PUT /item HTTP/1.1
+            Host: api.catalogue.iudx.org.in
+            Content-Type: application/json
+            token: <iudx-token>
+            {
+              "id": "<id-of-the-onboarded-item>",
+              "oldParamA": "oldParamAValue",
+              "newParam": "newParamValue",
+              "oldParamB": "oldParamBNewValue"
+            }
+      operationId: updateItem
+      description: Update an item where the body contains a fully valid item with id. Relationship links like
+                    provider, resourceGroup, resourceServer and "name" are not allowed to be updated. itemStatus is added by backend.
+                    Items maybe subClasses of type [IUDXEntity](https://voc.iudx.org.in/IUDXEntity). Depedning on this, some properties maybe mandatory.
+                    The json schema for the different types can be found [here](https://github.com/datakaveri/iudx-catalogue-server/tree/master/src/main/resources/iudx/catalogue/server/validator). In the future, we will serve schemas from our own servers.
+    post:
+      tags:
+        - Entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/exampleEntityWoID'
+        required: true
+      parameters:
+        - name: token
+          description: IUDX Auth token to process the request
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9\/\@\.]*$'
+            minLength: 0
+            maxLength: 512
+          in: header
+          required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Successfully inserted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Invalid document
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Unauthorized access
+      x-codeSamples:
+        - lang: create item
+          source: |
+            POST /item HTTP/1.1
+            Host: api.catalogue.iudx.org.in
+            Content-Type: application/json
+            token: <iudx-token>
+            {
+              "instance": "<instance to which this item must belong",
+              "name": "<name of the item (this will be used to generate id>",
+              "resourceGroup": "<id of group if this is a resource>",
+              "provider": "<id of the provider>",
+              "resourceServer": "<id of the resourceServer>"
+            }
+      operationId: createItem
+      description: Insert an item into the catalogue where the item's body specifies the type of item and instance name. id and itemStatus are added by server.
+                    Items maybe subClasses of type [IUDXEntity](https://voc.iudx.org.in/IUDXEntity). Depedning on this, some properties maybe mandatory.
+                    The json schema for the different types can be found [here](https://github.com/datakaveri/iudx-catalogue-server/tree/master/src/main/resources/iudx/catalogue/server/validator). In the future, we will serve schemas from our own servers.
+    delete:
+      tags:
+        - Entity
+      parameters:
+        - name: id
+          description: ID of the IUDX Entity
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 512
+          in: query
+          required: true
+        - name: token
+          description: IUDX Auth token to process the request
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9\/\@\.]*$'
+            minLength: 0
+            maxLength: 512
+          in: header
+          required: true
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Successfully deleted
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Unauthorized access
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Didn't find the item
+      x-codeSamples:
+        - lang: delete item
+          source: |
+            DELETE /item?q=<some-id> HTTP/1.1
+            Host: api.catalogue.iudx.org.in
+            Content-Type: application/json
+            token: <iudx-token>
+      operationId: deleteItem
+      description: Delete an item
+  /iudx/cat/v1/relsearch:
+    description: |-
+      Catalogue relationship search. This is much like normal search except the query explores properties that resides inside a related entity.
+      For e.g, for  a Resource entity -> Doc A - {id: some-id, provider: example-provider-id}, and Provider entity -> Doc B- {id: example-provider-id, name: some-name},
+      this api allows you to make a query saying provider.name=some-name which will return Doc A.
+    get:
+      tags:
+        - Relationship
+      parameters:
+        - name: relationship
+          description: |
+            Relationship attribute on which the query is to be made. For
+            e.g, entities whose related provider entity's name needs to match xyz will
+            have this field as "[provider.name]". The relationship is enclosed in [].
+            If there are two relationships, then they must be comma separated. For e.g,
+            [provider.name, resourceGroup.name].
+          schema:
+            type: array
+            items:
+              type: string
+          in: query
+          required: false
+        - name: value
+          description: |-
+            Value of the relationhsip. Multiple values for a single relationship are supported, for e.g, [[val1, val2]].
+            If multiple relationships are specified, then their values will occur as so - [[rel1-val1],[rel2-val1]]
+          schema:
+            type: array
+            items:
+              type: string
+          in: query
+          required: false
+        - name: instance
+          description: IUDX instance on which this query is to be made. Don't mention this if relsearch on entire catalogue is to be made. Else mentioning a specific instance name here restricts search only to that instance.
+          schema:
+            type: string
+            minLength: 0
+            maxLength: 100
+            example: 'pune, surat, varanasi'
+          in: header
+          required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResponseWithObjects'
+          description: All the query parameters yielded results.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardErrorResponse'
+          description: Bad query.
+      x-codeSamples:
+        - lang: search inside relationship
+          source: |
+            https://api.catalogue.iudx.org.in/relsearch?relationship="[provider.name]"&value="[[IUDXAdmin]]"
+      operationId: relationshipSearch
+      description: 'Search related items in the catalogue '
+  /iudx/cat/v1/relationship:
+    description: |-
+      Relationship api. This api will give you the document which is pointed by a cerain relationship attribute in an entity.
+      For e.g, for Resource.provider, this api will give the Provider entity associated with this Resource.
+    get:
+      tags:
+        - Relationship
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResponseWithObjects'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResponseWithObjects'
+          description: Item oor relationship doesn't exist
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResponseWithObjects'
+          description: Not authorized
+      operationId: getRelatedEntity
+      description: Get the related entity
+      x-codeSamples:
+        - lang: search by relationship
+          source: |
+            https://api.catalogue.iudx.org.in/relationship?id=<some-entity-id>&rel=resourceGroup
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - provider
+              - resourceGroup
+              - resourceServer
+              - instance
+          in: query
+          description: Relationship attribute of the entity whose id is provided
+          name: rel
+          required: true
+        - schema:
+            type: string
+            minLength: 0
+            maxLength: 512
+          in: query
+          name: id
+          description: id of the entity
+          required: true
+    parameters:
+      - name: id
+        description: ID of the entity
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: rel
+        description: Relationship attribute of the entity whose id is provided
+        schema:
+          type: string
+        in: query
+        required: true
+      - name: instance
+        description: IUDX instance on which this query is to be made. Don't mention this if relationship search on entire catalogue is to be made. Else mentioning a specific instance name here restricts search only to that instance.
+        schema:
+          type: string
+        in: header
+        required: false
+  /iudx/cat/v1/instance:
+    description: A catalogue administrator api to set an instance (grouping) which will be reflected on the catalogue ui.
+    post:
+      tags:
+        - Administrator
+      parameters:
+        - name: id
+          description: |
+            id of the instance. In most cases this is a city name.
+          schema:
+            type: string
+          in: query
+          required: true
+        - name: token
+          description: IUDX Auth token to process the request
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9\/\@\.]*$'
+            minLength: 0
+            maxLength: 512
+          in: header
+          required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Successfully inserted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Invalid document
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Unauthorized access
+      operationId: createInstance
+      description: Create an IUDX instance
+    delete:
+      tags:
+        - Administrator
+      parameters:
+        - name: id
+          description: |
+            id of the instance. In most cases this is a city name.
+          schema:
+            type: string
+          in: query
+          required: true
+        - name: token
+          description: IUDX Auth token to process the request
+          schema:
+            type: string
+          in: header
+          required: true
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Successfully deleted
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Unauthorized access
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardCrudResponse'
+          description: Instance doesn't exist
+      description: Delete an IUDX instance
+      operationId: deleteInstance
+components:
+  schemas:
+    standardResponseWithObjects:
+      title: Root Type for standardResponse
+      description: Standard Response for all requests
+      type: object
+      properties:
+        totalHits:
+          format: int32
+          description: Total number of documents which matched the query.
+          type: integer
+        results:
+          description: Results which matched the query. This is an array of objects.
+          type: array
+          items:
+            type: object
+        description:
+          description: Detailed description of the status
+        status:
+          description: 'Status of the request. Could be success, fail, invalidSyntax.'
+          type: string
+      example:
+        totalHits: 10
+        results:
+          - {}
+        status: success
+        description: a detailed description
+    standardResponseWithStrings:
+      title: Root Type for standardResponse
+      description: Standard Response for all requests
+      type: object
+      properties:
+        totalHits:
+          format: int32
+          description: Total number of documents which matched the query.
+          type: integer
+        results:
+          description: Results which matched the query. This is an array of strings.
+          type: array
+          items:
+            type: object
+        description:
+          description: Detailed description of the status
+        status:
+          description: 'Status of the request. Could be success, fail, invalidSyntax.'
+          type: string
+      example:
+        totalHits: 10
+        results:
+          - {}
+        status: success
+        description: a detailed description
+    standardErrorResponse:
+      title: Root Type for standardErrorResponse
+      description: Stand response body for error status
+      type: object
+      properties:
+        status:
+          type: string
+        description:
+          type: string
+      example:
+        status: fail
+        description: failed due to invalid query
+    exampleEntityWoID:
+      title: Root Type for exampleEntityWoID
+      description: An example entity without ID (For first time onboarding)
+      type: object
+      properties:
+        '@context':
+          type: string
+          description: JSON-LD context. Default is https://voc.iudx.org.in.
+        name:
+          type: string
+        type:
+          type: array
+          description: JSON-LD type. Must contain the uri of one of the [IUDXEntity](https://voc.iudx.org.in/IUDXEntity) subclasses.
+                        May additionally contain a data model uri which can be found [here](https://voc.iudx.org.in/) in the "Data-Models" tab.
+          items:
+            type: string
+      example:
+        '@context': context-url
+        name: some-name
+        type:
+          - 'iudx:Resource'
+        'instance': name of the instance to which this item belongs
+    exapmleEntityWId:
+      title: Root Type for exapmleEntityWId
+      description: And example entity with id for updates
+      type: object
+      properties:
+        '@context':
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: array
+          items:
+            type: string
+      example:
+        '@context': context-url
+        id: some-id
+        name: some-name
+        type:
+          - 'iudx:Resource'
+        'instance': name of the instance to which this item belongs
+    standardCrudResponse:
+      title: Root Type for standardCrudResponse
+      description: Standard response for crud apis
+      type: object
+      properties:
+        status:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              method:
+                type: string
+              status:
+                type: string
+      example:
+        status: success or fail
+        results:
+          - id: some-id
+            method: insert/delete/update
+            status: success
+servers:
+  - url: 'https://api.catalogue.iudx.org.in'
+    description: Production Instance
+  - url: 'https://api.catalogue.iudx.io'
+    description: Development Instance
