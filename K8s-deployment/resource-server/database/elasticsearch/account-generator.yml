@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: job
-        image: alpine
+        image: curlimages/curl:latest
         command: ["/usr/bin/share/account-generator.sh"]
         env:
           - name: ELASTICSEARCH_HOST
