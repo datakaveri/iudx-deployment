@@ -14,8 +14,13 @@ The helm chart is based on bitnami : https://github.com/bitnami/charts/tree/mast
 Creating custom image to include the [ReJSON module](https://github.com/RedisJSON/JRedisJSON)  on top of [bitnami redis-cluster docker image](https://github.com/bitnami/bitnami-docker-redis-cluster)
 
 **Build docker image**
+Redis-rejson image
 ```
-docker build -t <registry-domain-name>/<repo-name>/redis-cluster-rejson:6.2.5-1.0.7 -f docker/Dockerfile docker/
+docker build -t <registry-domain-name>/<repo-name>/redis-cluster-rejson:6.2.5-1.0.7 -f docker/redis-rejson/Dockerfile docker/redis-rejson
+```
+Redis-autoscaler image
+```
+docker build -t <registry-domain-name>/<repo-name>/redis-cluster-autoscaler:1.2 -f docker/redis-autoscaler/Dockerfile docker/redis-autoscaler
 ```
 **Push docker image**
 ``
