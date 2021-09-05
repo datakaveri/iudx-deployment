@@ -1,7 +1,5 @@
 #!/bin/sh
 
-apk add --no-cache curl
-
 elastic_username='elastic'
 elastic_password=$(cat /usr/share/secrets/elasticsearch-su-password)
 
@@ -52,6 +50,10 @@ change_password \
 create_simple_role "logstash-role" "[\"create\"]"
 create_simple_role "rs-role" "[\"read\"]"
 create_simple_role "cat-role" "[\"create\",\"read\",\"delete\"]"
+curl -X PUT "$ELASTICSEARCH_HOST/_security/role/monitor-role" \
+        -u $elastic_username:$elastic_password \
+        -H 'Content-Type: application/json' \
+        --data "{\"cluster\":[\"monitor\",\"monitor_snapshot\"],\"indices\":[{\"names\":[\"*\"],\"privileges\": [\"monitor\"]}]}"
 
 create_user \
     $(cat /usr/share/secrets/kibana-admin-username) \
@@ -72,3 +74,8 @@ create_user \
     cat-user \
     $(cat /usr/share/secrets/elasticsearch-cat-password) \
     "[\"cat-role\"]"
+
+create_user \
+   $(cat /usr/share/secrets/elasticsearch-monitor-user) \
+   $(cat /usr/share/secrets/elasticsearch-monitor-password) \
+   "[\"monitor-role\"]"
