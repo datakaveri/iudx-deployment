@@ -1,0 +1,6 @@
+postgresql:
+  extendedConf: |-
+    synchronous_commit = 'remote_apply'
+    synchronous_standby_names = 'ANY 1 ("*")'
+    random_page_cost = 1.5
+    effective_io_concurrency = 150

@@ -1,0 +1,5 @@
+secrets/*
+!secrets/.gitkeep
+resource-values.yaml
+.psql.env
+
