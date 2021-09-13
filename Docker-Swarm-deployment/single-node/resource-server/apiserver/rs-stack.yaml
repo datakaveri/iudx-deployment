@@ -15,7 +15,15 @@ services:
         target: /usr/share/app/secrets/all-verticles-configs/config.json
       - source: keystore
         target: /usr/share/app/secrets/keystore.jks
-
+    configs:
+      - source: apidoc-html
+        target: /usr/share/app/docs/apidoc.html
+      - source: iudx-png
+        target: /usr/share/app/docs/iudx.png
+      - source: openapi-yaml
+        target: /usr/share/app/docs/openapi.yaml
+      - source: rs_overview-png
+        target: /usr/share/app/docs/rs_overview.png
     expose:
       - 80
       - 9090
@@ -36,3 +44,14 @@ secrets:
     file: ./secrets/keystore.jks
   config-depl:
     file:  ./secrets/all-verticles-configs/config-depl.json
+
+configs:
+  apidoc-html:
+    file: docs/apidoc.html
+  iudx-png:
+    file: docs/iudx.png
+  openapi-yaml:
+    file: docs/openapi.yaml
+  rs_overview-png:
+    file: docs/rs_overview.png
+
