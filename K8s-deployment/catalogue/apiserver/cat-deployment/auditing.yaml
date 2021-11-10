@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cat-authenticator
+  name: cat-auditing
   namespace: cat
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cat-authenticator
+      app: cat-auditing
   template:
     metadata:
       labels:
-        app: cat-authenticator
+        app: cat-auditing
       annotations:
         prometheus.io/port: "9000"
         prometheus.io/scrape: "true"
@@ -19,17 +19,17 @@ spec:
       nodeSelector:
         node.kubernetes.io/instance-type: t3.medium
       containers:
-      - name: cat-authenticator 
+      - name: cat-auditing 
         image: dockerhub.iudx.io/iudx/cat-prod:3.0-1cc8c35
         resources:
           limits:
             cpu: 500m
-            memory: 800Mi
+            memory: 750Mi
           requests:
-            cpu: 300m
-            memory: 800Mi
+            cpu: 500m
+            memory: 700Mi
         volumeMounts:
-          - name: cat-config-authenticator
+          - name: cat-config-auditing
             mountPath: /usr/share/app/secrets/one-verticle-configs
         ports:
           - name: prometheus
@@ -54,26 +54,25 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
         command: ["/bin/bash"]
-        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-auditing.json"]
       imagePullSecrets:
         - name: regcred    
       volumes:
-        - name: cat-config-authenticator
+        - name: cat-config-auditing
           secret:
-            secretName: cat-config-authenticator
-
+            secretName: cat-config-auditing
 ---
 
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: cat-authenticator
+  name: cat-auditing
   namespace: cat
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: cat-authenticator
+    name: cat-auditing
   minReplicas: 1
   maxReplicas: 5
   metrics:
