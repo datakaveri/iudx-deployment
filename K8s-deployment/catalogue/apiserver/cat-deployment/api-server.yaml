@@ -2,7 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cat-api-server
-  namespace: cat-test
+  namespace: cat
+
 spec:
   replicas: 1
   selector:
@@ -12,17 +13,28 @@ spec:
     metadata:
       labels:
         app: cat-api-server
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
     spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: t3.medium
       containers:
       - name: cat-api-server
-        image: dockerhub.iudx.io/iudx/cat-prod:2.5.cb3bba6
+        image: dockerhub.iudx.io/iudx/cat-prod:3.0-1cc8c35
+        resources:
+          limits:
+            cpu: 800m
+            memory: 1.2Gi
+          requests:
+            cpu: 600m
+            memory: 1.2Gi
+
         volumeMounts:
           - name: cat-config-apiserver
             mountPath: /usr/share/app/secrets/one-verticle-configs
           - name: cat-keystore
             mountPath: /usr/share/app/secrets/
-          - name: cat-docs
-            mountPath: /usr/share/app/docs/
         ports:
           - name: http
             containerPort: 80
@@ -49,7 +61,7 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
         command: ["/bin/bash"]
-        args: ["-c","exec java $$CAT_JAVA_OPTS  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
       imagePullSecrets:
         - name: regcred    
       volumes:
@@ -59,17 +71,14 @@ spec:
         - name: cat-keystore
           secret:
             secretName: cat-keystore
-        - name: cat-docs
-          configMap:
-            name: cat-docs
-      
+ 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   name: cat-api-server
-  namespace: cat-test
+  namespace: cat
 spec:
   type: ClusterIP
   selector:
@@ -78,3 +87,26 @@ spec:
   - name: http
     port: 80
     targetPort: 80
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cat-api-server
+  namespace: cat
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: cat-api-server
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
