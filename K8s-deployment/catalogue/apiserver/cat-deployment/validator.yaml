@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cat-validator
-  namespace: cat-test
+  namespace: cat
 spec:
   replicas: 1
   selector:
@@ -12,10 +12,22 @@ spec:
     metadata:
       labels:
         app: cat-validator
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
     spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: t3.medium
       containers:
       - name: cat-validator 
-        image: dockerhub.iudx.io/iudx/cat-prod:2.5.cb3bba6
+        image: dockerhub.iudx.io/iudx/cat-prod:3.0-1cc8c35
+        resources:
+          limits:
+            cpu: 800m
+            memory: 1.2Gi
+          requests:
+            cpu: 600m
+            memory: 1.2Gi
         volumeMounts:
           - name: cat-config-validator
             mountPath: /usr/share/app/secrets/one-verticle-configs
@@ -42,10 +54,33 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
         command: ["/bin/bash"]
-        args: ["-c","exec java $$CAT_JAVA_OPTS  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-validator.json"]
+        args: ["-c","exec java  -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory   -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-validator.json"]
       imagePullSecrets:
         - name: regcred    
       volumes:
         - name: cat-config-validator
           secret:
             secretName: cat-config-validator
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cat-validator
+  namespace: cat
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: cat-validator
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
