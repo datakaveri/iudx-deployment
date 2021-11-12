@@ -17,6 +17,6 @@ kubectl create namespace zookeeper
 ```
 3. Helm install zookeeper in zookeeper namespace
 ```
-helm install -f zookeeper-values-yaml -f resource-values.yaml zookeeper --version 7.4.3  bitnami/zookeeper 
+helm install -f zookeeper-values-yaml -f resource-values.yaml zookeeper --version 7.4.3  bitnami/zookeeper -n zookeeper
 ```
 
