@@ -1,0 +1,25 @@
+version: '3.4'
+services:
+    immudb:
+      image: codenotary/immudb:1.0.5
+      ports: 
+        - 9497:9497
+        - 3322:3322
+        - 8000:8080
+        - 5432:5432
+      volumes:
+        - immudb-data:/var/lib/immudb
+      networks:
+        - overlay-net
+      environment:
+        - IMMUDB_ADDRESS=0.0.0.0
+        - IMMUDB_PGSQL_SERVER=true
+      deploy:
+        replicas: 1
+
+networks:
+  overlay-net:
+    driver: overlay
+
+volumes:
+  immudb-data:
