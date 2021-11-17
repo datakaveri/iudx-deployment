@@ -1,5 +1,6 @@
 import immudb
 from immudb import ImmudbClient
+import urllib.request
 
 f = open("../run/secrets/adminpassword","r")
 ADMIN_PASSWORD = f.read()
@@ -12,6 +13,13 @@ IUDX_CAT_PASSWORD = f.read()
 
 f = open("../run/secrets/rspassword","r")
 IUDX_RS_PASSWORD = f.read()
+
+while True:
+    try:
+        if urllib.request.urlopen("http://immudb:8080").getcode() == 200:
+            break
+    except:
+        continue
 
 client = ImmudbClient("immudb:3322")
 client.login("immudb","immudb")
@@ -41,12 +49,9 @@ print(client.databaseList())
 
 client.databaseUse("iudxcat")
 print(client.listTables())
-# print(client.describeTable("auditingtable"))
 
 client.databaseUse("iudxauth")
 print(client.listTables())
-# print(client.describeTable("table_auditing"))
 
 client.databaseUse("iudxrs")
 print(client.listTables())
-# print(client.describeTable("auditing"))
