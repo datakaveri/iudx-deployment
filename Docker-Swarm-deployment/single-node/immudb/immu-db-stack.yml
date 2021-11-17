@@ -19,6 +19,7 @@ services:
 
 networks:
   overlay-net:
+    external: true
     driver: overlay
 
 volumes:
