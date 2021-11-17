@@ -1,0 +1,29 @@
+version: '3.4'
+services:
+    immudb:
+      image: immudbconfiggenerator
+      networks:
+        - overlay-net
+      deploy:
+        replicas: 1
+      secrets:
+        - adminpassword
+        - catpassword
+        - authpassword
+        - rspassword
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+
+secrets:
+  adminpassword:
+    file: secrets/passwords/adminpassword
+  rspassword:
+    file: secrets/passwords/rspassword
+  authpassword:
+    file: secrets/passwords/authpassword
+  catpassword: 
+    file: secrets/passwords/catpassword
