@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cat-api-server
+  namespace: {{ .Values.namespace}}
+spec:
+  type: {{ .Values.apiserver.service.type }}
+  selector:
+    {{- include "math.apiserver.service" . | nindent 4 }}
+  ports:
+  - name: http
+    port: {{ .Values.apiserver.service.port}}
+    targetPort: {{ .Values.apiserver.service.targetPort }}
+
