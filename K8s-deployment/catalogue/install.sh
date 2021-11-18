@@ -12,5 +12,5 @@ kubectl create secret generic cat-config-database --from-file=secrets/one-vertic
 kubectl create secret generic cat-config-auditing --from-file=secrets/one-verticle-configs/config-auditing.json -n cat
 
 sleep 10
-kubectl apply -f cat-deployment/
-kubectl apply -f ingress.yaml
+
+helm install cat-helm cat-helm-mini/
