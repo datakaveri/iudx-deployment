@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cat-api-server
+  namespace: {{ .Values.namespace }}
+
+spec:
+  replicas: {{ .Values.apiserver.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.apiserver.labels.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.apiserver.labels.app }}
+      annotations:
+        {{- include "math.annotation" . | nindent 8 }}
+        
+    spec:
+      containers:
+      - name: {{ .Values.apiserver.labels.app }}
+        image: {{ .Values.image }}
+        resources:
+          limits:
+            cpu: {{ .Values.apiserver.limits.cpu }}
+            memory: {{ .Values.apiserver.limits.memory }}
+          requests:
+            cpu: {{ .Values.apiserver.requests.cpu}}
+            memory: {{ .Values.apiserver.requests.memory }}
+
+        volumeMounts:
+          - name: cat-config-apiserver
+            mountPath: {{ .Values.volumeConfigPath }}
+          - name: cat-keystore
+            mountPath: {{ .Values.volumeSecretPath }}
+        ports:
+          - name: http
+            containerPort: {{ .Values.containerPorts.http.port }}
+            protocol: {{ .Values.containerPorts.http.protocol }}
+          - name: hazelcast
+            containerPort: {{ .Values.containerPorts.hazelcast.port }}
+            protocol: {{ .Values.containerPorts.hazelcast.protocol }}
+          - name: prometheus
+            containerPort: {{ .Values.containerPorts.prometheus.port }}
+            protocol: {{ .Values.containerPorts.prometheus.protocol }}
+        livenessProbe:
+          httpGet:
+            {{- include "math.livenessProbe.httpGet" . | nindent 12 }}
+          initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+          periodSeconds: {{ .Values.periodSeconds }}
+          timeoutSeconds: {{ .Values.timeoutSeconds }}
+        envFrom:
+          - configMapRef:
+              name: {{ .Values.configMapRef }}
+        env:
+          - name: MY_POD_IP
+            {{- include "math.env.myPodIp" . | nindent 12 }}
+        command: [ {{ range .Values.apiserver.command }} {{ . | quote }} {{- end }} ]
+        args: [{{- range $index, $str := .Values.apiserver.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}  
+      volumes:
+        - name: cat-config-apiserver
+          secret:
+            secretName: cat-config-apiserver
+        - name: cat-keystore
+          secret:
+            secretName: cat-keystore
+
