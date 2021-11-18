@@ -32,7 +32,7 @@ Bring up the config and basic schema generator stack(only on clean deployment),
 docker stack deploy -c immudb-config-generator.yml tmp 
 
 # Monitor logs to ensure creation
-docker service logs tmp_account-generator -f
+docker service logs tmp_immudbconfiggenerator -f
 
 # Remove stack
 docker stack rm tmp 

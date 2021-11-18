@@ -2,11 +2,6 @@ version: '3.4'
 services:
     immudb:
       image: codenotary/immudb:1.0.5
-      ports: 
-        - 9497:9497
-        - 3322:3322
-        - 8000:8080
-        - 5432:5432
       volumes:
         - immudb-data:/var/lib/immudb
       networks:
