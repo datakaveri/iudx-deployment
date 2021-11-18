@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cat-auditing
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.auditing.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.auditing.labels.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.auditing.labels.app }}
+      annotations:
+        {{- include "math.annotation" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Values.auditing.labels.app }}
+        image: {{ .Values.image }}
+        resources:
+          limits:
+            cpu: {{ .Values.auditing.limits.cpu }}
+            memory: {{ .Values.auditing.limits.memory }}
+          requests:
+            cpu: {{ .Values.auditing.requests.cpu }}
+            memory: {{ .Values.auditing.requests.memory }}
+        volumeMounts:
+          - name: cat-config-auditing
+            mountPath: {{ .Values.volumeConfigPath }}
+        ports:
+          - name: prometheus
+            containerPort: {{ .Values.containerPorts.prometheus.port }}
+            protocol: {{ .Values.containerPorts.prometheus.protocol }}
+          - name: hazelcast
+            containerPort: {{ .Values.containerPorts.hazelcast.port }}
+            protocol: {{ .Values.containerPorts.hazelcast.protocol }}
+        livenessProbe:
+          httpGet:
+            {{- include "math.livenessProbe.httpGet" . | nindent 12 }}
+          initialDelaySeconds: {{ .Values.initialDelaySeconds }}
+          periodSeconds: {{ .Values.periodSeconds }}
+          timeoutSeconds: {{ .Values.timeoutSeconds }}
+        envFrom:
+          - configMapRef:
+              name: {{ .Values.configMapRef }}
+        env:
+          - name: MY_POD_IP
+            {{- include "math.env.myPodIp" . | nindent 12 }}
+        command: [ {{ range .Values.auditing.command }} {{ . | quote }} {{- end }} ]
+        args: [ {{- range $index, $str := .Values.auditing.args }} {{ if eq $index 0 }} {{ . | quote }} {{ else }} , {{  . | quote }} {{- end }}{{- end }} ]
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}      
+      volumes:
+        - name: cat-config-auditing
+          secret:
+            secretName: cat-config-auditing
+
