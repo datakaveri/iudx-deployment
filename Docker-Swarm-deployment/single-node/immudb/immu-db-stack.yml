@@ -16,6 +16,8 @@ services:
         - IMMUDB_PGSQL_SERVER=true
       deploy:
         replicas: 1
+        restart_policy:
+          condition: on-failure
 
 networks:
   overlay-net:
