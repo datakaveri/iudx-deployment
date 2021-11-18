@@ -22,4 +22,4 @@ Following install script deploys:
 ./install.sh
 ```
 
-helm install cat-helm cat-helm-mini/
+
