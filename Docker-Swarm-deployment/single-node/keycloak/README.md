@@ -116,35 +116,3 @@ volumes:
   postgresql_data:
     driver: local
 ```
-
-In case of adding a reverse proxy, you need to set the `KEYCLOAK_PROXY_ADDRESS_FORWARDING` to `true.
-
-### Adding custom themes
-
-In order to add new themes to Keycloak, you can mount them to the `/opt/bitnami/keycloak/themes` folder. The example below mounts a new theme.
-
-```yaml
-version: "2"
-services:
-  postgresql:
-    image: "docker.io/bitnami/postgresql:11-debian-10"
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - POSTGRESQL_USERNAME=bn_keycloak
-      - POSTGRESQL_DATABASE=bitnami_keycloak
-    volumes:
-      - "postgresql_data:/bitnami/postgresql"
-  keycloak:
-    image: docker.io/bitnami/keycloak:12-debian-10
-    ports:
-      - "80:8080"
-    environment:
-      - KEYCLOAK_CREATE_ADMIN_USER=true
-    depends_on:
-      - postgresql
-    volumes:
-      - "./mynewtheme:/opt/bitnami/keycloak/themes/mynewtheme"
-volumes:
-  postgresql_data:
-    driver: local
-```
