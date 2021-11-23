@@ -9,10 +9,23 @@ services:
       environment:
         - IMMUDB_ADDRESS=0.0.0.0
         - IMMUDB_PGSQL_SERVER=true
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "5m"
+          max-file: "3"
+          tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
       deploy:
         replicas: 1
         restart_policy:
-          condition: on-failure
+          condition: any
+        resources:
+          limits:
+            cpus: '0.65'
+            memory: 450M
+          reservations:
+            cpus: '0.01'   
+            memory: 30M
 
 networks:
   overlay-net:
