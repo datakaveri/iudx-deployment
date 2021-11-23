@@ -4,15 +4,21 @@ services:
       image: immudbconfiggenerator
       networks:
         - overlay-net
-      deploy:
-        replicas: 1
-        restart_policy:
-          condition: on-failure
       secrets:
         - adminpassword
         - catpassword
         - authpassword
         - rspassword
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "5m"
+          max-file: "3"
+          tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
 networks:
   overlay-net:
