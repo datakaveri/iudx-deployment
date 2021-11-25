@@ -1,0 +1,33 @@
+{{- if .Values.database.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cat-database
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "cat-helm-test.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: cat-database
+  minReplicas: {{ .Values.database.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.database.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.database.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.database.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.database.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.database.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
