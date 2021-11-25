@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cat-api-server
+  namespace: {{ .Values.namespace}}
+  labels:
+    {{- include "cat-helm-test.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+  selector:
+    {{- include "cat-helm-test.service.selectorLabels" . | nindent 4 }}
