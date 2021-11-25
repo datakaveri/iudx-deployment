@@ -1,0 +1,67 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "cat-helm-test.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: catalogue
+  labels:
+    {{- include "cat-helm-test.labels" . | nindent 4 }}
+  namespace: {{ .Values.namespace}}
+  annotations:
+  {{- if .Values.ingress.rateLimitAnnotation }}
+  {{- include "cat-helm-test.ingressRateLimit.annotation" . | nindent 4 }}
+  {{- end }}
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+    nginx.ingress.kubernetes.io/limit-connections: "150"
+    nginx.ingress.kubernetes.io/limit-rps: "150"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      add_header Clear-Site-Data   "*" always;
+      add_header Referrer-Policy   "no-referrer-when-downgrade" always;
+      add_header X-Frame-Options   "deny" always;
+      add_header X-XSS-Protection  "1; mode=block" always;
+      add_header X-Permitted-Cross-Domain-Policies  "none" always;
+      add_header Cross-Origin-Embedder-Policy "require-corp" always;
+      add_header Cross-Origin-Resource-Policy "cross-origin" always;
+
+spec:
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ .pathType }}
+            {{- end }}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: cat-api-server
+                port:
+                  name: http
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+              {{- end }}
+          {{- end }}
+    {{- end }}
+  {{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+{{- end }}
