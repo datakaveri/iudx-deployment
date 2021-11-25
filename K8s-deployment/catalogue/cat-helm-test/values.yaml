@@ -1,0 +1,178 @@
+# namespace: Namespace to deploy the controller
+namespace: cat
+
+image: dockerhub.iudx.io/iudx/cat-prod:3.0-1cc8c35
+
+imagePullSecrets: regcred 
+#volumeConfigPath: Path of secret config file
+volumeConfigPath: /usr/share/app/secrets/one-verticle-configs
+#volumeSecretPath: Path of keystore secret file
+volumeSecretPath: /usr/share/app/secrets/
+# nodeSelector.enable: "true" to deploy on specifiv nodes
+# nodeSelector.selector: list selector in key-value pairs
+nodeSelector:
+  enable: false
+  selector: [
+    node.kubernetes.io/instance-type: t3.medium,
+    hudu: hihh
+  ]
+
+
+
+
+containerPorts:
+  http:
+    port: 80
+    protocol: TCP
+  hazelcast:
+    port: 5701
+    protocol: TCP
+  prometheus:
+    port: 9000
+    protocol: TCP
+    scrape: true
+
+livenessProbe:
+  httpGet:
+    path: /metrics
+    port: 9000
+
+configMapRef: cat-env
+env:
+  fieldPath: status.podIP
+
+initialDelaySeconds: 60
+periodSeconds: 60
+timeoutSeconds: 10
+
+
+ingress:
+  enabled: true
+  rateLimitAnnotation: false
+  annotations: {}
+  hosts:
+    - host: cat.test.io
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: 
+    - secretName: catalogue-tls-secret
+      hosts:
+        - cat.test.io
+
+service:
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+    selector: [ 
+      app: cat-api-server, 
+    ]
+
+#apiserver: Specific to apiserver verticles
+
+apiserver:
+  replicas: 1
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    #targetMemoryUtilizationPercentage: 80
+  labels: [
+      app: cat-api-server,
+      ]
+  limits:
+    cpu: 800m
+    memory: 1.2Gi
+  requests:
+    cpu: 6m
+    memory: 10Mi
+  command: ["/bin/bash"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
+  
+#auditing: Specific to auditing verticles
+auditing:
+  replicas: 1
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+  labels: [
+    app: cat-auditing
+  ]
+  limits:
+    cpu: 500m
+    memory: 750Mi
+  requests:
+    cpu: 50m
+    memory: 70Mi
+  command: ["/bin/bash"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-auditing.json"]
+     
+#authenticator: Specific to authenticator verticles
+authenticator:
+  replicas: 1
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+  labels: [
+    app: cat-authenticator
+  ]
+  limits:
+    cpu: 500m
+    memory: 800Mi
+  requests:
+    cpu: 30m
+    memory: 80Mi
+  command: ["/bin/bash"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
+
+
+#database: Specific to database verticle
+database:
+  replicas: 1
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+  labels: [
+    app: cat-database
+  ]
+  limits:
+    cpu: 800m
+    memory: 1.2Gi
+  requests:
+    cpu: 6m
+    memory: 200Mi
+  command: ["/bin/bash"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-database.json"]
+
+#validator: Specific to validator verticles
+validator:
+  replicas: 1
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+  labels: [
+    app: cat-validator
+  ]
+  limits:
+    cpu: 800m
+    memory: 1.2Gi
+  requests:
+    cpu: 6m
+    memory: 200Mi
+  command: ["/bin/bash"]
+  args: ["-c","exec java  -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory   -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-validator.json"]
+          
+
