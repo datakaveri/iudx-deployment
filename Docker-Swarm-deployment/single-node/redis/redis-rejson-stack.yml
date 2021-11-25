@@ -1,0 +1,42 @@
+version: '3.4'
+services:
+    redisrejson:
+      image: redisrejson
+      environment:
+        - REDIS_PASSWORD_FILE=/run/secrets/adminpassword
+      command: /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so
+      volumes:
+        - redis-persistence:/bitnami/redis/data
+      networks:
+        - overlay-net
+      secrets:
+        - adminpassword
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: any
+        resources:
+          limits:
+            cpus: '0.85'
+            memory: 100M
+          reservations:
+            cpus: '0.2'   
+            memory: 5M
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "5m"
+          max-file: "3"
+          tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+volumes:
+  redis-persistence: 
+
+secrets:
+  adminpassword:
+    file: secrets/adminpassword
