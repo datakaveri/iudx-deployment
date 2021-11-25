@@ -1,0 +1,33 @@
+{{- if .Values.auditing.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cat-auditing
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "cat-helm-test.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: cat-auditing
+  minReplicas: {{ .Values.auditing.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.auditing.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.auditing.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.auditing.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.auditing.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.auditing.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
