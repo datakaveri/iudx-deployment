@@ -1,0 +1,61 @@
+version: "3.4"
+
+networks:
+  default:
+    external:
+      name: overlay-net
+    driver: overlay
+
+services:
+  postgres:
+    image: bitnami/postgresql:11.14.0
+    volumes:
+      - type: volume
+        source: postgres-db-volume
+        target: /bitnami/postgresql
+    configs:
+      - source: db-rs-schema
+        target: /docker-entrypoint-initdb.d/db-rs-schema.sql
+        mode: 0755
+      - source: db-user-creation 
+        target: /docker-entrypoint-initdb.d/db-user-creation.sh
+        mode: 0755
+    secrets:
+      - source: postgres-auth-password
+        target: /opt/bitnami/postgresql/secrets/postgres-auth-password
+      - source: postgres-rs-password
+        target: /opt/bitnami/postgresql/secrets/postgres-rs-password
+      - source: postgres-keycloak-password
+        target: /opt/bitnami/postgresql/secrets/postgres-keycloak-password
+      - source: postgresql-password
+        target: /opt/bitnami/postgresql/secrets/postgresql-password
+    environment:
+      - POSTGRESQL_PASSWORD_FILE=/opt/bitnami/postgresql/secrets/postgresql-password
+    deploy:
+        replicas: 1
+        placement:
+          constraints:
+          - "node.labels.postgres_db_node==true"
+        restart_policy:
+          condition: any
+          delay: 5s
+          window: 10s
+
+volumes:
+  postgres-db-volume:
+
+configs:
+  db-user-creation:
+    file: init-scripts/db-user-creation.sh
+  db-rs-schema:
+    file: init-scripts/db-rs-schema.sql
+
+secrets:
+  postgresql-password:
+    file: secrets/passwords/postgresql-password
+  postgres-keycloak-password:
+    file: secrets/passwords/postgres-keycloak-password                                              
+  postgres-rs-password:
+    file: secrets/passwords/postgres-rs-password                            
+  postgres-auth-password:
+    file: secrets/passwords/postgres-auth-password
