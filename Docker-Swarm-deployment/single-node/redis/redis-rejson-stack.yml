@@ -1,7 +1,7 @@
 version: '3.4'
 services:
     redisrejson:
-      image: redisrejson
+      image: redisrejson:6.2.5-1.0.7
       environment:
         - REDIS_PASSWORD_FILE=/run/secrets/adminpassword
       command: /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so
