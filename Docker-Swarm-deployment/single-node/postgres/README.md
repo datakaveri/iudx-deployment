@@ -17,12 +17,13 @@ docker node update --label-add postgres_db_node=true <node_name>
 ```
 
 ## Deploy
+Three ways to deploy, do any one of it
 1. Quick deploy 
 ```sh
 docker stack deploy -c postgres-stack.yml postgres
 ```
 
-2. Setting resource reservations,limits in postgres-stack.resources.yml file (see [here](example-postgres-stack.resources.yml)).
+2. Setting resource reservations,limits in postgres-stack.resources.yml file and then deploying (see [here](example-postgres-stack.resources.yml)).
 
 ```sh
 docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml postgres
@@ -31,7 +32,7 @@ docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml postgr
 ```sh
 docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml -c postgres-stack.custom.yml
 ```
-Please refer [here](https://docs.docker.com/compose/extends/#multiple-compose-files)  info on using multiple stack files.
+Please refer [here](https://docs.docker.com/compose/extends/#multiple-compose-files) for info on why and how to use multiple stack files.
 
 # Note
 1. Command to dump only psql data from a particular database of a dockerized psql.
