@@ -33,9 +33,6 @@ services:
       - POSTGRESQL_PASSWORD_FILE=/opt/bitnami/postgresql/secrets/postgresql-password
     deploy:
         replicas: 1
-        placement:
-          constraints:
-          - "node.labels.postgres_db_node==true"
         restart_policy:
           condition: any
           delay: 5s

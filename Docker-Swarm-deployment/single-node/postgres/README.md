@@ -1,5 +1,5 @@
 # Install
-
+Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and the network.
 ## Required secrets
 
 ```sh
@@ -10,23 +10,23 @@ secrets/
     ├── postgresql-password
     └── postgres-rs-password
 ```
-## Assign node labels
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root postgres  directory for demo or local testing purpose only! For other environment, please generate strong passwords.
 
+## Assign node labels
+You can contsrain the postgres container to run on specifc node by adding node labels, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info
 ```sh
 docker node update --label-add postgres_db_node=true <node_name>
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root database directory for demo or local testing purpose only! For other environment, please generate strong passwords.
 
 ## Deploy
-Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and overlay net.
 
 Three ways to deploy, do any one of it
-1. Quick deploy 
+1. Quick deploy (does not require assigning node labels)
 ```sh
 docker stack deploy -c postgres-stack.yml postgres
 ```
 
-2. Setting resource reservations,limits in postgres-stack.resources.yml file and then deploying (see [here](example-postgres-stack.resources.yml)).
+2. Setting node constraints (needs assigning of node labels),resource reservations,limits in postgres-stack.resources.yml file and then deploying (see [here](example-postgres-stack.resources.yml)).
 
 ```sh
 docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml postgres
