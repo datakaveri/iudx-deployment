@@ -26,7 +26,7 @@ Three ways to deploy, do any one of it
 docker stack deploy -c postgres-stack.yml postgres
 ```
 
-2. Setting node constraints (needs assigning of node labels),resource reservations,limits in postgres-stack.resources.yml file and then deploying (see [here](example-postgres-stack.resources.yml)).
+2. Setting node constraints (needs assigning of node labels),resource reservations,limits in 'postgres-stack.resources.yml' file and then deploying (see [here](example-postgres-stack.resources.yml) for example configuration in postgres-stack.resources.yml ).
 
 ```sh
 docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml postgres
