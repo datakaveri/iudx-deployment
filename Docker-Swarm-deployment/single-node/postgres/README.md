@@ -26,12 +26,12 @@ Three ways to deploy, do any one of it
 docker stack deploy -c postgres-stack.yml postgres
 ```
 
-2. Setting node constraints (needs assigning of node labels),resource reservations,limits in 'postgres-stack.resources.yml' file and then deploying (see [here](example-postgres-stack.resources.yml) for example configuration in postgres-stack.resources.yml ).
+2. Setting node constraints (needs assigning of node labels),resource reservations,limits in 'postgres-stack.resources.yml' file and then deploying (see [here](example-postgres-stack.resources.yml) for example configuration of 'postgres-stack.resources.yml' file ).
 
 ```sh
 docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml postgres
 ```
-3. You can add more custom stack cofiguration in file 'postgres-stack.custom.yml' that ooverrides base 'postgres-stack.yaml' file like ports mapping etc ( see [here](example-postgres-stack.custom.yml) for example configuration in 'postgres-stack.custom.yml')  and bring up like as follows
+3. You can add more custom stack cofiguration in file 'postgres-stack.custom.yml' that ooverrides base 'postgres-stack.yml' file like ports mapping etc ( see [here](example-postgres-stack.custom.yml) for example configuration of 'postgres-stack.custom.yml' file)  and bring up like as follows
 ```sh
 docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml -c postgres-stack.custom.yml
 ```
