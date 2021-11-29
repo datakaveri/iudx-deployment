@@ -2,9 +2,6 @@ version: "3.4"
 services:
   postgres:
     deploy:
-      placement:
-        constraints:
-        - "node.labels.postgres_db_node==true"
       resources:
         limits: 
           cpus: '0.50'
