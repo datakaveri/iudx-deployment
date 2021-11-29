@@ -31,7 +31,7 @@ docker stack deploy -c postgres-stack.yml postgres
 ```sh
 docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml postgres
 ```
-3. You can add more custom stack cofiguration in file 'postgres-stack.custom.yml' like ports mapping etc and bring up like as follows
+3. You can add more custom stack cofiguration in file 'postgres-stack.custom.yml' that ooverrides base 'postgres-stack.yaml' file like ports mapping etc ( see [here](example-postgres-stack.custom.yml) for example configuration in 'postgres-stack.custom.yml')  and bring up like as follows
 ```sh
 docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml -c postgres-stack.custom.yml
 ```
