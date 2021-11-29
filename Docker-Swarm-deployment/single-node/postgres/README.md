@@ -18,6 +18,7 @@ docker node update --label-add postgres_db_node=true <node_name>
 Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root database directory for demo or local testing purpose only! For other environment, please generate strong passwords.
 
 ## Deploy
+Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md)
 Three ways to deploy, do any one of it
 1. Quick deploy 
 ```sh
