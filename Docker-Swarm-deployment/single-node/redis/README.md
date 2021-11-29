@@ -7,7 +7,7 @@ secrets
 Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root database directory  for demo or local testing purpose only! For other environment, please generate strong passwords.
 ## Build the docker file
 ```sh
-docker build -t redisrejson .
+docker build -t redisrejson:6.2.5-1.0.7 docker
 ```
 ## Creating an overlay network
 ```sh
