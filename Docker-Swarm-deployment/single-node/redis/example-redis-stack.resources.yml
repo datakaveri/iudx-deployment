@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  redisrejson:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.85'
+          memory: 100M
+        reservations:
+          cpus: '0.2'   
+          memory: 5M

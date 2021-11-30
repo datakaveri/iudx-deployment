@@ -1,1 +1,3 @@
 secrets/
+redis-stack.resources.yml
+redis-stack.custom.yml

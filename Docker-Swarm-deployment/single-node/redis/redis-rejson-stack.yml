@@ -15,13 +15,9 @@ services:
         replicas: 1
         restart_policy:
           condition: any
-        resources:
-          limits:
-            cpus: '0.85'
-            memory: 100M
-          reservations:
-            cpus: '0.2'   
-            memory: 5M
+        placement:
+          constraints:
+            - "node.labels.redis_node==true"
       logging:
         driver: "json-file"
         options:
