@@ -19,13 +19,9 @@ services:
         replicas: 1
         restart_policy:
           condition: any
-        resources:
-          limits:
-            cpus: '0.65'
-            memory: 450M
-          reservations:
-            cpus: '0.01'   
-            memory: 30M
+        placement:
+          constraints:
+            - "node.labels.immu_db_node==true"
 
 networks:
   overlay-net:
