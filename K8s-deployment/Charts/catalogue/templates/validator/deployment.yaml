@@ -4,7 +4,7 @@ metadata:
   name: cat-validator
   namespace: {{ .Values.nameSpace }}
   labels: 
-    app.kubernetes.io/component: apiServer
+    app.kubernetes.io/component: validator
     app: cat-validator
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -13,44 +13,44 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.catalogue.replicaCount }}
-  {{- if .Values.catalogue.updateStrategy }}
-  strategy: {{- toYaml .Values.catalogue.updateStrategy | nindent 4 }}
+  replicas: {{ .Values.validator.replicaCount }}
+  {{- if .Values.validator.updateStrategy }}
+  strategy: {{- toYaml .Values.validator.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: 
       app: cat-validator
   template:
     metadata:
-      {{- if .Values.catalogue.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.podAnnotations "context" $) | nindent 8 }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app: cat-validator
-        app.kubernetes.io/component: apiServer
-        {{- if .Values.catalogue.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.podLabels "context" $) | nindent 8 }}
+        app.kubernetes.io/component: validator
+        {{- if .Values.validator.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.validator.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      {{- if .Values.catalogue.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.catalogue.nodeSelector "context" $) | nindent 8 }}
+      {{- if .Values.validator.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.validator.nodeSelector "context" $) | nindent 8 }}
       {{- end }}      
-      {{- if .Values.catalogue.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.tolerations "context" .) | nindent 8 }}
+      {{- if .Values.validator.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.validator.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.catalogue.priorityClassName }}
-      priorityClassName: {{ .Values.catalogue.priorityClassName | quote }}
+      {{- if .Values.validator.priorityClassName }}
+      priorityClassName: {{ .Values.validator.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.catalogue.schedulerName }}
-      schedulerName: {{ .Values.catalogue.schedulerName | quote }}
+      {{- if .Values.validator.schedulerName }}
+      schedulerName: {{ .Values.validator.schedulerName | quote }}
       {{- end }}
-      {{- if .Values.catalogue.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.catalogue.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.validator.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.validator.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}
         - name: volume-permissions
-          image: {{ include "catalogue.apiServer.volumePermissions.image" . }}
+          image: {{ include "catalogue.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command: {}
           
@@ -62,108 +62,107 @@ spec:
             - name: foo
               mountPath: bar
         {{- end }}
-        {{- if .Values.catalogue.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.initContainers "context" $) | nindent 8 }}
+        {{- if .Values.validator.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.validator.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: cat-validator
-          image: {{ template "catalogue.apiServer.image" . }}
-          imagePullPolicy: {{ .Values.catalogue.image.pullPolicy }}
-          {{- if .Values.catalogue.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.catalogue.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.validator.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.validator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.catalogue.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.command "context" $) | nindent 12 }}
+          {{- else if .Values.validator.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.validator.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.catalogue.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.args "context" $) | nindent 12 }}
+          {{- else if .Values.validator.args }}
+          args: [{{- range $index, $str := .Values.validator.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
           {{- end }}
           
           
-          {{- if .Values.catalogue.resources }}
-          resources: {{- toYaml .Values.catalogue.resources | nindent 12 }}
+          {{- if .Values.validator.resources }}
+          resources: {{- toYaml .Values.validator.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.catalogue.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- if .Values.validator.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.validator.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-        {{- if .Values.catalogue.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.catalogue.sidecars "context" $) | nindent 8 }}
+        {{- if .Values.validator.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.validator.sidecars "context" $) | nindent 8 }}
         {{- end }}
           ports:
-            - name: http
-              containerPort: {{ .Values.catalogue.containerPorts.http }}
-              protocol: TCP
             - name: hazelcast
-              containerPort: {{ .Values.catalogue.containerPorts.hazelcast }}
+              containerPort: {{ .Values.containerPorts.hazelcast }}
               protocol: TCP
             - name: prometheus
-              containerPort: {{ .Values.catalogue.containerPorts.prometheus }}
+              containerPort: {{ .Values.containerPorts.prometheus }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.catalogue.livenessProbe.enabled }}
+          {{- if .Values.validator.livenessProbe.enabled }}
           livenessProbe:
              httpGet:
-               path: {{ .Values.catalogue.livenessProbe.path }}
+               path: {{ .Values.validator.livenessProbe.path }}
                port: 9000
-             initialDelaySeconds: {{ .Values.catalogue.livenessProbe.initialDelaySeconds }}
-             periodSeconds: {{ .Values.catalogue.livenessProbe.periodSeconds }}
-             timeoutSeconds: {{ .Values.catalogue.livenessProbe.timeoutSeconds }}
+             initialDelaySeconds: {{ .Values.validator.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.validator.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.validator.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.validator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.validator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.validator.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.validator.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.validator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.validator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.validator.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.validator.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.validator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.validator.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.validator.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.validator.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: MY_POD_IP
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
           envFrom:
-            {{- if .Values.catalogue.extraEnvVarsCM }}
+            {{- if .Values.validator.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.catalogue.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.validator.extraEnvVarsCM "context" $) }}
             {{- end }}
-            {{- if .Values.catalogue.extraEnvVarsSecret }}
+            {{- if .Values.validator.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.catalogue.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.validator.extraEnvVarsSecret "context" $) }}
             {{- end }}
-            {{- if .Values.catalogue.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.extraEnvVars "context" $) | nindent 12 }}
+            {{- if .Values.validator.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.validator.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
-          {{- else if .Values.catalogue.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.customLivenessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.catalogue.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.catalogue.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.catalogue.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.catalogue.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.catalogue.startupProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.catalogue.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.customStartupProbe "context" $) | nindent 12 }}
-          {{- end }}
-          {{- end }}
-          {{- if .Values.catalogue.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
       {{- if .Values.serviceAccount.create }}    
-      serviceAccountName: {{ template "catalogue.apiServer.serviceAccountName" . }}
-      {{- include "catalogue.apiServer.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
       {{- end }}
-      {{- if .Values.catalogue.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.hostAliases "context" $) | nindent 8 }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.validator.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.validator.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.catalogue.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.catalogue.affinity "context" $) | nindent 8 }}
-      {{- if .Values.catalogue.podAffinityPreset or .Values.catalogue.podAntiAffinityPreset or  .Values.catalogue.nodeAffinityPreset.type}}
+      {{- if .Values.validator.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.validator.affinity "context" $) | nindent 8 }}
+      {{- if .Values.validator.podAffinityPreset or .Values.validator.podAntiAffinityPreset or  .Values.validator.nodeAffinityPreset.type}}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.catalogue.podAffinityPreset "component" "apiServer" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.catalogue.podAntiAffinityPreset "component" "apiServer" "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.catalogue.nodeAffinityPreset.type "key" .Values.catalogue.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.validator.podAffinityPreset "component" "validator" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.validator.podAntiAffinityPreset "component" "validator" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.validator.nodeAffinityPreset.type "key" .Values.validator.nodeAffinityPreset.key "values" .Values.validator.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- end }}
       volumes:
-        {{- if .Values.catalogue.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.catalogue.extraVolumes "context" $) | nindent 8 }}
+        {{- if .Values.validator.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.validator.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
