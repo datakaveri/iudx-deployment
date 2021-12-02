@@ -1,4 +1,4 @@
-{{- if .Values.catalogue.apiServer.autoscaling.enabled }}
+{{- if .Values.apiServer.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -19,23 +19,23 @@ spec:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
     name: cat-api-server
-  minReplicas: {{ .Values.catalogue.apiServer.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.catalogue.apiServer.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.apiServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.apiServer.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.catalogue.apiServer.autoscaling.targetCPU }}
+    {{- if .Values.apiServer.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.catalogue.apiServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.apiServer.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.catalogue.apiServer.autoscaling.targetMemory }}
+    {{- if .Values.apiServer.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.catalogue.apiServer.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.apiServer.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
