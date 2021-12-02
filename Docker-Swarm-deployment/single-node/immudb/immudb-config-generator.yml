@@ -1,14 +1,14 @@
 version: '3.4'
 services:
-    immudbconfiggenerator:
-      image: immudbconfiggenerator
+    immudb-config-generator:
+      image: ghcr.io/datakaveri/immudb-config-generator:1.0.5
       networks:
         - overlay-net
       secrets:
-        - adminpassword
-        - catpassword
-        - authpassword
-        - rspassword
+        - admin-password
+        - cat-password
+        - auth-password
+        - rs-password
       deploy:
         replicas: 1
         restart_policy:
@@ -27,11 +27,11 @@ networks:
 
 
 secrets:
-  adminpassword:
-    file: secrets/passwords/adminpassword
-  rspassword:
-    file: secrets/passwords/rspassword
-  authpassword:
-    file: secrets/passwords/authpassword
-  catpassword: 
-    file: secrets/passwords/catpassword
+  admin-password:
+    file: secrets/passwords/admin-password
+  rs-password:
+    file: secrets/passwords/rs-password
+  auth-password:
+    file: secrets/passwords/auth-password
+  cat-password: 
+    file: secrets/passwords/cat-password

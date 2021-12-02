@@ -9,6 +9,7 @@ services:
       environment:
         - IMMUDB_ADDRESS=0.0.0.0
         - IMMUDB_PGSQL_SERVER=true
+        - IMMUDB_DEVMODE=false
       logging:
         driver: "json-file"
         options:
@@ -21,7 +22,7 @@ services:
           condition: any
         placement:
           constraints:
-            - "node.labels.immu_db_node==true"
+            - "node.labels.immudb-node==true"
 
 networks:
   overlay-net:
