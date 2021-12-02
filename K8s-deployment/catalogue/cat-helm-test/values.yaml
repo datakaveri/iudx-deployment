@@ -14,7 +14,6 @@ nodeSelector:
   enable: false
   selector: [
     node.kubernetes.io/instance-type: t3.medium,
-    hudu: hihh
   ]
 
 
