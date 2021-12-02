@@ -2,16 +2,16 @@ import immudb
 from immudb import ImmudbClient
 import urllib.request
 
-f = open("../run/secrets/adminpassword","r")
+f = open("../run/secrets/admin-password","r")
 ADMIN_PASSWORD = f.read()
 
-f = open("../run/secrets/authpassword","r")
+f = open("../run/secrets/auth-password","r")
 IUDX_AUTH_PASSWORD = f.read()
 
-f = open("../run/secrets/catpassword","r")
+f = open("../run/secrets/cat-password","r")
 IUDX_CAT_PASSWORD = f.read()
 
-f = open("../run/secrets/rspassword","r")
+f = open("../run/secrets/rs-password","r")
 IUDX_RS_PASSWORD = f.read()
 
 while True:

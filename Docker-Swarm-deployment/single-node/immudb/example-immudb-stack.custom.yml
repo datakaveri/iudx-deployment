@@ -2,7 +2,15 @@ version: '3.4'
 services:
   immudb:
     ports: 
-      - 9497:9497
-      - 3322:3322
-      - 8000:8080
-      - 5432:5432
+      - target: 9497 # prometheus metrics port
+        published: 9497
+        mode: host
+      - target: 3322 # immudb port through which immuclient can connect
+        published: 3322
+        mode: host
+      - target: 8080 # web-embedded-server port
+        published: 8080
+        mode: host
+      - target: 5432 # psql-server port
+        published: 5432
+        mode: host # The port is published only on the host its scheduled and not on every node (ref: https://docs.docker.com/engine/swarm/ingress/#bypass-the-routing-mesh)

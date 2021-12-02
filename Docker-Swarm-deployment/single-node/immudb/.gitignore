@@ -1,1 +1,3 @@
 secrets/
+immudb-stack.resources.yml
+immudb-stack.custom.yml
