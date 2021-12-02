@@ -1,11 +1,11 @@
-{{- if .Values.catalogue.apiServer.autoscaling.enabled }}
+{{- if .Values.authenticator.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: cat-api-server
+  name: cat-authenticator
   namespace: {{ .Values.namespace }}
   labels:
-    app: cat-api-server
+    app: cat-authenticator
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -18,24 +18,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: cat-api-server
-  minReplicas: {{ .Values.catalogue.apiServer.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.catalogue.apiServer.autoscaling.maxReplicas }}
+    name: cat-authenticator
+  minReplicas: {{ .Values.authenticator.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.authenticator.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.catalogue.apiServer.autoscaling.targetCPU }}
+    {{- if .Values.authenticator.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.catalogue.apiServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.authenticator.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.catalogue.apiServer.autoscaling.targetMemory }}
+    {{- if .Values.authenticator.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.catalogue.apiServer.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.authenticator.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
