@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rs-authenticator
-  namespace: rs-test
+  namespace: rs
 spec:
   replicas: 1
   selector:
@@ -12,15 +12,25 @@ spec:
     metadata:
       labels:
         app: rs-authenticator
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
     spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: t3.medium
       containers:
       - name: rs-authenticator 
-        image: dockerhub.iudx.io/iudx/rs-depl:2.5.b69b75b 
+        image: ghcr.io/datakaveri/rs-depl:3.0-e194504
+        resources:
+          limits:
+            cpu: 600m
+            memory: 750Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
         volumeMounts:
           - name: rs-config-authenticator
             mountPath: /usr/share/app/secrets/one-verticle-configs
-          - name: rs-keystore
-            mountPath: /usr/share/app/secrets/
         ports:
           - name: prometheus
             containerPort: 9000
@@ -44,14 +54,31 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
         command: ["/bin/bash"]
-        args: ["-c","exec java $$RS_JAVA_OPTS  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
-      imagePullSecrets:
-        - name: regcred    
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
       volumes:
         - name: rs-config-authenticator
           secret:
             secretName: rs-config-authenticator
-        - name: rs-keystore
-          secret:
-            secretName: rs-keystore
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-authenticator
+  namespace: rs
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-authenticator
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
 

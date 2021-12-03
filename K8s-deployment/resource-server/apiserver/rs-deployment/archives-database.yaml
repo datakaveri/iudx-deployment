@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rs-databroker
+  name: rs-archives-database
   namespace: rs
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rs-databroker
+      app: rs-archives-database
   template:
     metadata:
       labels:
-        app: rs-databroker
+        app: rs-archives-database
       annotations:
         prometheus.io/port: "9000"
         prometheus.io/scrape: "true"
@@ -19,17 +19,17 @@ spec:
       nodeSelector:
         node.kubernetes.io/instance-type: t3.medium
       containers:
-      - name: rs-databroker 
+      - name: rs-archives-database 
         image: ghcr.io/datakaveri/rs-depl:3.0-e194504
         resources:
           limits:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 1000m
+            memory: 1.5Gi
           requests:
-            cpu: 400m
-            memory: 400Mi
+            cpu: 700m
+            memory: 1.5Gi
         volumeMounts:
-          - name: rs-config-databroker
+          - name: rs-config-archives-database
             mountPath: /usr/share/app/secrets/one-verticle-configs
         ports:
           - name: prometheus
@@ -54,24 +54,23 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
         command: ["/bin/bash"]
-        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-databroker.json"]
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-archives-database.json"]
       volumes:
-        - name: rs-config-databroker
+        - name: rs-config-archives-database
           secret:
-            secretName: rs-config-databroker
-
+            secretName: rs-config-archives-database
 ---
 
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: rs-databroker
+  name: rs-archives-database
   namespace: rs
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: rs-databroker
+    name: rs-archives-database
   minReplicas: 1
   maxReplicas: 5
   metrics:
@@ -80,5 +79,5 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 90
+        averageUtilization: 80
 

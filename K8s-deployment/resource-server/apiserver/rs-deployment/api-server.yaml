@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rs-api-server
-  namespace: rs-test
+  namespace: rs
 spec:
   replicas: 1
   selector:
@@ -12,17 +12,27 @@ spec:
     metadata:
       labels:
         app: rs-api-server
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
     spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: t3.medium
       containers:
       - name: rs-api-server
-        image: dockerhub.iudx.io/iudx/rs-depl:2.5.b69b75b 
+        image: ghcr.io/datakaveri/rs-depl:3.0-e194504
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1.2Gi
+          requests:
+            cpu: 700m
+            memory: 1.2Gi
         volumeMounts:
           - name: rs-config-apiserver
             mountPath: /usr/share/app/secrets/one-verticle-configs
           - name: rs-keystore
             mountPath: /usr/share/app/secrets/
-          - name: rs-docs
-            mountPath: /usr/share/app/docs/
         ports:
           - name: https
             containerPort: 80
@@ -49,9 +59,7 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
         command: ["/bin/bash"]
-        args: ["-c","exec java $$RS_JAVA_OPTS  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
-      imagePullSecrets:
-        - name: regcred    
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
       volumes:
         - name: rs-config-apiserver
           secret:
@@ -59,17 +67,13 @@ spec:
         - name: rs-keystore
           secret:
             secretName: rs-keystore
-        - name: rs-docs
-          configMap:
-            name: rs-docs
-      
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   name: rs-api-server
-  namespace: rs-test
+  namespace: rs
 spec:
   type: ClusterIP
   selector:
@@ -78,3 +82,27 @@ spec:
   - name: http
     port: 80
     targetPort: 80
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-api-server
+  namespace: rs
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-api-server
+  minReplicas: 1
+  maxReplicas: 7
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+
