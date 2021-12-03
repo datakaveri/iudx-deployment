@@ -1,23 +1,23 @@
 version: '3.4'
 services:
-    redisrejson:
-      image: redisrejson:6.2.5-1.0.7
+    redis-rejson:
+      image: ghcr.io/datakaveri/redis-rejson:6.2.6-1.0.7
       environment:
-        - REDIS_PASSWORD_FILE=/run/secrets/adminpassword
+        - REDIS_PASSWORD_FILE=/run/secrets/admin-password
       command: /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so
       volumes:
         - redis-persistence:/bitnami/redis/data
       networks:
         - overlay-net
       secrets:
-        - adminpassword
+        - admin-password
       deploy:
         replicas: 1
         restart_policy:
           condition: any
         placement:
           constraints:
-            - "node.labels.redis_node==true"
+            - "node.labels.redis-node==true"
       logging:
         driver: "json-file"
         options:
@@ -34,5 +34,5 @@ volumes:
   redis-persistence: 
 
 secrets:
-  adminpassword:
-    file: secrets/adminpassword
+  admin-password:
+    file: secrets/admin-password
