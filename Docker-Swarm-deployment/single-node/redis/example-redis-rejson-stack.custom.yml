@@ -1,0 +1,7 @@
+version: '3.4'
+services:
+    redis-rejson:
+      ports: 
+        - target: 6379   # redis server port inside the container
+          published: 6381 # the port published in host mode
+          mode: host 
