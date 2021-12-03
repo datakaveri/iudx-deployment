@@ -172,11 +172,11 @@ apiServer:
   ##
   resources:
     limits:
-      cpu: 80m
-      memory: 1.2Gi
+      cpu: 500m
+      memory: 750Mi
     requests: 
-      cpu: 6m
-      memory: 10Mi
+      cpu: 60m
+      memory: 100Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param %%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context
@@ -398,8 +398,8 @@ auditing:
   ##
   resources:
     limits:
-      cpu: 800m
-      memory: 1.2Gi
+      cpu: 500m
+      memory: 750Mi
     requests: 
       cpu: 60m
       memory: 100Mi
@@ -618,10 +618,10 @@ authenticator:
   ##
   resources:
     limits:
-      cpu: 800m
-      memory: 1.2Gi
+      cpu: 500m
+      memory: 750Mi
     requests: 
-      cpu: 6m
+      cpu: 60m
       memory: 10Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -838,10 +838,10 @@ database:
   ##
   resources:
     limits:
-      cpu: 800m
-      memory: 1.2Gi
+      cpu: 500m
+      memory: 750Mi
     requests: 
-      cpu: 6m
+      cpu: 60m
       memory: 50Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1059,8 +1059,8 @@ validator:
   ##
   resources:
     limits:
-      cpu: 800m
-      memory: 1.2Gi
+      cpu: 500m
+      memory: 750Mi
     requests: 
       cpu: 60m
       memory: 50Mi
