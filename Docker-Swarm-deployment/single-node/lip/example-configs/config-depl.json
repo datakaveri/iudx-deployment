@@ -1,0 +1,39 @@
+{
+	"version": "1.0",
+	"zookeepers": [
+		"zookeeper"
+	],
+	"clusterId": "iudx-ingestion-pipeline-cluster",
+	"modules": [
+		{
+			"id": "iudx.ingestion.pipeline.rabbitmq.RabbitMQVerticle",
+			"verticleInstances": 1,
+			"dataBrokerIP": "",
+			"dataBrokerPort": 1234,
+			"dataBrokerVhost": "",
+			"dataBrokerUserName": "",
+			"dataBrokerPassword": "",
+			"dataBrokerManagementPort": 15672,
+			"connectionTimeout": 6000,
+			"requestedHeartbeat": 60,
+			"handshakeTimeout": 6000,
+			"requestedChannelMax": 5,
+			"networkRecoveryInterval": 500,
+			"automaticRecoveryEnabled": true
+		},
+		{
+			"id": "iudx.ingestion.pipeline.redis.RedisVerticle",
+			"verticleInstances": 1,
+			"redisMode": "CLUSTER",
+			"redisUsername": "xyz",
+			"redisPassword": "abcd",
+			"redisMaxWaitingHandlers": 5000,
+			"redisHost": "redis-redis-cluster.redis.svc.cluster.local",
+			"redisPort": 6379
+		},
+		{
+			"id": "iudx.ingestion.pipeline.processor.ProcessorVerticle",
+			"verticleInstances": 1
+		}
+	]
+}
