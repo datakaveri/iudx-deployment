@@ -5,6 +5,8 @@ import ssl
 import os
 import json
 import datetime
+import rejson
+
 username = 'admin'
 password = 'admin'
 host = 'localhost'
@@ -43,10 +45,12 @@ json_packet=   {
         }
 json_obj=json.loads(json.dumps(json_packet))
 
+base = []
 while count < 10:
     count=count+1
     json_obj['license_plate']=str(count)
     json_obj['observationDateTime']=datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
+    base.append(json_obj.copy())
     # publishing the packet to the exchange
     channel.basic_publish(
     exchange=exchange,
@@ -60,3 +64,23 @@ while count < 10:
     print(count)
     time.sleep(1)
 connection.close()
+
+r = rejson.Client(host='localhost',port=6381, decode_responses=True, password="password")
+
+x = r.jsonget('iisc_ac_in_89a36273d77dac4cf38114fca1bbe64392547f86_rs_iudx_io_surat_itms_realtime_information_surat_itms_live_eta')
+compar = []
+
+for key in x:
+  compar.append(x[key])
+
+compar.pop(0)
+
+
+compar = sorted(compar, key = lambda x: int(x['license_plate']))
+base = sorted(base, key = lambda x: int(x['license_plate']))
+
+
+if compar == base:
+  print("LIP succsefully completed end to end testing")
+else:
+  print("Failed !!!!!!")
