@@ -8,11 +8,11 @@
 		{
 			"id": "iudx.ingestion.pipeline.rabbitmq.RabbitMQVerticle",
 			"verticleInstances": 1,
-			"dataBrokerIP": "",
-			"dataBrokerPort": 1234,
-			"dataBrokerVhost": "",
-			"dataBrokerUserName": "",
-			"dataBrokerPassword": "",
+			"dataBrokerIP": "rabbitmq",
+			"dataBrokerPort": 5672,
+			"dataBrokerVhost": "IUDX",
+			"dataBrokerUserName": "admin",
+			"dataBrokerPassword": "admin",
 			"dataBrokerManagementPort": 15672,
 			"connectionTimeout": 6000,
 			"requestedHeartbeat": 60,
@@ -24,11 +24,11 @@
 		{
 			"id": "iudx.ingestion.pipeline.redis.RedisVerticle",
 			"verticleInstances": 1,
-			"redisMode": "CLUSTER",
-			"redisUsername": "xyz",
-			"redisPassword": "abcd",
+			"redisMode": "STANDALONE",
+			"redisUsername": "default",
+			"redisPassword": "password",
 			"redisMaxWaitingHandlers": 5000,
-			"redisHost": "redis-redis-cluster.redis.svc.cluster.local",
+			"redisHost": "redis-rejson",
 			"redisPort": 6379
 		},
 		{
