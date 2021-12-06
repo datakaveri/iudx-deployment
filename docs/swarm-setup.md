@@ -34,3 +34,6 @@
     ```sh
     docker network create --driver overlay --subnet <subnet:-10.0.0.0/24> --attachable overlay-net
     ```
+    
+  **NOTE**
+  1. The "overlay-net" subnet must be different from underlaying private network subnet address range
