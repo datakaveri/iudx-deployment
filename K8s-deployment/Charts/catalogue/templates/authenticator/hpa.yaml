@@ -3,7 +3,7 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: cat-authenticator
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.nameSpace }}
   labels:
     app: cat-authenticator
     {{- include "common.labels.standard" . | nindent 4 }}
