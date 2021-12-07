@@ -14,7 +14,7 @@ services:
     secrets:
       - source: attribute-mapping
         target: /usr/share/app/secrets/attribute-mapping.json
-      - source: config-depl
+      - source: config
         target: /usr/share/app/secrets/all-verticles-configs/config.json
     networks: 
       - overlay-net
@@ -22,7 +22,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.lip_node==true"
+          - "node.labels.lip-node==true"
 
 networks:
   overlay-net:
@@ -32,5 +32,5 @@ networks:
 secrets:
   attribute-mapping:
     file: ./secrets/attribute-mapping.json
-  config-depl:
+  config:
     file: ./secrets/all-verticles-configs/config-depl.json

@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  lip:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.85'
+          memory: 1000M
+        reservations:
+          cpus: '0.02'   
+          memory: 130M
