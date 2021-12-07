@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  lip:
+    image: iudx/lip-dev
+    secrets:
+      - source: config
+        target: /usr/share/app/secrets/all-verticles-configs/config.json
+
+secrets:
+  config:
+    file: ./secrets/all-verticles-configs/config-dev.json

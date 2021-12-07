@@ -1,0 +1,39 @@
+# Install
+ Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and the network.
+## Required secrets
+```sh
+secrets/
+└── all-verticles-configs
+    ├── config-depl.json
+    ├── config-dev.json
+└── attribute-mapping.json
+```
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into lip  directory  for demo or local testing purpose only! For other environment, please generate strong passwords.
+
+## Assign node labels
+ The lip container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
+```sh
+docker node update --label-add lip-node=true <node_name>
+```
+
+## Deploy
+
+Three ways to deploy, do any one of it
+1. Quick deploy  
+```sh
+docker stack deploy -c lip-stack.yml lip 
+```
+2. Setting resource reservations,limits in 'lip-stack.resources.yml' file and then deploying (see [here](example-lip-stack.resources.yml) for example configuration of 'lip-stack.resources.yml' file ). Its suitable for production environment.
+
+```sh
+docker stack deploy -c lip-stack.yml -c lip-stack.resources.yml lip
+```
+3. You can add more custom stack cofiguration in file 'lip-stack.custom.yml' that overrides base 'lip-stack.yml' file like ports mapping etc ( see [here](example-lip-stack.custom.yml) for example configuration of 'lip-stack.custom.yml' file)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
+```sh
+docker stack deploy -c lip-stack.yml  -c lip-stack.custom.yml lip
+```
+or 
+with resource limits, reservations
+```sh
+docker stack deploy -c lip-stack.yml -c lip-stack.resources.yml -c lip-stack.custom.yml lip
+```
