@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lip-rabbitmq
+  namespace: lip
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lip-rabbitmq
+  template:
+    metadata:
+      labels:
+        app: lip-rabbitmq
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+ 
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: t3.medium
+      containers:
+      - name: lip-rabbitmq
+        image: ghcr.io/datakaveri/lip-depl:3.0-b803449
+        resources:
+          limits:
+            cpu: 600m
+            memory: 750Mi
+          requests:
+            cpu: 400m
+            memory: 600Mi
+        volumeMounts:
+          - name: lip-config-rabbitmq
+            mountPath: /usr/share/app/secrets/one-verticle-configs
+        ports:
+          - name: prometheus
+            containerPort: 9000
+            protocol: TCP
+          - name: hazelcast
+            containerPort: 5701
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9000
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 10
+        envFrom:
+          - configMapRef:
+              name: lip-env
+        env:
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        command: ["/bin/bash"]
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-rabbitmq.json"]
+      volumes:
+        - name: lip-config-rabbitmq
+          secret:
+            secretName: lip-config-rabbitmq
+ 
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: lip-rabbitmq
+  namespace: lip
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: lip-rabbitmq
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+ 
+
+      
+

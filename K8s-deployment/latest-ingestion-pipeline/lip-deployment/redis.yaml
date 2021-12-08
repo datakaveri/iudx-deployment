@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lip-redis
+  namespace: lip
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lip-redis
+  template:
+    metadata:
+      labels:
+        app: lip-redis
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+ 
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: t3.medium
+      containers:
+      - name: lip-redis
+        image: ghcr.io/datakaveri/lip-depl:3.0-b803449
+        resources:
+          limits:
+            cpu: 700m
+            memory: 850Mi
+          requests:
+            cpu: 400m
+            memory: 700Mi
+        volumeMounts:
+          - name: lip-config-redis
+            mountPath: /usr/share/app/secrets/one-verticle-configs
+        ports:
+          - name: prometheus
+            containerPort: 9000
+            protocol: TCP
+          - name: hazelcast
+            containerPort: 5701
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9000
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 10
+        envFrom:
+          - configMapRef:
+              name: lip-env
+        env:
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        command: ["/bin/bash"]
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-redis.json"]
+      volumes:
+        - name: lip-config-redis
+          secret:
+            secretName: lip-config-redis
+ 
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: lip-redis
+  namespace: lip
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: lip-redis
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+ 
+
+      
+
