@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fs-authenticator
+  namespace: fs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fs-authenticator
+  template:
+    metadata:
+      labels:
+        app: fs-authenticator
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: t3.medium
+      containers:
+      - name: fs-authenticator 
+        image: ghcr.io/datakaveri/fs-depl:3.0-2a93bdf
+        resources:
+          limits:
+            cpu: 600m
+            memory: 750Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        volumeMounts:
+          - name: fs-config-authenticator
+            mountPath: /usr/share/app/secrets/one-verticle-configs
+          - name: fs-keystore
+            mountPath: /usr/share/app/secrets/
+        ports:
+          - name: prometheus
+            containerPort: 9000
+            protocol: TCP
+          - name: hazelcast
+            containerPort: 5701
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9000
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 10
+        envFrom:
+          - configMapRef:
+              name: fs-env
+        env:
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        command: ["/bin/bash"]
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
+      volumes:
+        - name: fs-config-authenticator
+          secret:
+            secretName: fs-config-authenticator
+        - name: fs-keystore
+          secret:
+            secretName: fs-keystore
+            
+
+
