@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aaa-api-server
+  namespace: aaa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aaa-api-server
+  template:
+    metadata:
+      labels:
+        app: aaa-api-server
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: t3.medium
+      containers:
+      - name: aaa-api-server
+        image: ghcr.io/datakaveri/aaa-depl:3.0-7afbdaf
+        resources:
+          limits:
+            cpu: 800m
+            memory: 1.2Gi
+          requests:
+            cpu: 700m
+            memory: 1.2Gi
+        volumeMounts:
+          - name: aaa-config
+            mountPath: /usr/share/app/secrets/all-verticles-configs
+          - name: aaa-keystore
+            mountPath: /usr/share/app/secrets/
+        ports:
+          - name: http
+            containerPort: 8443
+            protocol: TCP
+          - name: hazelcast
+            containerPort: 5701
+            protocol: TCP
+          - name: prometheus
+            containerPort: 9000
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9000
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 10
+        envFrom:
+          - configMapRef:
+              name: aaa-env
+        env:
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        command: ["/bin/bash"]
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/all-verticles-configs/config.json -m iudx.aaa.server.apiserver.ApiServerVerticle"]
+      volumes:
+        - name: aaa-config
+          secret:
+            secretName: aaa-config
+        - name: aaa-keystore
+          secret:
+            secretName: aaa-keystore
+      
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: aaa-api-server
+  namespace: aaa
+spec:
+  type: ClusterIP
+  selector:
+    app: aaa-api-server
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8443
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: aaa-api-server
+  namespace: aaa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aaa-api-server
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+

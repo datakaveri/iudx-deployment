@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: auth-server
+  namespace: aaa
+  annotations:
+    nginx.ingress.kubernetes.io/global-rate-limit: "1000"
+    nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name
+    nginx.ingress.kubernetes.io/global-rate-limit-window: 1s
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+    nginx.ingress.kubernetes.io/limit-connections: "150"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: aaa-api-server
+                port:
+                  name: http
+      host: authorization.iudx.org.in
+  tls:
+    - hosts:
+        - authorization.iudx.org.in
+      secretName: aaa-tls-secret
+
