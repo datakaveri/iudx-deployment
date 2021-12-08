@@ -30,7 +30,7 @@ spec:
             memory: 500Mi
         volumeMounts:
           - name: aaa-config
-            mountPath: /usr/share/app/secrets/all-verticles-configs
+            mountPath: /usr/share/app/secrets/configs
           - name: aaa-keystore
             mountPath: /usr/share/app/secrets/
         ports:
@@ -56,7 +56,7 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
         command: ["/bin/bash"]
-        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/all-verticles-configs/config.json -m iudx.aaa.server.token.TokenVerticle"]
+        args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.token.TokenVerticle"]
       volumes:
         - name: aaa-config
           secret:

@@ -11,13 +11,12 @@ LOG_LEVEL=INFO
 
 ```sh
 secrets/
-├── all-verticles-configs
+├── configs
 │   └── config.json
 ├── keystore.jks
 └── pki
     ├── fullchain.pem
     └── privkey.pem
-
 ```
 ## Deploy
 Following install script deploys:
@@ -25,4 +24,4 @@ Following install script deploys:
 2. Deploys each verticle in seperate pod with HPA based on CPU
 ```sh
 ./install.sh
-
+```
