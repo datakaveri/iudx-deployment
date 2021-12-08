@@ -20,7 +20,7 @@ spec:
         node.kubernetes.io/instance-type: t3.medium
       containers:
       - name: cat-authenticator 
-        image: dockerhub.iudx.io/iudx/cat-prod:3.0-1cc8c35
+        image: ghcr.io/datakaveri/cat-prod:3.0-3a7684e
         resources:
           limits:
             cpu: 500m
@@ -55,8 +55,6 @@ spec:
                 fieldPath: status.podIP
         command: ["/bin/bash"]
         args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
-      imagePullSecrets:
-        - name: regcred    
       volumes:
         - name: cat-config-authenticator
           secret:
