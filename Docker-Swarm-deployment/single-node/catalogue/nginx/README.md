@@ -4,17 +4,13 @@
 .
 ├── .cat-ui.env
 ├── .gitignore
-├── .middle-layer.env
 ├── README.md
 ├── cat-nginx.yml
 ├── conf
 │   ├── cat.conf
-│   └── middle-layer.conf
 └── secrets
     ├── cat-cert
     ├── cat-key
-    ├── cat-middle-cert
-    └── cat-middle-key
 
 ```
 
@@ -41,8 +37,6 @@
 secrets/
 ├── cat-cert
 ├── cat-key
-├── cat-middle-cert
-└── cat-middle-key
 ```
 ## Create Environment file
 Add env variables in .cat-ui.env file using the template shown below
@@ -56,8 +50,6 @@ API_SERVICE_NAME=calc
 API_SERVICE_PORT=8080
 API_SERVER_PROTOCOL=http
 UI_SERVER_NAME="~\b(?!api\.)(\w+(?:-\w+)*)(?=\.catalogue\.io\.test\b)" catalogue.iudx.io.test
-MID_LAYER_IP=w.x.y.z
-MID_LAYER_IP_DEV=w.x.y.z
 ```
 Add env variables in .middle-layer.env file using the template shown below
 
@@ -76,16 +68,11 @@ On a docker-swarm master node, run
 # Label the Catalogue Server NGINX node
 docker node update --label-add cat_nginx_node=true <hostname/ID>
 ```
-## Login into registry
-On a docker-swarm master node, run
-```sh
-docker login dockerhub.iudx.io
-```
 ## Deploy
 On a docker-swarm master node, run
 ```sh
-# Deploy stack, deploys mlayer, api, catalogue ui nginx
-docker stack deploy --with-registry-auth -c cat-nginx.yml cat-nginx
+# Deploy stack
+docker stack deploy  -c cat-nginx.yml cat-nginx
 # Remove stack
 docker stack rm cat-nginx
 ```
