@@ -6,22 +6,6 @@ networks:
     driver: overlay
 
 services:
-  copy-catalogue-ui:
-    image: dockerhub.iudx.io/iudx/cat-ui:latest
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - "node.labels.cat_nginx_node==true"
-      restart_policy:
-        condition: none
-    volumes:
-      - type: bind
-        source: /usr/share/
-        target: /mnt/
-    networks:
-      - overlay-net
-
   cat-nginx:
     image: nginx:1.19
     deploy:
@@ -57,47 +41,11 @@ services:
     env_file:
       - ./.cat-ui.env
 
-  middle-layer-nginx:
-    image: nginx:1.19
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - "node.labels.middle_layer_nginx_node==true"
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        window: 10s
-    ports:
-      - target: 443
-        published: 443
-        mode: host
-      - target: 80
-        published: 80
-        mode: host
-    secrets:
-      - source: cat-middle-key
-        target: /etc/ssl/cat-middle-key
-      - source: cat-middle-cert
-        target: /etc/ssl/cat-middle-cert
-    configs:
-      - source: middle-layer-conf
-        target: /etc/nginx/templates/nginx.conf.template
-    networks:
-      - overlay-net
-    env_file:
-      - ./.middle-layer.env
 configs:
   cat-conf:
     file: conf/cat.conf
-  middle-layer-conf:
-    file: conf/middle-layer.conf
 secrets:
   cat-key:
     file: secrets/cat-key
   cat-cert:
     file: secrets/cat-cert
-  cat-middle-cert:
-    file: secrets/cat-middle-cert
-  cat-middle-key:
-    file: secrets/cat-middle-key

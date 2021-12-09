@@ -7,7 +7,7 @@ networks:
 
 services:
   rs:
-    image: dockerhub.iudx.io/iudx/rs-depl:stqc
+    image: ghcr.io/datakaveri/rs-depl:stqc
     networks:
       - overlay-net
     secrets:
