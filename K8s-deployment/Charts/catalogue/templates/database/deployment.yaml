@@ -155,12 +155,18 @@ spec:
       {{- end }}
       {{- if .Values.database.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.database.affinity "context" $) | nindent 8 }}
-      {{- if .Values.database.podAffinityPreset or .Values.database.podAntiAffinityPreset or  .Values.database.nodeAffinityPreset.type}}
+      {{/*- if .Values.database.podAffinityPreset or .Values.database.podAntiAffinityPreset or  .Values.database.nodeAffinityPreset.type*/}}
+      {{- else }}
       affinity:
+        {{- if .Values.database.podAffinityPreset}}
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.database.podAffinityPreset "component" "database" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.database.podAntiAffinityPreset}}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.database.podAntiAffinityPreset "component" "database" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.database.nodeAffinityPreset.type}}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.database.nodeAffinityPreset.type "key" .Values.database.nodeAffinityPreset.key "values" .Values.database.nodeAffinityPreset.values) | nindent 10 }}
-      {{- end }}
+        {{- end }}
       {{- end }}
       volumes:
         {{- if .Values.database.extraVolumes }}

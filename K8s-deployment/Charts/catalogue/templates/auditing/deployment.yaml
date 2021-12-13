@@ -155,12 +155,18 @@ spec:
       {{- end }}
       {{- if .Values.auditing.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.auditing.affinity "context" $) | nindent 8 }}
-      {{- if .Values.auditing.podAffinityPreset or .Values.auditing.podAntiAffinityPreset or  .Values.auditing.nodeAffinityPreset.type}}
+      {{/*- if .Values.auditing.podAffinityPreset or .Values.auditing.podAntiAffinityPreset or  .Values.auditing.nodeAffinityPreset.type*/}}
+      {{- else }}
       affinity:
+        {{- if .Values.auditing.podAffinityPreset}}
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.auditing.podAffinityPreset "component" "auditing" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.auditing.podAntiAffinityPreset}}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.auditing.podAntiAffinityPreset "component" "auditing" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.auditing.nodeAffinityPreset.type}}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.auditing.nodeAffinityPreset.type "key" .Values.auditing.nodeAffinityPreset.key "values" .Values.auditing.nodeAffinityPreset.values) | nindent 10 }}
-      {{- end }}
+        {{- end }}
       {{- end }}
       volumes:
         {{- if .Values.auditing.extraVolumes }}
