@@ -155,7 +155,6 @@ spec:
       {{- end }}
       {{- if .Values.auditing.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.auditing.affinity "context" $) | nindent 8 }}
-      {{/*- if .Values.auditing.podAffinityPreset or .Values.auditing.podAntiAffinityPreset or  .Values.auditing.nodeAffinityPreset.type*/}}
       {{- else }}
       affinity:
         {{- if .Values.auditing.podAffinityPreset}}
