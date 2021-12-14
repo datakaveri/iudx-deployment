@@ -1,9 +1,12 @@
-version: '3.4'
+version: '3.9'
 services:
   redis-rejson:
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
+          pids: 8
           cpus: '0.85'
           memory: 100M
         reservations:
