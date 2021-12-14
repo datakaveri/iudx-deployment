@@ -155,12 +155,17 @@ spec:
       {{- end }}
       {{- if .Values.metering.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.metering.affinity "context" $) | nindent 8 }}
-      {{- if .Values.metering.podAffinityPreset or .Values.metering.podAntiAffinityPreset or  .Values.metering.nodeAffinityPreset.type}}
+      {{- else }}
       affinity:
+        {{- if .Values.metering.podAffinityPreset}}
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metering.podAffinityPreset "component" "metering" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metering.podAntiAffinityPreset "component" "metering" "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metering.nodeAffinityPreset.type "key" .Values.metering.nodeAffinityPreset.key "values" .Values.metering.nodeAffinityPreset.values) | nindent 10 }}
-      {{- end }}
+        {{- end}}
+        {{- if .Values.metering.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "metering" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.metering.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metering.nodeAffinityPreset.type "key" .Values.metering.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
       {{- end }}
       volumes:
         {{- if .Values.metering.extraVolumes }}

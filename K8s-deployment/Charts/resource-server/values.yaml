@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/rs-depl
-  tag: 3.0-1cc8c35
+  tag: 3.0-e194504
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -171,7 +171,7 @@ apiServer:
   ##
   resources:
     limits:
-      cpu: 500m
+      cpu: 100m
       memory: 750Mi
     requests: 
       cpu: 60m
@@ -398,11 +398,11 @@ archivesDatabase:
   ##
   resources:
     limits:
-      cpu: 500m
-      memory: 750Mi
+      cpu: 100m
+      memory: 75Mi
     requests: 
       cpu: 60m
-      memory: 100Mi
+      memory: 10Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param %%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context
@@ -618,8 +618,8 @@ authenticator:
   ##
   resources:
     limits:
-      cpu: 500m
-      memory: 750Mi
+      cpu: 100m
+      memory: 75Mi
     requests: 
       cpu: 60m
       memory: 10Mi
@@ -838,8 +838,8 @@ databroker:
   ##
   resources:
     limits:
-      cpu: 500m
-      memory: 750Mi
+      cpu: 100m
+      memory: 75Mi
     requests: 
       cpu: 60m
       memory: 50Mi
@@ -1060,8 +1060,8 @@ latestDatabase:
   ##
   resources:
     limits:
-      cpu: 500m
-      memory: 750Mi
+      cpu: 100m
+      memory: 75Mi
     requests: 
       cpu: 60m
       memory: 50Mi
@@ -1284,8 +1284,8 @@ metering:
   ##
   resources:
     limits:
-      cpu: 500m
-      memory: 750Mi
+      cpu: 100m
+      memory: 75Mi
     requests: 
       cpu: 60m
       memory: 50Mi
@@ -1402,7 +1402,8 @@ metering:
   ##
   extraVolumes:
     - name: rs-config-metering
-      secretName: rs-config-metering
+      secret:
+        secretName: rs-config-metering
 
   ## @param %%MAIN_OBJECT_BLOCK%%.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the %%MAIN_CONTAINER_NAME%% container(s)
   ##
