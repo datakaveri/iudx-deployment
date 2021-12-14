@@ -1,7 +1,8 @@
-version: '3.4'
+version: '3.9'
 services:
     immudb:
       image: codenotary/immudb:1.0.5
+      read_only: true
       volumes:
         - immudb-data:/var/lib/immudb
       networks:
