@@ -158,7 +158,6 @@ spec:
       {{- end }}
       {{- if .Values.apiServer.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.apiServer.affinity "context" $) | nindent 8 }}
-      {{/*- if .Values.apiServer.podAffinityPreset or .Values.apiServer.podAntiAffinityPreset or  .Values.apiServer.nodeAffinityPreset.type*/}}
       {{- else }}
       affinity:
         {{- if .Values.apiServer.podAffinityPreset}}

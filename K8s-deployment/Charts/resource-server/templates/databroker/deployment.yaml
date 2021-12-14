@@ -155,12 +155,17 @@ spec:
       {{- end }}
       {{- if .Values.databroker.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.databroker.affinity "context" $) | nindent 8 }}
-      {{- if .Values.databroker.podAffinityPreset or .Values.databroker.podAntiAffinityPreset or  .Values.databroker.nodeAffinityPreset.type}}
+      {{- else }}
       affinity:
+        {{- if .Values.databroker.podAffinityPreset}}
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.databroker.podAffinityPreset "component" "databroker" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.databroker.podAntiAffinityPreset "component" "databroker" "context" $) | nindent 10 }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.databroker.nodeAffinityPreset.type "key" .Values.databroker.nodeAffinityPreset.key "values" .Values.databroker.nodeAffinityPreset.values) | nindent 10 }}
-      {{- end }}
+        {{- end}}
+        {{- if .Values.databroker.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "databroker" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.databroker.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.databroker.nodeAffinityPreset.type "key" .Values.databroker.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
       {{- end }}
       volumes:
         {{- if .Values.databroker.extraVolumes }}
