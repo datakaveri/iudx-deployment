@@ -11,8 +11,9 @@ services:
     image: "docker.io/bitnami/postgresql:11-debian-10"
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-      - POSTGRESQL_USERNAME=bn_keycloak
-      - POSTGRESQL_DATABASE=bitnami_keycloak
+      - POSTGRESQL_USERNAME=iudx-postgresql
+      - POSTGRESQL_DATABASE=iudx-postgresql-database
+      
     volumes:
       - "postgresql_data:/bitnami/postgresql"
   keycloak:
@@ -21,6 +22,10 @@ services:
       - "80:8080"
     environment:
       - KEYCLOAK_CREATE_ADMIN_USER=true
+      - KEYCLOAK_DATABASE_HOST=postgresql
+      - KEYCLOAK_DATABASE_PORT=5432
+      - KEYCLOAK_DATABASE_NAME=iudx-database
+      - KEYCLOAK_DATABASE_USER=iudex-user
     depends_on:
       - postgresql
     volumes:
