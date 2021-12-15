@@ -6,7 +6,7 @@ services:
     deploy:
       resources:
         limits:
-          pids: 8
+          pids: 6
           cpus: '0.85'
           memory: 100M
         reservations:
