@@ -1,8 +1,9 @@
-version: "3.4"
+version: "3.9"
 
 services:
   lip:
     image: ghcr.io/datakaveri/lip-depl:3.0-b803449
+    read_only: true
     env_file:
       - ./.lip.env
     command: bash -c "exec java $$LIP_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$(hostname) -c secrets/all-verticles-configs/config.json"
@@ -18,6 +19,12 @@ services:
         target: /usr/share/app/secrets/all-verticles-configs/config.json
     networks: 
       - overlay-net
+    volumes:
+      - type: volume
+        target: /tmp/vertx-cache/
+        volume:
+          nocopy: false
+        read_only: false
     deploy:
       replicas: 1
       placement:
