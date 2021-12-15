@@ -1,0 +1,37 @@
+version: "3"
+
+networks:
+  default:
+    external:
+      name: overlay-net
+    driver: overlay
+    
+volumes:
+  postgres_data:
+      driver: local
+
+services:
+  postgres:
+      image: postgres
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      environment:
+        POSTGRES_DB: iudx-postgresql-database
+        POSTGRES_USER: iudx-postgres-user
+        POSTGRES_PASSWORD: iudx-postgres-password
+  keycloak:
+      image: quay.io/keycloak/keycloak:latest
+      environment:
+        DB_VENDOR: POSTGRES
+        DB_ADDR: postgres
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_SCHEMA: public
+        DB_PASSWORD: iudx-db-password
+        KEYCLOAK_USER: iudx-keycloak-user
+        KEYCLOAK_PASSWORD: iudx-keycloak-password
+       
+      ports:
+        - 8080:8080
+      depends_on:
+        - postgres
