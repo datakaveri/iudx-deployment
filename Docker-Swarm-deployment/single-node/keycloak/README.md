@@ -6,7 +6,23 @@ Following deployments assume, there is a docker swarm and docker overlay network
 ```sh
 secrets/
 └── passwords
-    ├── postgres-auth-password
-    ├── postgres-keycloak-password
-    ├── postgresql-password
-    └── postgres-rs-password
+    ├── postgres-user
+    ├── postgres-password
+    ├── postgres-db
+    ├── keycloak-user
+    ├── keycloak-password
+    └── db-password
+ ```
+    
+    
+    
+
+## Keycloak and PostgreSQL
+The `keycloak-postgres.yml` template creates a volume for PostgreSQL and starts Keycloak connected to a PostgreSQL instance.
+
+Run the example with the following command:
+
+    docker-compose -f keycloak-postgres.yml up
+
+Open http://localhost:8080/auth and login as user 'keycloak-user' with password 'keycloak-password'.
+
