@@ -1,5 +1,7 @@
 # Install
 Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and the network.
+
+ [bitnami postgres image](https://github.com/bitnami/bitnami-docker-postgresql) is used for postgres.
 ## Required secrets
 
 ```sh
