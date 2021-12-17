@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  lip:
+  auth:
     image: ghcr.io/datakaveri/aaa-depl:3.0-40b9130
     command: bash -c "exec java $$AUTH_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
     environment:
@@ -15,9 +15,9 @@ services:
           max-size: "5m" 
     secrets:
       - source: keystore
-        target: /usr/share/app/configs/keystore.jks
+        target: /usr/share/app/secrets/keystore.jks
       - source: config
-        target: /usr/share/app/configs/config.json
+        target: /usr/share/app/secrets/configs/config.json
     networks: 
       - overlay-net
     ports: 
@@ -42,6 +42,6 @@ networks:
 
 secrets:
   keystore:
-    file: ./secrets/configs/keystore.jks
+    file: ./secrets/keystore.jks
   config:
     file: ./secrets/configs/config.json 
