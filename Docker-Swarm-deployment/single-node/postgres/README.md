@@ -54,7 +54,7 @@ docker exec <psqldb-container> pg_dump -a -U <username/role name>  <db_name> > <
 cat <dump_file>.sql | docker exec -i <psqldb-container> psql -U <username/role> -d <dbname>
 ```
 3. Please refer [here](https://docs.docker.com/compose/extends/#multiple-compose-files) for info on why and how to use multiple stack files.
-4.  Following users using the passwords present at ```secrets/password/postgres-rs-password``` and dbs are created accordingly using init scripts present at ```init-scripts/```:
+4.  Following users using the passwords present at ```secrets/password/``` directory and dbs are created accordingly using init scripts present at ```init-scripts/```:
 
 | Username           | Password                                    | Role/Access                         |  Services                     |
 |:-------------------:|:------------------------------------------:| :---------------------------------: |:-----------------------------:|
