@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/aaa-depl
-  tag: 3.0-40b9130
+  tag: 3.0-adf83d3
   pullSecrets: {}
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -185,11 +185,11 @@ apiServer:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 800m
+      memory: 1.2Gi
     requests: 
-      cpu: 60m
-      memory: 10Mi
+      cpu: 600m
+      memory: 1.2Gi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiServer.podSecurityContext.enabled Enabled ApiServer pods' Security Context
@@ -263,7 +263,7 @@ apiServer:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param apiServer.tolerations Tolerations for ApiServer pods assignment
@@ -422,11 +422,11 @@ auditing:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 700m
+      memory: 750Mi
     requests: 
-      cpu: 60m
-      memory: 50Mi
+      cpu: 500m
+      memory: 512Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param auditing.podSecurityContext.enabled Enabled Auditing pods' Security Context
@@ -499,7 +499,7 @@ auditing:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
   ## @param auditing.tolerations Tolerations for Auditing pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -652,11 +652,11 @@ admin:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 800m
+      memory: 1.2Gi
     requests: 
-      cpu: 60m
-      memory: 50Mi
+      cpu: 600m
+      memory: 1.2Gi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiServer.podSecurityContext.enabled Enabled ApiServer pods' Security Context
@@ -731,7 +731,7 @@ admin:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param apiServer.tolerations Tolerations for ApiServer pods assignment
@@ -885,11 +885,11 @@ registration:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 700m
+      memory: 750Mi
     requests: 
-      cpu: 60m
-      memory: 10Mi
+      cpu: 500m
+      memory: 600Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param authenticator.podSecurityContext.enabled Enabled Authenticator pods' Security Context
@@ -964,7 +964,7 @@ registration:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
 
@@ -1121,11 +1121,11 @@ token:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 800m
+      memory: 750Mi
     requests: 
-      cpu: 60m
-      memory: 50Mi
+      cpu: 600m
+      memory: 500Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param database.podSecurityContext.enabled Enabled Database pods' Security Context
@@ -1200,7 +1200,7 @@ token:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param database.tolerations Tolerations for Database pods assignment
@@ -1361,11 +1361,11 @@ policy:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 750m
+      memory: 800Mi
     requests:
-      cpu: 60m 
-      memory: 50Mi
+      cpu: 600m 
+      memory: 600Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param validator.podSecurityContext.enabled Enabled Validator pods' Security Context
@@ -1439,7 +1439,7 @@ policy:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param validator.tolerations Tolerations for Validator pods assignment
@@ -1596,7 +1596,7 @@ ingress:
   apiVersion:
   ## @param ingress.hostname Default host for the ingress record
   ##
-  hostname: auth.iudx.org.in
+  hostname: auth.iudxtest.org.in
   ## @param ingress.path Default path for the ingress record
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
@@ -1612,9 +1612,9 @@ ingress:
   ## @param ingress.serviceName Backend ingress Service Name 
   serviceName: "aaa-api-server"
   annotations: {
-    #nginx.ingress.kubernetes.io/global-rate-limit: "1000",
-    #nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name,
-    #nginx.ingress.kubernetes.io/global-rate-limit-window: 1s
+    nginx.ingress.kubernetes.io/global-rate-limit: "1000",
+    nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name,
+    nginx.ingress.kubernetes.io/global-rate-limit-window: 1s
   }
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
@@ -1625,7 +1625,7 @@ ingress:
   ##
   tls:
     - hosts:
-        - auth.iudx.org.in
+        - auth.iudxtest.org.in
       secretName: aaa-tls-secret
   ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
