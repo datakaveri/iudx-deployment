@@ -16,5 +16,11 @@ secrets/
 ## PostgreSQL Installation
 Before Keycloak installation, Install postgreSQL and follow this [document](https://github.com/hackcoderr/iudx-deployment/tree/keycloak/Docker-Swarm-deployment/single-node/postgres) for that.
 
-## Keycloak Installtion
+## Deployment
 
+[bitnami keycloak image](https://hub.docker.com/r/bitnami/keycloak/) is used for postgres.
+
+Quick deploy
+```
+docker stack deploy --compose-file keycloak-stack.yml keycloak
+```
