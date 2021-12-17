@@ -6,23 +6,15 @@ Following deployments assume, there is a docker swarm and docker overlay network
 ```sh
 secrets/
 └── passwords
-    ├── postgres-user
-    ├── postgres-password
-    ├── postgres-db
-    ├── keycloak-user
-    ├── keycloak-password
-    └── db-password
+    ├── keycloak_admin_user
+    └── keycloak_admin_password
  ```
+   Please see the ``example-secrets`` directory to get more idea, can use the 'secrets' in that directory by copying into root postgres directory i.e. ``cp -r example-secrets/secrets/`` .for demo or local testing purpose only! For other environment, please generate strong passwords. 
     
     
-    
 
-## Keycloak and PostgreSQL
-The `keycloak-postgres.yml` template creates a volume for PostgreSQL and starts Keycloak connected to a PostgreSQL instance.
+## PostgreSQL Installation
+Before Keycloak installation, Install postgreSQL and follow this [document](https://github.com/hackcoderr/iudx-deployment/tree/keycloak/Docker-Swarm-deployment/single-node/postgres) for that.
 
-Run the example with the following command:
-
-    docker-compose -f keycloak-postgres.yml up
-
-Open http://localhost:8080/auth and login as user 'keycloak-user' with password 'keycloak-password'.
+## Keycloak Installtion
 
