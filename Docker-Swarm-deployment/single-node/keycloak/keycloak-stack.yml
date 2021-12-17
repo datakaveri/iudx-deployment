@@ -1,0 +1,18 @@
+version: "3"
+
+networks:
+  default:
+    external:
+      name: overlay-net
+    driver: overlay
+
+
+services:
+  keycloak:
+    image: docker.io/bitnami/keycloak:12-debian-10
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    env_file:
+      - database.env # configure postgres
+
