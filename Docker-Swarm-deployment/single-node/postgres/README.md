@@ -60,5 +60,6 @@ cat <dump_file>.sql | docker exec -i <psqldb-container> psql -U <username/role> 
 |:-------------------:|:------------------------------------------:| :---------------------------------: |:-----------------------------:|
 | iudx_rs_user       | secrets/passwords/postgres-rs-password       | SELECT,INSERT,DELETE,UPDATE on tables of ```iudx_rs``` Database   | Used by resource server      |
 | iudx_keycloak_user | secrets/passwords/postgres-keycloak-password |  Owner of ```iudx_keycloak``` database                   | Used by keycloak server      |
-| iudx_auth_user     |   secrets/passwords/postgres-auth-password   |   Access given while setting up auth server             | Used by auth server          |        | postgres           | secrets/passwords/postgresql-password     |     Superuser                                             |  Used to set users and RBAC  |
+| iudx_auth_user     |   secrets/passwords/postgres-auth-password   |   Access given while setting up auth server             | Used by auth server          |
+| postgres           | secrets/passwords/postgresql-password     |     Superuser                                             |  Used to set users and RBAC  |
                             
