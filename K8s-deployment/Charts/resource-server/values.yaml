@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/rs-depl
-  tag: 3.0-e194504
+  tag: 3.0-476b9fd
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -171,11 +171,11 @@ apiServer:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 750Mi
+      cpu: 1000m
+      memory: 1.2Gi
     requests: 
-      cpu: 60m
-      memory: 100Mi
+      cpu: 700m
+      memory: 1.2Gi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param %%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context
@@ -251,7 +251,7 @@ apiServer:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
   ## @param %%MAIN_OBJECT_BLOCK%%.tolerations Tolerations for %%MAIN_CONTAINER_NAME%% pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -398,11 +398,11 @@ archivesDatabase:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 1000m
+      memory: 1.5Gi
     requests: 
-      cpu: 60m
-      memory: 10Mi
+      cpu: 700m
+      memory: 1.5Gi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param %%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context
@@ -477,7 +477,7 @@ archivesDatabase:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
   ## @param %%MAIN_OBJECT_BLOCK%%.tolerations Tolerations for %%MAIN_CONTAINER_NAME%% pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -618,11 +618,11 @@ authenticator:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 600m
+      memory: 750Mi
     requests: 
-      cpu: 60m
-      memory: 10Mi
+      cpu: 500m
+      memory: 500Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param %%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context
@@ -696,7 +696,7 @@ authenticator:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
   ## @param %%MAIN_OBJECT_BLOCK%%.tolerations Tolerations for %%MAIN_CONTAINER_NAME%% pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -838,11 +838,11 @@ databroker:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 500m
+      memory: 512Mi
     requests: 
-      cpu: 60m
-      memory: 50Mi
+      cpu: 400m
+      memory: 400Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param %%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context
@@ -916,7 +916,7 @@ databroker:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
   ## @param %%MAIN_OBJECT_BLOCK%%.tolerations Tolerations for %%MAIN_CONTAINER_NAME%% pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -1060,11 +1060,11 @@ latestDatabase:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 1000m
+      memory: 1Gi
     requests: 
-      cpu: 60m
-      memory: 50Mi
+      cpu: 800m
+      memory: 800Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param %%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context
@@ -1138,7 +1138,7 @@ latestDatabase:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
   ## @param %%MAIN_OBJECT_BLOCK%%.tolerations Tolerations for %%MAIN_CONTAINER_NAME%% pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -1284,11 +1284,11 @@ metering:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 700m
+      memory: 1Gi
     requests: 
-      cpu: 60m
-      memory: 50Mi
+      cpu: 500m
+      memory: 800Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param %%MAIN_OBJECT_BLOCK%%.podSecurityContext.enabled Enabled %%MAIN_CONTAINER_NAME%% pods' Security Context
@@ -1362,7 +1362,7 @@ metering:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
   ## @param %%MAIN_OBJECT_BLOCK%%.tolerations Tolerations for %%MAIN_CONTAINER_NAME%% pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##

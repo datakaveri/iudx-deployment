@@ -73,9 +73,9 @@ diagnosticMode:
   ## @param image.debug Enable image debug mode
   ##
 image:
-  registry: dockerhub.iudx.io
-  repository: iudx/cat-prod
-  tag: 3.0-1cc8c35
+  registry: ghcr.io
+  repository: datakaveri/cat-prod
+  tag: 3.0-21af067
   pullSecrets:
     - regcred 
     ## Specify a imagePullPolicy
@@ -186,11 +186,11 @@ apiServer:
   ##
   resources:
     limits:
-      cpu: 500m
-      memory: 750Mi
+      cpu: 800m
+      memory: 1.2Gi
     requests: 
-      cpu: 60m
-      memory: 100Mi
+      cpu: 600m
+      memory: 1.2Gi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiServer.podSecurityContext.enabled Enabled ApiServer pods' Security Context
@@ -265,7 +265,7 @@ apiServer:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param apiServer.tolerations Tolerations for ApiServer pods assignment
@@ -427,8 +427,8 @@ auditing:
       cpu: 500m
       memory: 750Mi
     requests: 
-      cpu: 60m
-      memory: 100Mi
+      cpu: 500m
+      memory: 700Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param auditing.podSecurityContext.enabled Enabled Auditing pods' Security Context
@@ -503,7 +503,7 @@ auditing:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
   ## @param auditing.tolerations Tolerations for Auditing pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -656,10 +656,10 @@ authenticator:
   resources:
     limits:
       cpu: 500m
-      memory: 750Mi
+      memory: 800Mi
     requests: 
-      cpu: 60m
-      memory: 10Mi
+      cpu: 300m
+      memory: 800Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param authenticator.podSecurityContext.enabled Enabled Authenticator pods' Security Context
@@ -734,7 +734,7 @@ authenticator:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
 
@@ -892,11 +892,11 @@ database:
   ##
   resources:
     limits:
-      cpu: 500m
-      memory: 750Mi
+      cpu: 800m
+      memory: 1.2Gi
     requests: 
-      cpu: 60m
-      memory: 50Mi
+      cpu: 600m
+      memory: 1.2Gi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param database.podSecurityContext.enabled Enabled Database pods' Security Context
@@ -971,7 +971,7 @@ database:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param database.tolerations Tolerations for Database pods assignment
@@ -1128,11 +1128,11 @@ validator:
   ##
   resources:
     limits:
-      cpu: 500m
-      memory: 750Mi
+      cpu: 800m
+      memory: 1.2Gi
     requests:
-      cpu: 60m 
-      memory: 50Mi
+      cpu: 600m 
+      memory: 1.2Gi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param validator.podSecurityContext.enabled Enabled Validator pods' Security Context
@@ -1206,7 +1206,7 @@ validator:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param validator.tolerations Tolerations for Validator pods assignment
