@@ -54,11 +54,11 @@ docker exec <psqldb-container> pg_dump -a -U <username/role name>  <db_name> > <
 cat <dump_file>.sql | docker exec -i <psqldb-container> psql -U <username/role> -d <dbname>
 ```
 3. Please refer [here](https://docs.docker.com/compose/extends/#multiple-compose-files) for info on why and how to use multiple stack files.
-4.  Following users using the passwords present at ```secrets/password/``` directory and dbs are created accordingly using init scripts present at ```init-scripts/```:
+4.  Following users using the passwords present at ```secrets/passwords/``` directory and dbs are created accordingly using init scripts present at ```init-scripts/```:
 
 | Username           | Password                                    | Role/Access                         |  Services                     |
 |:-------------------:|:------------------------------------------:| :---------------------------------: |:-----------------------------:|
-| iudx_rs_user       | secrets/password/postgres-rs-password       | SELECT,INSERT,DELETE,UPDATE on tables of ```iudx_rs``` Database   | Used by resource server      |
-| iudx_keycloak_user | secrets/password/postgres-keycloak-password |  Owner of ```iudx_keycloak``` database                   | Used by keycloak server      |
-| iudx_auth_user     |   secrets/password/postgres-auth-password   |   Access given while setting up auth server             | Used by auth server          |        | postgres           | secrets/password/postgresql-password     |     Superuser                                             |  Used to set users and RBAC  |
+| iudx_rs_user       | secrets/passwords/postgres-rs-password       | SELECT,INSERT,DELETE,UPDATE on tables of ```iudx_rs``` Database   | Used by resource server      |
+| iudx_keycloak_user | secrets/passwords/postgres-keycloak-password |  Owner of ```iudx_keycloak``` database                   | Used by keycloak server      |
+| iudx_auth_user     |   secrets/passwords/postgres-auth-password   |   Access given while setting up auth server             | Used by auth server          |        | postgres           | secrets/passwords/postgresql-password     |     Superuser                                             |  Used to set users and RBAC  |
                             
