@@ -20,8 +20,9 @@ metadata:
     {{- end }}
   {{- end }}
     nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
-    nginx.ingress.kubernetes.io/limit-connections: "150"
-    nginx.ingress.kubernetes.io/limit-rps: "150"
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/proxy-body-size: 1024m
     nginx.ingress.kubernetes.io/server-snippet: |
       add_header Clear-Site-Data   "*" always;
       add_header Referrer-Policy   "no-referrer-when-downgrade" always;
