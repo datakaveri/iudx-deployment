@@ -218,7 +218,8 @@ apiServer:
   command: ["/bin/bash"]
   ## @param apiServer.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.apiserver.ApiServerVerticle"]  ## @param apiServer.hostAliases ApiServer pods host aliases
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.apiserver.ApiServerVerticle"] 
+  ## @param apiServer.hostAliases ApiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
@@ -455,7 +456,9 @@ auditing:
   command: ["/bin/bash"]
   ## @param auditing.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.auditing.AuditingVerticle"]  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.auditing.AuditingVerticle"]  
+  ## @param auditing.hostAliases ApiServer pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
   ## @param auditing.podLabels Extra labels for Auditing pods
@@ -584,19 +587,19 @@ auditing:
 
 admin:
 
-  ## @param apiServer.replicaCount Number of ApiServer replicas to deploy
+  ## @param admin.replicaCount Number of admin replicas to deploy
 
   replicaCount: 1
   
-  ## Configure extra options for ApiServer containers' liveness and readiness probes
+  ## Configure extra options for admin containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param apiServer.livenessProbe.enabled Enable livenessProbe on ApiServer containers
-  ## @param apiServer.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param apiServer.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param apiServer.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param apiServer.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param apiServer.livenessProbe.successThreshold Success threshold for livenessProbe 
-  ## @param apiServer.livenessProbe.path Path for httpGet
+  ## @param admin.livenessProbe.enabled Enable livenessProbe on admin containers
+  ## @param admin.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param admin.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param admin.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param admin.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param admin.livenessProbe.successThreshold Success threshold for livenessProbe 
+  ## @param admin.livenessProbe.path Path for httpGet
 
   
   ##
@@ -608,12 +611,12 @@ admin:
     timeoutSeconds: 10
     #failureThreshold: 10
     #successThreshold: 10
-  ## @param apiServer.readinessProbe.enabled Enable readinessProbe on ApiServer containers
-  ## @param apiServer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param apiServer.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param apiServer.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param apiServer.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param apiServer.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param admin.readinessProbe.enabled Enable readinessProbe on admin containers
+  ## @param admin.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param admin.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param admin.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param admin.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param admin.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: false
@@ -622,12 +625,12 @@ admin:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param apiServer.startupProbe.enabled Enable startupProbe on ApiServer containers
-  ## @param apiServer.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param apiServer.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param apiServer.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param apiServer.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param apiServer.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param admin.startupProbe.enabled Enable startupProbe on admin containers
+  ## @param admin.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param admin.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param admin.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param admin.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param admin.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -636,19 +639,19 @@ admin:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param apiServer.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param admin.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param apiServer.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param admin.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param apiServer.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param admin.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## ApiServer resource requests and limits
+  ## admin resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param apiServer.resources.limits The resources limits for the ApiServer containers
-  ## @param apiServer.resources.requests The requested resources for the ApiServer containers
+  ## @param admin.resources.limits The resources limits for the admin containers
+  ## @param admin.resources.requests The requested resources for the admin containers
   ##
   resources:
     limits:
@@ -659,86 +662,86 @@ admin:
       memory: 50Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param apiServer.podSecurityContext.enabled Enabled ApiServer pods' Security Context
-  ## @param apiServer.podSecurityContext.fsGroup Set ApiServer pod's Security Context fsGroup
+  ## @param admin.podSecurityContext.enabled Enabled admin pods' Security Context
+  ## @param admin.podSecurityContext.fsGroup Set admin pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: false
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param apiServer.containerSecurityContext.enabled Enabled ApiServer containers' Security Context
-  ## @param apiServer.containerSecurityContext.runAsUser Set ApiServer containers' Security Context runAsUser
-  ## @param apiServer.containerSecurityContext.runAsNonRoot Set ApiServer containers' Security Context runAsNonRoot
+  ## @param admin.containerSecurityContext.enabled Enabled admin containers' Security Context
+  ## @param admin.containerSecurityContext.runAsUser Set admin containers' Security Context runAsUser
+  ## @param admin.containerSecurityContext.runAsNonRoot Set admin containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: false
     runAsUser: 1001
     runAsNonRoot: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param apiServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for ApiServer
+   ## @param admin.existingConfigmap The name of an existing ConfigMap with your custom configuration for admin
   ##
   existingConfigmap:
     
-  ## @param apiServer.command Override default container command (useful when using custom images)
+  ## @param admin.command Override default container command (useful when using custom images)
   ##
   command: ["/bin/bash"]
-  ## @param apiServer.args Override default container args (useful when using custom images)
+  ## @param admin.args Override default container args (useful when using custom images)
   ##
   args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.admin.AdminVerticle"]  
-  ## @param apiServer.hostAliases ApiServer pods host aliases
+  ## @param admin.hostAliases admin pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param apiServer.podLabels Extra labels for ApiServer pods
+  ## @param admin.podLabels Extra labels for admin pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
   
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  ## @param apiServer.podAffinityPreset Pod affinity preset. Ignored if `apiServer.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param admin.podAffinityPreset Pod affinity preset. Ignored if `admin.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param apiServer.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `apiServer.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param admin.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `admin.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-  ## Node apiServer.affinity preset
+  ## Node admin.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param apiServer.nodeAffinityPreset.type Node affinity preset type. Ignored if `apiServer.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param admin.nodeAffinityPreset.type Node affinity preset type. Ignored if `admin.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param apiServer.nodeAffinityPreset.key Node label key to match. Ignored if `apiServer.affinity` is set
+    ## @param admin.nodeAffinityPreset.key Node label key to match. Ignored if `admin.affinity` is set
     ##
     key: ""
-    ## @param apiServer.nodeAffinityPreset.values Node label values to match. Ignored if `apiServer.affinity` is set
+    ## @param admin.nodeAffinityPreset.values Node label values to match. Ignored if `admin.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param apiServer.affinity Affinity for ApiServer pods assignment
+  ## @param admin.affinity Affinity for admin pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `apiServer.podAffinityPreset`, `apiServer.podAntiAffinityPreset`, and `apiServer.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `admin.podAffinityPreset`, `admin.podAntiAffinityPreset`, and `admin.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param apiServer.nodeSelector Node labels for ApiServer pods assignment
+  ## @param admin.nodeSelector Node labels for admin pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
     #node.kubernetes.io/instance-type: t3.medium
 
 
-  ## @param apiServer.tolerations Tolerations for ApiServer pods assignment
+  ## @param admin.tolerations Tolerations for admin pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param apiServer.updateStrategy.type ApiServer statefulset strategy type
+  ## @param admin.updateStrategy.type admin statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -746,42 +749,42 @@ admin:
     ## Can be set to RollingUpdate or OnDelete
     ##
     #type: RollingUpdate
-  ## @param apiServer.priorityClassName ApiServer pods' priorityClassName
+  ## @param admin.priorityClassName admin pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param apiServer.schedulerName Name of the k8s scheduler (other than default) for ApiServer pods
+  ## @param admin.schedulerName Name of the k8s scheduler (other than default) for admin pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param apiServer.lifecycleHooks for the ApiServer container(s) to automate configuration before or after startup
+  ## @param admin.lifecycleHooks for the admin container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param apiServer.extraEnvVars Array with extra environment variables to add to ApiServer nodes
+  ## @param admin.extraEnvVars Array with extra environment variables to add to admin nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param apiServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ApiServer nodes
+  ## @param admin.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for admin nodes
   ##
   extraEnvVarsCM: "aaa-env"
-  ## @param apiServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for ApiServer nodes
+  ## @param admin.extraEnvVarsSecret Name of existing Secret containing extra env vars for admin nodes
   ##
   extraEnvVarsSecret:
-  ## @param apiServer.extraVolumes Optionally specify extra list of additional volumes for the ApiServer pod(s)
+  ## @param admin.extraVolumes Optionally specify extra list of additional volumes for the admin pod(s)
   ##
   extraVolumes:
     - name: aaa-config
       secret:
         secretName: aaa-config
-  ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ApiServer container(s)
+  ## @param admin.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the admin container(s)
   ##
   extraVolumeMounts: 
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
   
-  ## @param apiServer.sidecars Add additional sidecar containers to the ApiServer pod(s)
+  ## @param admin.sidecars Add additional sidecar containers to the admin pod(s)
   ## e.g:
   ## sidecars:
   ## - name: your-image-name
@@ -792,7 +795,7 @@ admin:
   ##         containerPort: 1234
   ##
   sidecars: {}
-  ## @param apiServer.initContainers Add additional init containers to the ApiServer pod(s)
+  ## @param admin.initContainers Add additional init containers to the admin pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -803,11 +806,11 @@ admin:
   ##
   initContainers: {}
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param apiServer.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param apiServer.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param apiServer.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param apiServer.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param apiServer.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param admin.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param admin.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param admin.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param admin.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param admin.autoscaling.targetMemory Target Memory utilization percentage
 
   autoscaling:
     enabled: true
@@ -816,22 +819,22 @@ admin:
     targetCPU: 80
     targetMemory:
 
-## @section Authenticator Parameters
+## @section registration Parameters
 registration:
 
-  ## @param authenticator.replicaCount Number of Authenticator replicas to deploy
+  ## @param registration.replicaCount Number of registration replicas to deploy
 
   replicaCount: 1
   
-  ## Configure extra options for Authenticator containers' liveness and readiness probes
+  ## Configure extra options for registration containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param authenticator.livenessProbe.enabled Enable livenessProbe on Authenticator containers
-  ## @param authenticator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param authenticator.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param authenticator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param authenticator.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param authenticator.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param authenticator.livenessProbe.path Path for httpGet
+  ## @param registration.livenessProbe.enabled Enable livenessProbe on registration containers
+  ## @param registration.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param registration.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param registration.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param registration.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param registration.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param registration.livenessProbe.path Path for httpGet
   ##
   livenessProbe:
     enabled: true
@@ -841,12 +844,12 @@ registration:
     timeoutSeconds: 10
     #failureThreshold: 10
     #successThreshold: 10
-  ## @param authenticator.readinessProbe.enabled Enable readinessProbe on Authenticator containers
-  ## @param authenticator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param authenticator.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param authenticator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param authenticator.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param authenticator.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param registration.readinessProbe.enabled Enable readinessProbe on registration containers
+  ## @param registration.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param registration.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param registration.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param registration.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param registration.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: false
@@ -855,12 +858,12 @@ registration:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param authenticator.startupProbe.enabled Enable startupProbe on Authenticator containers
-  ## @param authenticator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param authenticator.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param authenticator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param authenticator.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param authenticator.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param registration.startupProbe.enabled Enable startupProbe on registration containers
+  ## @param registration.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param registration.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param registration.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param registration.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param registration.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -869,19 +872,19 @@ registration:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param authenticator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param registration.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param authenticator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param registration.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param authenticator.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param registration.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Authenticator resource requests and limits
+  ## registration resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param authenticator.resources.limits The resources limits for the Authenticator containers
-  ## @param authenticator.resources.requests The requested resources for the Authenticator containers
+  ## @param registration.resources.limits The resources limits for the registration containers
+  ## @param registration.resources.requests The requested resources for the registration containers
   ##
   resources:
     limits:
@@ -892,75 +895,75 @@ registration:
       memory: 10Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param authenticator.podSecurityContext.enabled Enabled Authenticator pods' Security Context
-  ## @param authenticator.podSecurityContext.fsGroup Set Authenticator pod's Security Context fsGroup
+  ## @param registration.podSecurityContext.enabled Enabled registration pods' Security Context
+  ## @param registration.podSecurityContext.fsGroup Set registration pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: false
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param authenticator.containerSecurityContext.enabled Enabled Authenticator containers' Security Context
-  ## @param authenticator.containerSecurityContext.runAsUser Set Authenticator containers' Security Context runAsUser
-  ## @param authenticator.containerSecurityContext.runAsNonRoot Set Authenticator containers' Security Context runAsNonRoot
+  ## @param registration.containerSecurityContext.enabled Enabled registration containers' Security Context
+  ## @param registration.containerSecurityContext.runAsUser Set registration containers' Security Context runAsUser
+  ## @param registration.containerSecurityContext.runAsNonRoot Set registration containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: false
     runAsUser: 1001
     runAsNonRoot: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param authenticator.existingConfigmap The name of an existing ConfigMap with your custom configuration for Authenticator
+   ## @param registration.existingConfigmap The name of an existing ConfigMap with your custom configuration for registration
   ##
   existingConfigmap:
     
-  ## @param authenticator.command Override default container command (useful when using custom images)
+  ## @param registration.command Override default container command (useful when using custom images)
   ##
   command: ["/bin/bash"]
-  ## @param authenticator.args Override default container args (useful when using custom images)
+  ## @param registration.args Override default container args (useful when using custom images)
   ##
   args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.registration.RegistrationVerticle"]  
-  ## @param authenticator.hostAliases Authenticator pods host aliases
+  ## @param registration.hostAliases registration pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param authenticator.podLabels Extra labels for Authenticator pods
+  ## @param registration.podLabels Extra labels for registration pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
   
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  ## @param authenticator.podAffinityPreset Pod affinity preset. Ignored if `authenticator.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param registration.podAffinityPreset Pod affinity preset. Ignored if `registration.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param authenticator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `authenticator.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param registration.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `registration.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-  ## Node authenticator.affinity preset
+  ## Node registration.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param authenticator.nodeAffinityPreset.type Node affinity preset type. Ignored if `authenticator.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param registration.nodeAffinityPreset.type Node affinity preset type. Ignored if `registration.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param authenticator.nodeAffinityPreset.key Node label key to match. Ignored if `authenticator.affinity` is set
+    ## @param registration.nodeAffinityPreset.key Node label key to match. Ignored if `registration.affinity` is set
     ##
     key: ""
-    ## @param authenticator.nodeAffinityPreset.values Node label values to match. Ignored if `authenticator.affinity` is set
+    ## @param registration.nodeAffinityPreset.values Node label values to match. Ignored if `registration.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param authenticator.affinity Affinity for Authenticator pods assignment
+  ## @param registration.affinity Affinity for registration pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `authenticator.podAffinityPreset`, `authenticator.podAntiAffinityPreset`, and `authenticator.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `registration.podAffinityPreset`, `registration.podAntiAffinityPreset`, and `registration.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param authenticator.nodeSelector Node labels for Authenticator pods assignment
+  ## @param registration.nodeSelector Node labels for registration pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
@@ -968,11 +971,11 @@ registration:
 
 
 
-  ## @param authenticator.tolerations Tolerations for Authenticator pods assignment
+  ## @param registration.tolerations Tolerations for registration pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param authenticator.updateStrategy.type Authenticator statefulset strategy type
+  ## @param registration.updateStrategy.type registration statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -981,43 +984,43 @@ registration:
     ##
     ##type: RollingUpdate
 
-  ## @param authenticator.priorityClassName Authenticator pods' priorityClassName
+  ## @param registration.priorityClassName registration pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param authenticator.schedulerName Name of the k8s scheduler (other than default) for Authenticator pods
+  ## @param registration.schedulerName Name of the k8s scheduler (other than default) for registration pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param authenticator.lifecycleHooks for the Authenticator container(s) to automate configuration before or after startup
+  ## @param registration.lifecycleHooks for the registration container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param authenticator.extraEnvVars Array with extra environment variables to add to Authenticator nodes
+  ## @param registration.extraEnvVars Array with extra environment variables to add to registration nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param authenticator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Authenticator nodes
+  ## @param registration.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for registration nodes
   ##
   extraEnvVarsCM: "aaa-env"
-  ## @param authenticator.extraEnvVarsSecret Name of existing Secret containing extra env vars for Authenticator nodes
+  ## @param registration.extraEnvVarsSecret Name of existing Secret containing extra env vars for registration nodes
   ##
   extraEnvVarsSecret:
-  ## @param authenticator.extraVolumes Optionally specify extra list of additional volumes for the Authenticator pod(s)
+  ## @param registration.extraVolumes Optionally specify extra list of additional volumes for the registration pod(s)
   ##
   extraVolumes:
     - name: aaa-config
       secret:
         secretName: aaa-config
     
-  ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Authenticator container(s)
+  ## @param registration.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the registration container(s)
   ##
   extraVolumeMounts:
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
 
-  ## @param authenticator.sidecars Add additional sidecar containers to the Authenticator pod(s)
+  ## @param registration.sidecars Add additional sidecar containers to the registration pod(s)
   ## e.g:
   ## sidecars:
   ## - name: your-image-name
@@ -1028,7 +1031,7 @@ registration:
   ##       containerPort: 1234
   ##
   sidecars: {}
-  ## @param authenticator.initContainers Add additional init containers to the Authenticator pod(s)
+  ## @param registration.initContainers Add additional init containers to the registration pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -1039,11 +1042,11 @@ registration:
   ##
   initContainers: {}
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param authenticator.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param authenticator.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param authenticator.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param authenticator.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param authenticator.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param registration.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param registration.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param registration.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param registration.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param registration.autoscaling.targetMemory Target Memory utilization percentage
   autoscaling:
     enabled: true
     minReplicas: 1
@@ -1052,22 +1055,22 @@ registration:
     targetMemory:
 
 
-## @section Database Parameters
+## @section token Parameters
 token:
 
-  ## @param database.replicaCount Number of Database replicas to deploy
+  ## @param token.replicaCount Number of token replicas to deploy
 
   replicaCount: 1
   
-  ## Configure extra options for Database containers' liveness and readiness probes
+  ## Configure extra options for token containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param database.livenessProbe.enabled Enable livenessProbe on Database containers
-  ## @param database.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param database.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param database.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param database.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param database.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param database.livenessProbe.path Path for httpGet
+  ## @param token.livenessProbe.enabled Enable livenessProbe on token containers
+  ## @param token.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param token.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param token.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param token.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param token.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param token.livenessProbe.path Path for httpGet
   ##
   livenessProbe:
     enabled: true
@@ -1077,12 +1080,12 @@ token:
     timeoutSeconds: 10
     #failureThreshold: 10
     #successThreshold: 10
-  ## @param database.readinessProbe.enabled Enable readinessProbe on Database containers
-  ## @param database.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param database.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param database.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param database.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param database.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param token.readinessProbe.enabled Enable readinessProbe on token containers
+  ## @param token.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param token.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param token.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param token.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param token.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: false
@@ -1091,12 +1094,12 @@ token:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param database.startupProbe.enabled Enable startupProbe on Database containers
-  ## @param database.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param database.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param database.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param database.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param database.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param token.startupProbe.enabled Enable startupProbe on token containers
+  ## @param token.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param token.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param token.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param token.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param token.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -1105,19 +1108,19 @@ token:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param database.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param token.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param database.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param token.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param database.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param token.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Database resource requests and limits
+  ## token resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param database.resources.limits The resources limits for the Database containers
-  ## @param database.resources.requests The requested resources for the Database containers
+  ## @param token.resources.limits The resources limits for the token containers
+  ## @param token.resources.requests The requested resources for the token containers
   ##
   resources:
     limits:
@@ -1128,86 +1131,86 @@ token:
       memory: 50Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param database.podSecurityContext.enabled Enabled Database pods' Security Context
-  ## @param database.podSecurityContext.fsGroup Set Database pod's Security Context fsGroup
+  ## @param token.podSecurityContext.enabled Enabled token pods' Security Context
+  ## @param token.podSecurityContext.fsGroup Set token pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: false
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param database.containerSecurityContext.enabled Enabled Database containers' Security Context
-  ## @param database.containerSecurityContext.runAsUser Set Database containers' Security Context runAsUser
-  ## @param database.containerSecurityContext.runAsNonRoot Set Database containers' Security Context runAsNonRoot
+  ## @param token.containerSecurityContext.enabled Enabled token containers' Security Context
+  ## @param token.containerSecurityContext.runAsUser Set token containers' Security Context runAsUser
+  ## @param token.containerSecurityContext.runAsNonRoot Set token containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: false
     runAsUser: 1001
     runAsNonRoot: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param database.existingConfigmap The name of an existing ConfigMap with your custom configuration for Database
+   ## @param token.existingConfigmap The name of an existing ConfigMap with your custom configuration for token
   ##
   existingConfigmap:
     
-  ## @param database.command Override default container command (useful when using custom images)
+  ## @param token.command Override default container command (useful when using custom images)
   ##
   command: ["/bin/bash"]
-  ## @param database.args Override default container args (useful when using custom images)
+  ## @param token.args Override default container args (useful when using custom images)
   ##
   args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.token.TokenVerticle"]
-  ## @param database.hostAliases Database pods host aliases
+  ## @param token.hostAliases token pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param database.podLabels Extra labels for Database pods
+  ## @param token.podLabels Extra labels for token pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
   
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  ## @param database.podAffinityPreset Pod affinity preset. Ignored if `database.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param token.podAffinityPreset Pod affinity preset. Ignored if `token.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param database.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `database.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param token.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `token.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-  ## Node database.affinity preset
+  ## Node token.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param database.nodeAffinityPreset.type Node affinity preset type. Ignored if `database.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param token.nodeAffinityPreset.type Node affinity preset type. Ignored if `token.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param database.nodeAffinityPreset.key Node label key to match. Ignored if `database.affinity` is set
+    ## @param token.nodeAffinityPreset.key Node label key to match. Ignored if `token.affinity` is set
     ##
     key: ""
-    ## @param database.nodeAffinityPreset.values Node label values to match. Ignored if `database.affinity` is set
+    ## @param token.nodeAffinityPreset.values Node label values to match. Ignored if `token.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param database.affinity Affinity for Database pods assignment
+  ## @param token.affinity Affinity for token pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `database.podAffinityPreset`, `database.podAntiAffinityPreset`, and `database.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `token.podAffinityPreset`, `token.podAntiAffinityPreset`, and `token.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param database.nodeSelector Node labels for Database pods assignment
+  ## @param token.nodeSelector Node labels for token pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
     #node.kubernetes.io/instance-type: t3.medium
 
 
-  ## @param database.tolerations Tolerations for Database pods assignment
+  ## @param token.tolerations Tolerations for token pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param database.updateStrategy.type Database statefulset strategy type
+  ## @param token.updateStrategy.type token statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -1215,30 +1218,30 @@ token:
     ## Can be set to RollingUpdate or OnDelete
     ##
     ##type: RollingUpdate
-  ## @param database.priorityClassName Database pods' priorityClassName
+  ## @param token.priorityClassName token pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param database.schedulerName Name of the k8s scheduler (other than default) for Database pods
+  ## @param token.schedulerName Name of the k8s scheduler (other than default) for token pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param database.lifecycleHooks for the Database container(s) to automate configuration before or after startup
+  ## @param token.lifecycleHooks for the token container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param database.extraEnvVars Array with extra environment variables to add to Database nodes
+  ## @param token.extraEnvVars Array with extra environment variables to add to token nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param database.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Database nodes
+  ## @param token.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for token nodes
   ##
   extraEnvVarsCM: "aaa-env"
-  ## @param database.extraEnvVarsSecret Name of existing Secret containing extra env vars for Database nodes
+  ## @param token.extraEnvVarsSecret Name of existing Secret containing extra env vars for token nodes
   ##
   extraEnvVarsSecret:
-  ## @param database.extraVolumes Optionally specify extra list of additional volumes for the Database pod(s)
+  ## @param token.extraVolumes Optionally specify extra list of additional volumes for the token pod(s)
   ##
   extraVolumes:
     - name: aaa-config
@@ -1249,14 +1252,14 @@ token:
         secretName: aaa-keystore
 
     
-  ## @param database.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Database container(s)
+  ## @param token.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the token container(s)
   ##
   extraVolumeMounts: 
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
     - name: aaa-keystore
       mountPath: /usr/share/app/secrets/
-  ## @param database.sidecars Add additional sidecar containers to the Database pod(s)
+  ## @param token.sidecars Add additional sidecar containers to the token pod(s)
   ## e.g:
   ## sidecars:
   ## - name: your-image-name
@@ -1267,7 +1270,7 @@ token:
   ##       containerPort: 1234
   ##
   sidecars: {}
-  ## @param database.initContainers Add additional init containers to the Database pod(s)
+  ## @param token.initContainers Add additional init containers to the token pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -1279,11 +1282,11 @@ token:
   initContainers: {}
 
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param database.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param database.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param database.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param database.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param database.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param token.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param token.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param token.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param token.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param token.autoscaling.targetMemory Target Memory utilization percentage
 
   autoscaling:
     enabled: true
@@ -1292,22 +1295,22 @@ token:
     targetCPU: 80
     targetMemory:
 
-## @section Validator Parameters
+## @section policy Parameters
 
 policy:
 
-  ## @param validator.replicaCount Number of Validator replicas to deploy
+  ## @param policy.replicaCount Number of policy replicas to deploy
 
   replicaCount: 1  
-  ## Configure extra options for Validator containers' liveness and readiness probes
+  ## Configure extra options for policy containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param validator.livenessProbe.enabled Enable livenessProbe on Validator containers
-  ## @param validator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param validator.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param validator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param validator.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param validator.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param validator.livenessProbe.path Path for httpGet
+  ## @param policy.livenessProbe.enabled Enable livenessProbe on policy containers
+  ## @param policy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param policy.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param policy.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param policy.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param policy.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param policy.livenessProbe.path Path for httpGet
   ##
   livenessProbe:
     enabled: true
@@ -1317,12 +1320,12 @@ policy:
     timeoutSeconds: 10
     #failureThreshold: 10
     #successThreshold: 10
-  ## @param validator.readinessProbe.enabled Enable readinessProbe on Validator containers
-  ## @param validator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param validator.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param validator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param validator.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param validator.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param policy.readinessProbe.enabled Enable readinessProbe on policy containers
+  ## @param policy.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param policy.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param policy.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param policy.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param policy.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: false
@@ -1331,12 +1334,12 @@ policy:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param validator.startupProbe.enabled Enable startupProbe on Validator containers
-  ## @param validator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param validator.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param validator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param validator.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param validator.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param policy.startupProbe.enabled Enable startupProbe on policy containers
+  ## @param policy.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param policy.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param policy.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param policy.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param policy.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -1345,19 +1348,19 @@ policy:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param validator.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param policy.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param validator.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param policy.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param validator.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param policy.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Validator resource requests and limits
+  ## policy resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param validator.resources.limits The resources limits for the Validator containers
-  ## @param validator.resources.requests The requested resources for the Validator containers
+  ## @param policy.resources.limits The resources limits for the policy containers
+  ## @param policy.resources.requests The requested resources for the policy containers
   ##
   resources:
     limits:
@@ -1368,85 +1371,85 @@ policy:
       memory: 50Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param validator.podSecurityContext.enabled Enabled Validator pods' Security Context
-  ## @param validator.podSecurityContext.fsGroup Set Validator pod's Security Context fsGroup
+  ## @param policy.podSecurityContext.enabled Enabled policy pods' Security Context
+  ## @param policy.podSecurityContext.fsGroup Set policy pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: false
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param validator.containerSecurityContext.enabled Enabled Validator containers' Security Context
-  ## @param validator.containerSecurityContext.runAsUser Set Validator containers' Security Context runAsUser
-  ## @param validator.containerSecurityContext.runAsNonRoot Set Validator containers' Security Context runAsNonRoot
+  ## @param policy.containerSecurityContext.enabled Enabled policy containers' Security Context
+  ## @param policy.containerSecurityContext.runAsUser Set policy containers' Security Context runAsUser
+  ## @param policy.containerSecurityContext.runAsNonRoot Set policy containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: false
     runAsUser: 1001
     runAsNonRoot: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param validator.existingConfigmap The name of an existing ConfigMap with your custom configuration for Validator
+   ## @param policy.existingConfigmap The name of an existing ConfigMap with your custom configuration for policy
   ##
   existingConfigmap:
     
-  ## @param validator.command Override default container command (useful when using custom images)
+  ## @param policy.command Override default container command (useful when using custom images)
   ##
   command: ["/bin/bash"]
-  ## @param validator.args Override default container args (useful when using custom images)
+  ## @param policy.args Override default container args (useful when using custom images)
   ##
   args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.policy.PolicyVerticle"]
-  ## @param validator.hostAliases Validator pods host aliases
+  ## @param policy.hostAliases policy pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param validator.podLabels Extra labels for Validator pods
+  ## @param policy.podLabels Extra labels for policy pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
  
   ##
-  ## @param validator.podAffinityPreset Pod affinity preset. Ignored if `validator.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param policy.podAffinityPreset Pod affinity preset. Ignored if `policy.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param validator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `validator.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param policy.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `policy.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-  ## Node validator.affinity preset
+  ## Node policy.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param validator.nodeAffinityPreset.type Node affinity preset type. Ignored if `validator.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param policy.nodeAffinityPreset.type Node affinity preset type. Ignored if `policy.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param validator.nodeAffinityPreset.key Node label key to match. Ignored if `validator.affinity` is set
+    ## @param policy.nodeAffinityPreset.key Node label key to match. Ignored if `policy.affinity` is set
     ##
     key: ""
-    ## @param validator.nodeAffinityPreset.values Node label values to match. Ignored if `validator.affinity` is set
+    ## @param policy.nodeAffinityPreset.values Node label values to match. Ignored if `policy.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param validator.affinity Affinity for Validator pods assignment
+  ## @param policy.affinity Affinity for policy pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `validator.podAffinityPreset`, `validator.podAntiAffinityPreset`, and `validator.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `policy.podAffinityPreset`, `policy.podAntiAffinityPreset`, and `policy.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param validator.nodeSelector Node labels for Validator pods assignment
+  ## @param policy.nodeSelector Node labels for policy pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
     #node.kubernetes.io/instance-type: t3.medium
 
 
-  ## @param validator.tolerations Tolerations for Validator pods assignment
+  ## @param policy.tolerations Tolerations for policy pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param validator.updateStrategy.type Validator statefulset strategy type
+  ## @param policy.updateStrategy.type policy statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -1454,42 +1457,42 @@ policy:
     ## Can be set to RollingUpdate or OnDelete
     ##
     ##type: RollingUpdate
-  ## @param validator.priorityClassName Validator pods' priorityClassName
+  ## @param policy.priorityClassName policy pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param validator.schedulerName Name of the k8s scheduler (other than default) for Validator pods
+  ## @param policy.schedulerName Name of the k8s scheduler (other than default) for policy pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param validator.lifecycleHooks for the Validator container(s) to automate configuration before or after startup
+  ## @param policy.lifecycleHooks for the policy container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param validator.extraEnvVars Array with extra environment variables to add to Validator nodes
+  ## @param policy.extraEnvVars Array with extra environment variables to add to policy nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param validator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Validator nodes
+  ## @param policy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for policy nodes
   ##
   extraEnvVarsCM: "aaa-env"
-  ## @param validator.extraEnvVarsSecret Name of existing Secret containing extra env vars for Validator nodes
+  ## @param policy.extraEnvVarsSecret Name of existing Secret containing extra env vars for policy nodes
   ##
   extraEnvVarsSecret:
-  ## @param validator.extraVolumes Optionally specify extra list of additional volumes for the Validator pod(s)
+  ## @param policy.extraVolumes Optionally specify extra list of additional volumes for the policy pod(s)
   ##
   extraVolumes:
     - name: aaa-config
       secret:
         secretName: aaa-config
-  ## @param validator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Validator container(s)
+  ## @param policy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the policy container(s)
   ##
   extraVolumeMounts: 
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
   
-  ## @param validator.sidecars Add additional sidecar containers to the Validator pod(s)
+  ## @param policy.sidecars Add additional sidecar containers to the policy pod(s)
   ## e.g:
   ## sidecars:
    #   - name: your-image-name
@@ -1500,7 +1503,7 @@ policy:
   ##         containerPort: 1234
   ##
   sidecars: {}
-  ## @param validator.initContainers Add additional init containers to the Validator pod(s)
+  ## @param policy.initContainers Add additional init containers to the policy pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -1512,11 +1515,11 @@ policy:
   initContainers: {}
 
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param validator.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param validator.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param validator.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param validator.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param validator.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param policy.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param policy.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param policy.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param policy.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param policy.autoscaling.targetMemory Target Memory utilization percentage
   autoscaling:
     enabled: true
     minReplicas: 1
