@@ -35,3 +35,16 @@ Quick deploy
 ```
 docker stack deploy --compose-file keycloak-stack.yml keycloak
 ```
+
+## Nginx
+Follow this link first for deploying the nginx and then change the following staff in nginx deployment.
+
+### Create Environment file
+Add env variables in ``.env`` file using the template shown below.
+
+```
+NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
+NGINX_ENVSUBST_TEMPLATE_SUFFIX=.template
+NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/
+SERVER_NAME=20.204.43.118
+```
