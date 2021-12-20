@@ -10,15 +10,26 @@ secrets/
     └── keycloak_admin_password
  ```
    Please see the ``example-secrets`` directory to get more idea, can use the 'secrets' in that directory by copying into root postgres directory i.e. ``cp -r example-secrets/secrets/`` .for demo or local testing purpose only! For other environment, please generate strong passwords. 
-    
-    
+   
+   
 
 ## PostgreSQL Installation
 Before Keycloak installation, Install postgreSQL and follow this [document](https://github.com/hackcoderr/iudx-deployment/tree/keycloak/Docker-Swarm-deployment/single-node/postgres) for that.
 
-## Deployment
+## Keycloak
 
 [bitnami keycloak image](https://hub.docker.com/r/bitnami/keycloak/) is used for postgres.
+
+### Node labels
+ 
+ On a docker-swarm master node, run
+
+```
+# Label the Resource Server keycloak node
+docker node update --label-add keycloak_node=true <hostname/ID>
+```
+
+### Deployment
 
 Quick deploy
 ```
