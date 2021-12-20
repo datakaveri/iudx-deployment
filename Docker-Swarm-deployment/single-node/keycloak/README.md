@@ -33,11 +33,16 @@ docker node update --label-add keycloak_node=true <hostname/ID>
 
 Quick deploy
 ```
-docker stack deploy --compose-file keycloak-stack.yml keycloak
+docker stack deploy -c keycloak-stack.yml keycloak
 ```
 
 ## Nginx
-Follow this link first for deploying the nginx and then change the following staff in nginx deployment.
+Follow this [link](https://github.com/hackcoderr/iudx-deployment/tree/master/Docker-Swarm-deployment/single-node/resource-server/nginx) first for deploying the nginx and then change the following staff in nginx deployment.
+
+- [nginx image](https://hub.docker.com/_/nginx) with version ``1.20`` is used for keycloak.
+
+- Please replace this [directory](https://github.com/hackcoderr/iudx-deployment/tree/master/Docker-Swarm-deployment/single-node/resource-server/nginx/conf) with ``conf`` directory for configuring nginx with keycloak.
+
 
 ### Create Environment file
 Add env variables in ``.env`` file using the template shown below.
@@ -46,5 +51,13 @@ Add env variables in ``.env`` file using the template shown below.
 NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
 NGINX_ENVSUBST_TEMPLATE_SUFFIX=.template
 NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/
-SERVER_NAME=20.204.43.118
+SERVER_NAME=20.204.43.118  ##replace this IP with Host IP
+```
+
+### Deployment
+
+Quick deploy
+
+```
+docker stack deploy -c rs-nginx.yml keycloak-nginx
 ```
