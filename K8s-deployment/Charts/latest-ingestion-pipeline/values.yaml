@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/lip-depl
-  tag: 3.0-b803449
+  tag: 3.0-5b9d7e4
   pullSecrets: {}
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -185,11 +185,11 @@ processor:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 800m
+      memory: 1Gi
     requests: 
-      cpu: 60m
-      memory: 10Mi
+      cpu: 600m
+      memory: 800Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param processor.podSecurityContext.enabled Enabled processor pods' Security Context
@@ -264,7 +264,7 @@ processor:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param processor.tolerations Tolerations for processor pods assignment
@@ -423,11 +423,11 @@ rabbitmq:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 600m
+      memory: 750Mi
     requests: 
-      cpu: 60m
-      memory: 50Mi
+      cpu: 400m
+      memory: 600Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rabbitmq.podSecurityContext.enabled Enabled rabbitmq pods' Security Context
@@ -502,8 +502,13 @@ rabbitmq:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
+<<<<<<< HEAD
     #node.kubernetes.io/instance-type: t3.medium
   ## @param rabbitmq.tolerations Tolerations for rabbitmq pods assignment
+=======
+    node.kubernetes.io/instance-type: t3.medium
+  ## @param auditing.tolerations Tolerations for Auditing pods assignment
+>>>>>>> 62e50a70653013fc7e39528aa8fd60201b525fc2
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
@@ -655,11 +660,11 @@ redis:
   ##
   resources:
     limits:
-      cpu: 100m
-      memory: 75Mi
+      cpu: 700m
+      memory: 850Mi
     requests: 
-      cpu: 60m
-      memory: 50Mi
+      cpu: 400m
+      memory: 700Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param redis.podSecurityContext.enabled Enabled redis pods' Security Context
@@ -734,7 +739,7 @@ redis:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    #node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param redis.tolerations Tolerations for redis pods assignment
