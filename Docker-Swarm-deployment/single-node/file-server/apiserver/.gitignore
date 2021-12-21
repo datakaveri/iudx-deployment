@@ -1,0 +1,4 @@
+secrets/
+file-server-stack.resources.yml
+file-server-stack.custom.yml
+*.env

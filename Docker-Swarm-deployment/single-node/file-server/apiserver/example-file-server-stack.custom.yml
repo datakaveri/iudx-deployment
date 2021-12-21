@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  file-server:
+    # image: ghcr.io/datakaveri/fs-dev:3.0-test
+    ports:
+      - target: 8080
+        published: 8081
+        mode: host
