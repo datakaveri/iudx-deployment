@@ -111,7 +111,7 @@ podAnnotations:
   prometheus.io/port: "9000"
   prometheus.io/scrape: "true"
 
-
+## @section apiServer Parameters
 apiServer:
 
 ## @param apiServer.replicaCount Number of apiServer replicas to deploy
@@ -350,7 +350,7 @@ apiServer:
     targetCPU: 80
     #targetMemory:
 
-
+## @section archivesDatabase parameters
 archivesDatabase:
 ## @param archivesDatabase.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1
@@ -580,7 +580,7 @@ archivesDatabase:
     targetCPU: 80
     #targetMemory:
 
-
+## @section authenticator parameters
 authenticator:
 ## @param authenticator.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1
@@ -812,6 +812,8 @@ authenticator:
     targetCPU: 80
     #targetMemory:
 
+## @section databroker parameters
+
 databroker:
 ## @param databroker.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1
@@ -1042,7 +1044,7 @@ databroker:
     targetCPU: 80
     #targetMemory:
 
-
+## @section latestDatabase parameters
 latestDatabase:
 ## @param latestDatabase.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1
@@ -1274,7 +1276,7 @@ latestDatabase:
 
 
 
-
+## @section metering parameters
 
 metering:
 ## @param metering.replicaCount Number of apiServer replicas to deploy
