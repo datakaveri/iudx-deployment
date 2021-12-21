@@ -9,11 +9,11 @@ secrets/
     ├── keycloak_admin_user
     └── keycloak_admin_password
  ```
-   Please see the ``example-secrets`` directory to get more idea, can use the 'secrets' in that directory by copying into root postgres directory i.e. ``cp -r example-secrets/secrets/`` .for demo or local testing purpose only! For other environment, please generate strong passwords. 
+   Please see the ``example-secrets`` directory to get more idea, can use the 'secrets' in that directory by copying into root keycloak directory i.e. ``cp -r example-secrets/secrets/`` .for demo or local testing purpose only! For other environment, please generate strong passwords. 
    
    
 
-## PostgreSQL Installation
+## PostgreSQL 
 Before Keycloak installation, Install postgreSQL and follow this [document](https://github.com/hackcoderr/iudx-deployment/tree/keycloak/Docker-Swarm-deployment/single-node/postgres) for that.
 
 ## Keycloak
@@ -37,7 +37,7 @@ docker stack deploy -c keycloak-stack.yml keycloak
 ```
 
 ## Nginx
-Follow this [link](https://github.com/hackcoderr/iudx-deployment/tree/master/Docker-Swarm-deployment/single-node/resource-server/nginx) first for deploying the nginx and then change the following staff in nginx deployment.
+Follow this [link](https://github.com/hackcoderr/iudx-deployment/tree/master/Docker-Swarm-deployment/single-node/resource-server/nginx) first for deploying the nginx and then change the following staff in nginx directory.
 
 - [nginx image](https://hub.docker.com/_/nginx) with version ``1.20`` is used for keycloak.
 
