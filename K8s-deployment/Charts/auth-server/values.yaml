@@ -585,6 +585,7 @@ auditing:
     targetCPU: 80
     targetMemory:
 
+## @section Admin Parameters
 admin:
 
   ## @param admin.replicaCount Number of admin replicas to deploy
