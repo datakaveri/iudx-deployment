@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`            | Annotations for pods                                          | `nil`                |
 
 
-### apiServer Parameters
+### ApiServer Parameters
 
 | Name                                              | Description                                                                                         | Value                                                                                                                                                                                                                |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -134,7 +134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiServer.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                | `nil`                                                                                                                                                                                                                |
 
 
-### archivesDatabase Parameters
+### ArchivesDatabase Parameters
 
 | Name                                                     | Description                                                                                                | Value                                                                                                                                                                                                                         |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -199,7 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `archivesDatabase.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                       | `nil`                                                                                                                                                                                                                         |
 
 
-### authenticator Parameters
+### Authenticator Parameters
 
 | Name                                                  | Description                                                                                             | Value                                                                                                                                                                                                                     |
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -264,7 +264,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `authenticator.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                    | `nil`                                                                                                                                                                                                                     |
 
 
-### databroker Parameters
+### Databroker Parameters
 
 | Name                                               | Description                                                                                          | Value                                                                                                                                                                                                                  |
 | -------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -329,7 +329,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `databroker.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                 | `nil`                                                                                                                                                                                                                  |
 
 
-### latestDatabase Parameters
+### LatestDatabase Parameters
 
 | Name                                                   | Description                                                                                              | Value                                                                                                                                                                                                                       |
 | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -394,7 +394,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `latestDatabase.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                     | `nil`                                                                                                                                                                                                                       |
 
 
-### metering Parameters
+### Metering Parameters
 
 | Name                                             | Description                                                                                        | Value                                                                                                                                                                                                                |
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
