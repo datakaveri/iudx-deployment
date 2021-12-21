@@ -69,7 +69,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`            | Annotations for pods                       | `nil`                 |
 
 
-### processor Parameters
+### Processor Parameters
 
 | Name                                              | Description                                                                                         | Value                                                                                                                                                                                                                 |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -134,7 +134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `processor.autoscaling.targetMemory`              | Target Memory utilization percentage                                                                | `nil`                                                                                                                                                                                                                 |
 
 
-### rabbitmq Parameters
+### Rabbitmq Parameters
 
 | Name                                             | Description                                                                                        | Value                                                                                                                                                                                                                |
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
