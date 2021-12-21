@@ -21,15 +21,7 @@ metadata:
   {{- end }}
     nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
     nginx.ingress.kubernetes.io/limit-connections: "150"
-    nginx.ingress.kubernetes.io/limit-rps: "150"
-    nginx.ingress.kubernetes.io/server-snippet: |
-      add_header Clear-Site-Data   "*" always;
-      add_header Referrer-Policy   "no-referrer-when-downgrade" always;
-      add_header X-Frame-Options   "deny" always;
-      add_header X-XSS-Protection  "1; mode=block" always;
-      add_header X-Permitted-Cross-Domain-Policies  "none" always;
-      add_header Cross-Origin-Embedder-Policy "require-corp" always;
-      add_header Cross-Origin-Resource-Policy "cross-origin" always;
+    nginx.ingress.kubernetes.io/limit-rps: "100"
 spec:
   rules:
     {{- if .Values.ingress.hostname }}
