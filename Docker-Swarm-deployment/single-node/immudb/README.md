@@ -14,7 +14,7 @@ Please see the example-secrets directory to get more idea, can use the 'secrets'
 ## Build the docker file
 This is to create a custom docker image containing the python script to do initial setup of immudb like create users, tables required for the api-servers.
 ```sh
-docker build -t ghcr.io/datakaveri/immudb-config-generator:1.0.5 docker/
+docker build -t ghcr.io/datakaveri/immudb-config-generator:1.0.5 -f docker/immudb-config-generator/Dockerfile docker/immudb-config-generator 
 ```
 
 
@@ -45,7 +45,7 @@ with resource limits, reservations
 ```sh
 docker stack deploy -c immudb-stack.yml -c immudb-stack.resources.yml -c immudb-stack.custom.yml immudb
 ```
-
+### Create users, schema required by api-servers 
 Bring up the config and basic schema generator stack(only on clean deployment),
 ```sh
 docker stack deploy -c immudb-config-generator.yml tmp 
@@ -56,5 +56,15 @@ docker service logs tmp_immudbconfiggenerator -f
 # Remove stack
 docker stack rm tmp 
 ```
+Please refer the note section to see in detail what dbs, and users are created and the code in docker/immudb-config-generator/immudb-config-generator.py
+
 ## Note
 1.  The docker image 'ghcr.io/datakaveri/immudb-config-generator'  is tagged in accordance with immudb version used.
+2.  Following users using the passwords present at files in ```secrets/passwords/``` directory and dbs are created accordingly using ``` docker/immudb-config-generator/immudb-config-generator.py``` script :
+
+| Username           | Password                                    | Role/Access                         |  Services                     |
+|:-------------------:|:------------------------------------------:| :---------------------------------: |:-----------------------------:|
+| iudx_rs       | secrets/passwords/rs-password       | Read Write access to ```iudxrs``` Database   | Used by resource server  to audit to ```auditing``` table     |
+| iudx_cat | secrets/passwords/cat-password |   Read Write access to ```iudxcat``` database                   | Used by catalogue server to audit to ```auditingtable``` table     |
+| iudx_auth     |   secrets/passwords/auth-password   |   Read Write access to ```iudxauth``` database          | Used by auth server  to audit to ```table_auditing``` table        |
+| immudb          | secrets/passwords/admin-password     |     Superuser                                            |  Used to create dbs, set users and RBAC  |
