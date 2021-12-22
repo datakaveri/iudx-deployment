@@ -9,10 +9,10 @@ services:
       command: /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so
       read_only: true
       volumes:
-#Anonymous volume, https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes-for-services-swarms-and-stack-files 
         - type: volume
           source: redis-persistence
           target: /bitnami/redis/data
+#Anonymous volume, https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes-for-services-swarms-and-stack-files 
         - type: volume
           target: /opt/bitnami/
           volume:
