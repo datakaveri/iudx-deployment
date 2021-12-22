@@ -1,7 +1,7 @@
 version: '3.9'
 services:
     immudb-config-generator:
-      image: config-generator
+      image: ghcr.io/datakaveri/immudb-config-generator:1.0.5
       networks:
         - overlay-net
       secrets:
