@@ -1,0 +1,50 @@
+version: '3.9'
+services:
+    redis-rejson:
+      image: ghcr.io/datakaveri/redis-rejson:6.2.6-1.0.7
+      cap_drop:
+        - ALL
+      environment:
+        - REDIS_PASSWORD_FILE=/run/secrets/admin-password
+      command: /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so
+      read_only: true
+      volumes:
+#Anonymous volume, https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes-for-services-swarms-and-stack-files 
+        - type: volume
+          source: redis-persistence
+          target: /bitnami/redis/data
+        - type: volume
+          target: /opt/bitnami/
+          volume:
+            nocopy: false
+          read_only: false
+      networks:
+        - overlay-net
+      secrets:
+        - admin-password 
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: any
+          max_attempts: 5
+        placement:
+          constraints:
+            - "node.labels.redis-node==true"
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "5m"
+          max-file: "3"
+          tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+volumes:
+  redis-persistence: 
+
+secrets:
+  admin-password:
+    file: secrets/passwords/admin-password
