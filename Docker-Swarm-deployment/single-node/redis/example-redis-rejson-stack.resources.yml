@@ -1,0 +1,12 @@
+version: '3.9'
+services:
+  redis-rejson:
+    deploy:
+      resources:
+        limits:
+          pids: 100
+          cpus: '0.9'
+          memory: 1024M
+        reservations:
+          cpus: '0.2'   
+          memory: 64M
