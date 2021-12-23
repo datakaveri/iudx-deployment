@@ -8,7 +8,7 @@ image:
   repository: codenotary/immudb
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "1.0.5"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -23,7 +23,9 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations: {}
+podAnnotations: 
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "9497"
 
 podSecurityContext:
   fsGroup: 3322
@@ -44,13 +46,20 @@ immudb:
     value: "false"
   - name: IMMUDB_PGSQL_SERVER
     value: "true"
-
+  - name: IMMUDB_ADMIN_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: immudb-admin-password
+        key: immudb-admin-password
 service:
   type: ClusterIP
+  clusterIP: None
   listen:
     port: 3322
   metrics:
     port: 9497
+  psql:
+    port: 5432
 
 ingress:
   enabled: false
@@ -74,16 +83,16 @@ resources: {}
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  #limits:
+  #  cpu: 1800m
+  #  memory: 7.5Gi
+  #requests:
+  #  cpu: 1500m
+  #  memory: 7Gi
 
 volume:
   resource:
-    storage: 3Gi
+    storage: 200Gi
 
 nodeSelector: {}
 

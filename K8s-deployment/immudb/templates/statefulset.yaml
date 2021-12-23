@@ -37,14 +37,14 @@ spec:
               command:
               - immuadmin
               - status
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 5
           readinessProbe:
             exec:
               command:
               - immuadmin
               - status
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

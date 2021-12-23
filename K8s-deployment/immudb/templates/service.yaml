@@ -6,12 +6,22 @@ metadata:
     {{- include "immudb.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if and (eq .Values.service.type "ClusterIP") .Values.service.clusterIP }}
+  clusterIP: {{ .Values.service.clusterIP }}
+  {{- end }}
   ports:
     - port: {{ .Values.service.listen.port }}
+      targetPort: 3322
       protocol: TCP
       name: listen
+    - port: {{ .Values.service.psql.port }}
+      targetPort: 5432
+      protocol: TCP
+      name: psql
     - port: {{ .Values.service.metrics.port }}
+      targetPort: 9497
       protocol: TCP
       name: metrics
+
   selector:
     {{- include "immudb.selectorLabels" . | nindent 4 }}
