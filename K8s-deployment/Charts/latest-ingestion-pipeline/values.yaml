@@ -502,13 +502,8 @@ rabbitmq:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-<<<<<<< HEAD
-    #node.kubernetes.io/instance-type: t3.medium
-  ## @param rabbitmq.tolerations Tolerations for rabbitmq pods assignment
-=======
     node.kubernetes.io/instance-type: t3.medium
   ## @param auditing.tolerations Tolerations for Auditing pods assignment
->>>>>>> 62e50a70653013fc7e39528aa8fd60201b525fc2
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
