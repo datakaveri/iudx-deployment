@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  keycloak:
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2Gi
+        reservations:
+          cpus: '0.4'   
+          memory: 503Mi

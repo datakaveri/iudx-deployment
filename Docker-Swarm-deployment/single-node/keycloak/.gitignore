@@ -1,1 +1,4 @@
-!keep
+secrets/
+keycloak-stack-custom.yml
+keycloak-stack-resources.yml
+
