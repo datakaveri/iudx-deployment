@@ -41,3 +41,5 @@ with resource limits, reservations
 ```sh
 docker stack deploy -c lip-stack.yml -c lip-stack.resources.yml -c lip-stack.custom.yml lip
 ```
+# NOTE
+1. The upstream code for latest ingestion pipeline is available at https://github.com/datakaveri/latest-ingestion-pipeline/tree/master/vertx.
