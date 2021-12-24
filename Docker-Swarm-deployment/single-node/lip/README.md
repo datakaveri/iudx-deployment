@@ -8,13 +8,17 @@ secrets/
     ├── config-dev.json
 └── attribute-mapping.json
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into lip  directory  for demo or local testing purpose only! For other environment, please generate strong passwords.
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into lip directory i.e. ```cp -r example-secrets/secrets .```  for demo or local testing purpose only! For other environment, please generate strong passwords.
 
 ## Assign node labels
  The lip container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
 ```sh
 docker node update --label-add lip-node=true <node_name>
 ```
+## Pre-requisites for deploying latest ingestion pipeline
+1. For running the vertx clustered latest ingestion, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
+The  docker image ```ghcr.io/datakaveri/lip-dev:tag``` deploys a non-clustered vertx latest ingestion server.
+2. Rabbitmq and redis must be brought up, please refer for [redis-install](../redis/README.md), [rabbitmq-install](../rabbitmq/README.md) . Their connection details should be updated  appropriately in configs present at ```secrets/configs``` directory.
 
 ## Deploy
 

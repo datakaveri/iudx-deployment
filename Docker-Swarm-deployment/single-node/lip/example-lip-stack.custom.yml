@@ -2,11 +2,11 @@ version: '3.9'
 
 services:
   lip:
-    image: iudx/lip-dev
+    image: ghcr.io/datakaveri/lip-dev:3.0-a531c07
     secrets:
       - source: config
         target: /usr/share/app/secrets/all-verticles-configs/config.json
 
 secrets:
   config:
-    file: ./secrets/all-verticles-configs/config-dev.json
+    file: ./secrets/configs/config-dev.json
