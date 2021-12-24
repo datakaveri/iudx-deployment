@@ -1,20 +1,19 @@
 import pika
 import sys
 import time
-import ssl
 import os
 import json
 import datetime
 import rejson
 
-username = 'admin'
-password = 'admin'
-host = 'localhost'
-port = 5672
+username = 'admin' # RMQ username
+password = 'admin' # RNQ password
+host = 'localhost' # RMQ host
+port = 5672        # RMQ AMQP port
 vhost= 'IUDX'
-exchange = 'test-itms'
-exchange_type = 'direct'
-route = 'key'
+exchange = 'test-itms'  # RMQ exchange name 
+exchange_type = 'direct'  
+route = 'key'  # RMQ routing key
 # rabbitmq amqp connection details
 connection = pika.BlockingConnection(
     pika.URLParameters(f'amqp://{username}:{password}@{host}:{port}/{vhost}'))
