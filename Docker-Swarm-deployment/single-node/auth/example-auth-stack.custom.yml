@@ -2,10 +2,17 @@ version: "3.9"
 
 services:
   auth:
-    image: iudx/aaa-dev
+    image: ghcr.io/datakaveri/aaa-dev:3.0-c74b417
     secrets:
       - source: config
         target: /usr/share/app/secrets/configs/config.json
+    ports: 
+      - target: 8443   
+        published: 8443 
+        mode: host 
+      - target: 9000   
+        published: 9000 
+        mode: host 
   
 secrets:
   config: 
