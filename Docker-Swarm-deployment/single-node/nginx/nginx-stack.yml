@@ -1,0 +1,10 @@
+version: "3.9"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  rs-nginx:
+    image: nginx:1.19 
