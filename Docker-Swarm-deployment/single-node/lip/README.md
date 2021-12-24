@@ -19,7 +19,7 @@ docker node update --label-add lip-node=true <node_name>
 1. For running the vertx clustered latest ingestion, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
 The  docker image ```ghcr.io/datakaveri/lip-dev:tag``` deploys a non-clustered vertx latest ingestion server.
 2. Rabbitmq and redis must be brought up, please refer for [redis-install](../redis/README.md), [rabbitmq-install](../rabbitmq/README.md) . Their connection details should be updated  appropriately in configs present at ```secrets/configs``` directory.
-
+3. Define environment file ```.lip.env```. An example env file is present [here](example-env). 
 ## Deploy
 
 Three ways to deploy, do any one of it
