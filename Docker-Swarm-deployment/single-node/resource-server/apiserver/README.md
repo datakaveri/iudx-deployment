@@ -1,12 +1,44 @@
+# Install
+ Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and the network.
+## Required secrets
+```sh
+secrets/
+└── configs
+    ├── config-depl.json
+    ├── config-dev.json
+└── keystore.jks
+```
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into rs directory i.e. ```cp -r example-secrets/secrets .```  for demo or local testing purpose only! For other environment, please generate strong passwords.
 
-## Making a jks 
+## Assign node labels
+ The rs container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
+```sh
+docker node update --label-add rs-node=true <node_name>
+```
+## Pre-requisites for deploying latest ingestion pipeline
+1. For running the vertx clustered latest ingestion, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
+The  docker image ```ghcr.io/datakaveri/rs-dev:tag``` deploys a non-clustered vertx latest ingestion server.
+2. Define environment file ```.rs.env```. An example env file is present [here](example-secrets/secrets/example-env). 
+## Deploy
 
-1. Obtain PEM from certbot 
-`sudo certbot certonly --manual --preferred-challenges dns -d demo.example.com`
-2. Concat all pems into one file 
-`sudo cat /etc/letsencrypt/life/demo.example.com/*.pem > fullcert.pem`
-3. Convert to pkcs format 
-` openssl pkcs12 -export -out fullcert.pkcs12 -in fullcert.pem`
-4. Make JKS, will prompt for password 
-`keytool -v -importkeystore -srckeystore fullcert.pkcs12 -destkeystore keystore.jks -deststoretype JKS`
-5. Store JKS in config directory and edit the keyfile name and password entered in previous step
+Three ways to deploy, do any one of it
+1. Quick deploy  
+```sh
+docker stack deploy -c rs-stack.yml rs 
+```
+2. Setting resource reservations,limits in 'rs-stack.resources.yml' file and then deploying (see [here](example-rs-stack.resources.yml) for example configuration of 'rs-stack.resources.yml' file ). Its suitable for production environment.
+
+```sh
+docker stack deploy -c rs-stack.yml -c rs-stack.resources.yml rs
+```
+3. You can add more custom stack cofiguration in file 'rs-stack.custom.yml' that overrides base 'rs-stack.yml' file like ports mapping etc ( see [here](example-rs-stack.custom.yml) for example configuration of 'rs-stack.custom.yml' file)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
+```sh
+docker stack deploy -c rs-stack.yml  -c rs-stack.custom.yml rs
+```
+or 
+with resource limits, reservations
+```sh
+docker stack deploy -c rs-stack.yml -c rs-stack.resources.yml -c rs-stack.custom.yml rs
+```
+# NOTE
+1. The upstream code for resource server is available at [here](https://github.com/datakaveri/iudx-resource-server).
