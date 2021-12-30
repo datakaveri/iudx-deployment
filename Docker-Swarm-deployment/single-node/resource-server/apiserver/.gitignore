@@ -1,2 +1,4 @@
 .rs-api.env
 secrets/
+rs-stack.custom.yml
+rs-stack.resources.yml
