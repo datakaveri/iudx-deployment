@@ -13,10 +13,8 @@ services:
         target: /usr/share/app/files-storage
         volume:
           nocopy: true
-      - type: volume
+      - type: tmpfs
         target: /tmp/
-        volume:
-          nocopy: false
         read_only: false
     logging:
        driver: "json-file"
