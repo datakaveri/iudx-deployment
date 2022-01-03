@@ -16,6 +16,11 @@ Please see the example-secrets directory to get more idea, can use the 'secrets'
 docker node update --label-add file-server-node=true <node_name>
 ```
 
+## Pre-requisites for deploying latest ingestion pipeline
+1. For running the vertx clustered latest ingestion, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
+The  docker image ```ghcr.io/datakaveri/fileserver-dev:tag``` deploys a non-clustered vertx latest ingestion server.
+2. Define environment file ```.file-server.env```. An example env file is present [here](example-secrets/example-env).
+
 ## Deploy
 
 Three ways to deploy, do any one of it
@@ -37,3 +42,6 @@ with resource limits, reservations
 ```sh
 docker stack deploy -c file-server-stack.yml -c file-server-stack.resources.yml -c file-server-stack.custom.yml file-server
 ```
+
+# NOTE
+1. The upstream code for resource server is available at [here](https://github.com/datakaveri/iudx-file-server).
