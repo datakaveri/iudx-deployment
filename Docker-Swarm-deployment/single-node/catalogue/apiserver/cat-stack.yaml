@@ -7,7 +7,7 @@ networks:
 
 services:
   cat:
-    image: dockerhub.iudx.io/iudx/cat-depl:stqc
+    image: ghcr.io/datakaveri/cat-prod:stqc 
     networks:
       - overlay-net
     secrets:
