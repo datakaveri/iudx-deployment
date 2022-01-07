@@ -27,27 +27,28 @@ docker node update --label-add keycloak-node=true <node_name>
 Three ways to deploy, do any one of it
 1. Quick deploy  
 ```sh
-docker stack deploy -c keycloak-stack.yml keycloak
+docker stack deploy -c keycloak-stack.yaml keycloak
+
 ```
 
-2. Setting resource reservations,limits in 'keycloak-stack.resources.yml' file and then deploying (see [here](example-keycloak-stack-resources.yml) for example configuration of 'keycloak-stack-resources.yml' file ).
+2. Setting resource reservations,limits in 'keycloak-stack.resources.yaml' file and then deploying (see [here](example-keycloak-stack-resources.yaml) for example configuration of 'keycloak-stack-resources.yaml' file ).
 
 ```sh
-docker stack deploy -c keycloak-stack.yml -c keycloak-stack-resources.yml keycloak
+docker stack deploy -c keycloak-stack.yaml -c keycloak-stack.resources.yaml keycloak
 ```
-3. You can add more custom stack configuration in file 'keycloak-stack-custom.yml' that overrides base 'keycloak-stack.yml' file like ports mapping etc ( see [here](example-keycloak-stack-custom.yml) for example configuration of 'keycloak-stack-custom.yml' file)  and bring up like as follows.
+3. You can add more custom stack configuration in file 'keycloak-stack-custom.yaml' that overrides base 'keycloak-stack.yaml' file like ports mapping etc ( see [here](example-keycloak-stack-custom.yaml) for example configuration of 'keycloak-stack-custom.yaml' file)  and bring up like as follows.
 
 ```sh
-docker stack deploy -c keycloak-stack.yml  -c keycloak-stack-custom.yml keycloak
+docker stack deploy -c keycloak-stack.yaml  -c keycloak-stack-custom.yaml keycloak
 ```
 or 
 with resource limits, reservations
 ```sh
-docker stack deploy -c keycloak-stack.yml -c keycloak-stack-resources.yml -c keycloak-stack-custom.yml keycloak
+docker stack deploy -c keycloak-stack.yaml -c keycloak-stack.resources.yaml -c keycloak-stack.custom.yaml keycloak
 ```
 
 
 
 ## Note
-Before Keycloak installation, Install postgreSQL and follow this [document](https://github.com/hackcoderr/iudx-deployment/tree/keycloak/Docker-Swarm-deployment/single-node/postgres) for that.
+Before Keycloak installation, Install postgreSQL and follow this [document](../postgres/README.md) for that.
 

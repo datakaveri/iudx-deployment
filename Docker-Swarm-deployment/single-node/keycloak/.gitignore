@@ -1,4 +1,4 @@
 secrets/
-keycloak-stack-custom.yml
-keycloak-stack-resources.yml
+keycloak-stack.custom.yaml
+keycloak-stack.resources.yaml
 

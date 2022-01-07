@@ -17,7 +17,7 @@ Please see the example-secrets directory to get more idea, can use the 'secrets'
 ## Assign node labels
  The postgres container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart and able to mount the same local docker volume.
 ```sh
-docker node update --label-add postgres_db_node=true <node_name>
+docker node update --label-add postgres-db-node=true <node_name>
 ```
 
 ## Deploy
@@ -25,22 +25,22 @@ docker node update --label-add postgres_db_node=true <node_name>
 Three ways to deploy, do any one of it
 1. Quick deploy  
 ```sh
-docker stack deploy -c postgres-stack.yml postgres
+docker stack deploy -c postgres-stack.yaml postgres
 ```
 
-2. Setting resource reservations,limits in 'postgres-stack.resources.yml' file and then deploying (see [here](example-postgres-stack.resources.yml) for example configuration of 'postgres-stack.resources.yml' file ).
+2. Setting resource reservations,limits in 'postgres-stack.resources.yaml' file and then deploying (see [here](example-postgres-stack.resources.yaml) for example configuration of 'postgres-stack.resources.yaml' file ).
 
 ```sh
-docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml postgres
+docker stack deploy -c postgres-stack.yaml -c postgres-stack.resources.yaml postgres
 ```
-3. You can add more custom stack cofiguration in file 'postgres-stack.custom.yml' that overrides base 'postgres-stack.yml' file like ports mapping etc ( see [here](example-postgres-stack.custom.yml) for example configuration of 'postgres-stack.custom.yml' file)  and bring up like as follows
+3. You can add more custom stack cofiguration in file 'postgres-stack.custom.yaml' that overrides base 'postgres-stack.yaml' file like ports mapping etc ( see [here](example-postgres-stack.custom.yaml) for example configuration of 'postgres-stack.custom.yaml' file)  and bring up like as follows
 ```sh
-docker stack deploy -c postgres-stack.yml  -c postgres-stack.custom.yml postgres
+docker stack deploy -c postgres-stack.yaml  -c postgres-stack.custom.yaml postgres
 ```
 or 
 with resource limits, reservations
 ```sh
-docker stack deploy -c postgres-stack.yml -c postgres-stack.resources.yml -c postgres-stack.custom.yml postgres
+docker stack deploy -c postgres-stack.yaml -c postgres-stack.resources.yaml -c postgres-stack.custom.yaml postgres
 ```
 
 # Note

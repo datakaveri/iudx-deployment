@@ -7,5 +7,5 @@ services:
           cpus: '1.0'
           memory: 2Gi
         reservations:
-          cpus: '0.4'   
-          memory: 503Mi
+          cpus: '0.5'   
+          memory: 512Mi

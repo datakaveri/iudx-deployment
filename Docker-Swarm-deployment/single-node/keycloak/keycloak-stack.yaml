@@ -2,14 +2,13 @@ version: "3.9"
 
 networks:
   default:
-    external:
-      name: overlay-net
+    name: overlay-net
+    external: true
     driver: overlay
 
 services:
   keycloak:
-    image: docker.io/bitnami/keycloak:14
-
+    image: ghcr.io/datakaveri/keycloak:14.0.1
     volumes:
       - type: volume
         source: keycloak-volume
@@ -57,7 +56,7 @@ services:
 
 
 volumes:
-        keycloak-volume:
+  keycloak-volume:
 
 
 secrets:
