@@ -1,0 +1,4 @@
+secrets/
+.*.env
+cat-stack.resources.yml
+cat-stack.custom.yml
