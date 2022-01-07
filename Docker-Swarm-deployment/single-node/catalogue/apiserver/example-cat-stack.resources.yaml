@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  cat:
+    deploy:
+      resources:
+        limits:
+          pids: 500
+          cpus: '0.75'
+          memory: 1000M
+        reservations:
+          cpus: '0.02'   
+          memory: 250M
