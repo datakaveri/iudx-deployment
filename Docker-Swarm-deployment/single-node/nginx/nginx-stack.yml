@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.9"
 
 networks:
   overlay-net:
@@ -6,13 +6,13 @@ networks:
     driver: overlay
 
 services:
-  rs-nginx:
-    image: nginx:1.19 
+  nginx:
+    image: nginx:1.19
     deploy:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.rs_nginx_node==true"
+          - "node.labels.nginx-node==true"
       restart_policy:
         condition: on-failure
         delay: 5s
@@ -22,23 +22,31 @@ services:
         published: 443
         mode: host
     secrets:
-      - source: rs-key
-        target: /etc/ssl/rs-key
-      - source: rs-cert
-        target: /etc/ssl/rs-cert
+      - source: default-pki-key
+        target: /etc/default-ssl/privkey.pem
+      - source: default-pki-cert
+        target: /etc/default-ssl/fullchain.pem
     configs:
-      - source: rs-conf
-        target: /etc/nginx/templates/nginx.conf.template
+      - source: keycloak-conf
+        target: /etc/nginx/templates/keycloak.conf.template
+      - source: default-conf
+        target: /etc/nginx/templates/default.conf.template 
+      - source: nginx-conf
+        target: /etc/nginx/nginx.conf
     networks:
       - overlay-net
     env_file:
       - ./.env
 
 configs:
-  rs-conf:
-    file: conf/rs.conf
+  keycloak-conf:
+    file: conf/keycloak.conf
+  nginx-conf:
+    file: conf/nginx.conf
+  default-conf:
+    file: conf/default.conf
 secrets:
-  rs-key:
-    file: secrets/rs-key
-  rs-cert:
-    file: secrets/rs-cert
+  default-pki-key:
+    file: secrets/privkey.pem
+  default-pki-cert:
+    file: secrets/fullchain.pem
