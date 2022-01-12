@@ -7,6 +7,8 @@ services:
     cap_drop:
       - ALL
     read_only: true
+    env_file:
+      - ./.file-server.env
     volumes:
       - type: volume
         source: fs-volume
@@ -21,6 +23,7 @@ services:
        options:
           max-file: "3"
           max-size: "5m" 
+          tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     secrets:
       - source: keystore-file
         target: /usr/share/app/secrets/keystore-file.jks
