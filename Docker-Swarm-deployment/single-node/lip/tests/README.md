@@ -5,7 +5,8 @@ It tests by ingesting a sample surat-itms-live-eta data.
 ## Pre-requisites
 1. Install python3.8+ and  needed  packages
 
-```sh  pip install -r requirements.txt 
+```sh  
+pip install -r requirements.txt 
 ```
 
 2. Adjust the redis and rabbitmq connection information accordingly in 
@@ -13,7 +14,8 @@ python script ```latest-ingestion-pipeline-test.py```.
 
 ## Test
 1. To test the working of latest ingestion pipeline
-```sh python3 latest-ingestion-pipeline-test.py
+```sh 
+python3 latest-ingestion-pipeline-test.py
 ```
 2. The succesful output should be following
 ```
