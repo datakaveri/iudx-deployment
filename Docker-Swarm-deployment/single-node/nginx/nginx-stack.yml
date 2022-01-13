@@ -33,6 +33,8 @@ services:
         target: /etc/nginx/templates/default.conf.template 
       - source: nginx-conf
         target: /etc/nginx/nginx.conf
+      - source: file-server-conf
+        target: /etc/nginx/templates/fs.conf.template
     networks:
       - overlay-net
     env_file:
@@ -45,6 +47,9 @@ configs:
     file: conf/nginx.conf
   default-conf:
     file: conf/default.conf
+  file-server-conf:
+    file: conf/fs.conf
+
 secrets:
   default-pki-key:
     file: secrets/privkey.pem
