@@ -225,10 +225,10 @@ immudb:
     
   ## @param immudb.command Override default container command (useful when using custom images)
   ##
-  command: ["/bin/bash"]
+  command: []
   ## @param immudb.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-immudb.json"]
+  args: []
   ## @param immudb.hostAliases immudb pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -398,7 +398,7 @@ immudb:
       - ReadWriteOnce
     ## @param immudb.persistence.size Persistent Volume Size
     ##
-    size: 200Gi
+    size: 20Gi
 
   autoscaling:
     enabled: false
