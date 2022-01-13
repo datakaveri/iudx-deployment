@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hook-postinstall
+  namespace: {{ .Values.nameSpace }}
+  annotations:
+    "helm.sh/hook": "post-install"
+    "helm.sh/hook-delete-policy": "hook-succeeded"
+spec:
+  containers:
+  - name: hook-immudb
+    image: docker.io/pranav0/iudx:3.0
+    env:
+    - name: IMMUDB_HOST
+      value: "immudb"
+    volumeMounts:
+    - name: hook-config
+      mountPath: /run/secrets/password
+
+  volumes:
+  - name: hook-config
+    configMap:
+       name: hook-config
+  restartPolicy: Never
+

@@ -176,7 +176,7 @@ spec:
 
   volumeClaimTemplates:
     - metadata:
-        name: "fs-data"
+        name: "data"
         {{- if .Values.immudb.persistence.annotations }}
         annotations: {{- toYaml .Values.immudb.persistence.annotations | nindent 10 }}
         {{- end }}
