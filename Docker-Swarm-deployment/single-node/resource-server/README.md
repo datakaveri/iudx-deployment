@@ -15,30 +15,30 @@ Please see the example-secrets directory to get more idea, can use the 'secrets'
 ```sh
 docker node update --label-add rs-node=true <node_name>
 ```
-## Pre-requisites for deploying latest ingestion pipeline
-1. For running the vertx clustered latest ingestion, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
-The  docker image ```ghcr.io/datakaveri/rs-dev:tag``` deploys a non-clustered vertx latest ingestion server.
-2. Define environment file ```.rs.env```. An example env file is present [here](example-secrets/secrets/example-env). 
+## Pre-requisites for deploying resource server
+1. For running the vertx clustered resource server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
+The  docker image ```ghcr.io/datakaveri/rs-dev:tag``` deploys a non-clustered vertx resource server.
+2. Define environment file ```.rs.env```. An example env file is present [here](example-env). 
 ## Deploy
 
 Three ways to deploy, do any one of it
 1. Quick deploy  
 ```sh
-docker stack deploy -c rs-stack.yml rs 
+docker stack deploy -c rs-stack.yaml rs 
 ```
-2. Setting resource reservations,limits in 'rs-stack.resources.yml' file and then deploying (see [here](example-rs-stack.resources.yml) for example configuration of 'rs-stack.resources.yml' file ). Its suitable for production environment.
+2. Setting resource reservations,limits in 'rs-stack.resources.yaml' file and then deploying (see [here](example-rs-stack.resources.yaml) for example configuration of 'rs-stack.resources.yaml' file ). Its suitable for production environment.
 
 ```sh
-docker stack deploy -c rs-stack.yml -c rs-stack.resources.yml rs
+docker stack deploy -c rs-stack.yaml -c rs-stack.resources.yaml rs
 ```
-3. You can add more custom stack cofiguration in file 'rs-stack.custom.yml' that overrides base 'rs-stack.yml' file like ports mapping etc ( see [here](example-rs-stack.custom.yml) for example configuration of 'rs-stack.custom.yml' file)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
+3. You can add more custom stack cofiguration in file 'rs-stack.custom.yaml' that overrides base 'rs-stack.yaml' file like ports mapping etc ( see [here](example-rs-stack.custom.yaml) for example configuration of 'rs-stack.custom.yaml' file)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
 ```sh
-docker stack deploy -c rs-stack.yml  -c rs-stack.custom.yml rs
+docker stack deploy -c rs-stack.yaml  -c rs-stack.custom.yaml rs
 ```
 or 
 with resource limits, reservations
 ```sh
-docker stack deploy -c rs-stack.yml -c rs-stack.resources.yml -c rs-stack.custom.yml rs
+docker stack deploy -c rs-stack.yaml -c rs-stack.resources.yaml -c rs-stack.custom.yaml rs
 ```
 # NOTE
 1. The upstream code for resource server is available at [here](https://github.com/datakaveri/iudx-resource-server).
