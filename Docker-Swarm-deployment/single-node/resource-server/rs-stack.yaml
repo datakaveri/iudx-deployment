@@ -15,13 +15,6 @@ services:
         target: /usr/share/app/secrets/configs/config.json
       - source: keystore
         target: /usr/share/app/secrets/configs/keystore.jks
-    ports: 
-      - target: 80 
-        published: 8443
-        mode: host
-      - target: 9090 
-        published: 9090
-        mode: host
     env_file:
       - ./.rs.env
     read_only: true
@@ -34,6 +27,7 @@ services:
       options:
         max-file: "5"
         max-size: "100m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     command: bash -c "exec java $$RS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
     deploy:
       replicas: 1
