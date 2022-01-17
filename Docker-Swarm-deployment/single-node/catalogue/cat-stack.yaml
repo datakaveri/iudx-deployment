@@ -32,7 +32,7 @@ services:
         constraints:
           - "node.labels.cat-node==true"
       restart_policy:
-        condition: on-failure
+        condition: any
         max_attempts: 5
 
 networks:
@@ -44,6 +44,6 @@ secrets:
   keystore:
     file: ./secrets/keystore.jks
   config:
-    file:  ./secrets/configs/config.json
+    file:  ./secrets/configs/config-depl.json
 
 
