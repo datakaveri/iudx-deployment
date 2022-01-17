@@ -4,7 +4,7 @@
 ```sh
 secrets/
 └── configs
-    ├── config.json
+    ├── config-depl.json
     ├── config-dev.json
 └── keystore.jks
 ```
@@ -18,7 +18,7 @@ docker node update --label-add cat-node=true <node_name>
 ## Pre-requisites for deploying Catalogue Server
 1. For running the vertx clustered Catalogue Server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
 The  docker image ```ghcr.io/datakaveri/cat-dev:tag``` deploys a non-clustered vertx Catalogue Server.
-3. Define environment file ```.cat.env```. An example env file is present [here](./example-secrets/example-env). 
+3. Define environment file ```.cat.env```. An example env file is present [here](./example-env). 
 ## Deploy
 
 Three ways to deploy, do any one of it
