@@ -9,17 +9,17 @@ metadata:
 spec:
   containers:
   - name: hook-immudb
-    image: docker.io/pranav0/iudx:3.0
+    image: docker.io/pranav0/iudx:2.0
     env:
     - name: IMMUDB_HOST
       value: "immudb"
     volumeMounts:
-    - name: hook-config
+    - name: hook-secret
       mountPath: /run/secrets/password
 
   volumes:
-  - name: hook-config
-    configMap:
-       name: hook-config
+  - name: hook-secret
+    secret:
+      secretName: hook-secret
   restartPolicy: Never
 
