@@ -4,16 +4,16 @@ import urllib.request
 import os
 Host=os.environ['IMMUDB_HOST']
 f = open("/run/secrets/password/admin-password","r")
-ADMIN_PASSWORD = f.read().strip('\n')
+ADMIN_PASSWORD = f.read()
 
 f = open("/run/secrets/password/auth-password","r")
-IUDX_AUTH_PASSWORD = f.read().strip('\n')
+IUDX_AUTH_PASSWORD = f.read()
 
 f = open("/run/secrets/password/cat-password","r")
-IUDX_CAT_PASSWORD = f.read().strip('\n')
+IUDX_CAT_PASSWORD = f.read()
 
 f = open("/run/secrets/password/rs-password","r")
-IUDX_RS_PASSWORD = f.read().strip('\n')
+IUDX_RS_PASSWORD = f.read()
 
 while True:
     try:
