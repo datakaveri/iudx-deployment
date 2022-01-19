@@ -407,6 +407,16 @@ immudb:
     targetCPU: 80
     targetMemory:
 
+  install:
+    createUsers: true
+    secretName: hook-secret
+    hookImage:
+      registry: ghcr.io
+      repository: datakaveri/immudb-config-generator
+      tag: 1.0.5-1
+    hookEnv: 
+    - name: IMMUDB_HOST
+      value: "immudb"
 
 
 
