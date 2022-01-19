@@ -37,6 +37,9 @@ services:
         target: /etc/nginx/templates/fs.conf.template
       - source: rs-conf
         target: /etc/nginx/templates/rs.conf.template
+      - source: auth-conf
+        target: /etc/nginx/templates/auth.conf.template
+
     networks:
       - overlay-net
     env_file:
@@ -53,6 +56,9 @@ configs:
     file: conf/fs.conf
   rs-conf:
     file: conf/rs.conf
+  auth-conf:
+    file: conf/auth.conf
+
 
 
 
