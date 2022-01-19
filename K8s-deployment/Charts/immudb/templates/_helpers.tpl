@@ -5,6 +5,14 @@ Return the proper %%MAIN_OBJECT_BLOCK%% image name
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
+
+{{/*
+Return the proper hook image name
+*/}}
+{{- define "immudbHook.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.immudb.install.hookImage "global" .Values.global) }}
+{{- end -}}
+
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}

@@ -1,3 +1,4 @@
+{{- if .Values.immudb.install.createUsers }}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -9,10 +10,11 @@ metadata:
 spec:
   containers:
   - name: hook-immudb
-    image: docker.io/pranav0/iudx:2.0
+    image: {{ template "immudbHook.image" . }}
     env:
-    - name: IMMUDB_HOST
-      value: "immudb"
+    {{- if .Values.immudb.install.hookEnv }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.immudb.install.hookEnv "context" $) | nindent 4 }}
+    {{- end }}
     volumeMounts:
     - name: hook-secret
       mountPath: /run/secrets/password
@@ -20,6 +22,7 @@ spec:
   volumes:
   - name: hook-secret
     secret:
-      secretName: hook-secret
+      secretName: {{ .Values.immudb.install.secretName}}
   restartPolicy: Never
 
+{{- end }}
