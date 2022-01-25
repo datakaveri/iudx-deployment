@@ -39,6 +39,9 @@ services:
         target: /etc/nginx/templates/rs.conf.template
       - source: auth-conf
         target: /etc/nginx/templates/auth.conf.template
+      - source: cat-conf
+        target: /etc/nginx/templates/cat.conf.template
+
 
     networks:
       - overlay-net
@@ -58,6 +61,9 @@ configs:
     file: conf/rs.conf
   auth-conf:
     file: conf/auth.conf
+  cat-conf:
+    file: conf/cat.conf
+
 
 
 
