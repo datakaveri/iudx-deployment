@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  keycloak:
+  nginx:
     ports: 
       - target: 8080  # centralized nginx port inside the container
         published: 8080 # exposing centralized nginx port 8080 to outside at 8080
