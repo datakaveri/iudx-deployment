@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "36c0f027-0996-4476-ba7d-602ec978cb8a",
+		"name": "Data Ingestion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://<<ingestion-server-url>>/ingestion (Type-1)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"datakaveri.org/facec5182e3bf44cc3ac42b0b611263676d668a2/rs.iudx.org.in/agartala-env-aqm/shyamali-bazar\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://<<ingestion-server-url>>/ingestion",
+					"protocol": "https",
+					"host": [
+						"<<ingestion-server-url>>"
+					],
+					"path": [
+						"ingestion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://<<ingestion-server-url>>/ingestion (Type-2)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"datakaveri.org/facec5182e3bf44cc3ac42b0b611263676d668a2/rs.iudx.org.in/agartala-env-aqm\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://<<ingestion-server-url>>/ingestion",
+					"protocol": "https",
+					"host": [
+						"<<ingestion-server-url>>"
+					],
+					"path": [
+						"ingestion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://<<ingestion-server-url>>/ingestion (Type-3)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"datakaveri.org/facec5182e3bf44cc3ac42b0b611263676d668a2/rs.iudx.org.in/agartala-env-aqm\",\n    \"queue\":\"adaptor-1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://<<ingestion-server-url>>/ingestion",
+					"protocol": "https",
+					"host": [
+						"<<ingestion-server-url>>"
+					],
+					"path": [
+						"ingestion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://<<ingestion-server-url>>/ingestion (Type-4)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"datakaveri.org/facec5182e3bf44cc3ac42b0b611263676d668a2/rs.iudx.org.in/agartala-env-aqm/shyamali-bazar\",\n    \"queue\": \"adaptor-1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://<<ingestion-server-url>>/ingestion",
+					"protocol": "https",
+					"host": [
+						"<<ingestion-server-url>>"
+					],
+					"path": [
+						"ingestion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://<<ingestion-server-url>>/ingestion (Type-4) Copy",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "<<JWT Token>>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://<<ingestion-server-url>>/ingestion?id=<<group (or) resource id-of-exchange>>",
+					"protocol": "https",
+					"host": [
+						"<<ingestion-server-url>>"
+					],
+					"path": [
+						"ingestion"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "<<group (or) resource id-of-exchange>>"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://<<ingestion-server-url>>/ingestion (Type-4) Copy 2",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "<<JWT Token>>",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://<<ingestion-server-url>>/ingestion?id=<<group (or) resource id-of-exchange>>",
+					"protocol": "https",
+					"host": [
+						"<<ingestion-server-url>>"
+					],
+					"path": [
+						"ingestion"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "<<group (or) resource id-of-exchange>>"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

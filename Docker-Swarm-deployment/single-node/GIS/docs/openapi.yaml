@@ -1,0 +1,355 @@
+openapi: 3.0.2
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+info:
+  title: IUDX Data Ingestion Server APIs
+  version: 1.0.0
+  description: >
+    ## Introduction
+
+    The <b>Data Ingestion Server</b> is the <b> IUDX's "Firewall"</b> which allows publication of
+    data.
+    It enables *Providers* and *Delegate* of datasources to publish data as
+    per the IUDX data descriptor.
+
+    For publication, it allows users to use <b>HTTP protocol over TLS (HTTPs)</b>.
+
+    ## API HTTP Responses
+
+    Apart from the response codes specified in each API, the API server may
+    respond with certain 4xx and 5xx error codes which are related to common API
+    Gateway behaviours.
+
+    The application should address them accordingly.
+
+paths:
+  /ngsi-ld/v1/entities:
+    post:
+      tags:
+        - Ingest Data
+      operationId: Post Entities
+      parameters:
+        - name: token
+          in: header
+          description:
+            A <b> valid IUDX Auth token </b> to process the request for a <b>
+            resource </b> . <br/> This field is <b> mandatory </b> for
+            publishing a <b> protected resource </b> .  <br/> If not provided
+            with a valid token, user will be responded with <b> 401 Unauthorized
+            </b>.
+          required: true
+          schema:
+            type: string
+            maxLength: 512
+            pattern: ^[a-zA-Z0-9\/\@\.]*$
+      requestBody:
+        description: >-
+          A <b> valid IUDX ID </b> of the resource. Mandatory attributes and
+          values as per the data descriptor in the DX Catalogue
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/postentityrequest'
+      responses:
+        '201':
+          description: Successful Query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entityresponse'
+        '204':
+          description: Empty Response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardBadRequestErrorResponse'
+          description: Bad query
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardInvalidTokenErrorResponse'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResourceNotFoundErrorResponse'
+          description: Resource not found
+      deprecated: false
+      description: >
+        A Post Entity API is used by <b>IUDX Data *Providers* and *Delegate*</b> to publish data into the DX platform. <br/> As the POST method of the <b>/entities</b> endpoint is a protected endpoint a<b> valid IUDX Auth token </b> is <b> mandatory </b>  in the header parameter of the request.<br/> The request body for this API shall contain the data to be published in JSON format as per the data-descriptor available in <b>IUDX catalogue server
+
+  /ngsi-ld/v1/ingestion:
+    post:
+      tags:
+        - Register a Resource
+      operationId: Register a Resource
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: >-
+            A <b> valid IUDX Auth token </b> to process the request for the <b>
+            protected API </b> . <br/> This field is <b> mandatory </b> for
+            accessing a <b> protected API </b> .  <br/> If not provided
+            with a valid token, user will be responded with <b> 401 Unauthorized
+            </b> .
+          schema:
+            type: string
+            maxLength: 512
+            pattern: ^[a-zA-Z0-9\/\@\.]*$
+      requestBody:
+        description: >-
+          A <b> valid IUDX ID </b> of the resource is mandatory. <b>Queue</b> is
+          optional
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/postingestionrequest'
+      responses:
+        '201':
+          description: Successful Query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/postingestionresponse'
+        '204':
+          description: Empty Response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardBadRequestErrorResponse'
+          description: Bad query
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardInvalidTokenErrorResponse'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResourceNotFoundErrorResponse'
+          description: Resource not found
+      deprecated: false
+      description: >
+        The `/ingestion` end point allows an IUDX Admin to register ingestion
+        stream for one or more data resources. All the queries requires a <b> valid IUDX </b> `id` of
+        the resource. These apis are intended to be used by IUDX *Administrator*.
+
+  /ngsi-ld/v1/ingestion/{id}:
+    delete:
+      tags:
+        - Delete a Resource
+      operationId: Delete a Resource
+      parameters:
+        - name: token
+          in: header
+          required: true
+          description: >-
+            A <b> valid IUDX Auth token </b> to process the request for the <b>
+            protected API </b> . <br/> This field is <b> mandatory </b> for
+            accessing a <b> protected API </b> .  <br/> If not provided
+            with a valid token, user will be responded with <b> 401 Unauthorized
+            </b> .
+          schema:
+            type: string
+            maxLength: 512
+            pattern: ^[a-zA-Z0-9\/\@\.]*$
+        - name: id
+          in: path
+          description: >-
+            A <b> valid IUDX ID </b> of the resource.
+          required: true
+          schema:
+            type: string
+            maxLength: 512
+      responses:
+        '200':
+          description: Successful Query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleteingestionresponse'
+        '204':
+          description: Empty Response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardBadRequestErrorResponse'
+          description: Bad query
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardInvalidTokenErrorResponse'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/standardResourceNotFoundErrorResponse'
+          description: Resource not found
+      deprecated: false
+      description: >
+        The `/ingestion` end point allows an IUDX Admin to register ingestion
+        stream for one or more data resources. All the queries requires a <b> valid IUDX </b> `id` of
+        the resource. These apis are intended to be used by IUDX *Administrator*.
+components:
+  schemas:
+    postentityrequest:
+      title: postentityrequest
+      required:
+        - route_id
+        - vehicle_label
+        - id
+        - trip_direction
+        - observationDateTime
+        - license_plate
+      type: object
+      properties:
+        route_id:
+          type: string
+          maxLength: 50
+        vehicle_label:
+          type: string
+          maxLength: 50
+        id:
+          type: string
+          maxLength: 512
+        trip_direction:
+          type: string
+          maxLength: 50
+        observationDateTime:
+          type: string
+          maxLength: 50
+        license_plate:
+          type: string
+          maxLength: 50
+      example:
+        route_id: 12D
+        vehicle_label: P62
+        id: >-
+          suratmunicipal.org/6db486cb4f720e8585ba1f45a931c63c25dbbbda/rs.iudx.org.in/surat-itms-realtime-info/surat-itms-live-eta
+        trip_direction: DN
+        observationDateTime: '2021-09-23T11:56:24+05:30'
+        license_plate: GJ05BX1430
+    postingestionrequest:
+      title: postingestionrequest
+      required:
+        - id
+        - queue
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 512
+        queue:
+          type: string
+          maxLength: 50
+      example:
+        id: ''
+        queue: ''
+    entityresponse:
+      title: entityresponse
+      type: object
+      properties:
+        type:
+          type: integer
+        title:
+          type: string
+        results:
+          type: object
+          properties:
+            id:
+              type: string
+            observationDateTime:
+              type: string
+            trip_id:
+              type: string
+            route_id:
+              type: string
+      example:
+        type: 200
+        title: Success
+        detail: Publication Successful
+    postingestionresponse:
+      title: postingestionresponse
+      type: object
+      properties:
+        type:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+      example:
+        type: 201
+        title: Success
+        detail: Registration Successful
+    deleteingestionresponse:
+      title: deleteingestionresponse
+      type: object
+      properties:
+        type:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+      example:
+        type: 200
+        title: Success
+        detail: Deletion Successful
+    standardBadRequestErrorResponse:
+      title: standardBadRequestErrorResponse
+      properties:
+        type:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+      example:
+        type: 400
+        title: Bad Request Data
+        detail: >-
+          Empty response | Invalid Syntax | Invalid param type | Invalid param
+          value etc.
+    standardInvalidTokenErrorResponse:
+      title: standardInvalidTokenErrorResponse
+      properties:
+        type:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+      example:
+        type: 401
+        title: Invalid credentials
+        detail: Invalid credentials
+    standardResourceNotFoundErrorResponse:
+      title: standardResourceNotFoundErrorResponse
+      properties:
+        type:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+      example:
+        type: 404
+        title: Not Found
+        detail: Resource Not Found
