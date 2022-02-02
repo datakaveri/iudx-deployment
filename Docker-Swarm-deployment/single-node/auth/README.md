@@ -45,4 +45,4 @@ with resource limits, reservations
 docker stack deploy -c auth-stack.yml -c auth-stack.resources.yml -c auth-stack.custom.yml auth
 ```
 # NOTE
-1. The upstream code for latest ingestion pipeline is available at https://github.com/datakaveri/iudx-aaa-server.
+1. The upstream code for auth (aaa) server is available at https://github.com/datakaveri/iudx-aaa-server.
