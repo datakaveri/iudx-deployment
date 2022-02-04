@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  rs:
+    image: ghcr.io/datakaveri/rs-dev:3.0-03915b1
+    secrets:
+      - source: config
+        target: /usr/share/app/secrets/configs/config.json
+    ports:
+      - target: 80
+        published: 8443
+        mode: host
+      - target: 9090
+        published: 9090
+        mode: host
+
+secrets:
+  config:
+    file:  ./secrets/configs/config-dev.json
