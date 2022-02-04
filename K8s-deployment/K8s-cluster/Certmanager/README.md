@@ -37,3 +37,17 @@ kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/v1.
 ```
 Note: This command will also remove installed cert-manager CRDs and all cert-manager resources (e.g. certificates.cert-manager.io resources) by Kubernetes' garbage collector.
 
+# Cert-Manager Issuer
+Here LetsEncrypt issuer is being used.
+
+## Deploy
+
+To Deploy Issuer
+```
+kubectl apply -f cert-manager-cluster-issuer.yaml 
+```
+## Uninstall Issuer
+```
+kubectl delete -f cert-manager-cluster-issuer.yaml
+```
+Note: This will deploy and delete both stagging and production issuers
