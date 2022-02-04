@@ -46,3 +46,4 @@ docker stack deploy -c cat-stack.yaml -c cat-stack.resources.yaml -c cat-stack.c
 ```
 # NOTE
 1. The upstream code for Catalogue Server pipeline is available [here](https://github.com/datakaveri/iudx-catalogue-server).
+2. ToDO: Remove nginx folder, once centralised nginx pr is merged,
