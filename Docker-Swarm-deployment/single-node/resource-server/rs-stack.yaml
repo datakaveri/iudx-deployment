@@ -7,7 +7,7 @@ networks:
 
 services:
   rs:
-    image: ghcr.io/datakaveri/rs-depl:3.0-4e49d2a
+    image: ghcr.io/datakaveri/rs-depl:3.0-03915b1
     networks:
       - overlay-net
     secrets:
@@ -38,6 +38,7 @@ services:
         condition: any
         delay: 5s
         window: 10s
+        max_attempts: 5
     cap_drop:
       - ALL
 
