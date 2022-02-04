@@ -16,9 +16,13 @@ Please see the example-secrets directory to get more idea, can use the 'secrets'
 docker node update --label-add cat-node=true <node_name>
 ```
 ## Pre-requisites for deploying Catalogue Server
-1. For running the vertx clustered Catalogue Server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
+1. For running the vertx clustered Catalogue Server, need to bring zookeeper in docker swarm as mentioned [here](../zookeepeir/README.md).
 The  docker image ```ghcr.io/datakaveri/cat-dev:tag``` deploys a non-clustered vertx Catalogue Server.
-3. Define environment file ```.cat.env```. An example env file is present [here](./example-env). 
+2. Define environment file ```.cat.env```. An example env file is present [here](./example-env). 
+3. Elasticserach db needs to be deployed and setup accordingly. 
+4. Auth server needs to be [deployed](../auth-server/README.md).
+5. Immudb needs to be [deployed and setup for catalogue server use](../immudb/README.md).
+
 ## Deploy
 
 Three ways to deploy, do any one of it
@@ -41,4 +45,4 @@ with resource limits, reservations
 docker stack deploy -c cat-stack.yaml -c cat-stack.resources.yaml -c cat-stack.custom.yaml cat
 ```
 # NOTE
-1. The upstream code for Catalogue Server pipeline is available [here](https://github.com/datakaveri/iudx-catalogue-server)
+1. The upstream code for Catalogue Server pipeline is available [here](https://github.com/datakaveri/iudx-catalogue-server).
