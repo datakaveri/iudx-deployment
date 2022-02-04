@@ -1,0 +1,39 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: es-autoscaler-cron
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccount: es-autoscaler
+          containers:
+          - name: es-autoscaler
+            image: dockerhub.iudx.io/iudx/es-autoscaler
+            env:
+             - name: ES_PASSWORD
+               valueFrom:
+                 secretKeyRef:
+                   name: elasticsearch-monitor-credentials
+                   key: password
+             - name: ES_USERNAME
+               valueFrom:
+                 secretKeyRef:
+                   name: elasticsearch-monitor-credentials
+                   key: username
+            imagePullPolicy: IfNotPresent
+            command: ["/bin/sh", "-c", "--"]
+            args: ["apk add curl jq; /home/es-autoscaler.sh"]
+            volumeMounts:
+            - name: es-autoscale-script
+              mountPath: /home/
+          restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: regcred
+          volumes:
+            - name: es-autoscale-script
+              configMap:
+                name: es-autoscale-script
+                defaultMode: 0555

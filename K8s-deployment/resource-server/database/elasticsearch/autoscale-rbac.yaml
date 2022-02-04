@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: es-autoscaler
+  namespace: elastic
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name:  autoscaler-through-helm
+  namespace: elastic
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list","watch","create","update","delete"]
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["elasticsearch-data-nodes-config"]
+  verbs: ["get","list"]
+- apiGroups: ["policy"]
+  resources: ["poddisruptionbudgets"]
+  resourceNames: ["elasticsearch-data-nodes-pdb"]
+  verbs: ["get", "patch"]
+- apiGroups: [""]
+  resources: ["services"]
+  resourceNames: ["elasticsearch-data-nodes-headless","elasticsearch-data-nodes"]
+  verbs: ["get"]
+- apiGroups: ["apps"]
+  resources: ["statefulsets"]
+  resourceNames: ["elasticsearch-data-nodes"]
+  verbs: ["get", "patch"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: autoscaler-through-helm
+  namespace: elastic
+subjects:
+- kind: ServiceAccount
+  name: es-autoscaler
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: autoscaler-through-helm
