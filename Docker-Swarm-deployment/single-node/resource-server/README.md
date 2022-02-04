@@ -19,6 +19,14 @@ docker node update --label-add rs-node=true <node_name>
 1. For running the vertx clustered resource server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
 The  docker image ```ghcr.io/datakaveri/rs-dev:tag``` deploys a non-clustered vertx resource server.
 2. Define environment file ```.rs.env```. An example env file is present [here](example-env). 
+3. Elasticserach db needs to be deployed and setup accordingly for resource server use.
+4. Immudb needs to be deployed and setup for resource server use. 
+5. Postgres needs to be deployed and setup for resource server use.
+6. Rabbitmq needs to be deployed and setup for resource server use.
+7. Redis server to be deployed and setup accordingly for resource server use.
+8. AAA server needs to be deployed.
+9. Catalogue server needs to be deployed.
+
 ## Deploy
 
 Three ways to deploy, do any one of it
