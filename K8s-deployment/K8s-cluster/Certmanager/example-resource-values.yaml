@@ -1,0 +1,9 @@
+resources:
+  requests:
+    memory: 500Mi
+    cpu: 250m
+  limits:
+    memory: 750Mi
+    cpu: 400m
+nodeSelector: 
+  node.kubernetes.io/instance-type: t3.medium
