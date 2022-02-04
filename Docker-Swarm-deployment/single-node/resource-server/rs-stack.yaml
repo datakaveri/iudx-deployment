@@ -1,0 +1,50 @@
+version: "3.9"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  rs:
+    image: ghcr.io/datakaveri/rs-depl:3.0-03915b1
+    networks:
+      - overlay-net
+    secrets:
+      - source: config
+        target: /usr/share/app/secrets/configs/config.json
+      - source: keystore
+        target: /usr/share/app/secrets/configs/keystore.jks
+    env_file:
+      - ./.rs.env
+    read_only: true
+    volumes:
+      - type: tmpfs
+        target: /tmp/
+        read_only: false
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "100m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    command: bash -c "exec java $$RS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.rs-node==true"
+      restart_policy:
+        condition: any
+        delay: 5s
+        window: 10s
+        max_attempts: 5
+    cap_drop:
+      - ALL
+
+
+secrets:
+  keystore:
+    file: ./secrets/keystore.jks
+  config:
+    file:  ./secrets/configs/config-depl.json
