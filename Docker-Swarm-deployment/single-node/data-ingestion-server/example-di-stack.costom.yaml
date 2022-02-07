@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  data-ingestion:
-    image: iudx/di-depl:latest
+  di:
+    image: ghcr.io/datakaveri/di-depl:latest
     secrets:
       - source: config
         target: /usr/share/app/secrets/configs/config.json

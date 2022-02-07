@@ -1,8 +1,8 @@
 version: '3.9'
 
 services:
-        data-ingestion:
-                image: iudx/di-depl:latest
+        di:
+                image: ghcr.io/datakaveri/di-depl:latest
                 command:  bash -c "exec java $$RS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c configs/config.json"
                 cap-drop:
                         - ALL
@@ -12,7 +12,7 @@ services:
                           target: /tmp/
                           read-only: false
                 environment:
-                        - ./.data-ingestion.env
+                        - ./.di.env
                 logging:
                         driver: "json-file"
                         options:
@@ -33,7 +33,7 @@ services:
                                  max_attempts: 5
                         placement:
                                  constraints:
-                                         - "node.labels.data-ingestion-node==true"         
+                                         - "node.labels.di-node==true"         
 networks:
         overlay-net:
                 external: true
