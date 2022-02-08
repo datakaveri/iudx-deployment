@@ -21,6 +21,9 @@ The keycloak container is constrained to run on specifc node by adding node labe
 ```sh
 docker node update --label-add keycloak-node=true <node_name>
 ```
+## Pre-requisite
+1. Before Keycloak installation, Install postgreSQL and follow this [document](../postgres/README.md) for that.
+
 
 ## Deploy
 
@@ -47,8 +50,5 @@ with resource limits, reservations
 docker stack deploy -c keycloak-stack.yaml -c keycloak-stack.resources.yaml -c keycloak-stack.custom.yaml keycloak
 ```
 
-
-
-## Note
-Before Keycloak installation, Install postgreSQL and follow this [document](../postgres/README.md) for that.
-
+## ToDo
+1. Make keycloak container with read-only [file-system](https://github.com/bitnami/bitnami-docker-keycloak/issues/31).
