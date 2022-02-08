@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  file-server:
+    image: ghcr.io/datakaveri/fs-dev:3.0-f366c23
+    ports:
+      - target: 8080
+        published: 8081
+        mode: host
+    secrets:
+      - source: config
+        target: /usr/share/app/secrets/configs/config.json
+
+secrets:
+  config:
+    file:  ./secrets/configs/config-dev.json
