@@ -8,24 +8,15 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 
 --
--- Roles
---
-
-CREATE ROLE temp;
-ALTER ROLE temp WITH NOSUPERUSER NOINHERIT NOCREATEROLE CREATEDB LOGIN NOREPLICATION BYPASSRLS;
-
-
-
---
 -- Database creation
 --
 
-CREATE DATABASE iudx WITH TEMPLATE = template0 OWNER = temp;
+CREATE DATABASE iudx_rs WITH TEMPLATE = template0 OWNER = postgres;
 REVOKE CONNECT,TEMPORARY ON DATABASE template1 FROM PUBLIC;
 GRANT CONNECT ON DATABASE template1 TO PUBLIC;
 
 
-\connect iudx
+\connect iudx_rs
 
 SET default_transaction_read_only = off;
 
@@ -155,4 +146,6 @@ ALTER TABLE ONLY public.registercallback
 
 
 --
-
+ALTER TABLE public.databroker OWNER TO postgres;
+ALTER TABLE public.file_server_token OWNER TO postgres;
+ALTER TABLE public.registercallback OWNER TO postgres;
