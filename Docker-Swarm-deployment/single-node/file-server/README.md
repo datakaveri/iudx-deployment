@@ -3,9 +3,10 @@
 ## Required secrets
 ```sh
 secrets/
-└── configs
-    ├── config.json
-└── keystore-file.jks
+├── configs
+│   ├── config-depl.json
+│   └── config-dev.json
+├── keystore-file.jks
 └── keystore-rs.jks
 ```
 Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into file-server  directory  for demo or local testing purpose only! For other environment, please generate strong passwords. Populate .file-server-api.env environment file based on [here](example-secrets/example-env)
@@ -20,7 +21,9 @@ docker node update --label-add file-server-node=true <node_name>
 1. For running the vertx clustered file-server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
 The  docker image ```ghcr.io/datakaveri/fs-dev:tag``` deploys a non-clustered vertx file server.
 2. Define environment file ```.file-server.env```. An example env file is present [here](example-env).
-
+3. Elasticsearch needs to deployed and setup for file-server use.
+4. AAA server needs to be deployed. 
+5. Catalogue server needs to be deployed.
 ## Deploy
 
 Three ways to deploy, do any one of it
@@ -44,4 +47,4 @@ docker stack deploy -c file-server-stack.yaml -c file-server-stack.resources.yam
 ```
 
 # NOTE
-1. The upstream code for resource server is available at [here](https://github.com/datakaveri/iudx-file-server).
+1. The upstream code for file server is available at [here](https://github.com/datakaveri/iudx-file-server).

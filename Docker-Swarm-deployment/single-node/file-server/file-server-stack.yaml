@@ -50,7 +50,7 @@ secrets:
   keystore-rs:
     file: ./secrets/keystore-rs.jks
   config:
-    file: ./secrets/configs/config.json
+    file: ./secrets/configs/config-depl.json
 
 volumes:
   fs-volume:
