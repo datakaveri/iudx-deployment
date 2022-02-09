@@ -28,21 +28,21 @@ Their connection details should be updated  appropriately in configs present at 
 Three ways to deploy, do any one of it
 1. Quick deploy  
 ```sh
-docker stack deploy -c di-stack.yml di 
+docker stack deploy -c di-stack.yaml di 
 ```
-2. Setting resource reservations,limits in 'di-stack.resources.yml' file and then deploying (see [here](example-di-stack.resources.yml) for example configuration of 'di-stack.resources.yml' file ). Its suitable for production environment.
+2. Setting resource reservations,limits in 'di-stack.resources.yaml' file and then deploying (see [here](example-di-stack.resources.yaml) for example configuration of 'di-stack.resources.yaml' file ). Its suitable for production environment.
 
 ```sh
-docker stack deploy -c di-stack.yml -c di-stack.resources.yml di
+docker stack deploy -c di-stack.yaml -c di-stack.resources.yaml di
 ```
-3. You can add more custom stack cofiguration in file 'di-stack.custom.yml' that overrides base 'di-stack.yml' file like ports mapping etc ( see [here](example-di-stack.custom.yml) for example configuration of 'di-stack.custom.yml' file)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
+3. You can add more custom stack cofiguration in file 'di-stack.custom.yaml' that overrides base 'di-stack.yaml' file like ports mapping etc ( see [here](example-di-stack.custom.yaml) for example configuration of 'di-stack.custom.yaml' file)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
 ```sh
-docker stack deploy -c di-stack.yml  -c di-stack.custom.yml di
+docker stack deploy -c di-stack.yaml  -c di-stack.custom.yaml di
 ```
 or 
 with resource limits, reservations
 ```sh
-docker stack deploy -c di-stack.yml -c di-stack.resources.yml -c di-stack.custom.yml di
+docker stack deploy -c di-stack.yaml -c di-stack.resources.yaml -c di-stack.custom.yaml di
 ```
 # NOTE
 1. The upstream code for data ingestion  server is available at https://github.com/datakaveri/iudx-data-ingestion-server.
