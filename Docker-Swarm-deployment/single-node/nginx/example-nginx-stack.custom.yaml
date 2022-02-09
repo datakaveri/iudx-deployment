@@ -2,9 +2,9 @@ version: '3.9'
 services:
   nginx:
     ports: 
-      - target: 8080  # centralized nginx port inside the container
+      - target: 80  # centralized nginx port inside the container
         published: 8080 # exposing centralized nginx port 8080 to outside at 8080
         mode: host
-      - target: 8443
+      - target: 443
         published: 8443
         mode: host
