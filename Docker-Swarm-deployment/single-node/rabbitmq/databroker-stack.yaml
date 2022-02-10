@@ -1,18 +1,18 @@
-version: "3.4"
+version: "3.9"
 
 networks:
   default:
-    external:
-      name: overlay-net
+    name: overlay-net
+    external: true
     driver: overlay
 
 
 services:
   rabbitmq:
-    image: rabbitmq:3.8.9-management # using ubuntu based images as its officially supported
+    image: rabbitmq:3.8.11-management # using ubuntu based images as its officially supported
     #setting the hostname, so that when same/new container restarts it uses the same directory to save i.e "/var/lib/rabbitmq/rabbit@hostname"
     hostname: rabbitmq
-  # volume stores metadata of queues, excahnges and also persistent queue messages
+   # volume stores metadata of queues, excahnges and also persistent queue messages
     volumes:
       - type: volume
         source: rabbitmq-volume
