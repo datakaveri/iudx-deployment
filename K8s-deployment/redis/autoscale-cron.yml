@@ -1,0 +1,43 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: redis-autoscaler-cron
+  namespace: redis
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccount: redis-autoscaler
+          containers:
+          - name: redis-autoscaler
+            image: dockerhub.iudx.io/iudx/redis-cluster-autoscaler:1.2
+            env:
+             #CPU usage% threshold for autoscaling
+             - name: autoscale_threshold
+               value: "80"
+             #CPU resource limit set for redis (millicores)   
+             - name: redis_resource_limit
+               value: "1800"
+             - name: prometheus_url
+               value: prometheus-server.mon-stack.svc.cluster.local
+             - name: REDIS_PASSWORD
+               valueFrom:
+                 secretKeyRef:
+                   name: redis-passwords
+                   key: redis-password
+            imagePullPolicy: IfNotPresent
+            command: ["/bin/bash", "-c", "--"]
+            args: ["cd /home; /home/redis-autoscaler.sh"]
+            volumeMounts:
+            - name: redis-autoscale-script
+              mountPath: /home/
+          restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: regcred
+          volumes:
+            - name: redis-autoscale-script
+              configMap:
+                name: redis-autoscale-script
+                defaultMode: 0555

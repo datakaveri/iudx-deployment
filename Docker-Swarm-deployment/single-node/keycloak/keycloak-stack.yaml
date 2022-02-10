@@ -1,0 +1,69 @@
+version: "3.9"
+
+networks:
+  default:
+    name: overlay-net
+    external: true
+    driver: overlay
+
+services:
+  keycloak:
+    image: ghcr.io/datakaveri/keycloak:14.0.1
+    volumes:
+      - type: volume
+        source: keycloak-volume
+        target: /opt/bitnami/
+        volume:
+          nocopy: false
+        read_only: false
+
+    cap_drop:
+       - ALL
+
+    deploy:
+       replicas: 1
+       placement:
+          constraints:
+            - "node.labels.keycloak-node==true"
+       restart_policy:
+          condition: on-failure
+          delay: 5s
+          window: 10s
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+    secrets:
+      - source: keycloak-db-passwd
+        target: /opt/bitnami/keycloak/secrets/keycloak-db-passwd
+      - source: keycloak-admin-passwd
+        target: /opt/bitnami/keycloak/secrets/keycloak-admin-passwd
+
+    environment:
+            - KEYCLOAK_CREATE_ADMIN_USER=true
+            - KEYCLOAK_DATABASE_HOST=postgres
+            - KEYCLOAK_DATABASE_NAME=iudx_keycloak
+            - KEYCLOAK_DATABASE_PORT=5432
+            - KEYCLOAK_DATABASE_USER=iudx_keycloak_user
+            - KEYCLOAK_ADMIN_USER=iudx_admin
+            - KEYCLOAK_PROXY_ADDRESS_FORWARDING=true
+            - KEYCLOAK_DATABASE_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-db-passwd
+            - KEYCLOAK_ADMIN_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-admin-passwd
+
+
+volumes:
+  keycloak-volume:
+
+
+secrets:
+  keycloak-db-passwd:
+    file: secrets/passwords/keycloak-db-passwd
+  keycloak-admin-passwd:
+    file: secrets/passwords/keycloak-admin-passwd  
+
+   
+
