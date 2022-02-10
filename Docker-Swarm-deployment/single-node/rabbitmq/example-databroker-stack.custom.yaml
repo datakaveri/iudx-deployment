@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  rabbitmq: 
+    ports:
+      - target: 15671    # https management port 
+        published: 28041 
+        mode: host
+      - target: 5671     # amqps port 
+        published: 24567
+        mode: host
+      - target: 5672     # amqp port
+        published: 24568
+        mode: host
+      - target: 15672    # http port
+        published: 28042 
+        mode: host 

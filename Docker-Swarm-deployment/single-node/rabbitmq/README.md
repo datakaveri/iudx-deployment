@@ -1,5 +1,5 @@
 # Install
-
+ Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and the network.
 ## Required secrets
 
 ```sh
@@ -14,7 +14,7 @@ secrets/
     |-- rabbitmq-server-cert.pem (letsencrpt fullchain.pem)
     `-- rabbitmq-server-key.pem  (letsencrypt privkey.pem)
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root databroker directory  for demo or local testing purpose only! For other environment, please generate strong passwords and a correct certificate instead of self signed certificate. For example using [letsencrypt](https://certbot.eff.org/lets-encrypt/ubuntufocal-other) to generate a proper certificate
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into cat directory i.e. cp -r example-secrets/secrets . for demo or local testing purpose only! For other environment, please generate strong passwords. For other environment, please generate strong passwords and a correct certificate instead of self signed certificate. For example using [letsencrypt](https://certbot.eff.org/lets-encrypt/ubuntufocal-other) to generate a proper certificate
 
 ## Assign node labels
 
@@ -36,19 +36,15 @@ rabbitmq_user=wyz						                     #rabbitmq username
 remote_backup_dir=/home/rabbitmq-backup				   #backup directory path in remote machine
 ```
 ## Deploy
-
-### Production
+Two ways to deploy 
+1. Quick deploy
 ```sh
-# rabbitmq at random port + backup
-docker stack deploy -c databroker-stack.yml -c databroker-stack.prod.yml  databroker
+# rabbitmq not exposed + backup
+docker stack deploy -c databroker-stack.yaml  databroker
 ```
-### Testing
+2. You can add more custom stack cofiguration in file 'databroker-stack.custom.yaml' that overrides base 'databroker-stack.yaml' file like ports mapping etc ( see [here](example-databroker-stack.custom.yaml) for example configuration of 'databroker-stack.custom.yaml' file) and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
+
 ```sh
 # rabbitmq at random port + backup 
-docker stack deploy -c databroker-stack.yml -c databroker-stack.test.yml  databroker
-```
-### Development
-```sh
-# rabbitmq at 443 port
-docker stack deploy -c databroker-stack.yml -c databroker-stack.dev.yml  databroker
+docker stack deploy -c databroker-stack.yaml -c databroker-stack.custom.yaml  databroker
 ```

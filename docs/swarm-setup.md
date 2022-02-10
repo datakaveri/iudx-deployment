@@ -12,8 +12,10 @@
 ## Install 
 1. At the designated manager node, execute following command
     ```sh
-    docker swarm init --advertise-addr <ip_of_this_node>
+    docker swarm init --advertise-addr <ip_of_this_node> 
     ```
+   Preferably use private ip of the node i.e. create docker swarm on top of private network.
+
 2. Get manager tokens and worker node tokens from this manager node:
     ```sh
     # Manager Token
@@ -32,8 +34,6 @@
     ```
 4. Create overlay network using the following command on any manager nodes:
     ```sh
-    docker network create --driver overlay --subnet <subnet:-10.0.0.0/24> --attachable overlay-net
+    docker network create --driver overlay  --attachable --subnet=<CIDR format subnet, default:-10.0.0.0/24> overlay-net
     ```
-    
-  **NOTE**
-  1. The "overlay-net" subnet must be different from underlaying private network subnet address range
+   The "overlay-net" subnet CIDR must be different from underlaying private network subnet address range. 
