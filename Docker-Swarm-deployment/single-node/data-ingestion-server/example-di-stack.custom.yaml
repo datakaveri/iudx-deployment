@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   di:
-    image: ghcr.io/datakaveri/di-dev:3.0-e8aa329
+    image: ghcr.io/datakaveri/di-devi:3.0-d13d584
     secrets:
       - source: config
         target: /usr/share/app/secrets/configs/config.json
