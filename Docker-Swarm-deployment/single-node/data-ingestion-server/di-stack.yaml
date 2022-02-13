@@ -3,9 +3,11 @@ version: '3.9'
 services:
   di:
     image: ghcr.io/datakaveri/di-depl:3.0-d13d584
-    command:  bash -c "exec java $$RS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
+    command:  bash -c "exec java $$DI_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
+    # Dropping all Linux capabilities
     cap_drop:
        - ALL
+    # making the container file-system read only
     read_only: true
     volumes:
       - type: tmpfs
@@ -13,11 +15,12 @@ services:
         read_only: false
     env_file:
       - ./.di.env
+    # logging to files with rotation policy
     logging:
       driver: "json-file"
       options:
-        max-file: "5"
-        max-size: "100m"
+        max-file: "3"
+        max-size: "5m"
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     secrets:
       - source: keystore
