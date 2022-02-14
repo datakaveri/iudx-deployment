@@ -19,7 +19,7 @@ global:
 ## @section Common parameters
 
 ## @param nameSpace Namespace to deploy the controller
-nameSpace: rs
+nameSpace: gis
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -74,8 +74,8 @@ diagnosticMode:
   ##
 image:
   registry: ghcr.io
-  repository: datakaveri/rs-depl
-  tag: 3.0-476b9fd
+  repository: datakaveri/gis-depl
+  tag: 3.0-fc10a3a
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -214,7 +214,7 @@ apiServer:
   ## @param apiServer.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
+  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
   ## @param apiServer.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -292,25 +292,25 @@ apiServer:
   extraEnvVars: []
   ## @param apiServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for apiServer nodes
   ##
-  extraEnvVarsCM: "rs-env"
+  extraEnvVarsCM: "gis-env"
   ## @param apiServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for apiServer nodes
   ##
   extraEnvVarsSecret:
   ## @param apiServer.extraVolumes Optionally specify extra list of additional volumes for the apiServer pod(s)
   ##
   extraVolumes:
-    - name: rs-config-apiserver
+    - name: gis-config-apiserver
       secret:
-        secretName: rs-config-apiserver
-    - name: rs-keystore
+        secretName: gis-config-apiserver
+    - name: gis-keystore
       secret:
-        secretName: rs-keystore
+        secretName: gis-keystore
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
   ##
   extraVolumeMounts: 
-    - name: rs-config-apiserver
+    - name: gis-config-apiserver
       mountPath: /usr/share/app/secrets/one-verticle-configs
-    - name: rs-keystore
+    - name: gis-keystore
       mountPath: /usr/share/app/secrets/
   
   ## @param apiServer.sidecars Add additional sidecar containers to the apiServer pod(s)
@@ -350,235 +350,6 @@ apiServer:
     targetCPU: 80
     #targetMemory:
 
-## @section archivesDatabase parameters
-archivesDatabase:
-## @param archivesDatabase.replicaCount Number of apiServer replicas to deploy
-  replicaCount: 1
-  
-  ## Configure extra options for archivesDatabase containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param archivesDatabase.livenessProbe.enabled Enable livenessProbe on archivesDatabase containers
-  ## @param archivesDatabase.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param archivesDatabase.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param archivesDatabase.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param archivesDatabase.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param archivesDatabase.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param archivesDatabase.livenessProbe.path Path for httpGet
-
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param archivesDatabase.readinessProbe.enabled Enable readinessProbe on archivesDatabase containers
-  ## @param archivesDatabase.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param archivesDatabase.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param archivesDatabase.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param archivesDatabase.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param archivesDatabase.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param archivesDatabase.startupProbe.enabled Enable startupProbe on archivesDatabase containers
-  ## @param archivesDatabase.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param archivesDatabase.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param archivesDatabase.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param archivesDatabase.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param archivesDatabase.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param archivesDatabase.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param archivesDatabase.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param archivesDatabase.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## archivesDatabase resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param archivesDatabase.resources.limits The resources limits for the archivesDatabase containers
-  ## @param archivesDatabase.resources.requests The requested resources for the archivesDatabase containers
-  ##
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1.5Gi
-    requests: 
-      cpu: 700m
-      memory: 1.5Gi
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param archivesDatabase.podSecurityContext.enabled Enabled archivesDatabase pods' Security Context
-  ## @param archivesDatabase.podSecurityContext.fsGroup Set archivesDatabase pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: false
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param archivesDatabase.containerSecurityContext.enabled Enabled archivesDatabase containers' Security Context
-  ## @param archivesDatabase.containerSecurityContext.runAsUser Set archivesDatabase containers' Security Context runAsUser
-  ## @param archivesDatabase.containerSecurityContext.runAsNonRoot Set archivesDatabase containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
-    runAsNonRoot: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param archivesDatabase.existingConfigmap The name of an existing ConfigMap with your custom configuration for archivesDatabase
-  ##
-  existingConfigmap:
-    
-  ## @param archivesDatabase.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param archivesDatabase.args Override default container args (useful when using custom images)
-  ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-archives-database.json"]
-  ## @param archivesDatabase.hostAliases archivesDatabase pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param archivesDatabase.podLabels Extra labels for archivesDatabase pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param archivesDatabase.podAnnotations Annotations for archivesDatabase pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param archivesDatabase.podAffinityPreset Pod affinity preset. Ignored if `archivesDatabase.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param archivesDatabase.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `archivesDatabase.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node archivesDatabase.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param archivesDatabase.nodeAffinityPreset.type Node affinity preset type. Ignored if `archivesDatabase.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param archivesDatabase.nodeAffinityPreset.key Node label key to match. Ignored if `archivesDatabase.affinity` is set
-    ##
-    key: ""
-    ## @param archivesDatabase.nodeAffinityPreset.values Node label values to match. Ignored if `archivesDatabase.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param archivesDatabase.affinity Affinity for archivesDatabase pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `archivesDatabase.podAffinityPreset`, `archivesDatabase.podAntiAffinityPreset`, and `archivesDatabase.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param archivesDatabase.nodeSelector Node labels for archivesDatabase pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-  ## @param archivesDatabase.tolerations Tolerations for archivesDatabase pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param archivesDatabase.updateStrategy.type archivesDatabase statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param archivesDatabase.priorityClassName archivesDatabase pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param archivesDatabase.schedulerName Name of the k8s scheduler (other than default) for archivesDatabase pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param archivesDatabase.lifecycleHooks for the archivesDatabase container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param archivesDatabase.extraEnvVars Array with extra environment variables to add to archivesDatabase nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param archivesDatabase.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for archivesDatabase nodes
-  ##
-  extraEnvVarsCM: "rs-env"
-  ## @param archivesDatabase.extraEnvVarsSecret Name of existing Secret containing extra env vars for archivesDatabase nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param archivesDatabase.extraVolumes Optionally specify extra list of additional volumes for the archivesDatabase pod(s)
-  ##
-  extraVolumes:
-    - name: rs-config-archives-database
-      secret:
-        secretName: rs-config-archives-database
-  ## @param archivesDatabase.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the archivesDatabase container(s)
-  ##
-  extraVolumeMounts:
-    - name: rs-config-archives-database
-      mountPath: /usr/share/app/secrets/one-verticle-configs
-  
-  ## @param archivesDatabase.sidecars Add additional sidecar containers to the archivesDatabase pod(s)
-  ## e.g:
-  ## sidecars:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    ports:
-  ##      - name: portname
-  ##        containerPort: 1234
-  ##
-  sidecars: {}
-  ## @param archivesDatabase.initContainers Add additional init containers to the archivesDatabase pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param archivesDatabase.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param archivesDatabase.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param archivesDatabase.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param archivesDatabase.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param archivesDatabase.autoscaling.targetMemory Target Memory utilization percentage
-
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: 80
-    #targetMemory:
 
 ## @section authenticator parameters
 authenticator:
@@ -680,7 +451,7 @@ authenticator:
   command: ["/bin/bash"]
   ## @param authenticator.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
+  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
   ## @param authenticator.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -758,22 +529,22 @@ authenticator:
   extraEnvVars: []
   ## @param authenticator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for authenticator nodes
   ##
-  extraEnvVarsCM: "rs-env"
+  extraEnvVarsCM: "gis-env"
   ## @param authenticator.extraEnvVarsSecret Name of existing Secret containing extra env vars for authenticator nodes
   ##
   extraEnvVarsSecret:
   ## @param authenticator.extraVolumes Optionally specify extra list of additional volumes for the authenticator pod(s)
   ##
   extraVolumes:
-    - name: rs-config-authenticator
+    - name: gis-config-authenticator
       secret:
-        secretName: rs-config-authenticator
+        secretName: gis-config-authenticator
 
     
   ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the authenticator container(s)
   ##
   extraVolumeMounts:
-    - name: rs-config-authenticator
+    - name: gis-config-authenticator
       mountPath: /usr/share/app/secrets/one-verticle-configs
 
   ## @param authenticator.sidecars Add additional sidecar containers to the authenticator pod(s)
@@ -812,21 +583,21 @@ authenticator:
     targetCPU: 80
     #targetMemory:
 
-## @section databroker parameters
+## @section database parameters
 
-databroker:
-## @param databroker.replicaCount Number of apiServer replicas to deploy
+database:
+## @param database.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1
   
-  ## Configure extra options for databroker containers' liveness and readiness probes
+  ## Configure extra options for database containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param databroker.livenessProbe.enabled Enable livenessProbe on databroker containers
-  ## @param databroker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param databroker.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param databroker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param databroker.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param databroker.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param databroker.livenessProbe.path Path for httpGet
+  ## @param database.livenessProbe.enabled Enable livenessProbe on database containers
+  ## @param database.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param database.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param database.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param database.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param database.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param database.livenessProbe.path Path for httpGet
   ##
   livenessProbe:
     enabled: true
@@ -836,12 +607,12 @@ databroker:
     timeoutSeconds: 10
     #failureThreshold: 10
     #successThreshold: 10
-  ## @param databroker.readinessProbe.enabled Enable readinessProbe on databroker containers
-  ## @param databroker.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param databroker.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param databroker.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param databroker.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param databroker.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param database.readinessProbe.enabled Enable readinessProbe on database containers
+  ## @param database.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param database.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param database.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param database.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param database.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: false
@@ -850,12 +621,12 @@ databroker:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param databroker.startupProbe.enabled Enable startupProbe on databroker containers
-  ## @param databroker.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param databroker.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param databroker.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param databroker.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param databroker.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param database.startupProbe.enabled Enable startupProbe on database containers
+  ## @param database.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param database.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param database.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param database.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param database.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -864,19 +635,19 @@ databroker:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param databroker.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param database.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param databroker.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param database.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param databroker.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param database.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## databroker resource requests and limits
+  ## database resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param databroker.resources.limits The resources limits for the databroker containers
-  ## @param databroker.resources.requests The requested resources for the databroker containers
+  ## @param database.resources.limits The resources limits for the database containers
+  ## @param database.resources.requests The requested resources for the database containers
   ##
   resources:
     limits:
@@ -887,84 +658,84 @@ databroker:
       memory: 400Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param databroker.podSecurityContext.enabled Enabled databroker pods' Security Context
-  ## @param databroker.podSecurityContext.fsGroup Set databroker pod's Security Context fsGroup
+  ## @param database.podSecurityContext.enabled Enabled database pods' Security Context
+  ## @param database.podSecurityContext.fsGroup Set database pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: false
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param databroker.containerSecurityContext.enabled Enabled databroker containers' Security Context
-  ## @param databroker.containerSecurityContext.runAsUser Set databroker containers' Security Context runAsUser
-  ## @param databroker.containerSecurityContext.runAsNonRoot Set databroker containers' Security Context runAsNonRoot
+  ## @param database.containerSecurityContext.enabled Enabled database containers' Security Context
+  ## @param database.containerSecurityContext.runAsUser Set database containers' Security Context runAsUser
+  ## @param database.containerSecurityContext.runAsNonRoot Set database containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: false
     runAsUser: 1001
     runAsNonRoot: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param databroker.existingConfigmap The name of an existing ConfigMap with your custom configuration for databroker
+   ## @param database.existingConfigmap The name of an existing ConfigMap with your custom configuration for database
   ##
   existingConfigmap:
     
-  ## @param databroker.command Override default container command (useful when using custom images)
+  ## @param database.command Override default container command (useful when using custom images)
   ##
   command: ["/bin/bash"]
-  ## @param databroker.args Override default container args (useful when using custom images)
+  ## @param database.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-databroker.json"]
-  ## @param databroker.hostAliases apiServer pods host aliases
+  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$MY_POD_IP -c secrets/one-verticle-configs/config-database.json"]
+  ## @param database.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param databroker.podLabels Extra labels for databroker pods
+  ## @param database.podLabels Extra labels for database pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param databroker.podAnnotations Annotations for databroker pods
+  ## @param database.podAnnotations Annotations for database pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  ## @param databroker.podAffinityPreset Pod affinity preset. Ignored if `databroker.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param database.podAffinityPreset Pod affinity preset. Ignored if `database.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param databroker.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `databroker.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param database.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `database.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-  ## Node databroker.affinity preset
+  ## Node database.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param databroker.nodeAffinityPreset.type Node affinity preset type. Ignored if `databroker.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param database.nodeAffinityPreset.type Node affinity preset type. Ignored if `database.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param databroker.nodeAffinityPreset.key Node label key to match. Ignored if `databroker.affinity` is set
+    ## @param database.nodeAffinityPreset.key Node label key to match. Ignored if `database.affinity` is set
     ##
     key: ""
-    ## @param databroker.nodeAffinityPreset.values Node label values to match. Ignored if `databroker.affinity` is set
+    ## @param database.nodeAffinityPreset.values Node label values to match. Ignored if `database.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param databroker.affinity Affinity for databroker pods assignment
+  ## @param database.affinity Affinity for database pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `databroker.podAffinityPreset`, `databroker.podAntiAffinityPreset`, and `databroker.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `database.podAffinityPreset`, `database.podAntiAffinityPreset`, and `database.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param databroker.nodeSelector Node labels for databroker pods assignment
+  ## @param database.nodeSelector Node labels for database pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
-  ## @param databroker.tolerations Tolerations for databroker pods assignment
+  ## @param database.tolerations Tolerations for database pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param databroker.updateStrategy.type databroker statefulset strategy type
+  ## @param database.updateStrategy.type database statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -972,44 +743,44 @@ databroker:
     ## Can be set to RollingUpdate or OnDelete
     ##
     ##type: RollingUpdate
-  ## @param databroker.priorityClassName databroker pods' priorityClassName
+  ## @param database.priorityClassName database pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param databroker.schedulerName Name of the k8s scheduler (other than default) for databroker pods
+  ## @param database.schedulerName Name of the k8s scheduler (other than default) for database pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param databroker.lifecycleHooks for the databroker container(s) to automate configuration before or after startup
+  ## @param database.lifecycleHooks for the database container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param databroker.extraEnvVars Array with extra environment variables to add to databroker nodes
+  ## @param database.extraEnvVars Array with extra environment variables to add to database nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param databroker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for databroker nodes
+  ## @param database.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for database nodes
   ##
-  extraEnvVarsCM: "rs-env"
-  ## @param databroker.extraEnvVarsSecret Name of existing Secret containing extra env vars for databroker nodes
+  extraEnvVarsCM: "gis-env"
+  ## @param database.extraEnvVarsSecret Name of existing Secret containing extra env vars for database nodes
   ##
   extraEnvVarsSecret:
-  ## @param databroker.extraVolumes Optionally specify extra list of additional volumes for the databroker pod(s)
+  ## @param database.extraVolumes Optionally specify extra list of additional volumes for the database pod(s)
   ##
   extraVolumes:
-    - name: rs-config-databroker
+    - name: gis-config-database
       secret:
-        secretName: rs-config-databroker
+        secretName: gis-config-database
 
     
-  ## @param databroker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the databroker container(s)
+  ## @param database.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the database container(s)
   ##
   extraVolumeMounts: 
-    - name: rs-config-databroker
+    - name: gis-config-database
       mountPath: /usr/share/app/secrets/one-verticle-configs
   
-  ## @param databroker.sidecars Add additional sidecar containers to the databroker pod(s)
+  ## @param database.sidecars Add additional sidecar containers to the database pod(s)
   ## e.g:
   ## sidecars:
   ## - name: your-image-name
@@ -1020,7 +791,7 @@ databroker:
   ##       containerPort: 1234
   ##
   sidecars: {}
-  ## @param databroker.initContainers Add additional init containers to the databroker pod(s)
+  ## @param database.initContainers Add additional init containers to the database pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -1031,11 +802,11 @@ databroker:
   ##
   initContainers: {}
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param databroker.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param databroker.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param databroker.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param databroker.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param databroker.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param database.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param database.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param database.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param database.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param database.autoscaling.targetMemory Target Memory utilization percentage
 
   autoscaling:
     enabled: true
@@ -1043,236 +814,6 @@ databroker:
     maxReplicas: 5
     targetCPU: 80
     #targetMemory:
-
-## @section latestDatabase parameters
-latestDatabase:
-## @param latestDatabase.replicaCount Number of apiServer replicas to deploy
-  replicaCount: 1
-  
-  ## Configure extra options for latestDatabase containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param latestDatabase.livenessProbe.enabled Enable livenessProbe on latestDatabase containers
-  ## @param latestDatabase.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param latestDatabase.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param latestDatabase.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param latestDatabase.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param latestDatabase.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param latestDatabase.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param latestDatabase.readinessProbe.enabled Enable readinessProbe on latestDatabase containers
-  ## @param latestDatabase.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param latestDatabase.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param latestDatabase.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param latestDatabase.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param latestDatabase.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param latestDatabase.startupProbe.enabled Enable startupProbe on latestDatabase containers
-  ## @param latestDatabase.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param latestDatabase.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param latestDatabase.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param latestDatabase.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param latestDatabase.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param latestDatabase.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param latestDatabase.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param latestDatabase.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## latestDatabase resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param latestDatabase.resources.limits The resources limits for the latestDatabase containers
-  ## @param latestDatabase.resources.requests The requested resources for the latestDatabase containers
-  ##
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1Gi
-    requests: 
-      cpu: 800m
-      memory: 800Mi
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param latestDatabase.podSecurityContext.enabled Enabled latestDatabase pods' Security Context
-  ## @param latestDatabase.podSecurityContext.fsGroup Set latestDatabase pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: false
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param latestDatabase.containerSecurityContext.enabled Enabled latestDatabase containers' Security Context
-  ## @param latestDatabase.containerSecurityContext.runAsUser Set latestDatabase containers' Security Context runAsUser
-  ## @param latestDatabase.containerSecurityContext.runAsNonRoot Set latestDatabase containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
-    runAsNonRoot: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param latestDatabase.existingConfigmap The name of an existing ConfigMap with your custom configuration for latestDatabase
-  ##
-  existingConfigmap:
-    
-  ## @param latestDatabase.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param latestDatabase.args Override default container args (useful when using custom images)
-  ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-latest-database.json"]
-  ## @param latestDatabase.hostAliases apiServer pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param latestDatabase.podLabels Extra labels for latestDatabase pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param latestDatabase.podAnnotations Annotations for latestDatabase pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param latestDatabase.podAffinityPreset Pod affinity preset. Ignored if `latestDatabase.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param latestDatabase.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `latestDatabase.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node latestDatabase.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param latestDatabase.nodeAffinityPreset.type Node affinity preset type. Ignored if `latestDatabase.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param latestDatabase.nodeAffinityPreset.key Node label key to match. Ignored if `latestDatabase.affinity` is set
-    ##
-    key: ""
-    ## @param latestDatabase.nodeAffinityPreset.values Node label values to match. Ignored if `latestDatabase.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param latestDatabase.affinity Affinity for latestDatabase pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `latestDatabase.podAffinityPreset`, `latestDatabase.podAntiAffinityPreset`, and `latestDatabase.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param latestDatabase.nodeSelector Node labels for latestDatabase pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-  ## @param latestDatabase.tolerations Tolerations for latestDatabase pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param latestDatabase.updateStrategy.type latestDatabase statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param latestDatabase.priorityClassName latestDatabase pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param latestDatabase.schedulerName Name of the k8s scheduler (other than default) for latestDatabase pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param latestDatabase.lifecycleHooks for the latestDatabase container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param latestDatabase.extraEnvVars Array with extra environment variables to add to latestDatabase nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param latestDatabase.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for latestDatabase nodes
-  ##
-  extraEnvVarsCM: "rs-env"
-  ## @param latestDatabase.extraEnvVarsSecret Name of existing Secret containing extra env vars for latestDatabase nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param latestDatabase.extraVolumes Optionally specify extra list of additional volumes for the latestDatabase pod(s)
-  ##
-  extraVolumes:
-    - name: rs-config-latest-database
-      secret:
-        secretName: rs-config-latest-database
-
-    
-  ## @param latestDatabase.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the latestDatabase container(s)
-  ##
-  extraVolumeMounts: 
-    - name: rs-config-latest-database
-      mountPath: /usr/share/app/secrets/one-verticle-configs
-  
-  ## @param latestDatabase.sidecars Add additional sidecar containers to the latestDatabase pod(s)
-  ## e.g:
-  ## sidecars:
-  ## - name: your-image-name
-  ##   image: your-image
-  ##   imagePullPolicy: Always
-   ##  ports:
-  ##     - name: portname
-  ##       containerPort: 1234
-  ##
-  sidecars: {}
-  ## @param latestDatabase.initContainers Add additional init containers to the latestDatabase pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param latestDatabase.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param latestDatabase.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param latestDatabase.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param latestDatabase.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param latestDatabase.autoscaling.targetMemory Target Memory utilization percentage
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: 80
-    #targetMemory:      
 
 
 
@@ -1376,7 +917,7 @@ metering:
   command: ["/bin/bash"]
   ## @param metering.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-metering.json"]
+  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-metering.json"]
   ## @param metering.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1454,21 +995,21 @@ metering:
   extraEnvVars: []
   ## @param metering.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for metering nodes
   ##
-  extraEnvVarsCM: "rs-env"
+  extraEnvVarsCM: "gis-env"
   ## @param metering.extraEnvVarsSecret Name of existing Secret containing extra env vars for metering nodes
   ##
   extraEnvVarsSecret:
   ## @param metering.extraVolumes Optionally specify extra list of additional volumes for the metering pod(s)
   ##
   extraVolumes:
-    - name: rs-config-metering
+    - name: gis-config-metering
       secret:
-        secretName: rs-config-metering
+        secretName: gis-config-metering
 
   ## @param metering.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
   ##
   extraVolumeMounts: 
-    - name: rs-config-metering
+    - name: gis-config-metering
       mountPath: /usr/share/app/secrets/one-verticle-configs
   
   ## @param metering.sidecars Add additional sidecar containers to the metering pod(s)
@@ -1578,7 +1119,7 @@ ingress:
   apiVersion:
   ## @param ingress.hostname Default host for the ingress record
   ##
-  hostname: rs.iudx.org.in
+  hostname: gis.iudx.org.in
   ## @param ingress.path Default path for the ingress record
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
@@ -1593,7 +1134,7 @@ ingress:
   ##
   ##
   ## @param ingress.serviceName Backend ingress Service Name
-  serviceName: "rs-api-server"
+  serviceName: "gis-api-server"
   annotations: {
     kubernetes.io/tls-acme: "true",
     kubernetes.io/ingress.class: "nginx",
@@ -1611,8 +1152,8 @@ ingress:
   ##
   tls:
     - hosts:
-        - rs.iudx.org.in
-      secretName: rs-tls-secret
+        - gis.iudx.org.in
+      secretName: gis-tls-secret
   ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
   selfSigned: false

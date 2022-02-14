@@ -879,29 +879,3 @@ volumePermissions:
   containerSecurityContext:
     runAsUser: 0
 
-## @section Other Parameters
-
-## RBAC configuration
-##
-rbac:
-  ## @param rbac.create Specifies whether RBAC resources should be created
-  ##
-  create: false
-
-## ServiceAccount configuration
-##
-serviceAccount:
-  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
-  ##
-  create: false
-  ## @param serviceAccount.name The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the common.names.fullname template
-  ##
-  name: ""
-
-
-## %%SUBCHART_CONTAINER/POD_DESCRIPTION%%
-##
-#%%SUBCHART_NAME%%:
-# enabled: false
-  #%%OTHER_PARAMETERS_RELATED_TO_THIS_SUBCHART%%
