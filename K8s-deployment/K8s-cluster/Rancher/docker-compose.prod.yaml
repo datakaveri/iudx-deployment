@@ -1,0 +1,8 @@
+version: '2.4'
+services:
+  rancher:
+    mem_limit: 7g
+    command: "--acme-domain <rancher_server_url>"
+    ports:
+      - "80:80"
+      - "27083:443"
