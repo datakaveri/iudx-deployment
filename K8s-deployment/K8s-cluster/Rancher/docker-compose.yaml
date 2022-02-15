@@ -1,8 +1,8 @@
 #used version 2.4, because can't have mem_limit in docker-compose version 3 
 version: '2.4'
 services:
-  Rancher:
-    image: rancher/rancher:v2.5.5
+  rancher:
+    image: rancher/rancher:v2.5.9
     restart: always
     privileged: true
     volumes:
@@ -18,7 +18,6 @@ services:
       - type: bind
         source: /tmp/
         target: /var/log
-    mem_limit: 3g
 volumes:
   rancher-data:
   rancher-kubelet:
