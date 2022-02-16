@@ -665,9 +665,3 @@ serviceAccount:
   ##
   name: ""
 
-
-## %%SUBCHART_CONTAINER/POD_DESCRIPTION%%
-##
-#%%SUBCHART_NAME%%:
-# enabled: false
-  #%%OTHER_PARAMETERS_RELATED_TO_THIS_SUBCHART%%
