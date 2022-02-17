@@ -7,7 +7,7 @@ networks:
     
 services:
   vertx_sd:
-    image: dockerhub.iudx.io/iudx/vertx_sd:latest
+    image: ghcr.io/datakaveri/vertx_sd:1.0.0
     volumes:
       - type: bind
         source: /tmp/metrics-targets
@@ -74,7 +74,7 @@ services:
 
 
   grafana:
-    image: dockerhub.iudx.io/iudx/grafana:7.2.0
+    image: ghcr.io/datakaveri/grafana:7.2.2
     user: root
     volumes:
       - type: volume
