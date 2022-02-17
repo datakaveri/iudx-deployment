@@ -243,8 +243,7 @@ affinity:
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
-nodeSelector:
-  beta.kubernetes.io/instance-type: t3.medium
+nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
