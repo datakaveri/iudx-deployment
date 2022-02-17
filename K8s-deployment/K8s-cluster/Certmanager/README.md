@@ -51,4 +51,14 @@ kubectl apply -f cert-manager-cluster-issuer.yaml
 ```
 kubectl delete -f cert-manager-cluster-issuer.yaml
 ```
-Note: This will deploy and delete both stagging and production issuers
+## Note: 
+1. This will deploy and delete both stagging and production issuers. 
+2. To uninstall a specific issuer, use following command
+
+```
+kubectl delete ClusterIssuer <name-of-issuer>
+```
+3. The Let’s Encrypt production issuer has [very strict rate limits](https://letsencrypt.org/docs/rate-limits/). 
+Hence, use Let’s Encrypt staging issuer while experimenting and learning.
+
+4. Please delete letsencrypt-staging issuer in production.
