@@ -16,6 +16,13 @@ defaultBackend:
       cpu: 10m
       memory: 20Mi
 
+
+## @param nodeSelector Node labels for pod assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector:
+  node.kubernetes.io/instance-type: t3.medium
+
+
 # AWS network load-balancer provisioning in-front of ingress controller as service
 service:
     enabled: true
