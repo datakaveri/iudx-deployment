@@ -41,6 +41,7 @@ Note: This command will also remove installed cert-manager CRDs and all cert-man
 Here LetsEncrypt issuer is being used.
 
 ## Deploy
+Before deploying, please define appropriate email-id required for letsencrypt issuer.
 
 To Deploy Issuer
 ```
