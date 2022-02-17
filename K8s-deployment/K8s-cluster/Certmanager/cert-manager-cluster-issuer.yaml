@@ -5,7 +5,10 @@ metadata:
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: pranav.pathak@datakaveri.org
+    # You must replace this email address with your own.
+    # Let's Encrypt will use this to contact you about expiring
+    # certificates, and issues related to your account.
+    email: user@example.com
     privateKeySecretRef:
       name: letsencrypt-staging
     solvers:
@@ -20,7 +23,10 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: pranav.pathak@datakaveri.org
+    # You must replace this email address with your own.
+    # Let's Encrypt will use this to contact you about expiring
+    # certificates, and issues related to your account.
+    email: user@example.com
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
