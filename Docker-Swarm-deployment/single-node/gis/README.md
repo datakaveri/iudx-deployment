@@ -17,11 +17,10 @@ docker node update --label-add gis-node=true <node_name>
 ```
 ## Pre-requisites for deploying gis server
 1. For running the vertx clustered gis server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
-The  docker image ```ghcr.io/datakaveri/gis-dev:tag``` deploys a non-clustered vertx gis server.
-2. Keycloak and Postgresql must be brought up, please refer for [keycloak-install](../keycloak/README.md), [postgres-install](../postgres/README.md). 
-3. The Database needed to be setup should be as mentioned [here](https://github.com/datakaveri/iudx-aaa-server#flyway-database-setup). 
-4. The keycloak needs to be setup as mentioned [here](https://github.com/datakaveri/iudx-aaa-server#keycloak-setup).
-Their connection details should be updated  appropriately in configs present at ```secrets/configs``` directory.
+The  docker image ```ghcr.io/datakaveri/di-dev:tag``` deploys a non-clustered vertx data ingestion server.
+2. Databroker needs to be brought up and setup.
+3. AAA server and Catalogue server needs to up.
+4. Immudb server needs to be up and setup according to data-ingestion server needs.
 5. Define environment file ```.gis.env```. An example env file is present [here](example-env).
 ## Deploy
 

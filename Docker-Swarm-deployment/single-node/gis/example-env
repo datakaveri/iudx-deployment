@@ -1,3 +1,3 @@
 RS_URL=https://localhost
 LOG_LEVEL=INFO
-RS_JAVA_OPTS=-Xmx4096m
+GIS_JAVA_OPTS=-Xmx4096m
