@@ -8,7 +8,7 @@ secrets/
     ├── config-dev.json
 └── keystore.jks
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into gis  directory  for demo or local testing purpose only! For other environment, please generate strong passwords. For seting up the keystore.jks please refer [here](https://github.com/datakaveri/iudx-aaa-server#jwt-signing-key-setup)
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into gis  directory  for demo or local testing purpose only! For other environment, please generate strong passwords. For seting up the keystore.jks please refer [here](https://github.com/datakaveri/iudx-voc-server#jwt-signing-key-setup)
 
 ## Assign node labels
  The gis container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
@@ -17,11 +17,9 @@ docker node update --label-add gis-node=true <node_name>
 ```
 ## Pre-requisites for deploying gis server
 1. For running the vertx clustered gis server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
-The  docker image ```ghcr.io/datakaveri/di-dev:tag``` deploys a non-clustered vertx data ingestion server.
-2. Databroker needs to be brought up and setup.
-3. AAA server and Catalogue server needs to up.
-4. Immudb server needs to be up and setup according to data-ingestion server needs.
-5. Define environment file ```.gis.env```. An example env file is present [here](example-env).
+The  docker image ```ghcr.io/datakaveri/gis-dev:tag``` deploys a non-clustered vertx data ingestion server.
+2. AAA server and Catalogue server needs to up.
+4. Define environment file ```.gis.env```. An example env file is present [here](example-env).
 ## Deploy
 
 Three ways to deploy, do any one of it
