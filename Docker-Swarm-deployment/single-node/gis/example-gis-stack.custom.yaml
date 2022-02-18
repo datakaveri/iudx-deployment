@@ -7,7 +7,7 @@ services:
       - source: config
         target: /usr/share/app/secrets/configs/config.json
     ports: 
-      - target: 80             # Geographic information server http server port
+      - target: 8080           # Geographic information server http server port
         published: 8080        # published port to host 
         mode: host 
       - target: 9000           # geographic information server metrics server port
