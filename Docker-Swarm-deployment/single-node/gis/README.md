@@ -19,7 +19,9 @@ docker node update --label-add gis-node=true <node_name>
 1. For running the vertx clustered gis server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
 The  docker image ```ghcr.io/datakaveri/gis-dev:tag``` deploys a non-clustered vertx data ingestion server.
 2. AAA server and Catalogue server needs to up.
-4. Define environment file ```.gis.env```. An example env file is present [here](example-env).
+3. immudb server needs to be up and setup for gis server use.
+4. postgres server needs to be up and setup for gis server use.
+5. Define environment file ```.gis.env```. An example env file is present [here](example-env).
 ## Deploy
 
 Three ways to deploy, do any one of it
