@@ -1,7 +1,0 @@
-#used version 2.4, because can't have mem_limit in docker-compose version 3 
-version: '2.4'
-services:
-  Rancher:
-    ports:
-      - "27083:443"
-    mem_limit: 3g
