@@ -19,7 +19,10 @@ TLS termination at loadbalancer would involve certificates to be managed at load
     Ref: https://aws.amazon.com/blogs/opensource/network-load-balancer-nginx-ingress-controller-eks/ 
  
 ## Pre-requisites for deploying 
-1. If deploying in aws, tag resources according to the docs mentioned [here](https://rancher.com/docs/rancher/v2.5/en/cluster-provisioning/rke-clusters/custom-nodes/#3-amazon-only-tag-resources).
+1. If deploying in aws: <br>
+    - Tag resources according to the docs mentioned [here](https://rancher.com/docs/rancher/v2.5/en/cluster-provisioning/rke-clusters/custom-nodes/#3-amazon-only-tag-resources).
+    - Assign required IAM role for provisioning load-balancer to control-plane nodes, See [here](../../Rancher/configs/aws/K8s-master-iam-policy.json)
+    - Create Elastic IP and attach to loadbalancer by defining appropriate annotation. See example values of resource-values.yaml' for ingress-nginx.
 2. Memcached Instance for Nginx Ingress Global Rate Limiting. Its included in the installer script.
 3. Define resource values for memcached and ingress-nginx in respective directories in the file 'resource-values.yaml'. Please see the example of 'resource-values.yaml' for ingress-nginx, memcached present in their respective directories for reference.
 ## Deploy 
