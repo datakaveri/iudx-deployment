@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: resource-server
+  name: data-ingestion
   namespace: {{ .Values.nameSpace}}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: ingress
@@ -18,7 +18,7 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- end }}
+  {{- end }}      
     nginx.ingress.kubernetes.io/server-snippet: |
       add_header Clear-Site-Data   "*" always;
       add_header Referrer-Policy   "no-referrer-when-downgrade" always;
