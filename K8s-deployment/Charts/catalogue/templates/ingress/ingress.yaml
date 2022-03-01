@@ -18,10 +18,7 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- end }}
-    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
-    nginx.ingress.kubernetes.io/limit-connections: "150"
-    nginx.ingress.kubernetes.io/limit-rps: "150"
+  {{- end }}  
     nginx.ingress.kubernetes.io/server-snippet: |
       add_header Clear-Site-Data   "*" always;
       add_header Referrer-Policy   "no-referrer-when-downgrade" always;
