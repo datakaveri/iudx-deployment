@@ -36,3 +36,8 @@ docker-compose -f docker-compose.yaml -f docker-compose.custom.yaml up -d
 
 3. The necessary documentation and files for creating K8s cluster on a cloud is present in directory - configs/\<cloud-provider-name\>.
 4. Extra addons needed on top of this install of RKE distribution is present in [directory](../addons/). Basically, addons are K8s based applications which facilitate the proper functioning of actual workload - i.e. the IUDX system deployed in K8s. 
+5. Currently, through Rancher [following addons are installed](https://rancher.com/docs/rke/latest/en/config-options/add-ons/)
+  - Network CNI (calico/canal)
+  - DNS (CoreDNS)
+  - Metrics server
+
