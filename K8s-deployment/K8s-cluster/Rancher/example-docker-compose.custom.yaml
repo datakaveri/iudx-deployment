@@ -1,0 +1,9 @@
+version: '2.4'
+services:
+  rancher:
+    mem_limit: 7g # Maximum memory of rancher server container can consume from host,
+    # To see appropriate values to be set/required for rancher server, see : https://rancher.com/docs/rancher/v2.6/en/installation/requirements/#docker
+    command: "--acme-domain <rancher_server_url>"
+    ports:
+      - "80:80"     # Needed for letsencrypt auto-renewal verification
+      - "27083:443" # Rancher server HTTPS port (443) binding to host port 
