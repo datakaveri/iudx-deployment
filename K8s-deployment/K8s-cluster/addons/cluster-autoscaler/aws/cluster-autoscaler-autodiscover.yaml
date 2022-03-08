@@ -149,7 +149,7 @@ spec:
       nodeSelector:
         node-role.kubernetes.io/controlplane: "true"
       containers:
-        - image: k8s.gcr.io/autoscaling/cluster-autoscaler:v1.19.1 
+        - image: k8s.gcr.io/autoscaling/cluster-autoscaler:v1.20.0
           name: cluster-autoscaler
           resources:
             limits:
@@ -166,7 +166,7 @@ spec:
             - --skip-nodes-with-local-storage=false
             - --expander=least-waste
             - --skip-nodes-with-system-pods=false
-            - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/awsk8s
+            - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/<cluster-name>
           volumeMounts:
             - name: ssl-certs
               mountPath: /etc/ssl/certs/ca-certificates.crt
