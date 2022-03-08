@@ -12,6 +12,9 @@ These elements are required to follow this guide:
 - A VPC with atleast one subnet in AWS
 
 ## Installation
-
+Installation of K8s cluster in aws with cluster auto-scale integration. This is done using launchung of K8s cluster from Rancher using custom nodes. Following docs was used to setup the K8s cluster in aws : https://rancher.com/docs/rancher/v2.5/en/cluster-admin/cluster-autoscaler/amazon/
 
 ## Notes
+
+## ToDO
+Write extensive docs on bringing up cluster 
