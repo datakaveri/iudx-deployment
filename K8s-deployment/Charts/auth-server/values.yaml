@@ -1616,9 +1616,15 @@ ingress:
   ## @param ingress.serviceName Backend ingress Service Name 
   serviceName: "aaa-api-server"
   annotations: {
+    kubernetes.io/tls-acme: "true",
+    kubernetes.io/ingress.class: "nginx",
+    cert-manager.io/cluster-issuer: "letsencrypt-prod",
     nginx.ingress.kubernetes.io/global-rate-limit: "1000",
     nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name,
-    nginx.ingress.kubernetes.io/global-rate-limit-window: 1s
+    nginx.ingress.kubernetes.io/global-rate-limit-window: 1s,
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1",
+    nginx.ingress.kubernetes.io/limit-connections: "150",
+    nginx.ingress.kubernetes.io/limit-rps: "100"
   }
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
@@ -1746,13 +1752,6 @@ volumePermissions:
 
 ## @section Other Parameters
 
-## RBAC configuration
-##
-rbac:
-  ## @param rbac.create Specifies whether RBAC resources should be created
-  ##
-  create: false
-
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -1763,10 +1762,3 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
-
-
-## %%SUBCHART_CONTAINER/POD_DESCRIPTION%%
-##
-#%%SUBCHART_NAME%%:
-# enabled: false
-  #%%OTHER_PARAMETERS_RELATED_TO_THIS_SUBCHART%%

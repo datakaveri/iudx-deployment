@@ -881,13 +881,6 @@ volumePermissions:
 
 ## @section Other Parameters
 
-## RBAC configuration
-##
-rbac:
-  ## @param rbac.create Specifies whether RBAC resources should be created
-  ##
-  create: false
-
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -900,8 +893,3 @@ serviceAccount:
   name: ""
 
 
-## %%SUBCHART_CONTAINER/POD_DESCRIPTION%%
-##
-#%%SUBCHART_NAME%%:
-# enabled: false
-  #%%OTHER_PARAMETERS_RELATED_TO_THIS_SUBCHART%%
