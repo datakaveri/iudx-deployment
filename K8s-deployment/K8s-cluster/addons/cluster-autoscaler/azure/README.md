@@ -1,7 +1,7 @@
 # Azure CLuster Autoscaler
 
 ## Pre-requisites
-1. K8s cluster needs to be installed from Rancher, documented [here](https://wiki.iudx.io/books/k8s-notes/page/setting-up-k8s-cluster-on-azure).
+1. K8s cluster needs to be installed from Rancher using VMSS on azure, documented [here](https://wiki.iudx.io/books/k8s-notes/page/setting-up-k8s-cluster-on-azure).
 2. The worker node VMSS needs to be tagged with keys 
 ```cluster-autoscaler-enabled=true```,
 ```cluster-autoscaler-name=<cluster-name>``` to enable proper autodiscovery of VMSS of K8s cluster, ```min``` and ```max``` values denoting the minimum and maximum number of VMs that can be spawned for that specific VMSS. 
