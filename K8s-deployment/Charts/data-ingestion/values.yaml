@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/di-depl
-  tag: 3.0-e8aa329
+  tag: 3.0-2b9cc64
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -214,7 +214,7 @@ apiServer:
   ## @param apiServer.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java $$DI_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
+  args: ["-c","exec java $$DI_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.data.ingestion.server.apiserver.ApiServerVerticle"]
   ## @param apiServer.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -299,19 +299,14 @@ apiServer:
   ## @param apiServer.extraVolumes Optionally specify extra list of additional volumes for the apiServer pod(s)
   ##
   extraVolumes:
-    - name: di-config-apiserver
+    - name: di-config
       secret:
-        secretName: di-config-apiserver
-    - name: di-keystore
-      secret:
-        secretName: di-keystore
+        secretName: di-config
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
   ##
   extraVolumeMounts: 
-    - name: di-config-apiserver
-      mountPath: /usr/share/app/secrets/one-verticle-configs
-    - name: di-keystore
-      mountPath: /usr/share/app/secrets/
+    - name: di-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param apiServer.sidecars Add additional sidecar containers to the apiServer pod(s)
   ## e.g:
@@ -451,7 +446,7 @@ authenticator:
   command: ["/bin/bash"]
   ## @param authenticator.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$DI_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
+  args: ["-c","exec java $$DI_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.data.ingestion.server.authenticator.AuthenticationVerticle"]
   ## @param authenticator.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -536,16 +531,16 @@ authenticator:
   ## @param authenticator.extraVolumes Optionally specify extra list of additional volumes for the authenticator pod(s)
   ##
   extraVolumes:
-    - name: di-config-authenticator
+    - name: di-config
       secret:
-        secretName: di-config-authenticator
+        secretName: di-config
 
     
   ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the authenticator container(s)
   ##
   extraVolumeMounts:
-    - name: di-config-authenticator
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: di-config
+      mountPath: /usr/share/app/secrets/configs
 
   ## @param authenticator.sidecars Add additional sidecar containers to the authenticator pod(s)
   ## e.g:
@@ -684,7 +679,7 @@ databroker:
   command: ["/bin/bash"]
   ## @param databroker.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$DI_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$MY_POD_IP -c secrets/one-verticle-configs/config-databroker.json"]
+  args: ["-c","exec java $$DI_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.data.ingestion.server.databroker.DataBrokerVerticle"]
   ## @param databroker.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -769,16 +764,15 @@ databroker:
   ## @param databroker.extraVolumes Optionally specify extra list of additional volumes for the databroker pod(s)
   ##
   extraVolumes:
-    - name: di-config-databroker
+    - name: di-config
       secret:
-        secretName: di-config-databroker
+        secretName: di-config
 
-    
   ## @param databroker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the databroker container(s)
   ##
   extraVolumeMounts: 
-    - name: di-config-databroker
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: di-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param databroker.sidecars Add additional sidecar containers to the databroker pod(s)
   ## e.g:
@@ -917,7 +911,7 @@ metering:
   command: ["/bin/bash"]
   ## @param metering.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$DI_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-metering.json"]
+  args: ["-c","exec java $$DI_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.data.ingestion.server.metering.MeteringVerticle"]
   ## @param metering.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1002,15 +996,15 @@ metering:
   ## @param metering.extraVolumes Optionally specify extra list of additional volumes for the metering pod(s)
   ##
   extraVolumes:
-    - name: di-config-metering
+    - name: di-config
       secret:
-        secretName: di-config-metering
+        secretName: di-config
 
   ## @param metering.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
   ##
   extraVolumeMounts: 
-    - name: di-config-metering
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: di-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param metering.sidecars Add additional sidecar containers to the metering pod(s)
   ## e.g:
