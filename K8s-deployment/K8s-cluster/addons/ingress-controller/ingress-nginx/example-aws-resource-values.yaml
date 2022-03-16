@@ -6,25 +6,8 @@ controller:
     requests:
       cpu: 1200m
       memory: 3Gi
-
-defaultBackend:
-  resources:
-    limits:
-      cpu: 20m
-      memory: 30Mi
-    requests:
-      cpu: 10m
-      memory: 20Mi
-
-
-## @param nodeSelector Node labels for pod assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-nodeSelector:
-  node.kubernetes.io/instance-type: t3.medium
-
-
-# AWS network load-balancer provisioning in-front of ingress controller as service
-service:
+  # AWS network load-balancer provisioning in-front of ingress controller as service
+  service:
     enabled: true
     annotations: 
       ## in-tree aws cloud provider loadbalancer controller is used, 
@@ -92,3 +75,21 @@ service:
       ## providers supporting it
       ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
       # externalTrafficPolicy: ""
+
+
+defaultBackend:
+  resources:
+    limits:
+      cpu: 20m
+      memory: 30Mi
+    requests:
+      cpu: 10m
+      memory: 20Mi
+
+
+## @param nodeSelector Node labels for pod assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector:
+  node.kubernetes.io/instance-type: t3.medium
+
+
