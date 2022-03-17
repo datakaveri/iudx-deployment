@@ -10,8 +10,8 @@ services:
       - target: 80
         published: 8443
         mode: host
-      - target: 9090
-        published: 9090
+      - target: 9000
+        published: 9000
         mode: host
 
 secrets:
