@@ -599,8 +599,6 @@ controller:
       ##
       priorityClassName: ""
       podAnnotations: {}
-      nodeSelector:
-        beta.kubernetes.io/instance-type: t3.medium
       tolerations: []
       runAsUser: 2000
 
@@ -788,11 +786,6 @@ defaultBackend:
   podLabels: {}
   #  key: value
 
-  ## Node labels for default backend pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-    beta.kubernetes.io/instance-type: t3.medium
 
   ## Annotations to be added to default backend pods
   ##
