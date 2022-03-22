@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: gis-api-server
-  namespace: {{ .Values.nameSpace }}
   labels:
     app: gis-api-server
     {{- include "common.labels.standard" . | nindent 4 }}
