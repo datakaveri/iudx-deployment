@@ -9,7 +9,7 @@ Helm Chart for IUDX GIS Interface Deployment
 To install the chart with the release name `gis-interface`:
 
 ```console
-$ helm install gis-interface gis-interface/ -n gis-interface
+$ helm install gis-interface gis-interface/ -n gis
 ```
 
 The command deploys  gis-interface on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -19,7 +19,7 @@ The command deploys  gis-interface on the Kubernetes cluster in the default conf
 To uninstall/delete the `gis-interface` deployment:
 
 ```console
-$ helm delete gis-interface -n gis-interface
+$ helm delete gis-interface -n gis
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -384,14 +384,14 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install gis-interface gis-interface \  -n gis-interface
+$ helm install gis-interface gis-interface \  -n gis
   --set=slack.channel="#bots",slack.token="XXXX-XXXX-XXXX"
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install gis-interface -f values.yaml gis-interface/ -n gis-interface
+$ helm install gis-interface -f values.yaml gis-interface/ -n gis
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
