@@ -18,8 +18,6 @@ global:
 
 ## @section Common parameters
 
-## @param nameSpace Namespace to deploy the controller
-nameSpace: gis
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -214,7 +212,7 @@ apiServer:
   ## @param apiServer.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
+  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.gis.server.apiserver.ApiServerVerticle"]
   ## @param apiServer.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -302,16 +300,11 @@ apiServer:
     - name: gis-config-apiserver
       secret:
         secretName: gis-config-apiserver
-    - name: gis-keystore
-      secret:
-        secretName: gis-keystore
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
   ##
   extraVolumeMounts: 
     - name: gis-config-apiserver
       mountPath: /usr/share/app/secrets/one-verticle-configs
-    - name: gis-keystore
-      mountPath: /usr/share/app/secrets/
   
   ## @param apiServer.sidecars Add additional sidecar containers to the apiServer pod(s)
   ## e.g:
@@ -451,7 +444,7 @@ authenticator:
   command: ["/bin/bash"]
   ## @param authenticator.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
+  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m  iudx.gis.server.authenticator.AuthenticationVerticle"]
   ## @param authenticator.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -684,7 +677,7 @@ database:
   command: ["/bin/bash"]
   ## @param database.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$MY_POD_IP -c secrets/one-verticle-configs/config-database.json"]
+  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.gis.server.database.DatabaseVerticle"]
   ## @param database.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -917,7 +910,7 @@ metering:
   command: ["/bin/bash"]
   ## @param metering.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-metering.json"]
+  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.gis.server.metering.MeteringVerticle "]
   ## @param metering.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: gis-authenticator
-  namespace: {{ .Values.nameSpace }}
   labels:
     app: gis-authenticator
     {{- include "common.labels.standard" . | nindent 4 }}
