@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: di-databroker
-  namespace: {{ .Values.nameSpace }}
   labels:
     app: di-databroker
     {{- include "common.labels.standard" . | nindent 4 }}

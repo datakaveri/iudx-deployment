@@ -18,9 +18,6 @@ global:
 
 ## @section Common parameters
 
-## @param nameSpace Namespace to deploy the controller
-nameSpace: di
-
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
@@ -173,18 +170,7 @@ apiServer:
   ## @param apiServer.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## apiServer resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param apiServer.resources.limits The resources limits for the apiServer containers
-  ## @param apiServer.resources.requests The requested resources for the apiServer containers
-  ##
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1.2Gi
-    requests: 
-      cpu: 700m
-      memory: 1.2Gi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiServer.podSecurityContext.enabled Enabled apiServer pods' Security Context
@@ -406,18 +392,7 @@ authenticator:
   ## @param authenticator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## authenticator resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param authenticator.resources.limits The resources limits for the authenticator containers
-  ## @param authenticator.resources.requests The requested resources for the authenticator containers
-  ##
-  resources:
-    limits:
-      cpu: 600m
-      memory: 750Mi
-    requests: 
-      cpu: 500m
-      memory: 500Mi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param authenticator.podSecurityContext.enabled Enabled authenticator pods' Security Context
@@ -639,18 +614,7 @@ databroker:
   ## @param databroker.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## databroker resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param databroker.resources.limits The resources limits for the databroker containers
-  ## @param databroker.resources.requests The requested resources for the databroker containers
-  ##
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests: 
-      cpu: 400m
-      memory: 400Mi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param databroker.podSecurityContext.enabled Enabled databroker pods' Security Context
@@ -871,18 +835,7 @@ metering:
   ## @param metering.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## metering resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param metering.resources.limits The resources limits for the metering containers
-  ## @param metering.resources.requests The requested resources for the metering containers
-  ##
-  resources:
-    limits:
-      cpu: 700m
-      memory: 1Gi
-    requests: 
-      cpu: 500m
-      memory: 800Mi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metering.podSecurityContext.enabled Enabled metering pods' Security Context
