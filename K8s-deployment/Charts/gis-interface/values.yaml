@@ -297,14 +297,14 @@ apiServer:
   ## @param apiServer.extraVolumes Optionally specify extra list of additional volumes for the apiServer pod(s)
   ##
   extraVolumes:
-    - name: gis-config-apiserver
+    - name: gis-config
       secret:
-        secretName: gis-config-apiserver
+        secretName: gis-config
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
   ##
   extraVolumeMounts: 
-    - name: gis-config-apiserver
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: gis-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param apiServer.sidecars Add additional sidecar containers to the apiServer pod(s)
   ## e.g:
@@ -529,16 +529,16 @@ authenticator:
   ## @param authenticator.extraVolumes Optionally specify extra list of additional volumes for the authenticator pod(s)
   ##
   extraVolumes:
-    - name: gis-config-authenticator
+    - name: gis-config
       secret:
-        secretName: gis-config-authenticator
+        secretName: gis-config
 
     
   ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the authenticator container(s)
   ##
   extraVolumeMounts:
-    - name: gis-config-authenticator
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: gis-config
+      mountPath: /usr/share/app/secrets/configs
 
   ## @param authenticator.sidecars Add additional sidecar containers to the authenticator pod(s)
   ## e.g:
@@ -762,16 +762,16 @@ database:
   ## @param database.extraVolumes Optionally specify extra list of additional volumes for the database pod(s)
   ##
   extraVolumes:
-    - name: gis-config-database
+    - name: gis-config
       secret:
-        secretName: gis-config-database
+        secretName: gis-config
 
     
   ## @param database.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the database container(s)
   ##
   extraVolumeMounts: 
-    - name: gis-config-database
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: gis-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param database.sidecars Add additional sidecar containers to the database pod(s)
   ## e.g:
@@ -995,15 +995,15 @@ metering:
   ## @param metering.extraVolumes Optionally specify extra list of additional volumes for the metering pod(s)
   ##
   extraVolumes:
-    - name: gis-config-metering
+    - name: gis-config
       secret:
-        secretName: gis-config-metering
+        secretName: gis-config
 
   ## @param metering.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
   ##
   extraVolumeMounts: 
-    - name: gis-config-metering
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: gis-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param metering.sidecars Add additional sidecar containers to the metering pod(s)
   ## e.g:
