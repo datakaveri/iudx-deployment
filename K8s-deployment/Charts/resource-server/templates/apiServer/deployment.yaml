@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: rs-api-server
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: apiServer
     app: rs-api-server
@@ -48,20 +47,6 @@ spec:
       securityContext: {{- omit .Values.apiServer.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
-        {{- if .Values.volumePermissions.enabled }}
-        - name: volume-permissions
-          image: {{ include "catalogue.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: {}
-          
-          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: foo
-              mountPath: bar
-        {{- end }}
         {{- if .Values.apiServer.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.apiServer.initContainers "context" $) | nindent 8 }}
         {{- end }}
