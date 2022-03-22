@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: di-authenticator
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: authenticator
     app: di-authenticator
