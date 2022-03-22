@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: rs-latest-database
-  namespace: {{ .Values.namespace }}
   labels:
     app: rs-latest-database
     {{- include "common.labels.standard" . | nindent 4 }}
