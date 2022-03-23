@@ -2086,14 +2086,14 @@ service:
   type: ClusterIP
   ## @param service.ports ApiServer service port
   ##
-  ports: 8080
+  ports: 80
 
   ## Node ports to expose
 
   ## NOTE: choose port between <30000-32767>
   ## @param service.targetPorts ApiServer service TargetPorts port
   ##
-  targetPorts: 80
+  targetPorts: 8080
   ## @param service.clusterIP ApiServer service Cluster IP
   ## e.g.:
   ## clusterIP: None
