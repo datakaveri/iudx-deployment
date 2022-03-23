@@ -68,7 +68,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `nameSpace`              | Namespace to deploy the controller                                                      | `di`            |
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
