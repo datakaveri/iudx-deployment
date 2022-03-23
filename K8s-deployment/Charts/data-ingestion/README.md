@@ -4,22 +4,45 @@
 
 Helm Chart for IUDX Data Ingestion Deployment
 
-## Installing the Chart
-
-To install the chart with the release name `data-ingestion`:
-
-```console
-$ helm install data-ingestion data-ingestion/
+## Create secret files
+1. Generate required [env file](./configs/example-env):
+```
+secrets/
+└── .di.env
 ```
 
-The command deploys  data-ingestion on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+## Create config file
+- create `configs/config.json` with appropriate values for all verticles
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU of all data-ingestion-server verticles
+- RAM of all data-ingestion-server verticles
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
+
+## Installing the Chart
+
+To install the `data-ingestion-server`chart:
+
+```console
+$ ./install.sh
+```
+
+The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+Following script will create :
+1. create a namespace `di`
+2. create required configmaps
+3. deploy all data-ingestion-server verticles 
+
 
 ## Uninstalling the Chart
 
 To uninstall/delete the `data-ingestion` deployment:
 
 ```console
-$ helm delete data-ingestion
+$ helm delete data-ingestion -n di
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
