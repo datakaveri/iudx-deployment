@@ -5,14 +5,19 @@
 Helm Chart for IUDX Data Ingestion Deployment
 
 ## Create secret files
-1. Generate required [env file](./configs/example-env):
-```
-secrets/
-└── .di.env
+
+Make a copy of sample secrets directory and add appropriate values to all files.
+
+```console
+$ cp -r example-secrets/secrets .
 ```
 
-## Create config file
-- create `configs/config.json` with appropriate values for all verticles
+```
+# secrets directory after generation of secret files
+secrets/
+├── .di.env
+└── config.json
+```
 
 ## Define Appropriate values of resources
 
@@ -34,7 +39,8 @@ The command deploys  resource-server on the Kubernetes cluster in the default co
 Following script will create :
 1. create a namespace `di`
 2. create required configmaps
-3. deploy all data-ingestion-server verticles 
+3. create corresponding K8s secrets from the secret files
+4. deploy all data-ingestion-server verticles 
 
 
 ## Uninstalling the Chart
