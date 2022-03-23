@@ -12,6 +12,9 @@ apiServer:
       cpu: 700m
       memory: 1.2Gi
 
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
+
 ## authenticator resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param authenticator.resources.limits The resources limits for the authenticator containers
@@ -25,6 +28,9 @@ authenticator:
     requests: 
       cpu: 500m
       memory: 500Mi
+
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
 
 ## databroker resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -40,6 +46,9 @@ databroker:
       cpu: 400m
       memory: 400Mi
 
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
+    
 ## metering resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param metering.resources.limits The resources limits for the metering containers
@@ -53,3 +62,6 @@ metering:
     requests: 
       cpu: 500m
       memory: 800Mi
+      
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
