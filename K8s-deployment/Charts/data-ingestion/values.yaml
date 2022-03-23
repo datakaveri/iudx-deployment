@@ -96,7 +96,7 @@ image:
   ## @param containerPorts.prometheus  Prometheus container port
 
 containerPorts:
-  http: 80
+  http: 8080
   #https: 443
   hazelcast: 5701
   prometheus: 9000
@@ -1024,7 +1024,7 @@ service:
   ## NOTE: choose port between <30000-32767>
   ## @param service.targetPorts ApiServer service TargetPorts port
   ##
-  targetPorts: 80
+  targetPorts: 8080
   ## @param service.clusterIP ApiServer service Cluster IP
   ## e.g.:
   ## clusterIP: None
