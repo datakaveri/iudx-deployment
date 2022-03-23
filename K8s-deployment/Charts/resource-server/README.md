@@ -4,22 +4,46 @@
 
 Helm Chart for IUDX Resource Server Deployment
 
+## Create secret files
+1. Generate required env and secret files:
+```
+# secrets directory after generation of secret files
+secrets/
+├── [.rs.api.env](./configs/example-env)
+├── AWS_ACCESS_KEY_ID
+└── AWS_SECRET_ACCESS_KEY
+
+```
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU of all resource-server verticles
+- RAM of all resource-server verticles
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
+
 ## Installing the Chart
 
-To install the chart with the release name `resource-server`:
+To install the `resource-server`chart:
 
 ```console
-$ helm install resource-server resource-server/
+$ ./install.sh
 ```
 
 The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+Following script will create :
+1. create a namespace `rs`
+2. create required configmaps
+3. create corresponding K8s secrets from the secret files
+4. deploy all resource-server verticles 
 
 ## Uninstalling the Chart
 
 To uninstall/delete the `resource-server` deployment:
 
 ```console
-$ helm delete resource-server
+$ helm delete resource-server -n rs
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -39,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `nameSpace`              | Namespace to deploy the controller                                                      | `rs`            |
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
