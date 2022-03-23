@@ -246,7 +246,7 @@ apiServer:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+
   ## @param apiServer.tolerations Tolerations for apiServer pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -467,7 +467,7 @@ authenticator:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+
   ## @param authenticator.tolerations Tolerations for authenticator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -689,7 +689,7 @@ databroker:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+
   ## @param databroker.tolerations Tolerations for databroker pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -910,7 +910,7 @@ metering:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+
   ## @param metering.tolerations Tolerations for metering pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
