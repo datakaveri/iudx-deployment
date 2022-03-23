@@ -5,14 +5,20 @@
 Helm Chart for IUDX Resource Server Deployment
 
 ## Create secret files
-1. Generate required env and secret files:
+
+Make a copy of sample secrets directory and add appropriate values to all files.
+
+```console
+$ cp -r example-secrets/secrets .
+```
+
 ```
 # secrets directory after generation of secret files
 secrets/
-├── [.rs.api.env](./configs/example-env)
+├── .rs.env
 ├── AWS_ACCESS_KEY_ID
-└── AWS_SECRET_ACCESS_KEY
-
+├── AWS_SECRET_ACCESS_KEY
+└── config.json
 ```
 
 ## Define Appropriate values of resources
@@ -27,7 +33,7 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 To install the `resource-server`chart:
 
 ```console
-$ ./install.sh
+$ ./install.sh --set ingress.hostname=<rs-hostname>
 ```
 
 The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.

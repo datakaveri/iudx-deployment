@@ -96,7 +96,7 @@ image:
   ## @param containerPorts.prometheus  Prometheus container port
 
 containerPorts:
-  http: 80
+  http: 8080
   #https: 443
   hazelcast: 5701
   prometheus: 9000
@@ -2086,7 +2086,7 @@ service:
   type: ClusterIP
   ## @param service.ports ApiServer service port
   ##
-  ports: 80
+  ports: 8080
 
   ## Node ports to expose
 
@@ -2135,7 +2135,7 @@ ingress:
   apiVersion:
   ## @param ingress.hostname Default host for the ingress record
   ##
-  hostname: rs.iudx.org.in
+  hostname: rs-hostname
   ## @param ingress.path Default path for the ingress record
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
