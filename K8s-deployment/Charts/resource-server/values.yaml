@@ -200,7 +200,7 @@ apiServer:
   ## @param apiServer.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.apiserver.ApiServerVerticle"]
   ## @param apiServer.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -285,19 +285,14 @@ apiServer:
   ## @param apiServer.extraVolumes Optionally specify extra list of additional volumes for the apiServer pod(s)
   ##
   extraVolumes:
-    - name: rs-config-apiserver
+    - name: rs-config
       secret:
-        secretName: rs-config-apiserver
-    - name: rs-keystore
-      secret:
-        secretName: rs-keystore
+        secretName: rs-config
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
   ##
   extraVolumeMounts: 
-    - name: rs-config-apiserver
-      mountPath: /usr/share/app/secrets/one-verticle-configs
-    - name: rs-keystore
-      mountPath: /usr/share/app/secrets/
+    - name: rs-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param apiServer.sidecars Add additional sidecar containers to the apiServer pod(s)
   ## e.g:
@@ -425,7 +420,7 @@ archivesDatabase:
   command: ["/bin/bash"]
   ## @param archivesDatabase.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-archives-database.json"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.database.archives.DatabaseVerticle"]
   ## @param archivesDatabase.hostAliases archivesDatabase pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -510,14 +505,14 @@ archivesDatabase:
   ## @param archivesDatabase.extraVolumes Optionally specify extra list of additional volumes for the archivesDatabase pod(s)
   ##
   extraVolumes:
-    - name: rs-config-archives-database
+    - name: rs-config
       secret:
-        secretName: rs-config-archives-database
+        secretName: rs-config
   ## @param archivesDatabase.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the archivesDatabase container(s)
   ##
   extraVolumeMounts:
-    - name: rs-config-archives-database
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: rs-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param archivesDatabase.sidecars Add additional sidecar containers to the archivesDatabase pod(s)
   ## e.g:
@@ -643,7 +638,7 @@ authenticator:
   command: ["/bin/bash"]
   ## @param authenticator.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.authenticator.AuthenticationVerticle"]
   ## @param authenticator.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -728,16 +723,14 @@ authenticator:
   ## @param authenticator.extraVolumes Optionally specify extra list of additional volumes for the authenticator pod(s)
   ##
   extraVolumes:
-    - name: rs-config-authenticator
+    - name: rs-config
       secret:
-        secretName: rs-config-authenticator
-
-    
+        secretName: rs-config
   ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the authenticator container(s)
   ##
   extraVolumeMounts:
-    - name: rs-config-authenticator
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: rs-config
+      mountPath: /usr/share/app/secrets/configs
 
   ## @param authenticator.sidecars Add additional sidecar containers to the authenticator pod(s)
   ## e.g:
@@ -865,7 +858,7 @@ databroker:
   command: ["/bin/bash"]
   ## @param databroker.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-databroker.json"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.databroker.DataBrokerVerticle"]
   ## @param databroker.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -950,16 +943,14 @@ databroker:
   ## @param databroker.extraVolumes Optionally specify extra list of additional volumes for the databroker pod(s)
   ##
   extraVolumes:
-    - name: rs-config-databroker
+    - name: rs-config
       secret:
-        secretName: rs-config-databroker
-
-    
+        secretName: rs-config
   ## @param databroker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the databroker container(s)
   ##
   extraVolumeMounts: 
-    - name: rs-config-databroker
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: rs-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param databroker.sidecars Add additional sidecar containers to the databroker pod(s)
   ## e.g:
@@ -1085,7 +1076,7 @@ latestDatabase:
   command: ["/bin/bash"]
   ## @param latestDatabase.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-latest-database.json"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.database.latest.LatestVerticle"]
   ## @param latestDatabase.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1170,16 +1161,14 @@ latestDatabase:
   ## @param latestDatabase.extraVolumes Optionally specify extra list of additional volumes for the latestDatabase pod(s)
   ##
   extraVolumes:
-    - name: rs-config-latest-database
+    - name: rs-config
       secret:
-        secretName: rs-config-latest-database
-
-    
+        secretName: rs-config    
   ## @param latestDatabase.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the latestDatabase container(s)
   ##
   extraVolumeMounts: 
-    - name: rs-config-latest-database
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: rs-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param latestDatabase.sidecars Add additional sidecar containers to the latestDatabase pod(s)
   ## e.g:
@@ -1306,7 +1295,7 @@ metering:
   command: ["/bin/bash"]
   ## @param metering.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-metering.json"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.metering.MeteringVerticle"]
   ## @param metering.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1391,15 +1380,14 @@ metering:
   ## @param metering.extraVolumes Optionally specify extra list of additional volumes for the metering pod(s)
   ##
   extraVolumes:
-    - name: rs-config-metering
+    - name: rs-config
       secret:
-        secretName: rs-config-metering
-
+        secretName: rs-config
   ## @param metering.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
   ##
   extraVolumeMounts: 
-    - name: rs-config-metering
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: rs-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param metering.sidecars Add additional sidecar containers to the metering pod(s)
   ## e.g:
@@ -1613,7 +1601,46 @@ postgres:
     - name: rs-config
       secret:
         secretName: rs-config
+  ## @param postgres.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
+  ##
+  extraVolumeMounts: 
+    - name: rs-config
+      mountPath: /usr/share/app/secrets/configs
 
+  ## @param postgres.sidecars Add additional sidecar containers to the postgres pod(s)
+  ## e.g:
+  ## sidecars:
+   #   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+   ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param postgres.initContainers Add additional init containers to the postgres pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: {}
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param postgres.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param postgres.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param postgres.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param postgres.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param postgres.autoscaling.targetMemory Target Memory utilization percentage
+
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPU: 80
+    #targetMemory:
 
 ## @section cache parameters
 cache:
@@ -1792,8 +1819,6 @@ cache:
     - name: rs-config
       secret:
         secretName: rs-config
-
-    
   ## @param cache.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the cache container(s)
   ##
   extraVolumeMounts: 
