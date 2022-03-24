@@ -82,12 +82,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                        | Description                                                   | Value                |
 | --------------------------- | ------------------------------------------------------------- | -------------------- |
-| `image.registry`            | %%MAIN_CONTAINER%% image registry                             | `ghcr.io`            |
-| `image.repository`          | %%MAIN_CONTAINER%% image repository                           | `datakaveri/gis-depl` |
-| `image.tag`                 | %%MAIN_CONTAINER%% image tag (immutable tags are recommended) | `3.0-fc10a3a`        |
-| `image.pullPolicy`          | %%MAIN_CONTAINER%% image pull policy                          | `IfNotPresent`       |
-| `image.pullSecrets`         | %%MAIN_CONTAINER%% image pull secrets                         | `nil`                |
-| `image.debug`               | Enable %%MAIN_CONTAINER%% image debug mode                    | `false`              |
+| `image.registry`            | gis-interface image registry                             | `ghcr.io`            |
+| `image.repository`          | gis-interface image repository                           | `datakaveri/gis-depl` |
+| `image.tag`                 | gis-interface image tag (immutable tags are recommended) | `3.0-fc10a3a`        |
+| `image.pullPolicy`          | gis-interface image pull policy                          | `IfNotPresent`       |
+| `image.pullSecrets`         | gis-interface image pull secrets                         | `nil`                |
+| `image.debug`               | Enable gis-interface image debug mode                    | `false`              |
 | `containerPorts.http`       | HTTP container port                                           | `80`                 |
 | `containerPorts.hazelcast`  | Hazelcast container port                                      | `5701`               |
 | `containerPorts.prometheus` | Prometheus container port                                     | `9000`               |
