@@ -52,14 +52,15 @@ spec:
         - name: volume-permissions
           image: {{ include "catalogue.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command: ["sh","-c","mkdir -p /temp-dir && chown -R 1001:1001 /temp-dir"]
+          command: {}
+
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: async-dir
-              mountPath: "/temp-dir"
+            - name: foo
+              mountPath: bar
         {{- end }}
         {{- if .Values.redis.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.redis.initContainers "context" $) | nindent 8 }}
