@@ -75,7 +75,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/aaa-depl
-  tag: 3.0-adf83d3
+  tag: 3.0-f60d24c
   pullSecrets: {}
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -178,18 +178,7 @@ apiServer:
   ## @param apiServer.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## ApiServer resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param apiServer.resources.limits The resources limits for the ApiServer containers
-  ## @param apiServer.resources.requests The requested resources for the ApiServer containers
-  ##
-  resources:
-    limits:
-      cpu: 800m
-      memory: 1.2Gi
-    requests: 
-      cpu: 600m
-      memory: 1.2Gi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiServer.podSecurityContext.enabled Enabled ApiServer pods' Security Context
@@ -264,8 +253,6 @@ apiServer:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-
 
   ## @param apiServer.tolerations Tolerations for ApiServer pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -416,18 +403,7 @@ auditing:
   ## @param auditing.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Auditing resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param auditing.resources.limits The resources limits for the Auditing containers
-  ## @param auditing.resources.requests The requested resources for the Auditing containers
-  ##
-  resources:
-    limits:
-      cpu: 700m
-      memory: 750Mi
-    requests: 
-      cpu: 500m
-      memory: 512Mi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param auditing.podSecurityContext.enabled Enabled Auditing pods' Security Context
@@ -502,7 +478,7 @@ auditing:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+
   ## @param auditing.tolerations Tolerations for Auditing pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -649,18 +625,7 @@ admin:
   ## @param admin.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## admin resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param admin.resources.limits The resources limits for the admin containers
-  ## @param admin.resources.requests The requested resources for the admin containers
-  ##
-  resources:
-    limits:
-      cpu: 800m
-      memory: 1.2Gi
-    requests: 
-      cpu: 600m
-      memory: 1.2Gi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param admin.podSecurityContext.enabled Enabled admin pods' Security Context
@@ -735,8 +700,6 @@ admin:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-
 
   ## @param admin.tolerations Tolerations for admin pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -882,18 +845,7 @@ registration:
   ## @param registration.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## registration resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param registration.resources.limits The resources limits for the registration containers
-  ## @param registration.resources.requests The requested resources for the registration containers
-  ##
-  resources:
-    limits:
-      cpu: 700m
-      memory: 750Mi
-    requests: 
-      cpu: 500m
-      memory: 600Mi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param registration.podSecurityContext.enabled Enabled registration pods' Security Context
@@ -968,9 +920,6 @@ registration:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-
-
 
   ## @param registration.tolerations Tolerations for registration pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -1014,7 +963,6 @@ registration:
     - name: aaa-config
       secret:
         secretName: aaa-config
-    
   ## @param registration.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the registration container(s)
   ##
   extraVolumeMounts:
@@ -1118,18 +1066,7 @@ token:
   ## @param token.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## token resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param token.resources.limits The resources limits for the token containers
-  ## @param token.resources.requests The requested resources for the token containers
-  ##
-  resources:
-    limits:
-      cpu: 800m
-      memory: 750Mi
-    requests: 
-      cpu: 600m
-      memory: 500Mi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param token.podSecurityContext.enabled Enabled token pods' Security Context
@@ -1204,8 +1141,6 @@ token:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-
 
   ## @param token.tolerations Tolerations for token pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -1251,8 +1186,6 @@ token:
     - name: aaa-keystore
       secret:
         secretName: aaa-keystore
-
-    
   ## @param token.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the token container(s)
   ##
   extraVolumeMounts: 
@@ -1260,6 +1193,7 @@ token:
       mountPath: /usr/share/app/secrets/configs
     - name: aaa-keystore
       mountPath: /usr/share/app/secrets/
+
   ## @param token.sidecars Add additional sidecar containers to the token pod(s)
   ## e.g:
   ## sidecars:
@@ -1358,18 +1292,7 @@ policy:
   ## @param policy.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## policy resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param policy.resources.limits The resources limits for the policy containers
-  ## @param policy.resources.requests The requested resources for the policy containers
-  ##
-  resources:
-    limits:
-      cpu: 750m
-      memory: 800Mi
-    requests:
-      cpu: 600m 
-      memory: 600Mi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param policy.podSecurityContext.enabled Enabled policy pods' Security Context
@@ -1443,8 +1366,6 @@ policy:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-
 
   ## @param policy.tolerations Tolerations for policy pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
