@@ -1,18 +1,45 @@
-
-
 ## Introduction
 
 Helm Chart for IUDX GIS Interface Deployment
 
-## Installing the Chart
+## Create secret files
 
-To install the chart with the release name `gis-interface`:
+Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
-$ helm install gis-interface gis-interface/ -n gis
+$ cp -r example-secrets/* .
 ```
 
-The command deploys  gis-interface on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+```
+# secrets directory after generation of secret files
+secrets/
+├── .gis-api.env
+└── config.json
+```
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU of all gis-interface verticles
+- RAM of all gis-interface verticles
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
+
+## Installing the Chart
+
+To install the `gis-interface`chart:
+
+```console
+$ ./install.sh
+```
+
+The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+Following script will create :
+1. create a namespace `gis`
+2. create required configmaps
+3. create corresponding K8s secrets from the secret files
+4. deploy all gis-interface verticles 
+
 
 ## Uninstalling the Chart
 
