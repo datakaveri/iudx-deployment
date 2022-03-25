@@ -4,22 +4,51 @@
 
 Helm Chart for IUDX file-server Server Deployment
 
-## Installing the Chart
+## Create secret files
 
-To install the chart with the release name `file-server`:
+Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
-$ helm install file-server file-server/
+$ cp -r example-secrets/* .
 ```
 
-The command deploys file-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+```
+# secrets directory after generation of secret files
+secrets/
+├── .fs.env
+└── config.json
+```
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU of all file-server verticles
+- RAM of all file-server verticles
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
+
+## Installing the Chart
+
+To install the `file-server`chart:
+
+```console
+$ ./install.sh --set ingress.hostname=<rs-hostname>
+```
+
+The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+Following script will create :
+1. create a namespace `fs`
+2. create required configmaps
+3. create corresponding K8s secrets from the secret files
+4. deploy all file-server verticles 
+
 
 ## Uninstalling the Chart
 
 To uninstall/delete the `file-server` deployment:
 
 ```console
-$ helm delete file-server
+$ helm delete file-server -n fs
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
