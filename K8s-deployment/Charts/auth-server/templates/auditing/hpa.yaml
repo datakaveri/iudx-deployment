@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: aaa-auditing
-  namespace: {{ .Values.nameSpace }}
   labels:
     app: aaa-auditing
     {{- include "common.labels.standard" . | nindent 4 }}

@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: aaa-admin
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: admin
     app: aaa-admin
