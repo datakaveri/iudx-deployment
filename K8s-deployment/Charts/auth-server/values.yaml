@@ -18,9 +18,6 @@ global:
 
 ## @section Common parameters
 
-## @param nameSpace Namespace to deploy the controller
-nameSpace: aaa
-
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
@@ -1449,8 +1446,225 @@ policy:
     targetCPU: 80
     targetMemory:
 
+## @section apd Parameters
+apd:
 
+  ## @param apd.replicaCount Number of apd replicas to deploy
 
+  replicaCount: 1
+  
+  ## Configure extra options for apd containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param apd.livenessProbe.enabled Enable livenessProbe on apd containers
+  ## @param apd.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param apd.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param apd.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param apd.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param apd.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param apd.livenessProbe.path Path for httpGet
+  ##
+  livenessProbe:
+    enabled: true
+    path: /metrics
+    initialDelaySeconds: 60
+    periodSeconds: 60
+    timeoutSeconds: 10
+    #failureThreshold: 10
+    #successThreshold: 10
+  ## @param apd.readinessProbe.enabled Enable readinessProbe on apd containers
+  ## @param apd.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param apd.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param apd.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param apd.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param apd.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 10
+    successThreshold: 10
+  ## @param apd.startupProbe.enabled Enable startupProbe on apd containers
+  ## @param apd.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param apd.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param apd.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param apd.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param apd.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 10
+    successThreshold: 10
+  ## @param apd.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param apd.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param apd.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param apd.podSecurityContext.enabled Enabled apd pods' Security Context
+  ## @param apd.podSecurityContext.fsGroup Set apd pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: false
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param apd.containerSecurityContext.enabled Enabled apd containers' Security Context
+  ## @param apd.containerSecurityContext.runAsUser Set apd containers' Security Context runAsUser
+  ## @param apd.containerSecurityContext.runAsNonRoot Set apd containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
+    runAsNonRoot: true
+   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
+   ## @param apd.existingConfigmap The name of an existing ConfigMap with your custom configuration for apd
+  ##
+  existingConfigmap:
+    
+  ## @param apd.command Override default container command (useful when using custom images)
+  ##
+  command: ["/bin/bash"]
+  ## @param apd.args Override default container args (useful when using custom images)
+  ##
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.aaa.server.apd.apdVerticle"]  
+  ## @param apd.hostAliases apd pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param apd.podLabels Extra labels for apd pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  ## @param apd.podAffinityPreset Pod affinity preset. Ignored if `apd.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param apd.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `apd.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node apd.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param apd.nodeAffinityPreset.type Node affinity preset type. Ignored if `apd.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param apd.nodeAffinityPreset.key Node label key to match. Ignored if `apd.affinity` is set
+    ##
+    key: ""
+    ## @param apd.nodeAffinityPreset.values Node label values to match. Ignored if `apd.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param apd.affinity Affinity for apd pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `apd.podAffinityPreset`, `apd.podAntiAffinityPreset`, and `apd.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param apd.nodeSelector Node labels for apd pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector:
+
+  ## @param apd.tolerations Tolerations for apd pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param apd.updateStrategy.type apd statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    ##type: RollingUpdate
+
+  ## @param apd.priorityClassName apd pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param apd.schedulerName Name of the k8s scheduler (other than default) for apd pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param apd.lifecycleHooks for the apd container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param apd.extraEnvVars Array with extra environment variables to add to apd nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param apd.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for apd nodes
+  ##
+  extraEnvVarsCM: "aaa-env"
+  ## @param apd.extraEnvVarsSecret Name of existing Secret containing extra env vars for apd nodes
+  ##
+  extraEnvVarsSecret:
+  ## @param apd.extraVolumes Optionally specify extra list of additional volumes for the apd pod(s)
+  ##
+  extraVolumes:
+    - name: aaa-config
+      secret:
+        secretName: aaa-config
+  ## @param apd.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apd container(s)
+  ##
+  extraVolumeMounts:
+    - name: aaa-config
+      mountPath: /usr/share/app/secrets/configs
+
+  ## @param apd.sidecars Add additional sidecar containers to the apd pod(s)
+  ## e.g:
+  ## sidecars:
+  ## - name: your-image-name
+  ##   image: your-image
+  ##   imagePullPolicy: Always
+   ##  ports:
+  ##     - name: portname
+  ##       containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param apd.initContainers Add additional init containers to the apd pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: {}
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param apd.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param apd.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param apd.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param apd.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param apd.autoscaling.targetMemory Target Memory utilization percentage
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPU: 80
+    targetMemory:
 
 ## %%SECONDARY_CONTAINER/POD_DESCRIPTION%%
 ##
@@ -1521,7 +1735,7 @@ ingress:
   apiVersion:
   ## @param ingress.hostname Default host for the ingress record
   ##
-  hostname: auth.iudxtest.org.in
+  hostname: auth-host
   ## @param ingress.path Default path for the ingress record
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
@@ -1555,9 +1769,7 @@ ingress:
   ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls:
-    - hosts:
-        - auth.iudxtest.org.in
-      secretName: aaa-tls-secret
+    secretName: aaa-tls-secret
   ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
   selfSigned: false
