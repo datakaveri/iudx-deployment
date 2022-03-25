@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: cat-validator
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: validator
     app: cat-validator

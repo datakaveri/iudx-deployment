@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: cat-database
-  namespace: {{ .Values.nameSpace }}
   labels:
     app: cat-database
     {{- include "common.labels.standard" . | nindent 4 }}
