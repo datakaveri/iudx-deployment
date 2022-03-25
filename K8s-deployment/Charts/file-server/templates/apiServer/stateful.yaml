@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: fs-api-server
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: apiServer
     app: fs-api-server
