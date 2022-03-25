@@ -31,7 +31,7 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 To install the `file-server`chart:
 
 ```console
-$ ./install.sh --set ingress.hostname=<rs-hostname>
+$ ./install.sh --set ingress.hostname=<fs-hostname>
 ```
 
 The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
