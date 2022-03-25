@@ -1,10 +1,11 @@
-{{- if .Values.database.autoscaling.enabled }}
+
+{{- if .Values.databroker.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: fs-database 
+  name: fs-databroker
   labels:
-    app: fs-database 
+    app: fs-databroker
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +18,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: fs-database 
-  minReplicas: {{ .Values.database.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.database.autoscaling.maxReplicas }}
+    name: fs-databroker
+  minReplicas: {{ .Values.databroker.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.databroker.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.database.autoscaling.targetCPU }}
+    {{- if .Values.databroker.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.database.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.databroker.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.database.autoscaling.targetMemory }}
+    {{- if .Values.databroker.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.database.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.databroker.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}

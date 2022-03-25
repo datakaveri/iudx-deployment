@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: fs-database 
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: database
     app: fs-database 
