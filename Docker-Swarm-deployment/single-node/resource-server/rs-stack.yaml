@@ -7,7 +7,7 @@ networks:
 
 services:
   rs:
-    image: ghcr.io/datakaveri/rs-depl:3.0-03915b1
+    image: iudx/rs-depl:latest
     networks:
       - overlay-net
     secrets:
@@ -19,9 +19,9 @@ services:
       - ./.rs.env
     read_only: true
     volumes:
-      - type: tmpfs
-        target: /tmp/
-        read_only: false
+      - type: volume
+        source: rs-volume
+        target: /usr/share/app/storage/temp-dir
     logging:
       driver: "json-file"
       options:
@@ -42,9 +42,11 @@ services:
     cap_drop:
       - ALL
 
-
 secrets:
   keystore:
     file: ./secrets/keystore.jks
   config:
     file:  ./secrets/configs/config-depl.json
+
+volumes:
+  rs-volume:    
