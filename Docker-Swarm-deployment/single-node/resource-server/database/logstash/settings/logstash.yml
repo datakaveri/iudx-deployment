@@ -1,4 +1,0 @@
-node:
-  name: "node_logstash"
-log:
-  format: json
