@@ -13,8 +13,6 @@ services:
     secrets:
       - source: config
         target: /usr/share/app/secrets/configs/config.json
-      - source: keystore
-        target: /usr/share/app/secrets/configs/keystore.jks
     env_file:
       - ./.rs.env
     read_only: true
@@ -43,8 +41,6 @@ services:
       - ALL
 
 secrets:
-  keystore:
-    file: ./secrets/keystore.jks
   config:
     file:  ./secrets/configs/config-depl.json
 
