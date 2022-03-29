@@ -70,9 +70,7 @@ spec:
         - name: fs-keystore
           secret:
             secretName: fs-keystore
-        - name: fs-data
-          persistentVolumeClaim:
-            claimName: fs-data
+
 
   volumeClaimTemplates:
   - metadata:
