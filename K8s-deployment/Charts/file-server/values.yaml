@@ -100,7 +100,7 @@ image:
 
   ##
 containerPorts:
-  http: 80
+  http: 8080
   #https: 443
   hazelcast: 5701
   prometheus: 9000
@@ -307,9 +307,6 @@ apiServer:
     - name: fs-config
       secret:
         secretName: fs-config
-    - name: fs-data
-      persistentVolumeClaim:
-        claimName: fs-data
 
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ApiServer container(s)
   ##
@@ -1153,8 +1150,9 @@ postgres:
   ## @param postgres.podSecurityContext.fsGroup Set postgres pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
     fsGroup: 1001
+    fsGroupChangePolicy: "OnRootMismatch"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param postgres.containerSecurityContext.enabled Enabled postgres containers' Security Context
@@ -1787,7 +1785,7 @@ service:
   ## NOTE: choose port between <30000-32767>
   ## @param service.targetPorts ApiServer service TargetPorts port
   ##
-  targetPorts: 80
+  targetPorts: 8080
   ## @param service.clusterIP ApiServer service Cluster IP
   ## e.g.:
   ## clusterIP: None
