@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.9"
 
 networks:
   overlay-net:
@@ -58,18 +58,10 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-    ports:
-      - target: 5601
-        published: 5601
-        mode: host
     networks:
       - overlay-net
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - SERVER_SSL_ENABLED=true
-      - SERVER_SSL_CERTIFICATE=/run/secrets/kibana-tls-cert
-      - SERVER_SSL_KEY=/run/secrets/kibana-tls-key
-      - LOGGING_JSON=true
+      - ./.kibana.env
     secrets:
       - source: kibana.keystore
         target: /usr/share/kibana/data/kibana.keystore
