@@ -1,0 +1,14 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: azurefile-storage-class
+provisioner: kubernetes.io/azure/file
+mountOptions:
+  - dir_mode=0700
+  - file_mode=0700
+  - uid=1001
+  - gid=1001
+parameters:
+  skuName: Standard_LRS
+  location: centralindia
+  storageAccount: <storage-account-name>
