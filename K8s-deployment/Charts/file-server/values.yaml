@@ -314,7 +314,7 @@ apiServer:
     - name: fs-config
       mountPath: /usr/share/app/secrets/configs
     - name: fs-data
-      mountPath: /usr/share/app/files-storage/
+      mountPath: /usr/share/app/storage/
   
   ## @param apiServer.sidecars Add additional sidecar containers to the ApiServer pod(s)
   ## e.g:
