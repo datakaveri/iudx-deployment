@@ -42,9 +42,15 @@ kubectl create -f azure-cloud-provider.yaml
 2. Following command will deploy the storageclass
 ``` kubectl apply -f azuredisk-storage-class.yaml```
 
+# Deployment with AzureFile
+1. Create a storage account on azure for the shared file system. Follow the documentation [here](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).
+2. Update the `azurefile-storageclass.yaml` with the created storage account name.
+3. Following command will deploy the storageclass
+``` kubectl apply -f azurefile-storage-class.yaml```
 
 ## Links
 
 - https://github.com/kubernetes-sigs/azuredisk-csi-driver/blob/master/README.md
 - https://github.com/kubernetes-sigs/azuredisk-csi-driver/blob/master/docs/driver-parameters.md
 - https://kubernetes-csi.github.io/docs/
+- https://docs.microsoft.com/en-us/azure/aks/azure-files-dynamic-pv
