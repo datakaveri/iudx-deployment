@@ -22,7 +22,7 @@ git add <file>
 git commit 
 
 ## Push the changes to you fork remote 
-git push myy-fork  <feature-branch-name>
+git push my-fork  <feature-branch-name>
 
 ## Open a PR from the UI 
 
