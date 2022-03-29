@@ -307,9 +307,6 @@ apiServer:
     - name: fs-config
       secret:
         secretName: fs-config
-    - name: fs-data
-      persistentVolumeClaim:
-        claimName: fs-data
 
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ApiServer container(s)
   ##
