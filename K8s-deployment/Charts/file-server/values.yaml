@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/fs-depl
-  tag: 3.0-test
+  tag: 3.0-bc75617
   pullSecrets: {} 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -195,8 +195,9 @@ apiServer:
   ## @param apiServer.podSecurityContext.fsGroup Set ApiServer pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
     fsGroup: 1001
+    fsGroupChangePolicy: "OnRootMismatch"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiServer.containerSecurityContext.enabled Enabled ApiServer containers' Security Context
@@ -1150,9 +1151,8 @@ postgres:
   ## @param postgres.podSecurityContext.fsGroup Set postgres pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: true
+    enabled: false
     fsGroup: 1001
-    fsGroupChangePolicy: "OnRootMismatch"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param postgres.containerSecurityContext.enabled Enabled postgres containers' Security Context
