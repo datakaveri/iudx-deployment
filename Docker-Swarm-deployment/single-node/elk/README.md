@@ -61,15 +61,20 @@ or
 with resource limits, reservations and exposing port number
 ```sh
 docker stack deploy -c database-stack.yml -c database-stack.resources.yml -c database-stack.custom.yml database
-
+```
 
 Bring up the account generator stack(only on clean deployment),
 ```sh
 docker stack deploy -c account-generator.yml tmp 
+```
 
 # Monitor logs to ensure creation
+```sh
 docker service logs tmp_account-generator -f
+```
 
 # Remove stack
+```sh
 docker stack rm tmp 
 ```
+
