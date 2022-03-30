@@ -29,6 +29,7 @@ services:
       - xpack.security.enabled=true
       - xpack.security.audit.enabled=true
       - xpack.security.transport.ssl.enabled=true
+
     volumes:
       - type: volume
         source: elastic-volume
@@ -58,6 +59,8 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
+    cap_drop:
+      - ALL
     networks:
       - overlay-net
     environment:
@@ -79,6 +82,8 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
+    cap_drop:
+      - ALL
     volumes:
       - type: volume
         source: logstash-volume
