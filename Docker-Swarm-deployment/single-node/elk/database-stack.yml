@@ -34,12 +34,15 @@ services:
       - type: volume
         source: elastic-volume
         target: /usr/share/elasticsearch/data
+        read_only: false
       - type: volume
         source: elastic-plugins-volume
         target: /usr/share/elasticsearch/plugins
+        read_only: false
       - type: volume
         source: elastic-config-repository-s3-volume
         target: /usr/share/elasticsearch/config/repository-s3
+        read_only: false
     configs:
       - source: elasticsearch-launcher
         target: /usr/share/elasticsearch/launcher.sh
@@ -88,6 +91,7 @@ services:
       - type: volume
         source: logstash-volume
         target: /usr/share/logstash/data
+        read_only: false
     networks:
       - overlay-net
     secrets:
