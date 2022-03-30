@@ -29,7 +29,12 @@ services:
       - xpack.security.enabled=true
       - xpack.security.audit.enabled=true
       - xpack.security.transport.ssl.enabled=true
-
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     volumes:
       - type: volume
         source: elastic-volume
@@ -68,6 +73,13 @@ services:
       - overlay-net
     environment:
       - ./.kibana.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
     secrets:
       - source: kibana.keystore
         target: /usr/share/kibana/data/kibana.keystore
@@ -92,6 +104,13 @@ services:
         source: logstash-volume
         target: /usr/share/logstash/data
         read_only: false
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
     networks:
       - overlay-net
     secrets:
