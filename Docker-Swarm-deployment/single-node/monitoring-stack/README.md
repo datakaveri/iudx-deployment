@@ -1,3 +1,12 @@
+# Monitoring Stack
+
+
+<p align="center">
+<img src="./mon_stack_architecture.png">
+</p>
+
+
+The IUDX Monitoring stack uses Prometheus, Grafana, Micrometer, Node Exporter, Docker Daemon to capture API, System metrics. It integrates with telegram to publish alerts from Grafana based on predefined rules.  
 # Monitoring-stack-Installation
 ## Required secrets
 ```sh
