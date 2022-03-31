@@ -41,6 +41,10 @@ secrets
 |   `-- logstash.keystore
 ```
 
+Rename example-kibana.env to .kibana.env
+```sh
+cp example-kibana.env .kibana.env
+```
 ## Deploy
 
 Three ways to deploy, do any one of it
