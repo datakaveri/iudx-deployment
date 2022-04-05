@@ -1,10 +1,10 @@
-{{- if .Values.rabbitmq.autoscaling.enabled }}
+{{- if .Values.cache.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: lip-rabbitmq
+  name: lip-cache
   labels:
-    app: lip-rabbitmq
+    app: lip-cache
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: lip-rabbitmq
-  minReplicas: {{ .Values.rabbitmq.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.rabbitmq.autoscaling.maxReplicas }}
+    name: lip-cache
+  minReplicas: {{ .Values.cache.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.cache.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.rabbitmq.autoscaling.targetCPU }}
+    {{- if .Values.cache.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.rabbitmq.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.cache.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.rabbitmq.autoscaling.targetMemory }}
+    {{- if .Values.cache.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.rabbitmq.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.cache.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
