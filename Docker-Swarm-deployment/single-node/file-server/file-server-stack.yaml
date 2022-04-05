@@ -12,7 +12,7 @@ services:
     volumes:
       - type: volume
         source: fs-volume
-        target: /usr/share/app/files-storage
+        target: /usr/share/app/storage
         volume:
           nocopy: true
       - type: tmpfs
@@ -25,10 +25,6 @@ services:
           max-size: "5m" 
           tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     secrets:
-      - source: keystore-file
-        target: /usr/share/app/secrets/keystore-file.jks
-      - source: keystore-rs
-        target: /usr/share/app/secrets/keystore-rs.jks
       - source: config
         target: /usr/share/app/secrets/configs/config.json
     networks: 
@@ -45,10 +41,6 @@ networks:
     driver: overlay
 
 secrets:
-  keystore-file:
-    file: ./secrets/keystore-file.jks
-  keystore-rs:
-    file: ./secrets/keystore-rs.jks
   config:
     file: ./secrets/configs/config-depl.json
 
