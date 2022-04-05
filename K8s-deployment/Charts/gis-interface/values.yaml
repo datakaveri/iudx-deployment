@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/gis-depl
-  tag: 3.0-fc10a3a
+  tag: 3.0-8eba578
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1732,7 +1732,7 @@ service:
   ## NOTE: choose port between <30000-32767>
   ## @param service.targetPorts ApiServer service TargetPorts port
   ##
-  targetPorts: 80
+  targetPorts: 8080
   ## @param service.clusterIP ApiServer service Cluster IP
   ## e.g.:
   ## clusterIP: None
