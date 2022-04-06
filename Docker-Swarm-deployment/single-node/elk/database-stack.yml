@@ -7,7 +7,7 @@ networks:
 
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.1
+    image: ghcr.io/datakaveri/elasticsearch:7.12.1
     command: ./launcher.sh
     deploy:
       replicas: 1
@@ -42,9 +42,6 @@ services:
       - type: volume
         source: elastic-plugins-volume
         target: /usr/share/elasticsearch/plugins
-      - type: volume
-        source: elastic-config-repository-s3-volume
-        target: /usr/share/elasticsearch/config/repository-s3
     configs:
       - source: elasticsearch-launcher
         target: /usr/share/elasticsearch/launcher.sh
@@ -54,7 +51,7 @@ services:
         target: /usr/share/elasticsearch/config/elasticsearch.keystore
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.8.1
+    image: docker.elastic.co/kibana/kibana:7.12.1
     deploy:
       replicas: 1
       placement:
@@ -69,7 +66,11 @@ services:
     networks:
       - overlay-net
     environment:
-      - ./.kibana.env
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_SSL_ENABLED=true
+      - SERVER_SSL_CERTIFICATE=/run/secrets/kibana-tls-cert
+      - SERVER_SSL_KEY=/run/secrets/kibana-tls-key
+      - LOGGING_JSON=true
     logging:
       driver: "json-file"
       options:
@@ -84,7 +85,7 @@ services:
       - kibana-tls-key
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.8.1
+    image: ghcr.io/datakaveri/logstash:7.12.1
 
     deploy:
       replicas: 1
@@ -143,7 +144,6 @@ secrets:
 volumes:
   elastic-volume:
   elastic-plugins-volume:
-  elastic-config-repository-s3-volume:
   
   logstash-volume:
 
