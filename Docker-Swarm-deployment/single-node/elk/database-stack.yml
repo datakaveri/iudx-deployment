@@ -39,10 +39,7 @@ services:
       - type: volume
         source: elastic-volume
         target: /usr/share/elasticsearch/data
-      - type: volume
-        source: elastic-plugins-volume
-        target: /usr/share/elasticsearch/plugins
-    configs:
+     configs:
       - source: elasticsearch-launcher
         target: /usr/share/elasticsearch/launcher.sh
         mode: 0777
@@ -143,7 +140,7 @@ secrets:
 
 volumes:
   elastic-volume:
-  elastic-plugins-volume:
+ 
   
   logstash-volume:
 
