@@ -39,15 +39,12 @@ services:
       - type: volume
         source: elastic-volume
         target: /usr/share/elasticsearch/data
-        read_only: false
       - type: volume
         source: elastic-plugins-volume
         target: /usr/share/elasticsearch/plugins
-        read_only: false
       - type: volume
         source: elastic-config-repository-s3-volume
         target: /usr/share/elasticsearch/config/repository-s3
-        read_only: false
     configs:
       - source: elasticsearch-launcher
         target: /usr/share/elasticsearch/launcher.sh
@@ -88,6 +85,7 @@ services:
 
   logstash:
     image: docker.elastic.co/logstash/logstash:7.8.1
+
     deploy:
       replicas: 1
       placement:
@@ -103,7 +101,6 @@ services:
       - type: volume
         source: logstash-volume
         target: /usr/share/logstash/data
-        read_only: false
     logging:
       driver: "json-file"
       options:
