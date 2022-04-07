@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: lip-redis
-  namespace: {{ .Values.nameSpace }}
   labels:
     app: lip-redis
     {{- include "common.labels.standard" . | nindent 4 }}
