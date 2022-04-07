@@ -4,22 +4,51 @@
 
 Helm Chart for IUDX latest-ingestion-pipeline Server Deployment
 
-## Installing the Chart
+## Create secret files
 
-To install the chart with the release name `latest-ingestion-pipeline`:
+Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
-$ helm install latest-ingestion-pipeline latest-ingestion-pipeline/
+$ cp -r example-secrets/secrets .
 ```
 
-The command deploys latest-ingestion-pipeline on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+```
+# secrets directory after generation of secret files
+secrets/
+├── .lip.env
+├── attribute-mapping.json
+└── config.json
+```
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU of all latest-ingestion-pipeline verticles
+- RAM of all latest-ingestion-pipeline verticles
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
+
+## Installing the Chart
+
+To install the `latest-ingestion-pipeline`chart:
+
+```console
+$ ./install.sh
+```
+
+The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+Following script will create :
+1. create a namespace `lip`
+2. create required configmaps
+3. create corresponding K8s secrets from the secret files
+4. deploy all latest-ingestion-pipeline verticles 
 
 ## Uninstalling the Chart
 
 To uninstall/delete the `latest-ingestion-pipeline` deployment:
 
 ```console
-$ helm delete latest-ingestion-pipeline
+$ helm delete latest-ingestion-pipeline -n lip
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.

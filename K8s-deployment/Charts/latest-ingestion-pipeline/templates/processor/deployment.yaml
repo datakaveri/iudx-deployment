@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: lip-processor
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: processor
     app: lip-processor
