@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: lip-redis
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: redis
     app: lip-redis
