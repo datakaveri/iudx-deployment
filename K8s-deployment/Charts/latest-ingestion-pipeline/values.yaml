@@ -292,16 +292,11 @@ processor:
     - name: lip-config
       secret:
         secretName: lip-config
-    - name: attribute-mapping
-      secret:
-        secretName: attribute-mapping
   ## @param processor.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the processor container(s)
   ##
   extraVolumeMounts: 
     - name: lip-config
       mountPath: /usr/share/app/secrets/configs
-    - name: attribute-mapping
-      mountPath:  /usr/share/app/secrets
   
   ## @param processor.sidecars Add additional sidecar containers to the processor pod(s)
   ## e.g:
