@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: rs-databroker
-  namespace: {{ .Values.nameSpace }}
   labels:
     app: rs-databroker
     {{- include "common.labels.standard" . | nindent 4 }}

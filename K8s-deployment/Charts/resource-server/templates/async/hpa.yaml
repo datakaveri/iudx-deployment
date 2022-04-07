@@ -1,10 +1,10 @@
-{{- if .Values.latestDatabase.autoscaling.enabled }}
+{{- if .Values.async.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: rs-latest-database
+  name: rs-async
   labels:
-    app: rs-latest-database
+    app: rs-async
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: rs-latest-database
-  minReplicas: {{ .Values.latestDatabase.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.latestDatabase.autoscaling.maxReplicas }}
+    name: rs-async
+  minReplicas: {{ .Values.async.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.async.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.latestDatabase.autoscaling.targetCPU }}
+    {{- if .Values.async.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.latestDatabase.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.async.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.latestDatabase.autoscaling.targetMemory }}
+    {{- if .Values.async.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.latestDatabase.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.async.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
