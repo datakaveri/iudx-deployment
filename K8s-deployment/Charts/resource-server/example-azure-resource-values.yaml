@@ -104,11 +104,11 @@ postgres:
     node.kubernetes.io/instance-type: Standard_B2s
   resources:
     limits:
-      cpu: 1000m
-      memory: 1Gi
+      cpu: 600m
+      memory: 600Mi
     requests: 
-      cpu: 800m
-      memory: 800Mi
+      cpu: 400m
+      memory: 400Mi
 
 ## cache resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -120,11 +120,11 @@ cache:
     node.kubernetes.io/instance-type: Standard_B2s
   resources:
     limits:
-      cpu: 1000m
-      memory: 1Gi
+      cpu: 400m
+      memory: 750Mi
     requests: 
-      cpu: 800m
-      memory: 800Mi
+      cpu: 200m
+      memory: 600Mi
 
 ## async resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
