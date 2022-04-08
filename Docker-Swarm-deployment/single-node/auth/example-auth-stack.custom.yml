@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   auth:
-    image: iudx/aaa-dev:latest
+    image: ghcr.io/datakaveri/aaa-dev:3.5.0-f55cbdf
     secrets:
       - source: config
         target: /usr/share/app/secrets/configs/config.json
