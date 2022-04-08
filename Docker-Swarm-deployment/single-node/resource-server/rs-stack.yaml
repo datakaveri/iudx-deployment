@@ -7,7 +7,7 @@ networks:
 
 services:
   rs:
-    image: iudx/rs-depl:latest
+    image: ghcr.io/datakaveri/rs-depl:3.5.0-e45e327
     networks:
       - overlay-net
     secrets:
@@ -20,6 +20,9 @@ services:
       - type: volume
         source: rs-volume
         target: /usr/share/app/storage/temp-dir
+      - type: tmpfs
+        target: /tmp/
+        read_only: false  
     logging:
       driver: "json-file"
       options:
