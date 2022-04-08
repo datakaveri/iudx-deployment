@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   rs:
-    image: iudx/rs-dev:latest
+    image: ghcr.io/datakaveri/rs-dev:3.5.0-e45e327
     secrets:
       - source: config
         target: /usr/share/app/secrets/configs/config.json
