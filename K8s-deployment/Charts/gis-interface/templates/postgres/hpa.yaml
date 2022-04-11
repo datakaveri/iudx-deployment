@@ -1,10 +1,10 @@
-{{- if .Values.apiServer.autoscaling.enabled }}
+{{- if .Values.postgres.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: gis-api-server
+  name: gis-postgres
   labels:
-    app: gis-api-server
+    app: gis-postgres
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: gis-api-server
-  minReplicas: {{ .Values.apiServer.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.apiServer.autoscaling.maxReplicas }}
+    name: gis-postgres
+  minReplicas: {{ .Values.postgres.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.postgres.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.apiServer.autoscaling.targetCPU }}
+    {{- if .Values.postgres.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.postgres.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.apiServer.autoscaling.targetMemory }}
+    {{- if .Values.postgres.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.postgres.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
