@@ -4,22 +4,51 @@
 
 Helm Chart for IUDX file-server Server Deployment
 
-## Installing the Chart
+## Create secret files
 
-To install the chart with the release name `file-server`:
+Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
-$ helm install file-server file-server/
+$ cp -r example-secrets/* .
 ```
 
-The command deploys file-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+```
+# secrets directory after generation of secret files
+secrets/
+├── .fs.env
+└── config.json
+```
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU of all file-server verticles
+- RAM of all file-server verticles
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
+
+## Installing the Chart
+
+To install the `file-server`chart:
+
+```console
+$ ./install.sh --set ingress.hostname=<fs-hostname>
+```
+
+The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+Following script will create :
+1. create a namespace `fs`
+2. create required configmaps
+3. create corresponding K8s secrets from the secret files
+4. deploy all file-server verticles 
+
 
 ## Uninstalling the Chart
 
 To uninstall/delete the `file-server` deployment:
 
 ```console
-$ helm delete file-server
+$ helm delete file-server -n fs
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -38,8 +67,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `nameSpace`              | Namespace to deploy the controller                                                      | `fs`            |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |         |
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
@@ -62,8 +90,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`          | image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets`         | image pull secrets                         | `{}`                 |
 | `image.debug`               | Enable image debug mode                    | `false`              |
-| `containerPorts.http`       | HTTP container port                        | `80`                 |
-| `containerPorts.https`      | HTTPS container port                       | `443`                |
+| `containerPorts.http`       | HTTP container port                        | `8080`                 |
+| `containerPorts.https`      | HTTPS container port                       | `8443`                |
 | `containerPorts.hazelcast`  | Hazelcast container port                   | `5701`               |
 | `containerPorts.prometheus` | Prometheus container port                  | `9000`               |
 | `podAnnotations`            | Annotations for pods                       | `nil`                |
@@ -98,7 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiServer.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                                                                     | `{}`                                                                                                                                                                                                                 |
 | `apiServer.resources.limits`                      | The resources limits for the ApiServer containers                                                                                                      | `nil`                                                                                                                                                                                                                |
 | `apiServer.resources.requests`                    | The requested resources for the ApiServer containers                                                                                                   | `nil`                                                                                                                                                                                                                |
-| `apiServer.podSecurityContext.enabled`            | Enabled ApiServer pods' Security Context                                                                                                               | `false`                                                                                                                                                                                                              |
+| `apiServer.podSecurityContext.enabled`            | Enabled ApiServer pods' Security Context                                                                                                               | `true`                                                                                                                                                                                                              |
 | `apiServer.podSecurityContext.fsGroup`            | Set ApiServer pod's Security Context fsGroup                                                                                                           | `1001`                                                                                                                                                                                                               |
 | `apiServer.containerSecurityContext.enabled`      | Enabled ApiServer containers' Security Context                                                                                                         | `false`                                                                                                                                                                                                              |
 | `apiServer.containerSecurityContext.runAsUser`    | Set ApiServer containers' Security Context runAsUser                                                                                                   | `1001`                                                                                                                                                                                                               |
@@ -278,7 +306,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                             | ApiServers ervice type                                                                                                           | `ClusterIP`              |
 | `service.ports`                            | ApiServer service port                                                                                                           | `80`                     |
-| `service.targetPorts`                      | ApiServer service TargetPorts port                                                                                               | `80`                     |
+| `service.targetPorts`                      | ApiServer service TargetPorts port                                                                                               | `8080`                     |
 | `service.clusterIP`                        | ApiServer service Cluster IP                                                                                                     | `nil`                    |
 | `service.loadBalancerIP`                   | ApiServer service Load Balancer IP                                                                                               | `nil`                    |
 | `service.loadBalancerSourceRanges`         | service Load Balancer sources                                                                                                    | `[]`                     |
@@ -301,7 +329,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.path`                             | Default path for the ingress record                                                                                              | `/`                      |
 | `ingress.annotations`                      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.serviceName`                      | Backend ingress Service Name                                                                                                     | `fs-api-server`          |
-| `ingress.tls`                              | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `nil`                    |
+| `ingress.tls.secretName`                              | TLS secret name, if certmanager is used, no need to create that secret with tls certificates else create secret using the command `kubectl create secret tls fs-tls-secret --key ./secrets/pki/privkey.pem --cert ./secrets/pki/fullchain.pem -n  fs`                                                    | `fs-tls-secret`                    |
 | `ingress.selfSigned`                       | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
 | `ingress.extraHosts`                       | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
 | `ingress.extraPaths`                       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |

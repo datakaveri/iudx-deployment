@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: fs-api-server
-  namespace: {{ .Values.namespace }}
   labels:
     app: fs-api-server
     {{- include "common.labels.standard" . | nindent 4 }}
