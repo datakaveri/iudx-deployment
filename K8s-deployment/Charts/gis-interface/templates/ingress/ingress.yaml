@@ -3,7 +3,6 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: gis-interface
-  namespace: {{ .Values.nameSpace}}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: ingress
     {{- if .Values.commonLabels }}
@@ -52,7 +51,8 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
- {{- if .Values.ingress.tls }}
-  tls: {{- toYaml .Values.ingress.tls | nindent 4 }}
-  {{- end }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.hostname }}
+      secretName: {{ .Values.ingress.tls.secretName }}
 {{- end }}
