@@ -1,10 +1,10 @@
-{{- if .Values.apiServer.autoscaling.enabled }}
+{{- if .Values.geocoding.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: cat-api-server
+  name: cat-geocoding
   labels:
-    app: cat-api-server
+    app: cat-geocoding
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: cat-api-server
-  minReplicas: {{ .Values.apiServer.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.apiServer.autoscaling.maxReplicas }}
+    name: cat-geocoding
+  minReplicas: {{ .Values.geocoding.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.geocoding.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.apiServer.autoscaling.targetCPU }}
+    {{- if .Values.geocoding.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.geocoding.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.apiServer.autoscaling.targetMemory }}
+    {{- if .Values.geocoding.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.geocoding.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
