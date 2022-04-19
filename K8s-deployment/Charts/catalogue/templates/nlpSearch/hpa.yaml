@@ -2,9 +2,9 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: cat-nlpSearch
+  name: cat-nlpsearch
   labels:
-    app: cat-nlpSearch
+    app: cat-nlpsearch
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,7 +17,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: cat-nlpSearch
+    name: cat-nlpsearch
   minReplicas: {{ .Values.nlpSearch.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.nlpSearch.autoscaling.maxReplicas }}
   metrics:

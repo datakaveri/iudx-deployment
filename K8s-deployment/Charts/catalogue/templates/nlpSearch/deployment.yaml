@@ -1,10 +1,10 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: cat-nlpSearch
+  name: cat-nlpsearch
   labels: 
     app.kubernetes.io/component: nlpSearch
-    app: cat-nlpSearch
+    app: cat-nlpsearch
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -18,14 +18,14 @@ spec:
   {{- end }}
   selector:
     matchLabels: 
-      app: cat-nlpSearch
+      app: cat-nlpsearch
   template:
     metadata:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app: cat-nlpSearch
+        app: cat-nlpsearch
         app.kubernetes.io/component: nlpSearch
         {{- if .Values.nlpSearch.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.nlpSearch.podLabels "context" $) | nindent 8 }}
@@ -65,7 +65,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.nlpSearch.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: cat-nlpSearch
+        - name: cat-nlpsearch
           image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.nlpSearch.containerSecurityContext.enabled }}
