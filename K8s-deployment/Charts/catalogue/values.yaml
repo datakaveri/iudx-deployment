@@ -18,9 +18,6 @@ global:
 
 ## @section Common parameters
 
-## @param nameSpace Namespace to deploy the controller
-nameSpace: cat
-
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
@@ -75,9 +72,8 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/cat-prod
-  tag: 3.0-21af067
+  tag: 3.5.0-05b6b35
   pullSecrets:
-    - regcred 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -179,18 +175,6 @@ apiServer:
   ## @param apiServer.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## ApiServer resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param apiServer.resources.limits The resources limits for the ApiServer containers
-  ## @param apiServer.resources.requests The requested resources for the ApiServer containers
-  ##
-  resources:
-    limits:
-      cpu: 800m
-      memory: 1.2Gi
-    requests: 
-      cpu: 600m
-      memory: 1.2Gi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiServer.podSecurityContext.enabled Enabled ApiServer pods' Security Context
@@ -219,7 +203,7 @@ apiServer:
   command: ["/bin/bash"]
   ## @param apiServer.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-apiserver.json"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.catalogue.server.apiserver.ApiServerVerticle"]
   ## @param apiServer.hostAliases ApiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -265,8 +249,6 @@ apiServer:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-
 
   ## @param apiServer.tolerations Tolerations for ApiServer pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -306,19 +288,14 @@ apiServer:
   ## @param apiServer.extraVolumes Optionally specify extra list of additional volumes for the ApiServer pod(s)
   ##
   extraVolumes:
-    - name: cat-config-apiserver
+    - name: cat-config
       secret:
-        secretName: cat-config-apiserver
-    - name: cat-keystore
-      secret:
-        secretName: cat-keystore
+        secretName: cat-config
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ApiServer container(s)
   ##
   extraVolumeMounts: 
-    - name: cat-config-apiserver
-      mountPath: /usr/share/app/secrets/one-verticle-configs
-    - name: cat-keystore
-      mountPath: /usr/share/app/secrets/
+    - name: cat-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param apiServer.sidecars Add additional sidecar containers to the ApiServer pod(s)
   ## e.g:
@@ -417,18 +394,6 @@ auditing:
   ## @param auditing.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Auditing resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param auditing.resources.limits The resources limits for the Auditing containers
-  ## @param auditing.resources.requests The requested resources for the Auditing containers
-  ##
-  resources:
-    limits:
-      cpu: 500m
-      memory: 750Mi
-    requests: 
-      cpu: 500m
-      memory: 700Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param auditing.podSecurityContext.enabled Enabled Auditing pods' Security Context
@@ -457,7 +422,7 @@ auditing:
   command: ["/bin/bash"]
   ## @param auditing.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-auditing.json"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.catalogue.server.auditing.AuditingVerticle"]
   ## @param auditing.hostAliases Auditing pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -503,7 +468,7 @@ auditing:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+
   ## @param auditing.tolerations Tolerations for Auditing pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -542,14 +507,14 @@ auditing:
   ## @param auditing.extraVolumes Optionally specify extra list of additional volumes for the Auditing pod(s)
   ##
   extraVolumes:
-    - name: cat-config-auditing
+    - name: cat-config
       secret:
-        secretName: cat-config-auditing
+        secretName: cat-config
   ## @param auditing.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Auditing container(s)
   ##
   extraVolumeMounts:
-    - name: cat-config-auditing
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: cat-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param auditing.sidecars Add additional sidecar containers to the Auditing pod(s)
   ## e.g:
@@ -648,18 +613,6 @@ authenticator:
   ## @param authenticator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Authenticator resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param authenticator.resources.limits The resources limits for the Authenticator containers
-  ## @param authenticator.resources.requests The requested resources for the Authenticator containers
-  ##
-  resources:
-    limits:
-      cpu: 500m
-      memory: 800Mi
-    requests: 
-      cpu: 300m
-      memory: 800Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param authenticator.podSecurityContext.enabled Enabled Authenticator pods' Security Context
@@ -688,7 +641,7 @@ authenticator:
   command: ["/bin/bash"]
   ## @param authenticator.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-authenticator.json"]  
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.catalogue.server.authenticator.AuthenticationVerticle"]  
   ## @param authenticator.hostAliases Authenticator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -734,9 +687,6 @@ authenticator:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-
-
 
   ## @param authenticator.tolerations Tolerations for Authenticator pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -777,16 +727,15 @@ authenticator:
   ## @param authenticator.extraVolumes Optionally specify extra list of additional volumes for the Authenticator pod(s)
   ##
   extraVolumes:
-    - name: cat-config-authenticator
+    - name: cat-config
       secret:
-        secretName: cat-config-authenticator
+        secretName: cat-config
 
-    
   ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Authenticator container(s)
   ##
   extraVolumeMounts:
-    - name: cat-config-authenticator
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: cat-config
+      mountPath: /usr/share/app/secrets/configs
 
   ## @param authenticator.sidecars Add additional sidecar containers to the Authenticator pod(s)
   ## e.g:
@@ -885,18 +834,7 @@ database:
   ## @param database.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Database resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param database.resources.limits The resources limits for the Database containers
-  ## @param database.resources.requests The requested resources for the Database containers
-  ##
-  resources:
-    limits:
-      cpu: 800m
-      memory: 1.2Gi
-    requests: 
-      cpu: 600m
-      memory: 1.2Gi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param database.podSecurityContext.enabled Enabled Database pods' Security Context
@@ -925,7 +863,7 @@ database:
   command: ["/bin/bash"]
   ## @param database.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-database.json"] 
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.catalogue.server.database.DatabaseVerticle"] 
   ## @param database.hostAliases Database pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -971,8 +909,6 @@ database:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-
 
   ## @param database.tolerations Tolerations for Database pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -1012,16 +948,16 @@ database:
   ## @param database.extraVolumes Optionally specify extra list of additional volumes for the Database pod(s)
   ##
   extraVolumes:
-    - name: cat-config-database
+    - name: cat-config
       secret:
-        secretName: cat-config-database
+        secretName: cat-config
 
     
   ## @param database.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Database container(s)
   ##
   extraVolumeMounts: 
-    - name: cat-config-database
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: cat-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param database.sidecars Add additional sidecar containers to the Database pod(s)
   ## e.g:
@@ -1121,18 +1057,7 @@ validator:
   ## @param validator.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## Validator resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param validator.resources.limits The resources limits for the Validator containers
-  ## @param validator.resources.requests The requested resources for the Validator containers
-  ##
-  resources:
-    limits:
-      cpu: 800m
-      memory: 1.2Gi
-    requests:
-      cpu: 600m 
-      memory: 1.2Gi
+
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param validator.podSecurityContext.enabled Enabled Validator pods' Security Context
@@ -1161,7 +1086,7 @@ validator:
   command: ["/bin/bash"]
   ## @param validator.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java  -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory   -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-validator.json"]  
+  args: ["-c","exec java  -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory   -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.catalogue.server.validator.ValidatorVerticle"]  
   ## @param validator.hostAliases Validator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1206,7 +1131,6 @@ validator:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
 
 
   ## @param validator.tolerations Tolerations for Validator pods assignment
@@ -1247,15 +1171,15 @@ validator:
   ## @param validator.extraVolumes Optionally specify extra list of additional volumes for the Validator pod(s)
   ##
   extraVolumes:
-    - name: cat-config-validator
+    - name: cat-config
       secret:
-        secretName: cat-config-validator
+        secretName: cat-config
 
   ## @param validator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Validator container(s)
   ##
   extraVolumeMounts: 
-    - name: cat-config-validator
-      mountPath: /usr/share/app/secrets/one-verticle-configs
+    - name: cat-config
+      mountPath: /usr/share/app/secrets/configs
   
   ## @param validator.sidecars Add additional sidecar containers to the Validator pod(s)
   ## e.g:
@@ -1292,7 +1216,447 @@ validator:
     targetCPU: 80
     targetMemory:
 
+## @section geocoding Parameters
 
+geocoding:
+
+  ## @param geocoding.replicaCount Number of geocoding replicas to deploy
+
+  replicaCount: 1  
+  ## Configure extra options for geocoding containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param geocoding.livenessProbe.enabled Enable livenessProbe on geocoding containers
+  ## @param geocoding.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param geocoding.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param geocoding.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param geocoding.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param geocoding.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param geocoding.livenessProbe.path Path for httpGet
+  ##
+  livenessProbe:
+    enabled: true
+    path: /metrics
+    initialDelaySeconds: 60
+    periodSeconds: 60
+    timeoutSeconds: 10
+    #failureThreshold: 10
+    #successThreshold: 10
+  ## @param geocoding.readinessProbe.enabled Enable readinessProbe on geocoding containers
+  ## @param geocoding.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param geocoding.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param geocoding.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param geocoding.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param geocoding.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 10
+    successThreshold: 10
+  ## @param geocoding.startupProbe.enabled Enable startupProbe on geocoding containers
+  ## @param geocoding.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param geocoding.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param geocoding.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param geocoding.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param geocoding.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 10
+    successThreshold: 10
+  ## @param geocoding.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param geocoding.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param geocoding.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param geocoding.podSecurityContext.enabled Enabled geocoding pods' Security Context
+  ## @param geocoding.podSecurityContext.fsGroup Set geocoding pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: false
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param geocoding.containerSecurityContext.enabled Enabled geocoding containers' Security Context
+  ## @param geocoding.containerSecurityContext.runAsUser Set geocoding containers' Security Context runAsUser
+  ## @param geocoding.containerSecurityContext.runAsNonRoot Set geocoding containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
+    runAsNonRoot: true
+   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
+   ## @param geocoding.existingConfigmap The name of an existing ConfigMap with your custom configuration for geocoding
+  ##
+  existingConfigmap:
+    
+  ## @param geocoding.command Override default container command (useful when using custom images)
+  ##
+  command: ["/bin/bash"]
+  ## @param geocoding.args Override default container args (useful when using custom images)
+  ##
+  args: ["-c","exec java  -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory   -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.catalogue.server.geocoding.GeocodingVerticle"]  
+  ## @param geocoding.hostAliases geocoding pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param geocoding.podLabels Extra labels for geocoding pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+ 
+  ##
+  ## @param geocoding.podAffinityPreset Pod affinity preset. Ignored if `geocoding.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param geocoding.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `geocoding.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node geocoding.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param geocoding.nodeAffinityPreset.type Node affinity preset type. Ignored if `geocoding.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param geocoding.nodeAffinityPreset.key Node label key to match. Ignored if `geocoding.affinity` is set
+    ##
+    key: ""
+    ## @param geocoding.nodeAffinityPreset.values Node label values to match. Ignored if `geocoding.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param geocoding.affinity Affinity for geocoding pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `geocoding.podAffinityPreset`, `geocoding.podAntiAffinityPreset`, and `geocoding.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param geocoding.nodeSelector Node labels for geocoding pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector:
+
+
+  ## @param geocoding.tolerations Tolerations for geocoding pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param geocoding.updateStrategy.type geocoding statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    ##type: RollingUpdate
+  ## @param geocoding.priorityClassName geocoding pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param geocoding.schedulerName Name of the k8s scheduler (other than default) for geocoding pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param geocoding.lifecycleHooks for the geocoding container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param geocoding.extraEnvVars Array with extra environment variables to add to geocoding nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param geocoding.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for geocoding nodes
+  ##
+  extraEnvVarsCM: "cat-env"
+  ## @param geocoding.extraEnvVarsSecret Name of existing Secret containing extra env vars for geocoding nodes
+  ##
+  extraEnvVarsSecret:
+  ## @param geocoding.extraVolumes Optionally specify extra list of additional volumes for the geocoding pod(s)
+  ##
+  extraVolumes:
+    - name: cat-config
+      secret:
+        secretName: cat-config
+
+  ## @param geocoding.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the geocoding container(s)
+  ##
+  extraVolumeMounts: 
+    - name: cat-config
+      mountPath: /usr/share/app/secrets/configs
+  
+  ## @param geocoding.sidecars Add additional sidecar containers to the geocoding pod(s)
+  ## e.g:
+  ## sidecars:
+   #   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+   ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param geocoding.initContainers Add additional init containers to the geocoding pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: {}
+
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param geocoding.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param geocoding.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param geocoding.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param geocoding.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param geocoding.autoscaling.targetMemory Target Memory utilization percentage
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPU: 80
+    targetMemory:
+
+## @section nlpSearch Parameters
+
+nlpSearch:
+
+  ## @param nlpSearch.replicaCount Number of nlpSearch replicas to deploy
+
+  replicaCount: 1  
+  ## Configure extra options for nlpSearch containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param nlpSearch.livenessProbe.enabled Enable livenessProbe on nlpSearch containers
+  ## @param nlpSearch.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param nlpSearch.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param nlpSearch.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param nlpSearch.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param nlpSearch.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param nlpSearch.livenessProbe.path Path for httpGet
+  ##
+  livenessProbe:
+    enabled: true
+    path: /metrics
+    initialDelaySeconds: 60
+    periodSeconds: 60
+    timeoutSeconds: 10
+    #failureThreshold: 10
+    #successThreshold: 10
+  ## @param nlpSearch.readinessProbe.enabled Enable readinessProbe on nlpSearch containers
+  ## @param nlpSearch.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param nlpSearch.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param nlpSearch.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param nlpSearch.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param nlpSearch.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 10
+    successThreshold: 10
+  ## @param nlpSearch.startupProbe.enabled Enable startupProbe on nlpSearch containers
+  ## @param nlpSearch.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param nlpSearch.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param nlpSearch.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param nlpSearch.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param nlpSearch.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 10
+    failureThreshold: 10
+    successThreshold: 10
+  ## @param nlpSearch.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param nlpSearch.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param nlpSearch.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param nlpSearch.podSecurityContext.enabled Enabled nlpSearch pods' Security Context
+  ## @param nlpSearch.podSecurityContext.fsGroup Set nlpSearch pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: false
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param nlpSearch.containerSecurityContext.enabled Enabled nlpSearch containers' Security Context
+  ## @param nlpSearch.containerSecurityContext.runAsUser Set nlpSearch containers' Security Context runAsUser
+  ## @param nlpSearch.containerSecurityContext.runAsNonRoot Set nlpSearch containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: false
+    runAsUser: 1001
+    runAsNonRoot: true
+   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
+   ## @param nlpSearch.existingConfigmap The name of an existing ConfigMap with your custom configuration for nlpSearch
+  ##
+  existingConfigmap:
+    
+  ## @param nlpSearch.command Override default container command (useful when using custom images)
+  ##
+  command: ["/bin/bash"]
+  ## @param nlpSearch.args Override default container args (useful when using custom images)
+  ##
+  args: ["-c","exec java  -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory   -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.catalogue.server.nlpsearch.NLPSearchVerticle"]  
+  ## @param nlpSearch.hostAliases nlpSearch pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param nlpSearch.podLabels Extra labels for nlpSearch pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+ 
+  ##
+  ## @param nlpSearch.podAffinityPreset Pod affinity preset. Ignored if `nlpSearch.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param nlpSearch.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `nlpSearch.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node nlpSearch.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param nlpSearch.nodeAffinityPreset.type Node affinity preset type. Ignored if `nlpSearch.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param nlpSearch.nodeAffinityPreset.key Node label key to match. Ignored if `nlpSearch.affinity` is set
+    ##
+    key: ""
+    ## @param nlpSearch.nodeAffinityPreset.values Node label values to match. Ignored if `nlpSearch.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param nlpSearch.affinity Affinity for nlpSearch pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `nlpSearch.podAffinityPreset`, `nlpSearch.podAntiAffinityPreset`, and `nlpSearch.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param nlpSearch.nodeSelector Node labels for nlpSearch pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector:
+
+
+  ## @param nlpSearch.tolerations Tolerations for nlpSearch pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param nlpSearch.updateStrategy.type nlpSearch statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    ##type: RollingUpdate
+  ## @param nlpSearch.priorityClassName nlpSearch pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param nlpSearch.schedulerName Name of the k8s scheduler (other than default) for nlpSearch pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param nlpSearch.lifecycleHooks for the nlpSearch container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param nlpSearch.extraEnvVars Array with extra environment variables to add to nlpSearch nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param nlpSearch.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for nlpSearch nodes
+  ##
+  extraEnvVarsCM: "cat-env"
+  ## @param nlpSearch.extraEnvVarsSecret Name of existing Secret containing extra env vars for nlpSearch nodes
+  ##
+  extraEnvVarsSecret:
+  ## @param nlpSearch.extraVolumes Optionally specify extra list of additional volumes for the nlpSearch pod(s)
+  ##
+  extraVolumes:
+    - name: cat-config
+      secret:
+        secretName: cat-config
+
+  ## @param nlpSearch.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the nlpSearch container(s)
+  ##
+  extraVolumeMounts: 
+    - name: cat-config
+      mountPath: /usr/share/app/secrets/configs
+  
+  ## @param nlpSearch.sidecars Add additional sidecar containers to the nlpSearch pod(s)
+  ## e.g:
+  ## sidecars:
+   #   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+   ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: {}
+  ## @param nlpSearch.initContainers Add additional init containers to the nlpSearch pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: {}
+
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param nlpSearch.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param nlpSearch.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param nlpSearch.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param nlpSearch.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param nlpSearch.autoscaling.targetMemory Target Memory utilization percentage
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPU: 80
+    targetMemory:
 
 
 ## %%SECONDARY_CONTAINER/POD_DESCRIPTION%%
@@ -1322,7 +1686,7 @@ service:
   ## NOTE: choose port between <30000-32767>
   ## @param service.targetPorts ApiServer service TargetPorts port
   ##
-  targetPorts: 80
+  targetPorts: 8080
   ## @param service.clusterIP ApiServer service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -1364,7 +1728,7 @@ ingress:
   apiVersion:
   ## @param ingress.hostname Default host for the ingress record
   ##
-  hostname: cat.test.io
+  hostname: cat-host
   ## @param ingress.path Default path for the ingress record
   ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
@@ -1398,9 +1762,7 @@ ingress:
   ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
   tls:
-    - hosts:
-        - cat.test.io
-      secretName: catalogue-tls-secret
+    secretName: cat-tls-secret
   ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
   ##
   selfSigned: false

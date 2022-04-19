@@ -1,10 +1,10 @@
-{{- if .Values.apiServer.autoscaling.enabled }}
+{{- if .Values.nlpSearch.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: cat-api-server
+  name: cat-nlpsearch
   labels:
-    app: cat-api-server
+    app: cat-nlpsearch
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: cat-api-server
-  minReplicas: {{ .Values.apiServer.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.apiServer.autoscaling.maxReplicas }}
+    name: cat-nlpsearch
+  minReplicas: {{ .Values.nlpSearch.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.nlpSearch.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.apiServer.autoscaling.targetCPU }}
+    {{- if .Values.nlpSearch.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.nlpSearch.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.apiServer.autoscaling.targetMemory }}
+    {{- if .Values.nlpSearch.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.nlpSearch.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}

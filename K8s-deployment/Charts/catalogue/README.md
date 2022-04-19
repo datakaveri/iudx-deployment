@@ -4,15 +4,43 @@
 
 Helm Chart for IUDX Catalogue Server Deployment
 
-## Installing the Chart
+## Create secret files
 
-To install the chart with the release name `catalogue`:
+Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
-$ helm install catalogue catalogue/
+$ cp -r example-secrets/secrets .
 ```
 
-The command deploys Catalogue on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+```
+# secrets directory after generation of secret files
+secrets/
+├── .cat.env
+└── config.json
+```
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU of all catalogue-server verticles
+- RAM of all catalogue-server verticles
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
+
+## Installing the Chart
+
+To install the `catalogue-server`chart:
+
+```console
+$ ./install.sh --set ingress.hostname=<cat-hostname>
+```
+
+The command deploys  catalogue-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+Following script will create :
+1. create a namespace `cat`
+2. create required configmaps
+3. create corresponding K8s secrets from the secret files
+4. deploy all catalogue-server verticles 
 
 ## Uninstalling the Chart
 
@@ -39,7 +67,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `nameSpace`              | Namespace to deploy the controller                                                      | `cat`           |
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
 | `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
