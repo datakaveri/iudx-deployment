@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: cat-auditing
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: auditing
     app: cat-auditing

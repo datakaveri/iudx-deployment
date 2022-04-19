@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: cat-auditing
-  namespace: {{ .Values.nameSpace }}
   labels:
     app: cat-auditing
     {{- include "common.labels.standard" . | nindent 4 }}
