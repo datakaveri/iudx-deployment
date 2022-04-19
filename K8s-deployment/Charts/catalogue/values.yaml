@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/cat-prod
-  tag: 3.0-91af2fa
+  tag: 3.5.0-05b6b35
   pullSecrets:
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1528,7 +1528,7 @@ nlpSearch:
   command: ["/bin/bash"]
   ## @param nlpSearch.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java  -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory   -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.catalogue.server.nlpSearch.NLPSearchVerticle"]  
+  args: ["-c","exec java  -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory   -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.catalogue.server.nlpsearch.NLPSearchVerticle"]  
   ## @param nlpSearch.hostAliases nlpSearch pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1686,7 +1686,7 @@ service:
   ## NOTE: choose port between <30000-32767>
   ## @param service.targetPorts ApiServer service TargetPorts port
   ##
-  targetPorts: 80
+  targetPorts: 8080
   ## @param service.clusterIP ApiServer service Cluster IP
   ## e.g.:
   ## clusterIP: None
