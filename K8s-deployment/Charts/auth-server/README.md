@@ -2,17 +2,47 @@
 
 ## Introduction
 
-Helm Chart for IUDX auth-server Server Deployment
+Helm Chart for IUDX auth-server Deployment
+
+
+## Create secret files
+
+Make a copy of sample secrets directory and add appropriate values to all files.
+
+```console
+$ cp -r example-secrets/secrets .
+```
+
+```
+# secrets directory after generation of secret files
+secrets/
+├── .aaa.env
+├── config.json
+└── keystore.jks
+```
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU of all aaa-server verticles
+- RAM of all aaa-server verticles
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
 ## Installing the Chart
 
-To install the chart with the release name `auth-server`:
+To install the `auth-server`chart:
 
 ```console
-$ helm install auth-server auth-server/
+$ ./install.sh
 ```
 
 The command deploys auth-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+Following script will create :
+1. create a namespace `aaa`
+2. create required configmaps
+3. create corresponding K8s secrets from the secret files
+4. deploy all aaa-server verticles 
 
 ## Uninstalling the Chart
 

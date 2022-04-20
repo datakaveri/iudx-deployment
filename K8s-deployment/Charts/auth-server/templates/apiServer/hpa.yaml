@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: aaa-api-server
-  namespace: {{ .Values.nameSpace }}
   labels:
     app: aaa-api-server
     {{- include "common.labels.standard" . | nindent 4 }}
