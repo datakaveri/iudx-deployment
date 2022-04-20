@@ -2,7 +2,6 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: di-databroker
-  namespace: {{ .Values.nameSpace }}
   labels: 
     app.kubernetes.io/component: databroker
     app: di-databroker
