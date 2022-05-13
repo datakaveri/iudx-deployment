@@ -1,4 +1,9 @@
 controller:
+  ## @param nodeSelector Node labels for pod assignment
+  ### ref: https://kubernetes.io/docs/user-guide/node-selection/
+  #
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
   resources:
     limits:
       cpu: 1800m
@@ -6,26 +11,13 @@ controller:
     requests:
       cpu: 1200m
       memory: 3Gi
-
-  ## @param nodeSelector Node labels for pod assignment
- ### ref: https://kubernetes.io/docs/user-guide/node-selection/
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-  # AWS network load-balancer provisioning in-front of ingress controller as service
+  # Azure Standrd load-balancer in-front of ingress controller as service
   service:
     enabled: true
-    annotations: 
-      ## in-tree aws cloud provider loadbalancer controller is used, 
-      ## specified using annotations 
-      ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#aws-nlb-support
-      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-      ## AWS elastic ip is assigned to the ingress nlb 
-      ## It needs to be provisioned in aws before-hand and 
-      ## its epialloc-id needs to be specified
-      service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "<eipalloc-id>"
-      ## Explictly specifying the AZ in nlb will route traffic to 
-      ## https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/#subnets
-      service.beta.kubernetes.io/aws-load-balancer-subnets: "<subnet-id>"
+    annotations:
+      # https://kubernetes-sigs.github.io/cloud-provider-azure/topics/loadbalancer/,    
+      service.beta.kubernetes.io/azure-load-balancer-resource-group: <resourceGroup>
+
 
     labels: {}
     
@@ -35,8 +27,8 @@ controller:
     ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
     ##
     externalIPs: []
-
-    # loadBalancerIP: ""
+    # create a public ip with standard sku in azure beforehand
+    loadBalancerIP: <public-ip>
     loadBalancerSourceRanges: []
 
     enableHttp: true
@@ -90,8 +82,11 @@ defaultBackend:
     requests:
       cpu: 10m
       memory: 20Mi
-  ## @param nodeSelector Node labels for pod assignment
-  ### ref: https://kubernetes.io/docs/user-guide/node-selection/
+     ## Node labels for default backend pod assignment
+     #  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+     #    ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+     node.kubernetes.io/instance-type:  Standard_B2s
+
+
 
