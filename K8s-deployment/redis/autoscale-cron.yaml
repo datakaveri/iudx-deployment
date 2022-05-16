@@ -12,14 +12,14 @@ spec:
           serviceAccount: redis-autoscaler
           containers:
           - name: redis-autoscaler
-            image: dockerhub.iudx.io/iudx/redis-cluster-autoscaler:1.2
+            image: ghcr.io/datakaveri/redis-cluster-autoscaler:1.2
             env:
              #CPU usage% threshold for autoscaling
              - name: autoscale_threshold
                value: "80"
              #CPU resource limit set for redis (millicores)   
              - name: redis_resource_limit
-               value: "1800"
+               value: "1600"
              - name: prometheus_url
                value: prometheus-server.mon-stack.svc.cluster.local
              - name: REDIS_PASSWORD
@@ -29,7 +29,7 @@ spec:
                    key: redis-password
             imagePullPolicy: IfNotPresent
             command: ["/bin/bash", "-c", "--"]
-            args: ["cd /home; /home/redis-autoscaler.sh"]
+            args: ["cd /home; ./redis-autoscaler.sh"]
             volumeMounts:
             - name: redis-autoscale-script
               mountPath: /home/
