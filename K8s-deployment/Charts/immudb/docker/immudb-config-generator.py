@@ -37,13 +37,14 @@ client.createUser("iudx_cat",IUDX_CAT_PASSWORD,immudb.constants.PERMISSION_RW,"i
 client.createUser("iudx_rs",IUDX_RS_PASSWORD,immudb.constants.PERMISSION_RW,"iudxrs")
 
 client.databaseUse("iudxcat")
-client.sqlExec("CREATE TABLE auditingtable(id VARCHAR NOT NULL, userRole VARCHAR NOT NULL,userID VARCHAR NOT NULL,iid VARCHAR NOT NULL,api VARCHAR NOT NULL,method VARCHAR NOT NULL,time INTEGER NOT NULL,iudxID VARCHAR NOT NULL,PRIMARY KEY id);")
+client.sqlExec("CREATE TABLE auditingtable1(id VARCHAR NOT NULL, userRole VARCHAR NOT NULL, userId VARCHAR NOT NULL, iid VARCHAR NOT NULL, api VARCHAR NOT NULL, method VARCHAR NOT NULL, time INTEGER, iudxID VARCHAR NOT NULL,PRIMARY KEY id);")
 
 client.databaseUse("iudxauth")
 client.sqlExec("CREATE TABLE table_auditing(id VARCHAR NOT NULL, body VARCHAR NOT NULL,userid VARCHAR NOT NULL,endpoint VARCHAR NOT NULL,method VARCHAR NOT NULL,time INTEGER NOT NULL,PRIMARY KEY id);")
 
-client.databaseUse("iudxrs")
-client.sqlExec("CREATE TABLE auditing(id VARCHAR NOT NULL, userid VARCHAR NOT NULL,api VARCHAR NOT NULL,resourceid VARCHAR NOT NULL,time INTEGER NOT NULL,PRIMARY KEY id);")
+client.databaseUse("iudxrsorg")
+client.sqlExec("CREATE TABLE IF NOT EXISTS rsauditingtable (id VARCHAR NOT NULL, api VARCHAR, userid VARCHAR,epochtime INTEGER,resourceid VARCHAR, isotime VARCHAR, providerid VARCHAR, PRIMARY KEY (id));")
+
 
 print(client.listUsers())
 print(client.databaseList())
