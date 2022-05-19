@@ -64,8 +64,8 @@ diagnosticMode:
 ## @param image.debug Enable image debug mode
 ##
 image:
-  registry: dockerhub.iudx.io
-  repository: iudx/redis-cluster-rejson
+  registry: ghcr.io
+  repository: datakaveri/redis-cluster-rejson
   ## Bitnami Redis&trade; image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
@@ -82,8 +82,7 @@ image:
   ## pullSecrets:
   ##   - myRegistryKeySecretName
   ##
-  pullSecrets:
-    - regcred
+  pullSecrets: []
   ## Enable debug mode
   ##
   debug: false
@@ -401,6 +400,7 @@ redis:
   configmap: |-
     cluster-require-full-coverage no 
     cluster-node-timeout 90000    
+
   ## @param redis.extraEnvVars An array to add extra environment variables
   ## For example:
   ##  - name: BEARER_AUTH
@@ -455,9 +455,9 @@ redis:
   ## @param redis.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 5
+    enabled: false
+    initialDelaySeconds: 172800
+    periodSeconds: 60
     timeoutSeconds: 5
     successThreshold: 1
     failureThreshold: 5
