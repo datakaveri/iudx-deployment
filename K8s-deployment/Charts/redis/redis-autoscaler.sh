@@ -1,6 +1,12 @@
 #!/bin/bash
 
+set -e
+
 all_cpu_usage=$(curl -fs --data-urlencode 'query=sum(rate(container_cpu_usage_seconds_total{image!="",namespace="redis",pod=~"redis-redis-cluster-[0-9]+"}[5m])) by (pod) * 1000' http://$prometheus_url/api/v1/query | jq -r '.data.result[] | [.metric.pod, .value[1]] | join ("=")')
+#if [$all_cpu_usage == ""]
+#then
+#  exit 1
+#fi
 
 current_num_nodes=$(redis-cli --cluster call redis-redis-cluster-0.redis-redis-cluster-headless:6379 CLUSTER INFO -a $REDIS_PASSWORD | grep 'cluster_known_nodes' | awk -F: 'NR==1 {print $2}' | tr -d $'\r')
 echo "Current number of cluster nodes = $current_num_nodes"
