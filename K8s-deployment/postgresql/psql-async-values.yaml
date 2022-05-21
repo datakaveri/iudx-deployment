@@ -27,8 +27,8 @@
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
 ##
 postgresqlImage:
-  registry: dockerhub.iudx.io
-  repository: iudx/postgresql-repmgr
+  registry: docker.io
+  repository: bitnami/postgresql-repmgr
   tag: 11.12.0
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -208,7 +208,6 @@ postgresql:
   ## Node labels for PostgreSQL pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  nodeSelector: {}
 
   ## Tolerations for PostgreSQL pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -265,22 +264,13 @@ postgresql:
 
   ## Secret with extra environment variables
   ##
-  extraEnvVarsSecret: backup-s3-secret
 
   ## Extra volumes to add to the deployment
   ##
-  extraVolumes: 
-    - name: backup-s3-cfg
-      configMap:
-        name: backup-s3-cfg
-        items:
-        - key: s3cfg
-          path: .s3cfg
+  extraVolumes: []
   ## Extra volume mounts to add to the container
   ##
-  extraVolumeMounts:
-    - name: backup-s3-cfg
-      mountPath: /s3cmd/
+  extraVolumeMounts: []
 
 
   ## Extra init containers to add to the deployment
@@ -300,11 +290,11 @@ postgresql:
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
-    #   cpu: 250m
-    #   memory: 256Mi
+    #  cpu: 250m
+    #  memory: 256Mi
     requests: {}
-    #   cpu: 250m
-    #   memory: 256Mi
+    #  cpu: 250m
+    #  memory: 256Mi
 
   ## PostgreSQL container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -719,7 +709,8 @@ pgpool:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: pgpool.podAffinityPreset, pgpool.podAntiAffinityPreset, and pgpool.nodeAffinityPreset will be ignored when it's set
   ##
-  affinity: {}
+  affinity: {} 
+
 
   ## Node labels for Pgpool pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
@@ -754,11 +745,11 @@ pgpool:
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     limits: {}
-    #   cpu: 250m
-    #   memory: 256Mi
+    #  cpu: 250m
+    #  memory: 256Mi
     requests: {}
-    #   cpu: 250m
-    #   memory: 256Mi
+    #  cpu: 250m
+    #  memory: 256Mi
 
   ## Pgpool container's liveness, readiness, and startup probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -843,7 +834,7 @@ pgpool:
   ## The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
   ##
-  maxPool: 
+  maxPool:
 
   ## The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)
   ## ref: https://github.com/bitnami/bitnami-docker-pgpool#configuration
@@ -1150,7 +1141,7 @@ service:
   ## Set the Cluster IP to use
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
   ##
-  # clusterIP: None
+  clusterIP: None
   ## Enable client source IP preservation
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
