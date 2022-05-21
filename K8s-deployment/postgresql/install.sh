@@ -1,9 +1,9 @@
 #!/bin/bash
 
 kubectl create namespace postgres
-kubectl apply -f ../K8s-cluster/sealed-secrets/cluster-wide-sealed-secrets/docker-registry-cred.yaml -n postgres
-kubectl apply -f sealed-secrets/
-kubectl create configmap backup-s3-cfg --from-file=s3cfg=conf/backup-s3-cfg -n postgres
+kubectl create secret generic psql-passwords  --from-file=./secrets/postgresql-password --from-file=./secrets/repmgr-password --from-file=./secrets/postgres-auth-password --from-file=./secrets/postgres-rs-password --from-file=./secrets/postgres-keycloak-password -n postgres  
+kubectl create secret generic pgpool-auth  --from-file=./secrets/usernames --from-file=./secrets/passwords  -n postgres
+
 kubectl create configmap init-scripts --from-file=./init-scripts/ -n postgres
 sleep 10
 # install postgres asynchronous cluster  
@@ -16,8 +16,4 @@ POSTGRES_PASSWORD=$(kubectl get secret --namespace  postgres psql-passwords -o j
  POOL_ADMIN_PASSWORD=$(kubectl get secret --namespace postgres psql-postgresql-ha-pgpool -o jsonpath="{.data.admin-password}" | base64 --decode)
 helm upgrade -f psql-async-values.yaml -f psql-sync-values.yaml -f resource-values.yaml -n  postgres psql  bitnami/postgresql-ha --version=7.7.3 $@ --set postgresql.password=$POSTGRES_PASSWORD  --set postgresql.repmgrPassword=$REPMGR_PASSWORD --set pgpool.adminPassword=$POOL_ADMIN_PASSWORD
 
-sleep 100
 
-# install pg_dumpall K8s cronjob
-kubectl create configmap pg-backup-script --from-file=backup-script.sh -n postgres 
-kubectl apply -f pg-backup-cron.yaml -n postgres 
