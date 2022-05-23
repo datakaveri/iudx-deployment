@@ -41,3 +41,13 @@ Following script will create :
 3. create required configmaps
 4. Initialize asynchronous postgres replication cluster with initdb scripts 
 5. Upgrade the cluster with synchrounous replication
+
+## RS, auth scehma creation
+The rs and auth schema created using flyway using following steps:
+1. Port forward the pgpool (postgres proxy) on one terminal
+```kubectl port-forward -n postgres svc/psql-postgresql-ha-pgpool 5432
+```
+2. In another terminal, git clone each repo and do following
+  2.1 adjust flyway config 
+  2.2 Do flyway migrate
+  Refer here for more info: https://github.com/datakaveri/iudx-aaa-server#flyway-database-setup
