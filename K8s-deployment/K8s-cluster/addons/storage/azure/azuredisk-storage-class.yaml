@@ -4,7 +4,8 @@ metadata:
   name: azuredisk-storage-class
 provisioner: disk.csi.azure.com  # kubernetes.io/azure-disk for k8s in-tree drivers
 parameters:
-  skuname: StandardSSD_LRS 
+  skuname: StandardSSD_LRS
+  fsType: ext4
 allowVolumeExpansion: true
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
