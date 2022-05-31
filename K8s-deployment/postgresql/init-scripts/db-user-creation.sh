@@ -12,12 +12,10 @@ auth_username=iudx_auth_user
 auth_passwd=$(cat /opt/bitnami/postgresql/secrets/postgres-auth-password)
 auth_db_name=iudx_auth
 
-PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/postgresql-password) psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$rs_db_name" <<-EOSQL
-CREATE ROLE $rs_username WITH NOSUPERUSER NOINHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS;
+PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/postgresql-password) psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+CREATE DATABASE $rs_db_name WITH ENCODING 'UTF8';
+CREATE ROLE $rs_username WITH NOSUPERUSER NOINHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS;i
 ALTER ROLE $rs_username WITH  ENCRYPTED PASSWORD '$rs_passwd';
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE  public.databroker TO $rs_username;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE  public.file_server_token TO $rs_username;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE  public.registercallback TO $rs_username;
 GRANT ALL ON SCHEMA public TO $rs_username;
 EOSQL
 
