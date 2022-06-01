@@ -41,10 +41,6 @@ secrets
 |   `-- logstash.keystore
 ```
 
-Rename example-kibana.env to .kibana.env
-```sh
-cp example-kibana.env .kibana.env
-```
 ## Deploy
 
 Three ways to deploy, do any one of it
@@ -59,7 +55,7 @@ docker stack deploy -c database-stack.yml -c database-stack.resources.yml databa
 ```
 3. You can add more custom stack cofiguration in file 'database-stack.custom.yml' that overrides base 'database-stack.yml' file like ports mapping etc ( see [here](example-database-stack.custom.yml) for example configuration of 'database-stack.custom.yml' file)  and bring up like as follows.
 ```sh
-docker stack deploy -c immudb-stack.yml  -c database-stack.custom.yml database
+docker stack deploy -c database-stack.yml  -c database-stack.custom.yml database
 ```
 or
 with resource limits, reservations and exposing port number
