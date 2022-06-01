@@ -8,7 +8,6 @@ networks:
 services:
   elasticsearch:
     image: ghcr.io/datakaveri/elasticsearch:7.12.1
-    command: ./launcher.sh
     deploy:
       replicas: 1
       placement:
@@ -39,10 +38,6 @@ services:
       - type: volume
         source: elastic-volume
         target: /usr/share/elasticsearch/data
-    configs:
-      - source: elasticsearch-launcher
-        target: /usr/share/elasticsearch/launcher.sh
-        mode: 0777
     secrets:
       - source: elasticsearch.keystore
         target: /usr/share/elasticsearch/config/elasticsearch.keystore
@@ -143,9 +138,6 @@ volumes:
   logstash-volume:
 
 configs:
-  elasticsearch-launcher:
-    file: elasticsearch/launcher.sh
-
   logstash-pipelines:
     file: logstash/settings/pipelines.yml
   logstash-settings:
