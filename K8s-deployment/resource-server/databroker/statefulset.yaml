@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: rabbitmq
-  namespace: rabbitmq-test
+  namespace: rabbitmq
 spec:
   serviceName: rabbitmq-headless
   replicas: 3
@@ -14,6 +14,8 @@ spec:
       labels:
         app: rabbitmq
     spec:
+      nodeSelector:
+        beta.kubernetes.io/instance-type: c5.large
       serviceAccountName: rabbitmq
       terminationGracePeriodSeconds: 10
       initContainers:
@@ -36,7 +38,6 @@ spec:
       # read-write volume into which to copy the rabbitmq.conf and enabled_plugins files
       # this is needed since the docker image writes to the rabbitmq.conf file
       # and Kubernetes Config Maps are mounted as read-only since Kubernetes 1.9.4
-   
     
       # The Docker image runs as the `rabbitmq` user with uid 999 
       # and writes to the `rabbitmq.conf` file
@@ -113,14 +114,14 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: rabbitmq-erlang-cookie
-                key: rabbitmq-erlang-cookie      
+                key: .erlang.cookie     
         resources:
           limits:
-            cpu: "1200m"
-            memory: "3Gi"
+            cpu: "1800m"
+            memory: "3.8Gi"
           requests:
-            cpu: "800m"
-            memory: "2Gi"       
+            cpu: "1500m"
+            memory: "3Gi"
       volumes:
         - name: certs
           secret:
@@ -128,6 +129,12 @@ spec:
         - name: rabbitmq-definition-file
           secret:
             secretName: rabbitmq-definition-file
+        - name: rabbitmq-erlang-cookie
+          secret:
+            secretName: rabbitmq-erlang-cookie
+            items:
+            - key: .erlang.cookie
+              path: .erlang.cookie
         - name: rabbitmq-config
           configMap:
             name: rabbitmq-config
@@ -151,4 +158,4 @@ spec:
       storageClassName: "ebs-storage-class"
       resources:
         requests:
-          storage: 60Gi
+          storage: 20Gi
