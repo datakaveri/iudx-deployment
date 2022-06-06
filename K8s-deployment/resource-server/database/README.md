@@ -1,4 +1,4 @@
-# Install
+# Install ELK
 ## Required secrets
 ```sh
 secrets
@@ -14,20 +14,18 @@ secrets
 |   |-- logstash-rabbitmq-username
 |   `-- logstash-system-password
 `-- pki
-    |-- kibana-tls-cert
-    |-- kibana-tls-key
     |-- s3-access-key
     `-- s3-secret-key
 ```
 ## Build custom Elasticsearch docker image
 Custom docker image include S3 snapshot plugin (Recommeded way)[https://github.com/elastic/helm-charts/blob/master/elasticsearch/README.md#how-to-install-plugins]
 ```sh
-docker build -t dockerhub.iudx.io/iudx/elasticsearch:7.12.1 --build-arg es_version=7.12.1 -f elasticsearch/docker/Dockerfile .
+docker build -t ghcr.io/datakaveri/elasticsearch:7.12.1 --build-arg es_version=7.12.1 -f elasticsearch/docker/Dockerfile .
 ```
 
 ## Deploy Elasticsearch
 
-install.sh script
+es-install.sh script
 - generates the keystores from ./generate-keystores.sh
 - will generate 3 keystore files in the secrets directory,
 
@@ -44,5 +42,20 @@ secrets
 
 ```sh
 # Deployment of es
-./install.sh  --set volumeClaimTemplate.storageClassName=<name-of-starage-class>
+./es-install.sh  --set volumeClaimTemplate.storageClassName=<name-of-starage-class>
 ```
+## Deploy Logstash
+Once es is deployed and ready. Deploy logstash as follows :
+ 
+```sh
+./logstash-install.sh
+```
+
+## Deploy Kibana
+Once es is deployed and ready/ Deploy kibana as follows: 
+```sh
+./kibana-install.sh
+```
+## Tests
+Do basic test by creating an index under tests/ directory
+

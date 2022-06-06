@@ -11,20 +11,24 @@ logstashConfig:
     http.host: 0.0.0.0
     xpack.monitoring.enabled: false
     log.format: json
-
+  pipelines.yml: |
+    - pipeline.id: resource-group
+      path.config: "/usr/share/logstash/pipeline/resource-group.cfg"
+      queue.type: persisted
+      queue.max_bytes: 75mb
 # Allows you to add any pipeline files in /usr/share/logstash/pipeline/
 ### ***warn*** there is a hardcoded logstash.conf in the image, override it first
 logstashPipeline: 
-  resource-group.conf: |
+  resource-group.cfg: |
     input {
       rabbitmq {
-        host => "databroker.iudx.io"
-        port => 24567
+        host => "rabbitmq-logstash-client.rabbitmq.svc.cluster.local"
+        port => 5671 
         ssl => true
         vhost => "IUDX"
         user => "${rabbitmq_username}"
         password => "${rabbitmq_password}"
-        queue => "k8s-logstash"
+        queue => "database"
         durable => true
         metadata_enabled => true
       }
@@ -39,7 +43,7 @@ logstashPipeline:
     }
     output {
       elasticsearch {
-        hosts => [ "http://elasticsearch-mcd:9200" ]
+        hosts => [ "http://elasticsearch-mcd-headless.elastic.svc.cluster.local:9200" ]
         manage_template => false
         user => "${elasticsearch_username}"
         password => "${elasticsearch_password}"
@@ -86,7 +90,7 @@ hostAliases: []
 #  - "foo.local"
 #  - "bar.local"
 
-image: "docker.elastic.co/logstash/logstash"
+image: "ghcr.io/datakaveri/logstash"
 imageTag: "7.12.1"
 imagePullPolicy: "IfNotPresent"
 imagePullSecrets: []
@@ -96,22 +100,22 @@ podAnnotations: {}
 # additionals labels
 labels: {}
 
-logstashJavaOpts: "-Xmx1g -Xms1g"
+logstashJavaOpts: "-Xmx2g -Xms2g -Dlog4j2.formatMsgNoLookups=true"
 
 resources:
   requests:
-    cpu: "100m"
-    memory: "1536Mi"
+    cpu: "800m"
+    memory: "2.5Gi"
   limits:
-    cpu: "1000m"
-    memory: "1536Mi"
+    cpu: "1200m"
+    memory: "3Gi"
 
 volumeClaimTemplate:
   accessModes: [ "ReadWriteOnce" ]
   storageClassName: "ebs-storage-class"
   resources:
     requests:
-      storage: 5Gi
+      storage: 10Gi
 
 rbac:
   create: false
@@ -252,7 +256,8 @@ readinessProbe:
 ##
 schedulerName: ""
 
-nodeSelector: {}
+nodeSelector: 
+  node.kubernetes.io/instance-type: t3.medium
 tolerations: []
 
 nameOverride: ""
