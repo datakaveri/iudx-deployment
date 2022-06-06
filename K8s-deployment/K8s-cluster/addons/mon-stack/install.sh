@@ -1,7 +1,8 @@
 #!/bin/bash
 
 kubectl create namespace mon-stack
-kubectl create secret tls grafana-tls-secret -n mon-stack --key secrets/pki/privkey.pem --cert secrets/pki/fullchain.pem
+# certificate fro certmanager
+# kubectl create secret tls grafana-tls-secret -n mon-stack --key secrets/pki/privkey.pem --cert secrets/pki/fullchain.pem
 # Depreacting sealed secrets
 # kubectl apply -f sealed-secrets/
 kubectl create secret generic grafana-env-secret   --from-env-file=secrets/grafana-env-secret -n mon-stack
