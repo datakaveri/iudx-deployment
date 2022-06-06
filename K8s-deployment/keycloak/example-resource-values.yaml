@@ -1,0 +1,16 @@
+resources:
+  limits:
+    cpu: 1400m
+    memory: 3Gi
+  requests:
+    cpu: 1000m
+    memory: 2.5Gi
+
+## @param nodeSelector Node labels for pod assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+
+nodeSelector:
+  beta.kubernetes.io/instance-type: t3.medium
+
+
