@@ -1,24 +1,27 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: rabbitmq-test
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "<eip-alloc-id>"
+    service.beta.kubernetes.io/aws-load-balancer-subnets: "<subnet-id>"
+  namespace: rabbitmq
   name: rabbitmq-external-client
   labels:
     app: rabbitmq
     type: LoadBalancer
 spec:
-  type: NodePort
+  type: LoadBalancer
+  externalTrafficPolicy: Local
   ports:
    - name: https
-     port: 15671
+     port: 28041
      targetPort: 15671
-     nodePort: 31671
      protocol: TCP
 
    - name: amqps
-     port: 5671
+     port: 24567
      targetPort: 5671
-     nodePort: 30671
      protocol: TCP
 
   selector:
