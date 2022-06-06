@@ -24,8 +24,8 @@ esMajorVersion: ""
 # such as elasticsearch.yml and log4j2.properties
 esConfig: 
   elasticsearch.yml: |
-    action.auto_create_index: .* 
-    xpack.security.audit.enabled: true
+    action.auto_create_index: +.* 
+    xpack.security.audit.enabled: false
     xpack.security.enabled: true
     xpack.security.transport.ssl.enabled: true
     xpack.security.transport.ssl.verification_mode: certificate
@@ -76,7 +76,7 @@ hostAliases: []
 #  - "foo.local"
 #  - "bar.local"
 
-image: "dockerhub.iudx.io/iudx/elasticsearch"
+image: "ghcr.io/datakaveri/elasticsearch"
 imageTag: "7.12.1"
 imagePullPolicy: "IfNotPresent"
 
@@ -86,15 +86,15 @@ podAnnotations: {}
 # additionals labels
 labels: {}
 
-esJavaOpts: "-Xmx256m -Xms256m"
+esJavaOpts: "-Xmx8192m -Xms8192m -Dlog4j2.formatMsgNoLookups=true"
 
 resources:
   requests:
-    cpu: "500m"
-    memory: "1Gi"
+    cpu: "3500m"
+    memory: "14Gi"
   limits:
-    cpu: "1000m"
-    memory: "1Gi"
+    cpu: "3800m"
+    memory: "15Gi"
 
 initResources: {}
   # limits:
@@ -116,10 +116,10 @@ networkHost: "0.0.0.0"
 
 volumeClaimTemplate:
   accessModes: [ "ReadWriteOnce" ]
-  storageClassName: "standard"
+  storageClassName: "ebs-storage-class"
   resources:
     requests:
-      storage: 5Gi
+      storage: 120Gi
 
 rbac:
   create: false
@@ -262,9 +262,8 @@ clusterHealthCheckParams: "wait_for_status=green&timeout=1s"
 ##
 schedulerName: ""
 
-imagePullSecrets:
-  - name: regcred
-nodeSelector: {}
+nodeSelector:
+  beta.kubernetes.io/instance-type: t3.xlarge
 tolerations: []
 
 # Enabling this will publically expose your Elasticsearch instance.

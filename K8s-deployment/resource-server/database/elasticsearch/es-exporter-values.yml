@@ -36,13 +36,13 @@ log:
   format: logfmt
   level: info
 
-resources: {}
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources: 
+  requests:
+     cpu: 100m
+     memory: 128Mi
+  limits:
+     cpu: 100m
+     memory: 128Mi
 
 priorityClassName: ""
 
@@ -54,14 +54,26 @@ podAnnotations: {}
 
 podLabels: {}
 
-affinity: {}
+affinity: 
+  podAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: chart
+          operator: In
+          values:
+          - elasticsearch
+      topologyKey: "kubernetes.io/hostname"
+
 
 service:
   type: ClusterIP
   httpPort: 9108
   metricsPort:
     name: http
-  annotations: {}
+  annotations:
+    prometheus.io/scrape-slow: "true"
+    prometheus.io/port: "9108"
   labels: {}
 
 ## Extra environment variables that will be passed into the exporter pod
@@ -80,11 +92,11 @@ envFromSecret: ""
 ## This will set ${ES_PASSWORD} to the 'password' key from the 'my-secret' secret
 extraEnvSecrets:
   ES_PASSWORD:
-    secret: elastic-credentials
-    key: password
+    secret: elk-passwords
+    key: elasticsearch-monitor-password
   ES_USERNAME:
-    secret: elastic-credentials
-    key: username
+    secret: elk-passwords
+    key: elasticsearch-monitor-user
 
 # A list of secrets and their paths to mount inside the pod
 # This is useful for mounting certificates for security
@@ -146,7 +158,7 @@ es:
 
   ## If true, query stats for cluster settings.
   ##
-  cluster_settings: false
+  cluster_settings: true
 
   ## Timeout for trying to get stats from Elasticsearch. (ex: 20s)
   ##

@@ -9,24 +9,18 @@ replicas: 1
 extraEnvs:
   - name: "NODE_OPTIONS"
     value: "--max-old-space-size=1800"
-  - name: SERVER_SSL_ENABLED
-    value: "true"
-  - name: SERVER_SSL_CERTIFICATE
-    value: "/usr/share/kibana/secrets/kibana-tls-cert"
-  - name: SERVER_SSL_KEY
-    value: "/usr/share/kibana/secrets/kibana-tls-key"
   - name: LOGGING_JSON
     value: "true"
   - name: 'ELASTICSEARCH_USERNAME'
     valueFrom:
       secretKeyRef:
-        name: elastic-credentials
-        key: username
+        name: elk-passwords
+        key: kibana-admin-username
   - name: 'ELASTICSEARCH_PASSWORD'
     valueFrom:
       secretKeyRef:
-        name: elastic-credentials
-        key: password
+        name: elk-passwords
+        key: kibana-admin-password
 #  - name: MY_ENVIRONMENT_VAR
 #    value: the_value_goes_here
 
@@ -45,9 +39,6 @@ secretMounts:
     secretName: kibana-keystore
     path: /usr/share/kibana/config/kibana.keystore
     subPath: kibana.keystore # optional
-  - name: kibana-certs
-    secretName: kibana-certs
-    path: /usr/share/kibana/secrets
 hostAliases: []
 #- ip: "127.0.0.1"
 #  hostnames:
@@ -66,13 +57,13 @@ podAnnotations: {}
 
 resources:
   requests:
-    cpu: "500m"
+    cpu: "250m"
     memory: "1Gi"
   limits:
-    cpu: "1000m"
-    memory: "2Gi"
+    cpu: "500m"
+    memory: "1.5Gi"
 
-protocol: https
+protocol: http
 
 serverHost: "0.0.0.0"
 
@@ -120,10 +111,11 @@ updateStrategy:
   type: "Recreate"
 
 service:
-  type: NodePort
+  type: ClusterIP
   loadBalancerIP: ""
   port: 5601
-  nodePort: "31561"
+  targetPort: 5601
+  #nodePort: "31561"
   labels: {}
   annotations: {}
     # cloud.google.com/load-balancer-type: "Internal"
@@ -136,18 +128,26 @@ service:
   httpPortName: http
 
 ingress:
-  enabled: false
-  annotations: {}
+  enabled: true
+  annotations:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "4"
+    nginx.ingress.kubernetes.io/global-rate-limit: "300"
+    nginx.ingress.kubernetes.io/global-rate-limit-window: "1s"
+    nginx.ingress.kubernetes.io/global-rate-limit-key: "$server_name"
+
   hosts:
-    - host: chart-example.local
+    - host: database.iudx.org.in
       paths:
         - path: /
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:   
-  #      - chart-example.local
+  tls: 
+    - secretName: kibana-tls-secret
+      hosts:   
+        - database.iudx.org.in
 
 readinessProbe:
   failureThreshold: 3
@@ -157,7 +157,8 @@ readinessProbe:
   timeoutSeconds: 5
 
 imagePullSecrets: []
-nodeSelector: {}
+nodeSelector:
+  beta.kubernetes.io/instance-type: t3.medium
 tolerations: []
 affinity: {}
 
