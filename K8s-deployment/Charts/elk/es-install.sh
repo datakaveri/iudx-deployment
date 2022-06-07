@@ -17,7 +17,7 @@ helm install -f elasticsearch/es-mcd-values.yml  -n elastic elasticsearch-mcd --
 helm install -f elasticsearch/es-data-values.yml  -n elastic elasticsearch-data --version 7.12.1 $@  elastic/elasticsearch
 kubectl apply -f elasticsearch/account-generator.yml -n elastic 
 
-## elastic sexporter
+## elastic exporter
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update

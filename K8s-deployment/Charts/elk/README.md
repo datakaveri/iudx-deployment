@@ -42,7 +42,7 @@ secrets
 
 ```sh
 # Deployment of es
-./es-install.sh  --set volumeClaimTemplate.storageClassName=<name-of-starage-class>
+./es-install.sh  --set volumeClaimTemplate.storageClassName=<name-of-storage-class>
 ```
 ## Deploy Logstash
 Once es is deployed and ready. Deploy logstash as follows :
