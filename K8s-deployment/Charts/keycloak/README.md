@@ -30,7 +30,8 @@ secrets/
 Define Appropriate values of resources -
 - CPU of keycloak
 - RAM of keycloak
-in example-resource-values.yaml as shown below:
+
+in resource-values.yaml as shown in example-resource-values.yaml
 
 ## Deploy
 
