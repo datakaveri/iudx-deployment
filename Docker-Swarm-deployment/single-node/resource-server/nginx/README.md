@@ -58,6 +58,20 @@ On a docker-swarm master node, run
 docker node update --label-add rs_nginx_node=true <hostname/ID>
 
 ```
+## Login into registry
+On a docker-swarm master node, run
+```sh
+docker login dockerhub.iudx.io
+```
+## Deploy
+On a docker-swarm master node, run
+```sh
+# Deploy stack, deploys mlayer, api, catalogue ui nginx
+docker stack deploy --with-registry-auth -c rs-nginx.yml rs-nginx
+
+# Remove stack
+docker stack rm cat-nginx
+```
 
 ## Deploy
 On a docker-swarm master node, run
@@ -96,5 +110,5 @@ limit_req zone=rs_req_per_ip burst=<number-of-burst-requests-allowed> nodelay;
 
 
 # Note 
-  *  Don't use nginx 1.19 (mainline) experimental features as it might contain bugs.
-
+  *  Used the [script](https://gist.github.com/abhi4578/4ea75684d348b5d02a4e010af4229ed6) to generate error pages, except for 401. 404, 409 error codes.
+   
