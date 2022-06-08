@@ -43,17 +43,38 @@ secrets
 
 ## Deploy
 
-Bring up the database stack,
+Three ways to deploy, do any one of it
+1. Quick deploy
 ```sh
-docker stack deploy -c database-stack.yml database 
+docker stack deploy -c database-stack.yml database
 ```
+2. Setting resource reservations,limits in 'database-stack.yml' file and then deploying (see [here](example-database-stack.resources.yml) for example configuration of 'database-stack.resources.yml' file ). Its suitable for production environment.
+
+```sh
+docker stack deploy -c database-stack.yml -c database-stack.resources.yml database
+```
+3. You can add more custom stack cofiguration in file 'database-stack.custom.yml' that overrides base 'database-stack.yml' file like ports mapping etc ( see [here](example-database-stack.custom.yml) for example configuration of 'database-stack.custom.yml' file)  and bring up like as follows.
+```sh
+docker stack deploy -c database-stack.yml  -c database-stack.custom.yml database
+```
+or
+with resource limits, reservations and exposing port number
+```sh
+docker stack deploy -c database-stack.yml -c database-stack.resources.yml -c database-stack.custom.yml database
+```
+
 Bring up the account generator stack(only on clean deployment),
 ```sh
 docker stack deploy -c account-generator.yml tmp 
+```
 
 # Monitor logs to ensure creation
+```sh
 docker service logs tmp_account-generator -f
+```
 
 # Remove stack
+```sh
 docker stack rm tmp 
 ```
+
