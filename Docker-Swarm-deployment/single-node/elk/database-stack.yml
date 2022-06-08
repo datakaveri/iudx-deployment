@@ -59,9 +59,6 @@ services:
       - overlay-net
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - SERVER_SSL_ENABLED=true
-      - SERVER_SSL_CERTIFICATE=/run/secrets/kibana-tls-cert
-      - SERVER_SSL_KEY=/run/secrets/kibana-tls-key
       - LOGGING_JSON=true
     logging:
       driver: "json-file"
@@ -73,8 +70,6 @@ services:
     secrets:
       - source: kibana.keystore
         target: /usr/share/kibana/data/kibana.keystore
-      - kibana-tls-cert
-      - kibana-tls-key
 
   logstash:
     image: ghcr.io/datakaveri/logstash:7.12.1
@@ -128,10 +123,6 @@ secrets:
   logstash.keystore:
     file: secrets/keystores/logstash.keystore
 
-  kibana-tls-cert:
-    file: secrets/pki/kibana-tls-cert
-  kibana-tls-key:
-    file: secrets/pki/kibana-tls-key
 
 volumes:
   elastic-volume:
