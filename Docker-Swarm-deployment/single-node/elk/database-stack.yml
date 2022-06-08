@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.9"
 
 networks:
   overlay-net:
@@ -7,8 +7,7 @@ networks:
 
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.1
-    command: ./launcher.sh
+    image: ghcr.io/datakaveri/elasticsearch:7.12.1
     deploy:
       replicas: 1
       placement:
@@ -29,26 +28,22 @@ services:
       - xpack.security.enabled=true
       - xpack.security.audit.enabled=true
       - xpack.security.transport.ssl.enabled=true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     volumes:
       - type: volume
         source: elastic-volume
         target: /usr/share/elasticsearch/data
-      - type: volume
-        source: elastic-plugins-volume
-        target: /usr/share/elasticsearch/plugins
-      - type: volume
-        source: elastic-config-repository-s3-volume
-        target: /usr/share/elasticsearch/config/repository-s3
-    configs:
-      - source: elasticsearch-launcher
-        target: /usr/share/elasticsearch/launcher.sh
-        mode: 0777
     secrets:
       - source: elasticsearch.keystore
         target: /usr/share/elasticsearch/config/elasticsearch.keystore
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.8.1
+    image: docker.elastic.co/kibana/kibana:7.12.1
     deploy:
       replicas: 1
       placement:
@@ -58,10 +53,8 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-    ports:
-      - target: 5601
-        published: 5601
-        mode: host
+    cap_drop:
+      - ALL
     networks:
       - overlay-net
     environment:
@@ -70,6 +63,13 @@ services:
       - SERVER_SSL_CERTIFICATE=/run/secrets/kibana-tls-cert
       - SERVER_SSL_KEY=/run/secrets/kibana-tls-key
       - LOGGING_JSON=true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
     secrets:
       - source: kibana.keystore
         target: /usr/share/kibana/data/kibana.keystore
@@ -77,7 +77,8 @@ services:
       - kibana-tls-key
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.8.1
+    image: ghcr.io/datakaveri/logstash:7.12.1
+
     deploy:
       replicas: 1
       placement:
@@ -87,10 +88,19 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
+    cap_drop:
+      - ALL
     volumes:
       - type: volume
         source: logstash-volume
         target: /usr/share/logstash/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
     networks:
       - overlay-net
     secrets:
@@ -125,15 +135,9 @@ secrets:
 
 volumes:
   elastic-volume:
-  elastic-plugins-volume:
-  elastic-config-repository-s3-volume:
-  
   logstash-volume:
 
 configs:
-  elasticsearch-launcher:
-    file: elasticsearch/launcher.sh
-
   logstash-pipelines:
     file: logstash/settings/pipelines.yml
   logstash-settings:
