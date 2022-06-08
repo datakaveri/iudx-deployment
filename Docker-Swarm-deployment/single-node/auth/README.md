@@ -8,7 +8,7 @@ secrets/
     ├── config-dev.json
 └── keystore.jks
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into auth  directory  for demo or local testing purpose only! For other environment, please generate strong passwords. For seting up the keystore.jks please refer [here](https://github.com/datakaveri/iudx-aaa-server#jwt-signing-key-setup)
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into auth  directory  for demo or local testing purpose only! For other environment, please generate strong passwords. For seting up the keystore.jks please refer [here](https://github.com/datakaveri/iudx-aaa-server#jwt-signing-key-setup). Please get and refer latest config from https://github.com/datakaveri/iudx-aaa-server/blob/3.5.0/configs/config-depl.json for 3.5.0.
 
 ## Assign node labels
  The auth container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
