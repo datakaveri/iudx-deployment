@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -e
-./generate-keystore.sh
-./elasticsearch/generate-certs.sh
+sudo ./generate-keystore.sh
+sudo ./elasticsearch/generate-certs.sh
 kubectl create namespace elastic
 kubectl create secret generic regcred \
     --from-file=.dockerconfigjson=secrets/passwords/docker-registry-login \
@@ -16,3 +16,10 @@ helm repo add elastic https://helm.elastic.co
 helm install -f elasticsearch/es-mcd-values.yml  -n elastic elasticsearch-mcd --version 7.12.1 $@  elastic/elasticsearch  &&
 helm install -f elasticsearch/es-data-values.yml  -n elastic elasticsearch-data --version 7.12.1 $@  elastic/elasticsearch
 kubectl apply -f elasticsearch/account-generator.yml -n elastic 
+
+## elastic exporter
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+helm install -f elasticsearch/es-exporter-values.yml --version 4.7.0 -n elastic es-exporter  prometheus-community/prometheus-elasticsearch-exporter
