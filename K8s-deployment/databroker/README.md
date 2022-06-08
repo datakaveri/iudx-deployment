@@ -3,6 +3,7 @@
 ```sh
 secrets/
 ├── credentials
+|   ├── .erlang.cookie (Random characters - 50)
 │   ├── rabbitmq-admin-passwd
 │   └── rabbitmq-definitions.json
 └── pki
