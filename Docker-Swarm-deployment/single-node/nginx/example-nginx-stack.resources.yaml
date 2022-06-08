@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  nginx:
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2Gi
+        reservations:
+          cpus: '0.5'   
+          memory: 512Mi

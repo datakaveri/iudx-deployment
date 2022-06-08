@@ -16,9 +16,7 @@ secrets/
 ├── passwords 
 │   ├── grafana-super-admin-passwd
 │   └── grafana-super-admin-username
-└── pki
-    ├── grafana-server-cert.pem (letsencrypt fullchain.pem)
-    └── grafana-server-key.pem (letsencrypt privkey.pem)
+
 
  ```
 ## Assign node labels 
@@ -81,4 +79,4 @@ docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.temp.yml 
 2. Pipeline stages might be different for each application , this can be done using [match stage](https://grafana.com/docs/loki/latest/clients/promtail/stages/match/)
 3. mon-stack.yml contains additional service vertx_sd, which discover vertx instances from zookeeper for prometheus.
 4. Config Telegrambot for grafana's alerts is detailed [here](https://gist.github.com/abhilashvenkatesh/50478502ccd257a28d2c441ac51a8d65).
-
+5.  The grafana is now secured through centralised nginx.
