@@ -1,0 +1,90 @@
+version: "3.9"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  nginx:
+    image: nginx:1.20
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.nginx-node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    ports:
+      - target: 443
+        published: 443
+        mode: host
+    secrets:
+      - source: default-pki-key
+        target: /etc/default-ssl/privkey.pem
+      - source: default-pki-cert
+        target: /etc/default-ssl/fullchain.pem
+    configs:
+      - source: keycloak-conf
+        target: /etc/nginx/templates/keycloak.conf.template
+      - source: default-conf
+        target: /etc/nginx/templates/default.conf.template 
+      - source: nginx-conf
+        target: /etc/nginx/nginx.conf
+      - source: file-server-conf
+        target: /etc/nginx/templates/fs.conf.template
+      - source: rs-conf
+        target: /etc/nginx/templates/rs.conf.template
+      - source: auth-conf
+        target: /etc/nginx/templates/auth.conf.template
+      - source: gis-conf
+        target: /etc/nginx/templates/gis.conf.template
+      - source: di-conf
+        target: /etc/nginx/templates/di.conf.template
+      - source: kibana-conf
+        target: /etc/nginx/templates/kibana.conf.template
+      - source: grafana-conf
+        target: /etc/nginx/templates/grafana.conf.template
+
+
+    networks:
+      - overlay-net
+    env_file:
+      - ./.env
+
+configs:
+  keycloak-conf:
+    file: conf/keycloak.conf
+  nginx-conf:
+    file: conf/nginx.conf
+  default-conf:
+    file: conf/default.conf
+  file-server-conf:
+    file: conf/fs.conf
+  rs-conf:
+    file: conf/rs.conf
+  auth-conf:
+    file: conf/auth.conf
+  cat-conf:
+    file: conf/cat.conf
+  di-conf:
+    file: conf/di.conf
+  gis-conf:
+    file: conf/gis.conf
+  kibana-conf:
+    file: conf/kibana.conf
+  grafana-conf:
+    file: conf/grafana.conf
+
+
+
+
+
+
+secrets:
+  default-pki-key:
+    file: secrets/privkey.pem
+  default-pki-cert:
+    file: secrets/fullchain.pem
