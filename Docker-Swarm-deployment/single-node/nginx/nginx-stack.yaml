@@ -7,7 +7,7 @@ networks:
 
 services:
   nginx:
-    image: nginx:1.19
+    image: nginx:1.20
     deploy:
       replicas: 1
       placement:
@@ -39,8 +39,14 @@ services:
         target: /etc/nginx/templates/rs.conf.template
       - source: auth-conf
         target: /etc/nginx/templates/auth.conf.template
-      - source: cat-conf
-        target: /etc/nginx/templates/cat.conf.template
+      - source: gis-conf
+        target: /etc/nginx/templates/gis.conf.template
+      - source: di-conf
+        target: /etc/nginx/templates/di.conf.template
+      - source: kibana-conf
+        target: /etc/nginx/templates/kibana.conf.template
+      - source: grafana-conf
+        target: /etc/nginx/templates/grafana.conf.template
 
 
     networks:
@@ -63,6 +69,15 @@ configs:
     file: conf/auth.conf
   cat-conf:
     file: conf/cat.conf
+  di-conf:
+    file: conf/di.conf
+  gis-conf:
+    file: conf/gis.conf
+  kibana-conf:
+    file: conf/kibana.conf
+  grafana-conf:
+    file: conf/grafana.conf
+
 
 
 
