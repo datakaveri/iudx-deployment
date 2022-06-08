@@ -1,0 +1,3 @@
+secrets/
+redis-rejson-stack.resources.yml
+redis-rejson-stack.custom.yml

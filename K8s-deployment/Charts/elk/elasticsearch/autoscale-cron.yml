@@ -1,0 +1,38 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: es-autoscaler-cron
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            beta.kubernetes.io/instance-type: t3.large
+          serviceAccount: es-autoscaler
+          containers:
+          - name: es-autoscaler
+            image: ghcr.io/datakaveri/es-autoscaler:1.0.0
+            env:
+             - name: ES_PASSWORD
+               valueFrom:
+                 secretKeyRef:
+                   name: elk-passwords
+                   key: elasticsearch-monitor-password
+             - name: ES_USERNAME
+               valueFrom:
+                 secretKeyRef:
+                   name: elk-passwords
+                   key: elasticsearch-monitor-user
+            command: ["/bin/sh", "-c", "--"]
+            args: ["/home/es-autoscaler.sh"]
+            volumeMounts:
+            - name: es-autoscale-script
+              mountPath: /home/
+          restartPolicy: OnFailure
+          volumes:
+            - name: es-autoscale-script
+              configMap:
+                name: es-autoscale-script
+                defaultMode: 0555

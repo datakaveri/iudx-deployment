@@ -1,0 +1,78 @@
+PUT test-itms
+{
+   "settings": {
+    "number_of_replicas": 1,
+    "number_of_shards": 1
+  }, 
+  "mappings" : {
+   "dynamic": "strict",
+   "properties": {
+       "actual_trip_start_time": {
+           "type": "date",
+           "index": false
+       },
+       "id": {
+           "type": "keyword"
+       },
+       "last_stop_arrival_time": {
+           "type": "date",
+           "index": false,
+           "ignore_malformed": true,
+           "format": "strict_hour_minute_second"
+       },
+       "arrival_time": {
+           "type": "date",
+           "format": "strict_hour_minute_second"
+       },
+       "departure_time": {
+           "type": "date",
+           "format": "strict_hour_minute_second"
+       },
+       "stop_id": {
+           "type": "keyword"
+       },
+       "stop_sequence": {
+           "type": "float"
+       },
+       "last_stop_id": {
+           "type": "keyword",
+           "index": false
+       },
+       "license_plate": {
+           "type": "keyword"
+       },
+       "location": {
+           "type": "geo_shape",
+           "strategy": "recursive"
+       },
+       "observationDateTime": {
+           "type": "date"
+       },
+       "route_id": {
+           "type": "keyword"
+       },
+       "speed": {
+           "type": "float"
+       },
+       "trip_delay": {
+           "type": "float"
+       },
+       "trip_direction": {
+           "type": "keyword",
+           "index": false
+       },
+       "trip_id": {
+           "type": "keyword"
+       },
+       "vehicle_label": {
+           "type": "keyword"
+       },
+       "passengerCount": {
+           "type": "float"
+       },
+       "occupancyLevel": {
+           "type": "keyword"
+       }
+   }
+}
+}

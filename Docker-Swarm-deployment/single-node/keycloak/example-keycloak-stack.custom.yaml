@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  keycloak:
+    ports: 
+      - target: 8080  # keycloak port inside the container
+        published: 8080 # exposing keycloak port 8080 to outside at 8080
+        mode: host
+      - target: 8443
+        published: 8443
+        mode: host
+

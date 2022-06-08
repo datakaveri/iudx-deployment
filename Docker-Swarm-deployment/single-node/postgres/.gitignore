@@ -1,0 +1,3 @@
+secrets/
+postgres-stack.resources.yaml
+postgres-stack.custom.yaml

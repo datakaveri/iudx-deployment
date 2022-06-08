@@ -1,0 +1,118 @@
+## ApiServer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param apiServer.resources.limits The resources limits for the ApiServer containers
+## @param apiServer.resources.requests The requested resources for the ApiServer containers
+##
+apiServer:
+  resources:
+    limits:
+      cpu: 800m
+      memory: 1.2Gi
+    requests: 
+      cpu: 600m
+      memory: 1.2Gi
+
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
+
+## Auditing resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param auditing.resources.limits The resources limits for the Auditing containers
+## @param auditing.resources.requests The requested resources for the Auditing containers
+##
+auditing:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 750Mi
+    requests: 
+      cpu: 500m
+      memory: 700Mi
+
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
+
+## Authenticator resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param authenticator.resources.limits The resources limits for the Authenticator containers
+## @param authenticator.resources.requests The requested resources for the Authenticator containers
+##
+authenticator:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 800Mi
+    requests: 
+      cpu: 300m
+      memory: 800Mi
+
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
+
+## Database resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param database.resources.limits The resources limits for the Database containers
+## @param database.resources.requests The requested resources for the Database containers
+##
+aatabase:
+  resources:
+    limits:
+      cpu: 800m
+      memory: 1.2Gi
+    requests: 
+      cpu: 600m
+      memory: 1.2Gi
+
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
+
+## Validator resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param validator.resources.limits The resources limits for the Validator containers
+## @param validator.resources.requests The requested resources for the Validator containers
+##
+validator:
+  resources:
+    limits:
+      cpu: 800m
+      memory: 1.2Gi
+    requests:
+      cpu: 600m 
+      memory: 1.2Gi
+
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
+
+## geocoding resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param geocoding.resources.limits The resources limits for the geocoding containers
+## @param geocoding.resources.requests The requested resources for the geocoding containers
+##
+geocoding:
+  resources:
+    limits:
+      cpu: 800m
+      memory: 1.2Gi
+    requests:
+      cpu: 600m 
+      memory: 1.2Gi
+
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
+
+## nlpSearch resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param nlpSearch.resources.limits The resources limits for the nlpSearch containers
+## @param nlpSearch.resources.requests The requested resources for the nlpSearch containers
+##
+nlpSearch:
+  resources:
+    limits:
+      cpu: 800m
+      memory: 1.2Gi
+    requests:
+      cpu: 600m 
+      memory: 1.2Gi
+
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium

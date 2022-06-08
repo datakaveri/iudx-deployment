@@ -65,7 +65,7 @@
   "gnetId": 1860,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1620665603159,
+  "iteration": 1639057055477,
   "links": [],
   "panels": [
     {
@@ -1218,7 +1218,7 @@
       "options": {
         "alertThreshold": true
       },
-      "percentage": false,
+      "percentage": true,
       "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
@@ -1255,7 +1255,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"system\",host=~\"$node\"}[5m])) * 100 ",
+          "expr": "avg(sum by(mode) (irate(node_cpu_seconds_total{mode=\"system\",host=~\"$node\"}[5m]))) * 100  / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1265,7 +1265,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"user\",host=~\"$node\"}[5m])) * 100 ",
+          "expr": "avg(sum by(mode) (irate(node_cpu_seconds_total{mode=\"user\",host=~\"$node\"}[5m]))) * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu)) ",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1275,7 +1275,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"iowait\",host=~\"$node\"}[5m])) * 100 ",
+          "expr": "avg( sum by(mode) (irate(node_cpu_seconds_total{mode=\"iowait\",host=~\"$node\"}[5m]))) * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1284,7 +1284,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=~\".*irq\",host=~\"$node\"}[5m])) * 100",
+          "expr": "avg(sum by(mode) (irate(node_cpu_seconds_total{mode=~\".*irq\",host=~\"$node\"}[5m]))) * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1293,7 +1293,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode!=\"idle\",mode!=\"user\",mode!=\"system\",mode!=\"iowait\",mode!=\"irq\",mode!=\"softirq\",host=~\"$node\"}[5m])) * 100 ",
+          "expr": "avg(sum by (mode)(irate(node_cpu_seconds_total{mode!=\"idle\",mode!=\"user\",mode!=\"system\",mode!=\"iowait\",mode!=\"irq\",mode!=\"softirq\",host=~\"$node\"}[5m]))) * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu)) ",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1302,7 +1302,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"idle\",host=~\"$node\"}[5m])) * 100 ",
+          "expr": "avg(sum by (mode) (irate(node_cpu_seconds_total{mode=\"idle\",host=~\"$node\"}[5m]))) * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1333,10 +1333,10 @@
         {
           "$$hashKey": "object:601",
           "format": "short",
-          "label": "",
+          "label": "Percentage",
           "logBase": 1,
-          "max": null,
-          "min": null,
+          "max": "100",
+          "min": "0",
           "show": true
         },
         {
@@ -1663,6 +1663,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:2340",
           "format": "bps",
           "label": null,
           "logBase": 1,
@@ -1671,6 +1672,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:2341",
           "format": "pps",
           "label": "",
           "logBase": 1,
@@ -1865,7 +1867,7 @@
       "options": {
         "alertThreshold": true
       },
-      "percentage": false,
+      "percentage": true,
       "pluginVersion": "7.2.0",
       "pointradius": 5,
       "points": false,
@@ -1877,7 +1879,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(node_cpu_seconds_total{mode=\"system\",host=~\"$node\"}[5m])) * 100",
+          "expr": "avg(sum by (mode)(irate(node_cpu_seconds_total{mode=\"system\",host=~\"$node\"}[5m]))) * 100   / count(count(node_cpu_seconds_total{instance=~\"\",job=~\"servers\"}) by (cpu))",
           "format": "time_series",
           "interval": "10s",
           "intervalFactor": 1,
@@ -1886,7 +1888,7 @@
           "step": 20
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"user\",host=~\"$node\"}[5m])) * 100",
+          "expr": "avg(sum by (mode) (irate(node_cpu_seconds_total{mode=\"user\",host=~\"$node\"}[5m])))   * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1895,7 +1897,7 @@
           "step": 240
         },
         {
-          "expr": "sum  (irate(node_cpu_seconds_total{mode=\"nice\",host=~\"$node\"}[5m])) * 100",
+          "expr": "avg( sum by(mode)  (irate(node_cpu_seconds_total{mode=\"nice\",host=~\"$node\"}[5m]))) * 100  / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1904,7 +1906,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"idle\",host=~\"$node\"}[5m]))  * 100 ",
+          "expr": "avg( sum by (mode) (irate(node_cpu_seconds_total{mode=\"idle\",host=~\"$node\"}[5m])))  * 100  / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1913,7 +1915,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"iowait\",host=~\"$node\"}[5m])) * 100 ",
+          "expr": "avg(sum by (mode) (irate(node_cpu_seconds_total{mode=\"iowait\",host=~\"$node\"}[5m]))) * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu)) ",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1922,7 +1924,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"irq\",host=~\"$node\"}[5m]))  * 100 ",
+          "expr": "avg(sum by (mode) (irate(node_cpu_seconds_total{mode=\"irq\",host=~\"$node\"}[5m])))  * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu)) ",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1931,7 +1933,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"softirq\",host=~\"$node\"}[5m])) * 100 ",
+          "expr": "avg(sum by (mode) (irate(node_cpu_seconds_total{mode=\"softirq\",host=~\"$node\"}[5m]))) * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1940,7 +1942,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"steal\",host=~\"$node\"}[5m])) * 100 ",
+          "expr": "avg (sum by (mode) (irate(node_cpu_seconds_total{mode=\"steal\",host=~\"$node\"}[5m]))) * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu)) ",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1949,7 +1951,7 @@
           "step": 240
         },
         {
-          "expr": "sum (irate(node_cpu_seconds_total{mode=\"guest\",host=~\"$node\"}[5m])) * 100 ",
+          "expr": "avg(sum by (mode) (irate(node_cpu_seconds_total{mode=\"guest\",host=~\"$node\"}[5m]))) * 100 / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu)) ",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1965,7 +1967,7 @@
       "title": "CPU",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1982,8 +1984,8 @@
           "format": "short",
           "label": "percentage",
           "logBase": 1,
-          "max": null,
-          "min": null,
+          "max": "100",
+          "min": "0",
           "show": true
         },
         {
@@ -2985,5 +2987,5 @@
   "timezone": "browser",
   "title": "Basic System Metrics",
   "uid": "rYdddlPWk",
-  "version": 2
+  "version": 5
 }

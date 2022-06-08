@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+    immudb-config-generator:
+      image: ghcr.io/datakaveri/immudb-config-generator:1.0.5
+      networks:
+        - overlay-net
+      secrets:
+        - admin-password
+        - cat-password
+        - auth-password
+        - rs-password
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "5m"
+          max-file: "3"
+          tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+
+secrets:
+  admin-password:
+    file: secrets/passwords/admin-password
+  rs-password:
+    file: secrets/passwords/rs-password
+  auth-password:
+    file: secrets/passwords/auth-password
+  cat-password: 
+    file: secrets/passwords/cat-password

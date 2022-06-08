@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  postgres:
+    deploy:
+      resources:
+        limits: 
+          cpus: '0.50'
+          memory: 4Gi
+        reservations:
+          cpus: '0.20'
+          memory: 300Mi
