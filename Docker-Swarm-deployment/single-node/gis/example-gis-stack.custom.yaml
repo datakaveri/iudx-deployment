@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   gis:
-    image: ghcr.io/datakaveri/gis-dev:3.0-fc10a3a
+    image: ghcr.io/datakaveri/gis-dev:3.5.0-2dee63b
     secrets:
       - source: config
         target: /usr/share/app/secrets/configs/config.json

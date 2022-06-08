@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   cat:
-    image: ghcr.io/datakaveri/cat-dev:3.0-eb800fa
+    image: ghcr.io/datakaveri/cat-dev:3.5-64074dd
     ports:
       - target: 8080
         published: 8080 
