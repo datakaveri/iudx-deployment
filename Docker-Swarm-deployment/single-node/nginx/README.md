@@ -54,32 +54,8 @@ secrets/
    Please see the ``example-secrets`` directory to get more idea, can use the ``secrets`` in that directory by copying into root keycloak directory i.e. ``cp -r example-secrets/secrets/ .`` for demo or local testing purpose only! For other environment, please generate strong passwords.
 
 ## Create Environment file
-Add env variables in .env file using the template shown below
+Add env variables in .env file . An example is at ```example-env```
 
-```sh
-NGINX_ENVSUBST_TEMPLATE_DIR=/etc/nginx/templates
-NGINX_ENVSUBST_TEMPLATE_SUFFIX=.template
-NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/conf.d
-
-SERVICE_PORT=8080
-SERVER_PROTOCOL=http
-
-KEYCLOAK_DOMAIN_NAME=keycloak.io.test
-KEYCLOAK_SERVICE_NAME=keycloak
-
-
-FILE_DOMAIN_NAME=fs.io.test
-FILE_SERVICE_NAME=fs
-
-RS_DOMAIN_NAME=rs.io.test
-RS_SERVICE_NAME=calc
-
-AUTH_DOMAIN_NAME=auth.io.test
-AUTH_SERVICE_NAME=auth
-
-CAT_DOMAIN_NAME=cat.io.test
-CAT_SERVICE_NAME=cat
-```
 
 ## Assign node labels
 
