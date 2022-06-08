@@ -1,0 +1,28 @@
+{{- if .Values.immudb.install.createUsers }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hook-postinstall
+  namespace: {{ .Values.nameSpace }}
+  annotations:
+    "helm.sh/hook": "post-install"
+    "helm.sh/hook-delete-policy": "hook-succeeded"
+spec:
+  containers:
+  - name: hook-immudb
+    image: {{ template "immudbHook.image" . }}
+    env:
+    {{- if .Values.immudb.install.hookEnv }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.immudb.install.hookEnv "context" $) | nindent 4 }}
+    {{- end }}
+    volumeMounts:
+    - name: hook-secret
+      mountPath: /run/secrets/password
+
+  volumes:
+  - name: hook-secret
+    secret:
+      secretName: {{ .Values.immudb.install.secretName}}
+  restartPolicy: Never
+
+{{- end }}

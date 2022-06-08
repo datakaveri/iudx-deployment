@@ -1,0 +1,92 @@
+controller:
+  ## @param nodeSelector Node labels for pod assignment
+  ### ref: https://kubernetes.io/docs/user-guide/node-selection/
+  #
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 1800m
+      memory: 3.5Gi
+    requests:
+      cpu: 1200m
+      memory: 3Gi
+  # Azure Standrd load-balancer in-front of ingress controller as service
+  service:
+    enabled: true
+    annotations:
+      # https://kubernetes-sigs.github.io/cloud-provider-azure/topics/loadbalancer/,    
+      service.beta.kubernetes.io/azure-load-balancer-resource-group: <resourceGroup>
+
+
+    labels: {}
+    
+    # clusterIP: ""
+
+    ## List of IP addresses at which the controller services are available
+    ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+    ##
+    externalIPs: []
+    # create a public ip with standard sku in azure beforehand
+    loadBalancerIP: <public-ip>
+    loadBalancerSourceRanges: []
+
+    enableHttp: true
+    enableHttps: true
+
+    ## Set external traffic policy to: "Local" to preserve source IP on
+    ## providers supporting it
+    ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
+    externalTrafficPolicy: "Local"
+    # Must be either "None" or "ClientIP" if set. Kubernetes will default to "None".
+    # Ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    # sessionAffinity: ""
+
+    # specifies the health check node port (numeric port number) for the service. If healthCheckNodePort isn’t specified,
+    # the service controller allocates a port from your cluster’s NodePort range.
+    # Ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    # healthCheckNodePort: 0
+
+    ports:
+      http: 80
+      https: 443
+
+    targetPorts:
+      http: http
+      https: https
+
+    type: LoadBalancer
+
+    ## Enables an additional internal load balancer (besides the external one).
+    ## Annotations are mandatory for the load balancer to come up. Varies with the cloud service.
+    internal:
+      enabled: false
+      annotations: {}
+
+      # loadBalancerIP: ""
+
+      ## Restrict access For LoadBalancer service. Defaults to 0.0.0.0/0.
+      loadBalancerSourceRanges: []
+
+      ## Set external traffic policy to: "Local" to preserve source IP on
+      ## providers supporting it
+      ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
+      # externalTrafficPolicy: ""
+
+
+defaultBackend:
+  resources:
+    limits:
+      cpu: 20m
+      memory: 30Mi
+    requests:
+      cpu: 10m
+      memory: 20Mi
+     ## Node labels for default backend pod assignment
+     #  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+     #    ##
+  nodeSelector:
+     node.kubernetes.io/instance-type:  Standard_B2s
+
+
+
