@@ -6,10 +6,8 @@ secrets/
 └── configs
     ├── config-depl.json
     ├── config-dev.json
-└── keystore.jks
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into cat directory i.e. ```cp -r example-secrets/secrets .```  for demo or local testing purpose only! For other environment, please generate strong passwords.
-
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into cat directory i.e. ```cp -r example-secrets/secrets .```  for demo or local testing purpose only! For other environment, please generate strong passwords. Please refer latest config at https://github.com/datakaveri/iudx-catalogue-server/blob/3.5.0/configs/config-example.json for 3.5.0 release.
 ## Assign node labels
  The cat container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
 ```sh

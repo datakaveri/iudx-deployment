@@ -6,10 +6,8 @@ secrets/
 ├── configs
 │   ├── config-depl.json
 │   └── config-dev.json
-├── keystore-file.jks
-└── keystore-rs.jks
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into file-server  directory  for demo or local testing purpose only! For other environment, please generate strong passwords. Populate .file-server-api.env environment file based on [here](example-secrets/example-env)
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into file-server  directory  for demo or local testing purpose only! For other environment, please generate strong passwords. Populate .file-server-api.env environment file based on [here](example-secrets/example-env). Please refer latest config at https://github.com/datakaveri/iudx-file-server/blob/3.5.0/example-configs/config-depl.json and corresponding SETUP.md.
 
 ## Assign node labels
  The file-server container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
