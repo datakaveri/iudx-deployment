@@ -50,6 +50,7 @@ change_password \
 create_simple_role "logstash-role" "[\"create\"]"
 create_simple_role "rs-role" "[\"read\"]"
 create_simple_role "cat-role" "[\"create\",\"read\",\"delete\"]"
+create_simple_role "fs-role" "[\"read\",\"write\"]"
 curl -X PUT "$ELASTICSEARCH_HOST/_security/role/monitor-role" \
         -u $elastic_username:$elastic_password \
         -H 'Content-Type: application/json' \
@@ -79,3 +80,9 @@ create_user \
    $(cat /usr/share/secrets/elasticsearch-monitor-user) \
    $(cat /usr/share/secrets/elasticsearch-monitor-password) \
    "[\"monitor-role\"]"
+
+create_user \
+    fs-user \
+   $(cat /usr/share/secrets/elasticsearch-fs-password) \
+   "[\"fs-role\"]"
+

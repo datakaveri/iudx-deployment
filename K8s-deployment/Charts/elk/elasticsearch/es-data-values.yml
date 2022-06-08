@@ -1,6 +1,6 @@
 ---
 clusterName: "elasticsearch"
-nodeGroup: "mcd"
+nodeGroup: "data-nodes"
 
 # The service that non master groups will try to connect to when joining the cluster
 # This should be set to clusterName + "-" + nodeGroup for your master group
@@ -9,14 +9,14 @@ masterService: "elasticsearch-mcd"
 # Elasticsearch roles that will be applied to this nodeGroup
 # These will be set as environment variables. E.g. node.master=true
 roles:
-  master: "true"
+  master: "false"
   ingest: "false"
   data: "true"
   remote_cluster_client: "false"
   ml: "false"
 
-replicas: 3
-minimumMasterNodes: 2
+replicas: 1
+#minimumMasterNodes: 2
 
 esMajorVersion: ""
 
@@ -24,8 +24,8 @@ esMajorVersion: ""
 # such as elasticsearch.yml and log4j2.properties
 esConfig: 
   elasticsearch.yml: |
-    action.auto_create_index: .* 
-    xpack.security.audit.enabled: true
+    action.auto_create_index: +.* 
+    xpack.security.audit.enabled: false
     xpack.security.enabled: true
     xpack.security.transport.ssl.enabled: true
     xpack.security.transport.ssl.verification_mode: certificate
@@ -75,24 +75,26 @@ hostAliases: []
 #  hostnames:
 #  - "foo.local"
 #  - "bar.local"
-image: "dockerhub.iudx.io/iudx/elasticsearch"
+
+image: "ghcr.io/datakaveri/elasticsearch"
 imageTag: "7.12.1"
 imagePullPolicy: "IfNotPresent"
+
 podAnnotations: {}
   # iam.amazonaws.com/role: es-cluster
 
 # additionals labels
 labels: {}
 
-esJavaOpts: "-Xmx256m -Xms256m"
+esJavaOpts: "-Xmx8192m -Xms8192m -Dlog4j2.formatMsgNoLookups=true"
 
 resources:
   requests:
-    cpu: "500m"
-    memory: "1Gi"
+    cpu: "3500m"
+    memory: "14Gi"
   limits:
-    cpu: "1000m"
-    memory: "1Gi"
+    cpu: "3800m"
+    memory: "15Gi"
 
 initResources: {}
   # limits:
@@ -114,10 +116,10 @@ networkHost: "0.0.0.0"
 
 volumeClaimTemplate:
   accessModes: [ "ReadWriteOnce" ]
-  storageClassName: "standard"
+  storageClassName: "ebs-storage-class"
   resources:
     requests:
-      storage: 5Gi
+      storage: 120Gi
 
 rbac:
   create: false
@@ -170,7 +172,7 @@ extraInitContainers:
     command: ['chown', '-R', '1000:1000', '/usr/share/elasticsearch/']
     volumeMounts:
       - mountPath: /usr/share/elasticsearch/data
-        name: elasticsearch-mcd
+        name: elasticsearch-data-nodes
     
     securityContext:
       privileged: true
@@ -260,9 +262,8 @@ clusterHealthCheckParams: "wait_for_status=green&timeout=1s"
 ##
 schedulerName: ""
 
-imagePullSecrets: 
-  - name: regcred
-nodeSelector: {}
+nodeSelector:
+  beta.kubernetes.io/instance-type: t3.xlarge
 tolerations: []
 
 # Enabling this will publically expose your Elasticsearch instance.

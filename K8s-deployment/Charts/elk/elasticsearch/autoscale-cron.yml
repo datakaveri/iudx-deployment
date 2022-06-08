@@ -8,30 +8,29 @@ spec:
     spec:
       template:
         spec:
+          nodeSelector:
+            beta.kubernetes.io/instance-type: t3.large
           serviceAccount: es-autoscaler
           containers:
           - name: es-autoscaler
-            image: dockerhub.iudx.io/iudx/es-autoscaler
+            image: ghcr.io/datakaveri/es-autoscaler:1.0.0
             env:
              - name: ES_PASSWORD
                valueFrom:
                  secretKeyRef:
-                   name: elasticsearch-monitor-credentials
-                   key: password
+                   name: elk-passwords
+                   key: elasticsearch-monitor-password
              - name: ES_USERNAME
                valueFrom:
                  secretKeyRef:
-                   name: elasticsearch-monitor-credentials
-                   key: username
-            imagePullPolicy: IfNotPresent
+                   name: elk-passwords
+                   key: elasticsearch-monitor-user
             command: ["/bin/sh", "-c", "--"]
-            args: ["apk add curl jq; /home/es-autoscaler.sh"]
+            args: ["/home/es-autoscaler.sh"]
             volumeMounts:
             - name: es-autoscale-script
               mountPath: /home/
           restartPolicy: OnFailure
-          imagePullSecrets:
-          - name: regcred
           volumes:
             - name: es-autoscale-script
               configMap:
