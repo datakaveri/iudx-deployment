@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-databroker
+  namespace: rs-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rs-databroker
+  template:
+    metadata:
+      labels:
+        app: rs-databroker
+    spec:
+      containers:
+      - name: rs-databroker 
+        image: dockerhub.iudx.io/iudx/rs-depl:2.5.b69b75b
+        volumeMounts:
+          - name: rs-config-databroker
+            mountPath: /usr/share/app/secrets/one-verticle-configs
+        ports:
+          - name: prometheus
+            containerPort: 9000
+            protocol: TCP
+          - name: hazelcast
+            containerPort: 5701
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 9000
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 10
+        envFrom:
+          - configMapRef:
+              name: rs-env
+        env:
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        command: ["/bin/bash"]
+        args: ["-c","exec java $$RS_JAVA_OPTS  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/one-verticle-configs/config-databroker.json"]
+      imagePullSecrets:
+        - name: regcred    
+      volumes:
+        - name: rs-config-databroker
+          secret:
+            secretName: rs-config-databroker

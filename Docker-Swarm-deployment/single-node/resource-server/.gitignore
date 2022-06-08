@@ -1,0 +1,6 @@
+.rs.env
+secrets/
+rs-stack.custom.yaml
+rs-stack.resources.yaml
+
+

@@ -1,0 +1,22 @@
+{
+    "cloud":"",
+    "tenantId": "",		// mandatory
+    "aadClientId": "",		// mandatory if using service principal
+    "aadClientSecret": "",	// mandatory if using service principal
+    "subscriptionId": "",	// mandatory
+    "resourceGroup": "",	// mandatory
+    "location": "",		// mandatory
+    "subnetName": "",
+    "securityGroupName": "",
+    "securityGroupResourceGroup": "",
+    "vnetName": "",		// mandatory
+    "vnetResourceGroup": "",	// mandatory
+    "routeTableName": "",
+    "primaryAvailabilitySetName": "",
+    "routeTableResourceGroup": "",
+    "cloudProviderBackoff": false,
+    "useManagedIdentityExtension": false,
+    "useInstanceMetadata": true,
+    "vmType": ""		// mandatory (vmss or standard)
+}
+

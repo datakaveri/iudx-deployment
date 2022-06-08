@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+  namespace: rs-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - name: zookeeper
+        image: zookeeper:latest
+        ports:
+          - name: zoos-client
+            containerPort: 2181
+            protocol: TCP
+          - name: zoos-peer-1
+            containerPort: 2888
+            protocol: TCP
+          - name: zoos-peer-2
+            containerPort: 3888
+            protocol: TCP
+        # imagePullPolicy: Always
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: zookeeper
+  namespace: rs-test
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+   - name: zookeeper-client
+     port: 2181
+     targetPort: 2181
+     protocol: TCP
+
+  selector:
+    app: zookeeper

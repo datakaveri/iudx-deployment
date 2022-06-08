@@ -72,7 +72,7 @@
       "pluginVersion": "7.2.1",
       "targets": [
         {
-          "expr": "{source=\"auth\"}",
+          "expr": "{job=\"auth-logs\"}",
           "legendFormat": "",
           "refId": "A"
         }
@@ -97,5 +97,5 @@
   "timezone": "",
   "title": "Auth Dashboard",
   "uid": "cmDEwCcGk",
-  "version": 3
+  "version": 5
 }
