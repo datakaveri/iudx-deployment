@@ -183,6 +183,32 @@ h1#kc-page-title {
   padding: 0 35px;
 }
 
+/* Update Password */
+
+#custom-kc-passwd-update-form{
+  padding: 0 30px;
+  margin-top: 20px
+}
+
+.pw-update-form-group{
+  margin-bottom: 20px;
+}
+
+.label-wrapper{
+  padding: 0;
+}
+
+#custom-kc-form-buttons{
+  margin: 10px 0;
+}
+
+/* Page expired */
+
+#custom-instruction1{
+  padding: 10px 30px;
+}
+
+
 @media (max-width: 767px) {
   #custom-card-pf {
     position: relative;
@@ -214,3 +240,19 @@ h1#kc-page-title {
     font-size: 16px;
   }
 }
+
+
+#instruction-one{
+  color:'#ddd';
+  text-align: center;
+  margin-top: 20px;
+  padding: 0 30px;
+}
+
+#instruction-two{
+  color:'#ddd'
+}
+
+
+
+
