@@ -14,12 +14,10 @@ secrets
 |   |-- logstash-rabbitmq-username
 |   `-- logstash-system-password
 `-- pki
-    |-- kibana-tls-cert
-    |-- kibana-tls-key
     |-- s3-access-key
     `-- s3-secret-key
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root database directory  for demo or local testing purpose only! For other environment, please generate strong passwords and a correct certificate instead of self signed certificate. For example using [letsencrypt](https://certbot.eff.org/lets-encrypt/ubuntufocal-other) to generate a proper certificate
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root database directory  for demo or local testing purpose only! The kibana is tls secured through centralised nginx.
 
 ## Assign node labels
 
