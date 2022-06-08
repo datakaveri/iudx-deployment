@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   lip:
-    image: ghcr.io/datakaveri/lip-depl:3.0-a531c07
+    image: ghcr.io/datakaveri/lip-depl:3.5.0-e2208ae
     read_only: true
     cap_drop:
       - ALL
@@ -16,8 +16,6 @@ services:
           max-size: "5m" 
           tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     secrets:
-      - source: attribute-mapping
-        target: /usr/share/app/secrets/attribute-mapping.json
       - source: config
         target: /usr/share/app/secrets/all-verticles-configs/config.json
     networks: 
@@ -41,7 +39,5 @@ networks:
     driver: overlay
 
 secrets:
-  attribute-mapping:
-    file: ./secrets/attribute-mapping.json
   config:
     file: ./secrets/configs/config-depl.json

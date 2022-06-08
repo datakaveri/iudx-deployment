@@ -2,14 +2,12 @@ version: "3.9"
 
 services:
   cat:
-    image: ghcr.io/datakaveri/cat-prod:3.0-eb800fa
+    image: ghcr.io/datakaveri/cat-prod:3.5.0-64074dd
     networks:
       - overlay-net
     secrets:
       - source: config
         target: /usr/share/app/secrets/configs/config.json
-      - source: keystore
-        target: /usr/share/app/secrets/configs/keystore.jks
     env_file:
       - ./.cat.env
     cap_drop:
@@ -41,8 +39,6 @@ networks:
     driver: overlay
 
 secrets:
-  keystore:
-    file: ./secrets/keystore.jks
   config:
     file:  ./secrets/configs/config-depl.json
 
