@@ -6,10 +6,8 @@ secrets/
 └── all-verticles-configs
     ├── config-depl.json
     ├── config-dev.json
-└── attribute-mapping.json
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into lip directory i.e. ```cp -r example-secrets/secrets .```  for demo or local testing purpose only! For other environment, please generate strong passwords.
-
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into lip directory i.e. ```cp -r example-secrets/secrets .```  for demo or local testing purpose only! For other environment, please generate strong passwords. Please get and refer latest config from https://github.com/datakaveri/latest-ingestion-pipeline/blob/3.5.0/vertx/example-configs/config-depl.json and setup.md.
 ## Assign node labels
  The lip container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
 ```sh
