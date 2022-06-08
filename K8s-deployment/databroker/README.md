@@ -1,19 +1,21 @@
 # RabbitMQ cluster in k8s as a StatefulSet
 ## Required Secrets
 ```sh
-../../secrets/
+secrets/
 ├── credentials
-│   ├── rabbitmq-definitions.json
-│   └── rabbitmq-erlang-cookie
+|   ├── .erlang.cookie (Random characters - 50)
+│   ├── rabbitmq-admin-passwd
+│   └── rabbitmq-definitions.json
 └── pki
-    ├── ca-cert.pem (letsencrpt chain.pem)
-    ├── server-cert.pem (letsencrpt fullchain.pem)
-    └── server-key.pem (letsencrpt privkey.pem)
+    ├── rabbitmq-ca-cert.pem (letsencrpt chain.pem)
+    ├── rabbitmq-server-cert.pem (letsencrpt fullchain.pem)
+    └── rabbitmq-server-key.pem (letsencrpt privkey.pem)
+
 ```
 ## Required storage class
 ```sh
 # For ebs as storage class, deploy ebs-storage class in K8s cluster if not present
-kubectl apply -f ../../K8s-cluster/cloud-specific/aws/ebs-storageclass.yaml
+kubectl apply -f ../../K8s-cluster/addons/storage/aws/ebs-storageclass.yaml
 ```
 ## Required cluster-autoscaler
 ```sh
@@ -42,10 +44,10 @@ kubectl apply -f ../../K8s-cluster/cloud-specific/aws/cluster-autoscaler-autodis
 #### Helpers
 ```sh
 # Pod status, IP, node, etc
-kubectl -n rabbitmq-test get pods -o wide
+kubectl -n rabbitmq get pods -o wide
 
 # RabbitMQ pod logs
-kubectl logs -n rabbitmq-test -f POD_NAME
+kubectl logs -n rabbitmq -f POD_NAME
 ```
 ## To dos:
 1. Integration of cert-manager and TLS certs of RMQ
