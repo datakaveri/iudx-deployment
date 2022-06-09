@@ -33,7 +33,7 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 To install the `auth-server`chart:
 
 ```console
-$ ./install.sh
+$ ./install.sh --set ingress.hostname=<auth-hostname>
 ```
 
 The command deploys auth-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
