@@ -1,37 +1,39 @@
-
-
 ## Introduction
 
 Helm Chart for IUDX immudb Server Deployment
 
-## Create secret files
+## Generating secrets
 
-Make a copy of sample secrets directory and add appropriate values to all files.
+Make a copy of sample secrets directory:
 
 ```console
-$ cp -r example-secrets/* .
+$ cp -r example-secrets/secrets .
 ```
+To generate the passwords:
 
+```console
+$ ./create-secrets.sh
+```
 ```
 # secrets directory after generation of secret files
-secrets
-    ├── immudb-admin-password
-    └── password
-        ├── admin-password
-        ├── auth-password
-        ├── cat-password
-        └── rs-password
-
+secrets/
+├── immudb-admin-password
+└── passwords/
+    ├── admin-password
+    ├── auth-password
+    ├── cat-password
+    └── rs-password
 ```
-
 ## Define Appropriate values of resources
 
 Define Appropriate values of resources -
-- RAM and CPU for immudb
-- Persistence storage class
+- CPU requests and limits
+- RAM requests and limits
+- Instance-type for nodeSelector
+- StorageClassName
+- Size of the persistent volume required
 
 in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
-
 
 ## Installing the Chart
 
@@ -54,7 +56,7 @@ Following script will create :
 To uninstall/delete the `immudb` deployment:
 
 ```console
-$ helm delete immudb -n immudb
+$ helm uninstall immudb -n immudb
 ```
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
