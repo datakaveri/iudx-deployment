@@ -17,7 +17,6 @@ global:
   storageClass: ""
 
 ## @section Common parameters
-
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
@@ -367,7 +366,7 @@ immudb:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "ebs-storage-class"
+    storageClass: "storage-class-name"
     ## @param immudb.persistence.existingClaim Existing Persistent Volume Claim
     ## If persistence is enable, and this value is defined,
     ## then accept the value as an existing Persistent Volume Claim to which
