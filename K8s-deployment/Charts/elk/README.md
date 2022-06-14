@@ -60,8 +60,9 @@ secrets/
 - creates K8s secrets from above credentials
 - brings es through helm and elasticsearch/es-values.yml, it can be overriden by passing set helm valuesargs after the scripts. It is illustrated below for the storage class.
 
+Deploy es as follows:
+
 ```sh
-# Deployment of es
 ./es-install.sh  --set volumeClaimTemplate.storageClassName=<name-of-storage-class>
 ```
 ## Deploy Logstash
