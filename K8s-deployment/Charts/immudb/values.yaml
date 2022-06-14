@@ -18,9 +18,6 @@ global:
 
 ## @section Common parameters
 
-## @param nameSpace Namespace to deploy the controller
-nameSpace: immudb
-
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
@@ -418,12 +415,12 @@ immudb:
     ## @param immudb.install.secretName Secrets for hook to connect immudb
     secretName: hook-secret
       ## @param immudb.install.hookImage.registry hookImage registry
-      ## @param immudb.install.hookImage.repository hookImage repository
+      ## @param immudb.install.hookImage.repository hookImage repository 
       ## @param immudb.install.hookImage.tag hookImage tag (immutable tags are recommended)
     hookImage:
       registry: ghcr.io
       repository: datakaveri/immudb-config-generator
-      tag: 1.0.5-1
+      tag: 1.0.5-3
     ## @param immudb.install.hookEnv Hooks env to pass on.
     hookEnv: 
     - name: IMMUDB_HOST
@@ -587,7 +584,7 @@ ingress:
   #      - path: /
   #        pathType: ImplementationSpecific
   #tls: 
-  #  - secretName: catalogue-tls-secret
+  #  - secretName: immudb-tls-secret
   #    hosts:
   #     - cat.test.io
 

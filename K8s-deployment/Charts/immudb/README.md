@@ -4,25 +4,66 @@
 
 Helm Chart for IUDX immudb Server Deployment
 
-## Installing the Chart
+## Create secret files
 
-To install the chart with the release name `immudb`:
+Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
-$ helm install immudb immudb/
+$ cp -r example-secrets/* .
 ```
 
-The command deploys immudb on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+```
+# secrets directory after generation of secret files
+secrets
+    ├── immudb-admin-password
+    └── password
+        ├── admin-password
+        ├── auth-password
+        ├── cat-password
+        └── rs-password
+
+```
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- RAM and CPU for immudb
+- Persistence storage class
+
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
+
+
+## Installing the Chart
+
+To install the `immudb`chart:
+
+```console
+$ ./install.sh  
+```
+
+The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+Following script will create :
+1. create a namespace `immudb`
+2. create required secrets
+3. deploy immudb verticles 
+4. Post-install Hook will configure the immudb
 
 ## Uninstalling the Chart
 
 To uninstall/delete the `immudb` deployment:
 
 ```console
-$ helm delete immudb
+$ helm delete immudb -n immudb
+```
+The command removes all the Kubernetes components associated with the chart and deletes the release.
+
+
+To delete immudb 'pvc'
+```console
+kubectl delete pvc data-immudb-0 -n immudb
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Parameters
 
