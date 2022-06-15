@@ -45,7 +45,9 @@ Define Appropriate values of resources -
 - nodeSelector
 - Storage class name
 
-in `es-resource-values.yaml`, `ls-resource-values.yaml`, and `kibana-resource-values.yaml` as shown in sample resource-values files present in the [`elasticsearch/`](./elasticsearch/), [`logstash/`](./logstash/), and [`kibana/`](./kibana/) directories respectively.
+in `elasticsearch/es-resource-values.yaml`, `logstash/ls-resource-values.yaml`, and `kibana/kibana-resource-values.yaml` as shown in sample resource-values files present in the [`elasticsearch/`](./elasticsearch/), [`logstash/`](./logstash/), and [`kibana/`](./kibana/) directories respectively.
+
+Define Appropriate nodeSelector value in the [`elasticsearch/autoscale-cron.yml`](./elasticsearch/autoscale-cron.yml)
 
 ## Build custom Elasticsearch docker image
 Custom docker image include S3 snapshot plugin (Recommeded way)[https://github.com/elastic/helm-charts/blob/master/elasticsearch/README.md#how-to-install-plugins]
