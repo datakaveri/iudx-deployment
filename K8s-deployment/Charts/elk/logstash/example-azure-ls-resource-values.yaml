@@ -1,0 +1,12 @@
+nodeSelector: 
+  node.kubernetes.io/instance-type: Standard_B2s
+logstashJavaOpts: "-Xmx2g -Xms2g -Dlog4j2.formatMsgNoLookups=true"
+resources:
+  requests:
+    cpu: "800m"
+    memory: "2.5Gi"
+  limits:
+    cpu: "1200m"
+    memory: "3Gi"
+volumeClaimTemplate:
+  storageClassName: "azuredisk-storage-class"
