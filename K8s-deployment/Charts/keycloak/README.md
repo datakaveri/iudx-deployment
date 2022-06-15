@@ -21,8 +21,6 @@ secrets/
 ├── database-password
 ├── management-password
 └── management-username
-
-
 ```
 
 ## Define Appropriate values of resources
@@ -31,7 +29,7 @@ Define Appropriate values of resources -
 - CPU of keycloak
 - RAM of keycloak
 
-in resource-values.yaml as shown in example-resource-values.yaml
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
 ## Deploy
 
@@ -51,5 +49,5 @@ Following script will create :
 KEYCLOAK_ADMIN_PASSWORD=$(kubectl get secret --namespace keycloak keycloak-passwords -o jsonpath="{.data.admin-password}" | base64 --decode)
 KEYCLOAK_MANAGEMENT_PASSWORD=$(kubectl get secret --namespace keycloak keycloak-passwords -o jsonpath="{.data.management-password}" | base64 --decode)
 
-helm upgrade   -f keycloak-values.yaml -f resource-values.yaml  --set ingress.hostname=<domain-name> --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD     --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD  keycloak  --version 4.0.1 bitnami/keycloak -n keycloak 
+helm upgrade   -f values.yaml -f resource-values.yaml  --set ingress.hostname=<domain-name> --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD     --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD  keycloak  --version 4.0.1 bitnami/keycloak -n keycloak 
 ```
