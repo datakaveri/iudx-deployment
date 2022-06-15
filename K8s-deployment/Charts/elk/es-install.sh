@@ -23,3 +23,9 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 
 helm install -f elasticsearch/es-exporter-values.yml -f elasticsearch/es-exporter-resource-values.yaml --version 4.7.0 -n elastic es-exporter  prometheus-community/prometheus-elasticsearch-exporter
+
+## elasticSearch data nodes autoscaler
+
+kubectl create configmap es-autoscale-script --from-file=elasticsearch/es-autoscaler.sh -n elastic
+kubectl apply -f elasticsearch/autoscale-rbac.yaml &&
+kubectl apply -f elasticsearch/autoscale-cron.yml
