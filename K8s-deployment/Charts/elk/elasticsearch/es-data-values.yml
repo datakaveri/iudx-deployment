@@ -86,15 +86,11 @@ podAnnotations: {}
 # additionals labels
 labels: {}
 
-esJavaOpts: "-Xmx8192m -Xms8192m -Dlog4j2.formatMsgNoLookups=true"
+esJavaOpts: {}
 
 resources:
-  requests:
-    cpu: "3500m"
-    memory: "14Gi"
-  limits:
-    cpu: "3800m"
-    memory: "15Gi"
+  limits: {}
+  requests: {}
 
 initResources: {}
   # limits:
@@ -116,7 +112,7 @@ networkHost: "0.0.0.0"
 
 volumeClaimTemplate:
   accessModes: [ "ReadWriteOnce" ]
-  storageClassName: "ebs-storage-class"
+  storageClassName: "storage-class-name"
   resources:
     requests:
       storage: 120Gi
@@ -263,7 +259,7 @@ clusterHealthCheckParams: "wait_for_status=green&timeout=1s"
 schedulerName: ""
 
 nodeSelector:
-  beta.kubernetes.io/instance-type: t3.xlarge
+  beta.kubernetes.io/instance-type: ""
 tolerations: []
 
 # Enabling this will publically expose your Elasticsearch instance.
