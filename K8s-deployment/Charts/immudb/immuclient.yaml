@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  annotations: {}
+  labels: 
+    app: immudb-client
+  name: immudb-client
+  namespace: immudb
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: immudb-client
+  template: 
+    metadata: 
+      labels: 
+        app: immudb-client
+    spec: 
+      containers: 
+        - name: immuclient
+          image: "codenotary/immuclient:latest"
+          args: 
+            - "while true; do sleep 30; done;"
+          command: 
+            - /bin/bash
+            - "-c"
+            - "--"
+          env: 
+            - name: immudb_admin_password
+              valueFrom: 
+                secretKeyRef: 
+                  name: hook-secret
+                  key: admin-password
+            - name: IMMUCLIENT_IMMUDB_ADDRESS
+              value: immudb.immudb.svc.cluster.local
