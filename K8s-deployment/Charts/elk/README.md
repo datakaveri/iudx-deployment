@@ -1,4 +1,5 @@
 # Install ELK
+
 ## Generating secrets
 
 Make a copy of sample secrets directory:
@@ -36,6 +37,16 @@ secrets/
     ├── s3-access-key
     └── s3-secret-key
 ```
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU of requests and limits
+- RAM of resuests and limits
+- nodeSelector
+- Storage class name
+
+in `es-resource-values.yaml`, `ls-resource-values.yaml`, and `kibana-resource-values.yaml` as shown in sample resource-values files present in the [`elasticsearch/`](./elasticsearch/), [`logstash/`](./logstash/), and [`kibana/`](./kibana/) directories respectively.
+
 ## Build custom Elasticsearch docker image
 Custom docker image include S3 snapshot plugin (Recommeded way)[https://github.com/elastic/helm-charts/blob/master/elasticsearch/README.md#how-to-install-plugins]
 ```sh
@@ -58,12 +69,13 @@ secrets/
 ```
 - generates CA, signed certs from ./elasticsearch/generate-certs.sh
 - creates K8s secrets from above credentials
-- brings es through helm and elasticsearch/es-values.yml, it can be overriden by passing set helm valuesargs after the scripts. It is illustrated below for the storage class.
+- deploys es through helm 
+- deploys es-autoscaler-cron job in K8s which autoscales the es-data-nodes
 
 Deploy es as follows:
 
 ```sh
-./es-install.sh  --set volumeClaimTemplate.storageClassName=<name-of-storage-class>
+./es-install.sh
 ```
 ## Deploy Logstash
 Once es is deployed and ready. Deploy logstash as follows :
