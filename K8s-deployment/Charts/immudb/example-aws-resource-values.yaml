@@ -10,6 +10,6 @@ immudb:
       memory: 7Gi
   persistence:
     storageClass: "ebs-storage-class"
-    size: 20Gi
+    size: 80Gi
   install:
     createUsers: true
