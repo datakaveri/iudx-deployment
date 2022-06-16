@@ -8,7 +8,7 @@ postgresql:
        memory: 3Gi
   maxConnections: 300
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: Standard_B2s
 
 pgpool:
   resources:
@@ -58,10 +58,10 @@ pgpool:
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: Standard_B2s
 
 persistence:
-  storageClass: "ebs-storage-class"
+  storageClass: "azuredisk-storage-class"
   accessModes:
     - ReadWriteOnce
   size: 30Gi
