@@ -9,9 +9,9 @@ Make a copy of sample secrets directory and add appropriate values to all files.
 ```console
 $ cp -r example-secrets/secrets .
 ```
-Generate required secrets  using follwing script:
+Generate required secrets  using following script:
 ```sh
-./create_secrets.sh
+./create-secrets.sh
 ```
 ```
 # secrets directory after generation of secrets
@@ -33,7 +33,8 @@ Define Appropriate values of resources -
 - node-selector for postgres and pgpool, to schedule the pods on particular type of node
 - Disk storage size and storage class
 - connections related settings 
-as shown in example-aws-resource-values.yaml
+
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
 ## Deploy
 
