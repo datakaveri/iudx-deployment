@@ -1,44 +1,46 @@
-
-
 ## Introduction
 
 Helm Chart for IUDX immudb Server Deployment
 
-## Create secret files
+## Generating secrets
 
-Make a copy of sample secrets directory and add appropriate values to all files.
+Make a copy of sample secrets directory:
 
 ```console
-$ cp -r example-secrets/* .
+cp -r example-secrets/secrets .
 ```
+To generate the passwords:
 
+```console
+./create-secrets.sh
+```
 ```
 # secrets directory after generation of secret files
-secrets
-    ├── immudb-admin-password
-    └── password
-        ├── admin-password
-        ├── auth-password
-        ├── cat-password
-        └── rs-password
-
+secrets/
+├── immudb-admin-password
+└── passwords/
+    ├── admin-password
+    ├── auth-password
+    ├── cat-password
+    └── rs-password
 ```
-
 ## Define Appropriate values of resources
 
 Define Appropriate values of resources -
-- RAM and CPU for immudb
-- Persistence storage class
+- CPU requests and limits
+- RAM requests and limits
+- Instance-type for nodeSelector
+- StorageClassName
+- Size of the persistent volume required
 
 in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
-
 
 ## Installing the Chart
 
 To install the `immudb`chart:
 
 ```console
-$ ./install.sh  
+./install.sh  
 ```
 
 The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,12 +51,29 @@ Following script will create :
 3. deploy immudb verticles 
 4. Post-install Hook will configure the immudb
 
+## Installing immuclient instance (optional)
+- Can be used to connect to immudb to perform manual database operations.
+
+Deploy using the following command:
+```sh
+kubectl apply -f immuclient.yaml -n immudb
+```
+To access immuclient pod:
+```sh
+kubectl exec -it $(kubectl get pods -n immudb | awk '{print $1}' | grep 'immudb-client') /bin/bash -n immudb
+```
+To login to immuclient shell
+```sh
+/app/immuclient login immudb --password $immudb_admin_password
+/app/immuclient 
+```
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `immudb` deployment:
 
 ```console
-$ helm delete immudb -n immudb
+helm uninstall immudb -n immudb
 ```
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
@@ -242,14 +261,14 @@ kubectl delete pvc data-immudb-0 -n immudb
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install immudb immudb \
+helm install immudb immudb \
   --set=slack.channel="#bots",slack.token="XXXX-XXXX-XXXX"
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install immudb -f values.yaml immudb/
+helm install immudb -f values.yaml immudb/
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
