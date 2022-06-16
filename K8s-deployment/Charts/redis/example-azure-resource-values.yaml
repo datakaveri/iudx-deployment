@@ -1,0 +1,50 @@
+redis:
+  resources:
+    limits:
+      cpu: 1600m
+      memory: 3.5Gi
+    requests:
+      cpu: 1400m
+      memory: 3.5Gi
+  ## @param redis.nodeSelector Node labels for Redis&trade; pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+
+persistence:
+  ## @param persistence.enabled Use a PVC to persist data.
+  ##
+  enabled: true
+  ## @param persistence.path Path to mount the volume at, to use other images Redis&trade; images.
+  ##
+  path: /bitnami/redis/data
+  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
+  ## @param persistence.storageClass Storage class of backing PVC
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: "azuredisk-storage-class"
+  ## @param persistence.accessModes Persistent Volume Access Modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size Size of data volume
+  ##
+  size: 20Gi
+  ## @param persistence.matchLabels Persistent Volume selectors
+  ## https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
+  ##
+  matchLabels: {}
+  ## @param persistence.matchExpressions matchExpressions Persistent Volume selectors
+  ##
+  matchExpressions: {}
+## Update strategy, can be set to RollingUpdate or onDelete by default.
+## https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
+##
+
