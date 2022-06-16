@@ -1,0 +1,16 @@
+nodeSelector:
+  beta.kubernetes.io/instance-type: t3.medium
+resources:
+  requests:
+    cpu: "250m"
+    memory: "1Gi"
+  limits:
+    cpu: "500m"
+    memory: "1.5Gi"
+
+ingress: 
+  hosts: 
+    host: kibana-hostname
+  tls: 
+    hosts: 
+      - kibana-hostname
