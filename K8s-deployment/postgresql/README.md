@@ -2,12 +2,18 @@
 This installs a postgres HA synchronous replication cluster with pgpool as proxy pod and repmgr for failover and backup using velero.
 The helm chart is based on bitnami : https://github.com/bitnami/charts/tree/master/bitnami/postgresql-ha 
 
-## Create secrets 
-1. Generate required secrets  using follwing script:
-```
-# command
-./create_secrets.sh
+## Generate secret files
 
+Make a copy of sample secrets directory and add appropriate values to all files.
+
+```console
+$ cp -r example-secrets/secrets .
+```
+Generate required secrets  using follwing script:
+```sh
+./create_secrets.sh
+```
+```
 # secrets directory after generation of secrets
 secrets/
 ├── passwords (contains all passwords concatenated using ':')
