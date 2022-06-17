@@ -33,8 +33,15 @@ Redis-autoscaler image
 ```
 docker push ghcr.io/datakaveri/redis-cluster-autoscaler:1.2
 ```
-## Required Secrets
+## Generate required secrets
+To generate the secrets:
+
+```sh
+./create-secrets.sh
 ```
+
+```
+# secrets directory after generation of secret files
 secrets/
 └── redis-password
 ```
@@ -46,7 +53,8 @@ Define Appropriate values of resources -
 - memory (RAM) of redis
 - storage size and class 
 - node-selector
-in resource-values.yaml as shown in example resource values.
+
+in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
 ##  Run Install script
 
