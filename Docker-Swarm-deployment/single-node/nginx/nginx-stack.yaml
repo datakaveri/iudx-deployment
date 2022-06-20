@@ -47,6 +47,8 @@ services:
         target: /etc/nginx/templates/kibana.conf.template
       - source: grafana-conf
         target: /etc/nginx/templates/grafana.conf.template
+      - source: cat-conf
+        target: /etc/nginx/templates/cat.conf.template
 
 
     networks:
