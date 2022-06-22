@@ -51,6 +51,7 @@ services:
             - KEYCLOAK_DATABASE_USER=iudx_keycloak_user
             - KEYCLOAK_ADMIN_USER=iudx_admin
             - KEYCLOAK_PROXY_ADDRESS_FORWARDING=true
+            - KC_HTTP_RELATIVE_PATH=/auth
             - KEYCLOAK_DATABASE_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-db-passwd
             - KEYCLOAK_ADMIN_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-admin-passwd
 
