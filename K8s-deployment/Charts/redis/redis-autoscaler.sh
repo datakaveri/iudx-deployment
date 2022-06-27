@@ -32,7 +32,7 @@ do
             master_id_line=$(expr $line_num + 2)
             master_id=$(redis-cli --cluster check $pod_name.redis-redis-cluster-headless:6379 -a $REDIS_PASSWORD |awk 'NR=='$master_id_line' {print $2}')
             echo "Master id to replicate: $master_id"
-            helm repo add bitnami https://charts.bitnami.com/bitnami
+            helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/43174e1970616584f893f66c1fbcac00d110c633/bitnami/
             helm upgrade --timeout 600s --reuse-values redis --set "password=$REDIS_PASSWORD,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=$current_num_nodes,cluster.nodes=$new_num_nodes,updateJob.nodeType=slave,updateJob.masterID=$master_id" bitnami/redis-cluster -n redis
             exit 0
         elif [[ "$node_type" == "M" ]]
@@ -40,7 +40,7 @@ do
             echo "Node type = Master"
             new_num_nodes=$(echo "2 + $current_num_nodes" | bc)
             echo "Number of cluster nodes after scaling = $new_num_nodes"
-            helm repo add bitnami https://charts.bitnami.com/bitnami
+            helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/43174e1970616584f893f66c1fbcac00d110c633/bitnami/
             helm upgrade  --version 6.3.3 --timeout 600s --reuse-values redis --set "password=$REDIS_PASSWORD,cluster.update.addNodes=true,cluster.update.currentNumberOfNodes=$current_num_nodes,cluster.nodes=$new_num_nodes,updateJob.nodeType=master" bitnami/redis-cluster -n redis
             sleep 5m
             redis-cli --cluster rebalance redis-redis-cluster:6379 --cluster-use-empty-masters -a $REDIS_PASSWORD
