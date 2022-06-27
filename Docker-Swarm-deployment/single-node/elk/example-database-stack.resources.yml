@@ -27,6 +27,8 @@ services:
 
 
   elasticsearch:
+    environment:
+      - "ES_JAVA_OPTS=-Xms1000m -Xmx1000m"
     deploy:
       resources:
         limits:
