@@ -33,8 +33,17 @@
 # install swarm, overlay network, node labels
 ansible-playbook -v  deploy-swarm.yml -i inventory.yml 
 
+# install swarm, overlay, node labels in localhost machine
+ansible-playbook -v  deploy-swarm.yml -i inventory.yml --ask-become-pass --connection=local
+
+
 # remove overlay and swarm
 ansible-playbook -v leave-swarm.yml -i inventory.yml
+
+# remove overlay and swarm in localhost machine
+ansible-playbook -v  leave-swarm.yml -i inventory.yml --ask-become-pass --connection=local
+
+
 
 ```
 
