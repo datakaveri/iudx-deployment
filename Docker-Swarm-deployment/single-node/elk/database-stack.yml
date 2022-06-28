@@ -20,7 +20,6 @@ services:
     networks:
       - overlay-net
     environment:
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
       - cluster.name=elastic-cluster
       - node.name=es
       - discovery.type=single-node

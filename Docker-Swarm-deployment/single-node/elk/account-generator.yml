@@ -30,6 +30,7 @@ services:
       - logstash-internal-password
       - elasticsearch-rs-password
       - elasticsearch-cat-password
+      - elasticsearch-fs-password
 
 secrets:
   elasticsearch-su-password:
@@ -50,7 +51,8 @@ secrets:
     file: secrets/passwords/logstash-system-password
   logstash-internal-password:
     file: secrets/passwords/logstash-internal-password
-
+  elasticsearch-fs-password:
+    file: secrets/passwords/elasticsearch-fs-password
 configs:
   account-generator:
     file: elasticsearch/account-generator.sh
