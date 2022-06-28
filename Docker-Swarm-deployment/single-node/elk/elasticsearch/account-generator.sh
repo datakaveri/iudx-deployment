@@ -31,6 +31,7 @@ create_simple_role(){
         --data "{\"cluster\":[\"monitor\"],\"indices\":[{\"names\":[\"*\"],\"privileges\":$2}]}"
 }
 
+
 echo 'Updating system-user passwords'
 
 change_password \
@@ -45,7 +46,7 @@ change_password \
 create_simple_role "logstash-role" "[\"create\"]"
 create_simple_role "rs-role" "[\"read\"]"
 create_simple_role "cat-role" "[\"create\",\"read\",\"delete\"]"
-
+create_simple_role "fs-role" "[\"read\",\"write\"]"
 create_user \
     $(cat /run/secrets/kibana-admin-username) \
     $(cat /run/secrets/kibana-admin-password) \
@@ -65,3 +66,8 @@ create_user \
     cat-user \
     $(cat /run/secrets/elasticsearch-cat-password) \
     "[\"cat-role\"]"
+
+create_user \
+    fs-user \
+   $(cat /run/secrets/elasticsearch-fs-password) \
+   "[\"fs-role\"]"

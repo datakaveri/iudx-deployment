@@ -4,6 +4,7 @@
 secrets
 |-- passwords
 |   |-- elasticsearch-cat-password
+|   |-- elasticsearch-fs-password 
 |   |-- elasticsearch-rs-password
 |   |-- elasticsearch-su-password
 |   |-- kibana-admin-password

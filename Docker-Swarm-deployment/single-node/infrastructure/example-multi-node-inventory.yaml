@@ -1,0 +1,65 @@
+all:
+  hosts:
+    backend-node:
+      # IP (should be reachable from ansible execution machine)/domain name  of host or it can be localhost/127.0.0.1
+      ansible_host: w.x.y.z
+      host_name: backend-node
+      # hostname to be set on VM
+      swarm_node_labels: 
+        - database_node=true
+        - monitoring_node=true
+        - databroker_node=true
+        - immudb-node=true
+        - postgres-db-node=true
+        - keycloak-node=true
+        - redis-node=true
+
+    api-servers-node:
+      ansible_host: w.x.y.a
+      host_name: api-servers-node
+      swarm_node_labels:
+        - auth-node=true
+        - cat-node=true
+        - file-server-node=true
+        - nginx-node=true
+        - lip-node=true
+        - rs-node=true
+        - di-node=true
+        - gis-node=true
+
+
+  vars: 
+    ansible_python_interpreter: /usr/bin/python3
+    # non-root user (the user should have sudo access) with which ansible remote logins on docker swarm nodes
+    # needed for remote docker swarm nodes only
+    ansible_user: ubuntu                                      
+    ansible_host_key_checking: false 
+    # ssh private key file location    
+    ansible_ssh_private_key_file: /home/user/.ssh/iudx
+    # specify the private subnet in regex. Eg. 10.20.1.\d+\/24 for 10.20.1.0/24 for subnet
+    private_subnet: 10.20.1.\d+/24
+    
+    
+  children: 
+
+    # swarm init node and the deployment node
+    swarm-first-manager-node:                           
+      hosts:
+        api-servers:
+      vars:
+        # specify the ovelay subnet like 10.1.0.0/16, caution not to clash with private subnet
+        swarm_overlay_subnet:           
+        # name of overlay network        
+        swarm_overlay_name: overlay-net  
+    
+    swarm-manager-nodes:                        
+      hosts:
+        api-servers-node:
+
+    swarm-worker-nodes:                         
+      hosts:
+        backend-node: 
+    swarm-all-nodes:                            
+      hosts:
+        backend-node:
+        api-servers-node:
