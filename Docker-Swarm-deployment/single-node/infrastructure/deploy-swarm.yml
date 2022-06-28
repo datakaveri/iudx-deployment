@@ -80,6 +80,11 @@
     shell: docker network create --driver overlay --subnet {{ swarm_overlay_subnet }} --attachable overlay-net
     when: "docker_networks.stdout.find('overlay-net' ) == -1"
 
+  - name: docker info
+    shell: docker info
+    register: docker_info
+
+
 
 - hosts: swarm-manager-nodes
   become_user: root
@@ -121,3 +126,5 @@
     loop_control:
       loop_var: node
     ignore_errors: yes
+  - name: nodes status
+    shell:  docker node ls
