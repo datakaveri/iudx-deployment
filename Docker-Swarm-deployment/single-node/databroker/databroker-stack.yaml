@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.10"
 
 networks:
   default:
@@ -9,7 +9,7 @@ networks:
 
 services:
   rabbitmq:
-    image: rabbitmq:3.8.11-management # using ubuntu based images as its officially supported
+    image: rabbitmq:3.10.5-management # using ubuntu based images as its officially supported
     #setting the hostname, so that when same/new container restarts it uses the same directory to save i.e "/var/lib/rabbitmq/rabbit@hostname"
     hostname: rabbitmq
    # volume stores metadata of queues, excahnges and also persistent queue messages
