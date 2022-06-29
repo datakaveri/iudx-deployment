@@ -1,8 +1,13 @@
 # Install
 Following deployments assume, there is a docker swarm and docker overlay network called "overlay-net" in the swarm. Please [refer](https://github.com/hackcoderr/iudx-deployment/blob/keycloak/docs/swarm-setup.md) to bring up docker swarm and the network.
 
-[bitnami keycloak image](https://hub.docker.com/r/bitnami/keycloak/) is used for postgres.
+## Docker image
+A custom docker image based on [bitnami keycloak image](https://hub.docker.com/r/bitnami/keycloak/) includes iudx custom themes. Build and push the image to ghcr (if not present)
 
+``` 
+docker build -t ghcr.io/datakaveri/keycloak:14.0.0-1 -f docker/Dockerfile  docker/  && docker push  ghcr.io/datakaveri/keycloak:14.0.0-1
+```
+Note: The tag is of form x.y.z-a. Where x.y.z is bitnami keycloak image version and a is UI version revision (currently 1). For each version upgrade of keycloak, custom image must be built, tested and pushed to ghcr.
 
 ## Required secrets
 
