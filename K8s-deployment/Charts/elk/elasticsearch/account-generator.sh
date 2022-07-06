@@ -77,7 +77,7 @@ create_user \
     "[\"cat-role\"]"
 
 create_user \
-   $(cat /usr/share/secrets/elasticsearch-monitor-user) \
+   $(cat /usr/share/secrets/elasticsearch-monitor-username) \
    $(cat /usr/share/secrets/elasticsearch-monitor-password) \
    "[\"monitor-role\"]"
 
