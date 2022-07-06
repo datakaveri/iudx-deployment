@@ -19,6 +19,10 @@ secrets/
 ├── passwords/
 │   ├── elasticsearch-cat-password
 │   ├── elasticsearch-cat-username
+│   ├── elasticsearch-fs-password
+│   ├── elasticsearch-fs-username
+│   ├── elasticsearch-monitor-password
+│   ├── elasticsearch-monitor-username
 │   ├── elasticsearch-rs-password
 │   ├── elasticsearch-rs-username
 │   ├── elasticsearch-su-password
