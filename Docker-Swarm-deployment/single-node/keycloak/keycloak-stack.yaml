@@ -8,7 +8,7 @@ networks:
 
 services:
   keycloak:
-    image: ghcr.io/datakaveri/keycloak:14.0.0-1
+    image: ghcr.io/datakaveri/keycloak:18.0.1
     volumes:
       - type: volume
         source: keycloak-volume
@@ -51,6 +51,7 @@ services:
             - KEYCLOAK_DATABASE_USER=iudx_keycloak_user
             - KEYCLOAK_ADMIN_USER=iudx_admin
             - KEYCLOAK_PROXY_ADDRESS_FORWARDING=true
+            - KC_HTTP_RELATIVE_PATH=/auth 
             - KEYCLOAK_DATABASE_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-db-passwd
             - KEYCLOAK_ADMIN_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-admin-passwd
 
@@ -64,6 +65,3 @@ secrets:
     file: secrets/passwords/keycloak-db-passwd
   keycloak-admin-passwd:
     file: secrets/passwords/keycloak-admin-passwd  
-
-   
-
