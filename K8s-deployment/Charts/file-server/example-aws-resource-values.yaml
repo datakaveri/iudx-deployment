@@ -1,3 +1,6 @@
+ingress:
+  hostname: fs-hostname
+
 ## apiServer resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param apiServer.resources.limits The resources limits for the apiServer containers

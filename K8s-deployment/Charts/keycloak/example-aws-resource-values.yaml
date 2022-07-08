@@ -1,3 +1,6 @@
+ingress:
+  hostname: keycloak-hostname
+
 resources:
   limits:
     cpu: 1400m

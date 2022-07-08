@@ -22,6 +22,8 @@ secrets/
 Define Appropriate values of resources -
 - CPU of all gis-interface verticles
 - RAM of all gis-interface verticles
+- ingress.hostname
+
 in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
 ## Installing the Chart

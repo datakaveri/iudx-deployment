@@ -26,6 +26,8 @@ secrets/
 Define Appropriate values of resources -
 - CPU of all resource-server verticles
 - RAM of all resource-server verticles
+- ingress.hostname
+
 in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
 ## Installing the Chart
@@ -33,7 +35,7 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 To install the `resource-server`chart:
 
 ```console
-$ ./install.sh --set ingress.hostname=<rs-hostname>
+$ ./install.sh
 ```
 
 The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
