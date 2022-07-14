@@ -9,7 +9,7 @@ An example is given in example-resource-values.yaml.
 ## Deploy
 1. Add bitnami repo and update
 ```
-helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update
+helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/43174e1970616584f893f66c1fbcac00d110c633/bitnami/ && helm repo update
 ```
 2. Create zookeeper namespace
 ```
