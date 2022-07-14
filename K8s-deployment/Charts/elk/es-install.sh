@@ -3,9 +3,6 @@
 sudo ./generate-keystore.sh
 sudo ./elasticsearch/generate-certs.sh
 kubectl create namespace elastic
-kubectl create secret generic regcred \
-    --from-file=.dockerconfigjson=secrets/passwords/docker-registry-login \
-    --type=kubernetes.io/dockerconfigjson -n elastic
 kubectl create secret generic es-keystore --from-file=./secrets/keystores/elasticsearch.keystore  -n elastic
 kubectl create secret generic elastic-certificates --from-file=./secrets/pki/elastic-certificates.p12  -n elastic
 kubectl create secret generic elastic-credentials --from-file=password=./secrets/passwords/elasticsearch-su-password --from-literal=username=elastic -n elastic
