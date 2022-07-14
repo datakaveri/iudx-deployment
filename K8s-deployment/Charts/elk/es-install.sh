@@ -10,8 +10,8 @@ kubectl create secret generic elk-passwords --from-file=./secrets/passwords -n e
 kubectl create configmap  account-generator --from-file=./elasticsearch/account-generator.sh -n elastic
 helm repo add elastic https://helm.elastic.co
 # brings up master-coordinator-data-nodes
-helm install -f elasticsearch/es-mcd-values.yml  -f es-resource-values.yaml -n elastic elasticsearch-mcd --version 7.12.1 $@  elastic/elasticsearch  &&
-helm install -f elasticsearch/es-data-values.yml  -f es-resource-values.yaml -n elastic elasticsearch-data --version 7.12.1 $@  elastic/elasticsearch
+helm install -f elasticsearch/es-mcd-values.yml  -f elasticsearch/es-resource-values.yaml -n elastic elasticsearch-mcd --version 7.12.1 $@  elastic/elasticsearch  &&
+helm install -f elasticsearch/es-data-values.yml  -f elasticsearch/es-resource-values.yaml -n elastic elasticsearch-data --version 7.12.1 $@  elastic/elasticsearch
 kubectl apply -f elasticsearch/account-generator.yml -n elastic 
 
 ## elastic exporter
