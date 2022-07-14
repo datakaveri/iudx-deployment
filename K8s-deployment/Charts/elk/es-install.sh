@@ -27,5 +27,5 @@ helm install -f elasticsearch/es-exporter-values.yml -f elasticsearch/es-exporte
 ## elasticSearch data nodes autoscaler
 
 kubectl create configmap es-autoscale-script --from-file=elasticsearch/es-autoscaler.sh -n elastic
-kubectl apply -f elasticsearch/autoscale-rbac.yaml &&
-kubectl apply -f elasticsearch/autoscale-cron.yml
+kubectl apply -f elasticsearch/autoscale-rbac.yaml -n elastic &&
+kubectl apply -f elasticsearch/autoscale-cron.yml -n elastic
