@@ -16,13 +16,14 @@ Generate required secrets  using following script:
 ```
 # secrets directory after generation of secrets
 secrets/
-├── passwords (contains all passwords concatenated using ':')
-├── postgres-auth-password (used by aaa)
-├── postgres-keycloak-password (used by keycloak)
-├── postgres-rs-password (used by rs)
-├── postgresql-password (super user password)
-├── repmgr-password (used repmgr for replication)
-└── usernames
+└── passwords
+    ├── passwords (contains all passwords concatenated using ':')
+    ├── postgres-auth-password (used by aaa)
+    ├── postgres-keycloak-password (used by keycloak)
+    ├── postgresql-password (super user password )
+    ├── postgres-rs-password (used by rs)
+    ├── repmgr-password (used by rempgr for replication)
+    └── usernames (contains all usernames concatenated using ';')
 ```
 
 ## Define Appropriate values of resources
