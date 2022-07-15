@@ -1,6 +1,9 @@
 ingress:
   hostname: rs-hostname
-
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+  
 ## apiServer resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param apiServer.resources.limits The resources limits for the apiServer containers
