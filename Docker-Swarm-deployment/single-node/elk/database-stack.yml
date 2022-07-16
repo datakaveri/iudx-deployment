@@ -19,14 +19,9 @@ services:
         window: 10s
     networks:
       - overlay-net
-    environment:
-      - cluster.name=elastic-cluster
-      - node.name=es
-      - discovery.type=single-node
-      - action.auto_create_index=.*
-      - xpack.security.enabled=true
-      - xpack.security.audit.enabled=true
-      - xpack.security.transport.ssl.enabled=true
+    configs:
+      - source: elasticsearch-config
+        target:  /usr/share/elasticsearch/config/elasticsearch.yml
     logging:
       driver: "json-file"
       options:
@@ -128,6 +123,8 @@ volumes:
   logstash-volume:
 
 configs:
+  elasticsearch-config:
+    file: elasticsearch/elasticsearch.yml
   logstash-pipelines:
     file: logstash/settings/pipelines.yml
   logstash-settings:
