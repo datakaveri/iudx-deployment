@@ -1,10 +1,10 @@
 # Pre-requisite
-1.  [git installed](https://github.com/git-guides/install-git).
+1.  [install git](https://github.com/git-guides/install-git).
 2. Preferably, SSH key based github authentication due to its ease than 
-token based over HTTPS url.
-  i) [generate ssh key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-  ii) [add ssh key to github](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
-  iii) [test ssh key based github auth](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection)
+token based over HTTPS url. <br>
+  i) [generate ssh key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) <br>
+  ii) [add ssh key to github](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) <br>
+  iii) [test ssh key based github auth](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection) 
 
 # To contribute new fetaure
 Following is simple step-by-step procedure to contribute to repo through 
@@ -47,7 +47,7 @@ git add <file>
 git commit 
 ```
 The commit message preferrably must contain one line heading covering what commit does.
-A detailed explanation  if required as points as shown below:
+A detailed explanation (if required) in points as shown below:
 ```
 Adding git docs 
 
@@ -65,7 +65,7 @@ ref: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/p
 
 
 # Other miscellaneous commands
-1. To fetch branch from others fork
-1.1  Add the thier fork ``git remote other-fork <fork-git-clone-url>``
-1.2  fetch the branch ```git fetch other-fork <branch-name>``
+1. To fetch branch from others fork <br>
+1.1  Add the thier fork ``git remote other-fork <fork-git-clone-url>`` <br>
+1.2  fetch the branch ``git fetch other-fork <branch-name>`` <br>
 
