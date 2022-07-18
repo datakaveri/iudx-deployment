@@ -2,6 +2,9 @@
 
 Helm Chart for IUDX immudb Server Deployment
 
+## Docker image 
+``ghcr.io/datakaveri/immudb-config-generator:1.3.0`` custom docker image containing the python script to do initial setup of immudb like create users, tables required for the api-servers. The files are present at ``../../../Docker-Swarm-deployment/single-node/immudb/docker/immudb-config-generator``
+
 ## Generating secrets
 
 Make a copy of sample secrets directory:
