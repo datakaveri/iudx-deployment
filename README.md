@@ -36,7 +36,8 @@ As a design choice on the architecture, keeping scalability for microservices in
 - Metrics are pushed to Loki, Prometheus and visualized using Grafana.
 
 ## Contributing
-We follow Git Merge based workflow 
+We follow Git Merge based workflow
 1. Fork this repo
 2. Create a new feature branch in your fork. Multiple features must have a hyphen separated name, or refer to a milestone name as mentioned in Github -> Projects 
-3. Commit to your fork and raise a Pull Request with upstream
+3. Commit to your fork and raise a Pull Request with upstream. <br>
+A detailed instructions present [here](docs/git-commands.md).
