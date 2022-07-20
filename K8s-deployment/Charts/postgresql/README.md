@@ -7,7 +7,7 @@ The helm chart is based on bitnami : https://github.com/bitnami/charts/tree/mast
 Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
-$ cp -r example-secrets/secrets .
+ cp -r example-secrets/secrets .
 ```
 Generate required secrets  using following script:
 ```sh
