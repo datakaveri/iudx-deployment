@@ -136,13 +136,13 @@ ingress:
     nginx.ingress.kubernetes.io/global-rate-limit-key: "$server_name"
 
   hosts:
-    - host: kibana-hostname
+    - host: ""
       paths:
         - path: /
   tls: 
     - secretName: kibana-tls-secret
       hosts:   
-        - kibana-hostname
+        - ""
 
 readinessProbe:
   failureThreshold: 3
