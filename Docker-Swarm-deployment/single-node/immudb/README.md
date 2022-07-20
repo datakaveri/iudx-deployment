@@ -14,7 +14,7 @@ Please see the example-secrets directory to get more idea, can use the 'secrets'
 ## Build the docker file
 This is to create a custom docker image containing the python script to do initial setup of immudb like create users, tables required for the api-servers.
 ```sh
-docker build -t ghcr.io/datakaveri/immudb-config-generator:1.0.5 -f docker/immudb-config-generator/Dockerfile docker/immudb-config-generator 
+docker build -t ghcr.io/datakaveri/immudb-config-generator:1.3.0 -f docker/immudb-config-generator/Dockerfile docker/immudb-config-generator 
 ```
 
 
