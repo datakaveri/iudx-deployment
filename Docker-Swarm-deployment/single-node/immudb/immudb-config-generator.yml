@@ -1,18 +1,24 @@
 version: '3.9'
 services:
     immudb-config-generator:
-      image: ghcr.io/datakaveri/immudb-config-generator:1.0.5
+      image: ghcr.io/datakaveri/immudb-config-generator:1.3.0
       networks:
         - overlay-net
       secrets:
-        - admin-password
-        - cat-password
-        - auth-password
-        - rs-password
+       - source: admin-password
+         target: /run/secrets/password/admin-password
+       - source: cat-password
+         target: /run/secrets/password/cat-password
+       - source: auth-password
+         target: /run/secrets/password/auth-password
+       - source: rs-password
+         target: /run/secrets/password/rs-password
       deploy:
         replicas: 1
         restart_policy:
           condition: on-failure
+      environment:
+        - IMMUDB_HOST=immudb
       logging:
         driver: "json-file"
         options:
@@ -35,3 +41,4 @@ secrets:
     file: secrets/passwords/auth-password
   cat-password: 
     file: secrets/passwords/cat-password
+
