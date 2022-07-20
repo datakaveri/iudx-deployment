@@ -41,7 +41,7 @@ client.useDatabase("iudxcat")
 client.sqlExec("CREATE TABLE auditingtable(id VARCHAR[128] NOT NULL, userRole VARCHAR[64] NOT NULL,userID VARCHAR[128] NOT NULL,iid VARCHAR[250] NOT NULL,api VARCHAR[128] NOT NULL,method VARCHAR[32] NOT NULL,time INTEGER NOT NULL,iudxID VARCHAR[256] NOT NULL,PRIMARY KEY id);")
 client.sqlExec("CREATE INDEX ON auditingtable(userID, iudxID, time, api);")
 client.useDatabase("iudxauth")
-client.sqlExec("CREATE TABLE table_auditing(id VARCHAR[128] NOT NULL, body VARCHAR[2048] NOT NULL,userid VARCHAR[128] NOT NULL,endpoint VARCHAR[128] NOT NULL,method VARCHAR[32] NOT NULL,time INTEGER NOT NULL,PRIMARY KEY id);")
+client.sqlExec("CREATE TABLE table_auditing(id VARCHAR[128] NOT NULL, body VARCHAR NOT NULL,userid VARCHAR[128] NOT NULL,endpoint VARCHAR[128] NOT NULL,method VARCHAR[32] NOT NULL,time INTEGER NOT NULL,PRIMARY KEY id);")
 
 client.sqlExec("CREATE INDEX ON table_auditing(userid, endpoint, time);")
 client.useDatabase("iudxrsorg")
