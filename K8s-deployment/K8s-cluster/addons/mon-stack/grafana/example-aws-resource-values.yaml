@@ -29,4 +29,17 @@ persistence:
     ## the minimum value between the SizeLimit specified
     ## here and the sum of memory limits of all containers in a pod
     ##
-                        
+ingress:
+  annotations:
+    # change it to - cert-manager.io/cluster-issuer: "letsencrypt-prod",
+    # when deployed in production/ need proper certficates
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+  host: 
+   - grafana-domain-name
+
+  tls:
+   - secretName: grafana-tls-secret
+     hosts:
+      - grafana-domain-name
+
+

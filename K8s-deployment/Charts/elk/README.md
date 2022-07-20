@@ -48,7 +48,7 @@ Define Appropriate values of resources -
 - RAM of resuests and limits
 - nodeSelector
 - Storage class name
-- cert-manager issuer
+- cert-manager issuer and ingress hostname in kibana-resource-values.yaml
 
 in `elasticsearch/es-resource-values.yaml`, `logstash/ls-resource-values.yaml`, and `kibana/kibana-resource-values.yaml` as shown in sample resource-values files present in the [`elasticsearch/`](./elasticsearch/), [`logstash/`](./logstash/), and [`kibana/`](./kibana/) directories respectively.
 
