@@ -3,7 +3,6 @@
 #set -e
 
 # create required secrets
-mkdir secrets/passwords
 echo -n  $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*+|:<>?' | head -c 16) > secrets/passwords/postgresql-password
 echo -n  $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*+|:<>?' | head -c 16) > secrets/passwords/repmgr-password
 echo -n  $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*+|:<>?' | head -c 16) > secrets/passwords/postgres-auth-password
