@@ -71,7 +71,7 @@ diagnosticMode:
 image:
   registry: codenotary
   repository: immudb
-  tag: 1.0.5
+  tag: 1.3.0
   pullSecrets: {} 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -419,7 +419,7 @@ immudb:
     hookImage:
       registry: ghcr.io
       repository: datakaveri/immudb-config-generator
-      tag: 1.0.5-3
+      tag: 1.3.0
     ## @param immudb.install.hookEnv Hooks env to pass on.
     hookEnv: 
     - name: IMMUDB_HOST
