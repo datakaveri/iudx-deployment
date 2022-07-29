@@ -129,12 +129,62 @@ Install Velero, including all prerequisites, into the cluster and start the depl
 ```bash
 velero install \
     --provider aws \
-    --plugins velero/velero-plugin-for-aws:v1.2.0 \
+    --plugins velero/velero-plugin-for-aws:v1.5.0 \
     --bucket $BUCKET \
     --backup-location-config region=$REGION \
     --snapshot-location-config region=$REGION \
     --secret-file ./credentials-velero
 ```
 
-## Backup and Restore using Velero
-
+## Backup
+1. velero backup
+```
+velero backup create <backup-name> --include-resources=pvc,pv --selector <resource-label>
+```
+2. All backups created can be listed using:
+```
+velero backup get
+```
+3. To see more details about the backups:
+```
+velero backup describe <backup-name> --details
+```
+## Restoring from backup
+1. Update your backup storage location to read-only mode (this prevents backup objects from being created or deleted in the backup storage location during the restore process):
+```
+kubectl patch backupstoragelocation <STORAGE LOCATION NAME> \
+    --namespace velero \
+    --type merge \
+    --patch '{"spec":{"accessMode":"ReadOnly"}}'
+```
+* storage location name: default (unless configured otherwise)
+2. Restore 
+```
+velero restore create <restore-name> --from-backup <backup-name> 
+```
+3. When ready, revert your backup storage location to read-write mode:
+```
+kubectl patch backupstoragelocation <STORAGE LOCATION NAME> \
+   --namespace velero \
+   --type merge \
+   --patch '{"spec":{"accessMode":"ReadWrite"}}'
+```
+## Creating scheduled backups
+ Example: To create a backup every 6 hours with 24 hour retention period. 
+* To creates a backup object with the name ``<schedule-name>-<TIMESTAMP>``.
+```
+velero schedule create <schedule-name> --schedule "0 */6 * * *" --include-resources=pvc,pv --selector <app-label> --ttl 24h
+```
+* To restore the latest successful backup triggered by the provided schedule.
+```
+velero restore create <restore-name> --from-schedule <schedule-name>
+```
+## Note
+1. The following labels should be used to backup the resource volumes:
+    Redis: app.kubernetes.io/name=redis-cluster
+    RabbitMQ: app=rabbitmq
+    PostgreSQL: app.kubernetes.io/name=postgresql-ha
+    ImmuDB: app=immudb
+2. Upgrading of velero and velero-aws-plugin: 
+   velero : velero 1.6 to 1.9 - https://velero.io/docs/v1.9/upgrade-to-1.9/#instructions
+   velero-aws-plugin: from v1.2.0 to v1.5.0 ``velero plugin remove velero/velero-plugin-for-aws:v1.2.0 && velero plugin add velero/velero-plugin-for-aws:v1.5.0``
