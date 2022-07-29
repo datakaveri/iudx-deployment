@@ -184,7 +184,7 @@ velero restore create <restore-name> --from-schedule <schedule-name>
     Redis: app.kubernetes.io/name=redis-cluster
     RabbitMQ: app=rabbitmq
     PostgreSQL: app.kubernetes.io/name=postgresql-ha
-    ImmuDB: app=immudb
+    ImmuDB: app.kubernetes.io/name=immudb
 2. Upgrading of velero and velero-aws-plugin: 
    velero : velero 1.6 to 1.9 - https://velero.io/docs/v1.9/upgrade-to-1.9/#instructions
    velero-aws-plugin: from v1.2.0 to v1.5.0 ``velero plugin remove velero/velero-plugin-for-aws:v1.2.0 && velero plugin add velero/velero-plugin-for-aws:v1.5.0``
