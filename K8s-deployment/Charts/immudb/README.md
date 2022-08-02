@@ -20,7 +20,6 @@ To generate the passwords:
 ```
 # secrets directory after generation of secret files
 secrets/
-├── immudb-admin-password
 └── passwords/
     ├── admin-password
     ├── auth-password

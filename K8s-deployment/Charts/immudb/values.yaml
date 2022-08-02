@@ -307,11 +307,6 @@ immudb:
     value: "false"
   - name: IMMUDB_PGSQL_SERVER
     value: "true"
-  - name: IMMUDB_ADMIN_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        key: immudb-admin-password
-        name: immudb-admin-password  
   
   ## @param immudb.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for immudb nodes
   ##
