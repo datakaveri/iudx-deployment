@@ -1,7 +1,7 @@
 version: '3.9'
 services:
     redis-rejson:
-      image: ghcr.io/datakaveri/redis-rejson:6.2.6-1.0.7
+      image: ghcr.io/datakaveri/redis-rejson:7.0.2-2.0.9
       cap_drop:
         - ALL
       environment:
@@ -18,6 +18,9 @@ services:
           volume:
             nocopy: false
           read_only: false
+      configs: 
+        - source: redis-conf
+          target: /opt/bitnami/redis/mounted-etc/overrides.conf
       networks:
         - overlay-net
       secrets:
@@ -45,6 +48,10 @@ networks:
 volumes:
   redis-persistence: 
 
+configs:
+  redis-conf:
+    file: redis.conf
 secrets:
   admin-password:
     file: secrets/passwords/admin-password
+
