@@ -46,12 +46,12 @@ docker stack deploy -c postgres-stack.yaml -c postgres-stack.resources.yaml -c p
 # Note
 1. Command to dump only psql data from a particular database of a dockerized psql.
 ```sh
-docker exec <psqldb-container> pg_dump -a -U <username/role name>  <db_name> > <dump-file>.sql
+docker exec <psqldb-container> PGPASSWORD=`cat $POSTGRESQL_PASSWORD_FILE` pg_dumpall -U postgres > /tmp/dump.sql
 ```
 2. Command to restore psql dump data (of a particular database) to dockerized  psql.
 
 ```sh
-cat <dump_file>.sql | docker exec -i <psqldb-container> psql -U <username/role> -d <dbname>
+cat <dump_file>.sql | docker exec -i <psqldb-container> PGPASSWORD=`cat $POSTGRESQL_PASSWORD_FILE` psql -U postgres
 ```
 3. Please refer [here](https://docs.docker.com/compose/extends/#multiple-compose-files) for info on why and how to use multiple stack files.
 4.  Following users using the passwords present at ```secrets/passwords/``` directory and dbs are created accordingly using init scripts present at ```init-scripts/```:
