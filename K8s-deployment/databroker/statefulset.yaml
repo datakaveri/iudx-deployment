@@ -51,7 +51,7 @@ spec:
         runAsGroup: 999
       containers:
       - name: rabbitmq-k8s
-        image: rabbitmq:3.8.11-management
+        image: rabbitmq:3.10.5-management
         volumeMounts:
           - name: certs
             mountPath: /certs/
