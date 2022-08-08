@@ -665,8 +665,7 @@ ingress:
     nginx.ingress.kubernetes.io/global-rate-limit: "300"
     nginx.ingress.kubernetes.io/global-rate-limit-window: "1s"
     nginx.ingress.kubernetes.io/global-rate-limit-key: "$server_name"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-
+    
   ## @param ingress.tls Enable TLS configuration for the hostname defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.ingress.hostname }}
   ## You can use the ingress.secrets parameter to create this TLS secret, relay on cert-manager to create it, or
