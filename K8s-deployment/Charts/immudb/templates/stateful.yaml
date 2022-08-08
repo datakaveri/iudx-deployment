@@ -2,7 +2,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: immudb
-  labels: 
+  labels: {{- include "common.labels.standard" . | nindent 4 }} 
     app.kubernetes.io/component: immudb
     app: immudb
     {{- if .Values.commonLabels }}
@@ -17,8 +17,9 @@ spec:
   {{- if .Values.immudb.updateStrategy }}
   strategy: {{- toYaml .Values.immudb.updateStrategy | nindent 4 }}
   {{- end }}
-  selector:
-    matchLabels: 
+  selector:  
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: immudb
       app: immudb
   template:
     metadata:
