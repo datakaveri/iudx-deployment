@@ -399,7 +399,8 @@ redis:
   ## is down, keeping it 90s, (higher than default 15s, so that helm upgrade won't change the master)
   configmap: |-
     cluster-require-full-coverage no 
-    cluster-node-timeout 90000    
+    cluster-node-timeout 90000  
+    tcp-keepalive 120  
 
   ## @param redis.extraEnvVars An array to add extra environment variables
   ## For example:
@@ -525,16 +526,6 @@ redis:
   ## @param redis.busPort The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
   ##
   busPort: 16379
-
-  extraVolumeMounts:
-    - name: redis-conf
-      mountPath: /opt/bitnami/redis/etc/overrides.conf
-      subPath: overrides.conf
-
-  extraVolumes:
-    - name: redis-conf
-      configMap:
-        name: redis-conf
 
 ## @section Cluster update job parameters
 
