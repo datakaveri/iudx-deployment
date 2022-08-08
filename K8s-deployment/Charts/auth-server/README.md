@@ -10,7 +10,7 @@ Helm Chart for IUDX auth-server Deployment
 Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
-$ cp -r example-secrets/secrets .
+ cp -r example-secrets/secrets .
 ```
 
 ```
@@ -26,6 +26,9 @@ secrets/
 Define Appropriate values of resources -
 - CPU of all aaa-server verticles
 - RAM of all aaa-server verticles
+- ingress.hostname
+- cert-manager issuer
+
 in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
 ## Installing the Chart
@@ -33,7 +36,7 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 To install the `auth-server`chart:
 
 ```console
-$ ./install.sh --set ingress.hostname=<auth-hostname>
+ ./install.sh
 ```
 
 The command deploys auth-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,7 +52,7 @@ Following script will create :
 To uninstall/delete the `auth-server` deployment:
 
 ```console
-$ helm delete auth-server
+ helm delete auth-server
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -544,14 +547,14 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install auth-server auth-server \
+ helm install auth-server auth-server \
   --set=slack.channel="#bots",slack.token="XXXX-XXXX-XXXX"
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install auth-server -f values.yaml auth-server/
+ helm install auth-server -f values.yaml auth-server/
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
