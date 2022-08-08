@@ -69,7 +69,7 @@ image:
   ## Bitnami Redis&trade; image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.5-1.0.7
+  tag: 7.0.2-2.0.9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -525,6 +525,16 @@ redis:
   ## @param redis.busPort The busPort should be obtained adding 10000 to the redisPort. By default: 10000 + 6379 = 16379
   ##
   busPort: 16379
+
+  extraVolumeMounts:
+    - name: redis-conf
+      mountPath: /opt/bitnami/redis/etc/overrides.conf
+      subPath: overrides.conf
+
+  extraVolumes:
+    - name: redis-conf
+      configMap:
+        name: redis-conf
 
 ## @section Cluster update job parameters
 
