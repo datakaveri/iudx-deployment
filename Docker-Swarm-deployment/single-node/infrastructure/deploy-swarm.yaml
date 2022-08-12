@@ -121,7 +121,7 @@
     shell:  docker node ls
 
   - name: add docker node labels
-    include_tasks: tasks/docker-labels-per-node.yml 
+    include_tasks: tasks/docker-labels-per-node.yaml 
     loop: "{{ groups['swarm-all-nodes'] }}"
     loop_control:
       loop_var: node
