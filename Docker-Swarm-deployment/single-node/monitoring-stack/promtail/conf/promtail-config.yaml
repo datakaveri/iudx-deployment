@@ -4,18 +4,18 @@ server:
   grpc_listen_port: 0
 
 positions:
-  filename: /var/log/positions.yml
+  filename: /var/log/positions.yaml
   
 clients:
   - url: http://tasks.loki:3100/loki/api/v1/push
   
 scrape_configs:
- #----------------- other-container-logs(except auth) --------------------------------------------
+ #----------------- container-logs --------------------------------------------
 - job_name: container
   static_configs:
   - targets:
     labels:
-      job: other-container-logs
+      job: container-logs
       __path__: /var/lib/docker/containers/*/*-json.log  
   pipeline_stages:
 
@@ -56,29 +56,6 @@ scrape_configs:
       source: docker_time
       format: RFC3339
 
-#-----------------------------------------authorisation logs-------------------------------------
-- job_name: system_auth
-  static_configs:
-  - targets:
-    labels: 
-      job: auth-logs  # A `job` label is fairly standard in prometheus and useful for linking metrics and logs.
-      host: authorization-node # A `host` label will help identify logs from this machine vs others
-      __path__: /var/log/debug.log  # The path matching uses a third party library: https://github.com/bmatcuk/doublestar
-      source: auth
-      sourceUrl: authorization.iudx.org.in        #mention url of auth
-  pipeline_stages:
-  - match:
-      selector: '{job="auth-logs"}'
-      stages:
-      - json:
-          expressions:
-            level: level
-            type: type
-            notify: notify
-            details: details
-      - labels:
-          level:
-          type:
 
  
  

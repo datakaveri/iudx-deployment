@@ -8,65 +8,58 @@
 
 The IUDX Monitoring stack uses Prometheus, Grafana, Micrometer, Node Exporter, Docker Daemon to capture API, System metrics. It integrates with telegram to publish alerts from Grafana based on predefined rules.  
 # Monitoring-stack-Installation
-## Required secrets
-```sh
-secrets/
-├── configs
-│   └── blackbox-targets.yml (only needed in test environment. Its a file_sd_config. See example below)
-├── passwords 
-│   ├── grafana-super-admin-passwd
-│   └── grafana-super-admin-username
-
-
- ```
-## Assign node labels 
-```sh
-docker node update --label-add monitoring_node=true <hostname/ID>
+## Generate secret files
+1. Make a copy of sample secrets directory.
 ```
-## Create .grafana.env file 
-Define env variables specific to production/testing environment for Grafana in .grafana.env using following template. 
-```sh
-GF_SERVER_ROOT_URL=https://<domain-name>:3000/
-TELEGRAM_CHAT_ID=-78222322                      # configure telegram chat ID 
-TELEGRAM_BOT_TOKEN=22222920290sws               # configure Telegram bot token 
+cp -r example-secrets/secrets .
 ```
-## Create blackbox-targets.yml file (only in test environment)
+2. Generate required secrets using following script:
+```
+./create-secrets.sh
+```
+ 3. Config Telegrambot for grafana's alerts is detailed [here](https://gist.github.com/abhilashvenkatesh/50478502ccd257a28d2c441ac51a8d65). Then appropiately define the environment file  secrets/grafana-env-secret. The template is defined as follow:
+ Please do not include comments and substitute appropiate correct values in the placeholders ``<placholder>``.
+```
+GF_SERVER_ROOT_URL=https://<grafana-domain-name>/
+GF_SERVER_DOMAIN=<grafana-domain-name>
+TELEGRAM_CHAT_ID=<telegram-chat-id>
+TELEGRAM_BOT_TOKEN=<telegram-chat-token>
+```
+4. Configure servers to be monitored for certificate expiry, server up status, as targets in  blackbox-targets.yml. See below for an example.
 ```sh
 - targets:
     - https://rs.io.test/apis
     - https://catalogue.io.test/
 ```
+5. secrets directory after generation of secrets
+```
+secrets/
+├── configs
+│   └── blackbox-targets.yaml
+├── .grafana.env
+└── passwords
+    ├── grafana-super-admin-passwd
+    └── grafana-super-admin-username
+```
+## Assign node labels 
+```sh
+docker node update --label-add monitoring_node=true <hostname/ID>
+```
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU 
+- RAM 
+- PID limit 
+in `mon-stack.resources.yaml`  for grafana, prometheus, loki, promtail, blackbox as shown in sample resource-values file for [here](example-mon-stack.resources.yaml)
 
 ## Deploy
-
-### Installation of Node-Exporter and docker daemon metrics
-Done Through Ansible. Refer [here](ansible/README.md)
-
-### Production
+Deploy monitoring stack:
 ```sh
-# Prometheus + Loki + Grafana + Promtail+ Vertx_SD (assumes zookeeper to be running)
-docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.prod.yml  mon-stack
-
+ docker stack deploy -c mon-stack.yaml -c mon-stack.resources.yaml mon-stack
 ```
-### Testing
-```sh
-# Prometheus + Loki + Grafana + Promtail+ Vertx_SD (assumes zookeeper to be running)
-docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.test.yml  mon-stack
-
-```
-### Development
-```sh
-# Zookeeper + Prometheus + Loki + Grafana + Promtail+ Vertx_SD
-docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.dev.yml  mon-stack
-```
-### Any other custom deployment
-```sh
-docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.temp.yml  mon-stack
-```
-
 ## Description
-* ``` docker stack deploy -c mon-stack.yml -c mon-stack.prod.yml mon-stack ``` 
- installs Vertx_SD, Prometheus, Loki, Grafana swarm services with replicas as one at node with "node.labels.monitoring_node==true" .
+* Installs Vertx_SD, Prometheus, Loki, Grafana, blackbox swarm services with replicas as one at node with "node.labels.monitoring_node==true" .
 * Promtail service installed in global mode i.e. all nodes have one promtail task running.
 
 
@@ -77,6 +70,11 @@ docker stack deploy --with-registry-auth -c mon-stack.yml -c mon-stack.temp.yml 
    running/restarting the docker with new admin credentials doesn't overwrite
    the password stored in Grafana db.
 2. Pipeline stages might be different for each application , this can be done using [match stage](https://grafana.com/docs/loki/latest/clients/promtail/stages/match/)
-3. mon-stack.yml contains additional service vertx_sd, which discover vertx instances from zookeeper for prometheus.
-4. Config Telegrambot for grafana's alerts is detailed [here](https://gist.github.com/abhilashvenkatesh/50478502ccd257a28d2c441ac51a8d65).
-5.  The grafana is now secured through centralised nginx.
+3. mon-stack.yaml contains additional service vertx_sd, which discover vertx instances from zookeeper for prometheus.
+4.  The grafana is now secured through centralised nginx.
+5. If you need to expose/access grafana HTTP port or have custom stack configuration( see [here](example-mon-stack.custom.yaml) for example configuration of 'mon-stack.custom.yaml' file). You can bring up as follows.
+```sh
+docker stack deploy -c mon-stack.yaml -c mon-stack.resources.yaml -c mon-stack.custom.yaml mon-stack
+```
+This is generally useful in local,dev/test environment.
+                                                            
