@@ -35,7 +35,6 @@ services:
     secrets:
       - source: elasticsearch.keystore
         target: /usr/share/elasticsearch/config/elasticsearch.keystore
-        
       - source: elastic.certificates
         target: /usr/share/elasticsearch/config/certs/elastic-certificates.p12 
 
