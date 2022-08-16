@@ -17,21 +17,21 @@ Creating custom image to include the [ReJSON module](https://github.com/RedisJSO
 
 Redis-rejson image
 ```
-docker build -t ghcr.io/datakaveri/redis-cluster-rejson:6.2.5-1.0.7 -f docker/redis-rejson/Dockerfile docker/redis-rejson
+docker build -t ghcr.io/datakaveri/redis-cluster-rejson:7.0.2-2.0.9 -f docker/redis-rejson/Dockerfile docker/redis-rejson
 ```
 Redis-autoscaler image
 ```
-docker build -t ghcr.io/datakaveri/redis-cluster-autoscaler:1.2 -f docker/redis-autoscaler/Dockerfile docker/redis-autoscaler
+docker build -t ghcr.io/datakaveri/redis-cluster-autoscaler:7.0.2 -f docker/redis-autoscaler/Dockerfile docker/redis-autoscaler
 ```
 **Push docker image**
 
 Redis-rejson image
 ```
-docker push ghcr.io/datakaveri/redis-cluster-rejson:6.2.5-1.0.7 
+docker push ghcr.io/datakaveri/redis-cluster-rejson:7.0.2-2.0.9 
 ```
 Redis-autoscaler image
 ```
-docker push ghcr.io/datakaveri/redis-cluster-autoscaler:1.2
+docker push ghcr.io/datakaveri/redis-cluster-autoscaler:7.0.2
 ```
 ## Generate required secrets
 To generate the secrets:
@@ -67,7 +67,7 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 ```
 1. kubectl run --namespace redis redis-redis-cluster-client --rm --tty -i --restart='Never' \
  --env REDIS_PASSWORD=$REDIS_PASSWORD \
---image <registry-domian-name>/<repo-name>/redis-cluster-rejson:6.2.5-1.0.7 -- bash
+--image <registry-domian-name>/<repo-name>/redis-cluster-rejson:7.0.2-2.0.9 -- bash
 
 2. redis-cli --cluster rebalance redis-redis-cluster:6379 --cluster-use-empty-masters -a $REDIS_PASSWORD
 
