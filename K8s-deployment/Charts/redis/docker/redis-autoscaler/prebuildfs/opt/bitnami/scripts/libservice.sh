@@ -138,6 +138,19 @@ generate_cron_conf() {
 }
 
 ########################
+# Remove a cron configuration file for a given service
+# Arguments:
+#   $1 - Service name
+# Returns:
+#   None
+#########################
+remove_cron_conf() {
+    local service_name="${1:?service name is missing}"
+    local cron_conf_dir="/etc/monit/conf.d"
+    rm -f "${cron_conf_dir}/${service_name}"
+}
+
+########################
 # Generate a monit configuration file for a given service
 # Arguments:
 #   $1 - Service name
@@ -145,7 +158,7 @@ generate_cron_conf() {
 #   $3 - Start command
 #   $4 - Stop command
 # Flags:
-#   --disabled - Whether to disable the monit configuration
+#   --disable - Whether to disable the monit configuration
 # Returns:
 #   None
 #########################
@@ -161,9 +174,8 @@ generate_monit_conf() {
     shift 4
     while [[ "$#" -gt 0 ]]; do
         case "$1" in
-            --disabled)
-                shift
-                disabled="$1"
+            --disable)
+                disabled="yes"
                 ;;
             *)
                 echo "Invalid command line flag ${1}" >&2
@@ -181,6 +193,19 @@ check process ${service_name}
   start program = "${start_command}" with timeout 90 seconds
   stop program = "${stop_command}" with timeout 90 seconds
 EOF
+}
+
+########################
+# Remove a monit configuration file for a given service
+# Arguments:
+#   $1 - Service name
+# Returns:
+#   None
+#########################
+remove_monit_conf() {
+    local service_name="${1:?service name is missing}"
+    local monit_conf_dir="/etc/monit/conf.d"
+    rm -f "${monit_conf_dir}/${service_name}.conf"
 }
 
 ########################
@@ -232,4 +257,17 @@ ${log_path} {
 $(indent "$extra" 2)
 }
 EOF
+}
+
+########################
+# Remove a logrotate configuration file
+# Arguments:
+#   $1 - Service name
+# Returns:
+#   None
+#########################
+remove_logrotate_conf() {
+    local service_name="${1:?service name is missing}"
+    local logrotate_conf_dir="/etc/logrotate.d"
+    rm -f "${logrotate_conf_dir}/${service_name}"
 }
