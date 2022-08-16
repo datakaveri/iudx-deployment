@@ -7,7 +7,7 @@ networks:
 
 services:
   elasticsearch:
-    image: ghcr.io/datakaveri/elasticsearch:7.12.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
     deploy:
       replicas: 1
       placement:
@@ -35,9 +35,12 @@ services:
     secrets:
       - source: elasticsearch.keystore
         target: /usr/share/elasticsearch/config/elasticsearch.keystore
+        
+      - source: elastic.certificates
+        target: /usr/share/elasticsearch/config/certs/elastic-certificates.p12 
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.12.1
+    image: docker.elastic.co/kibana/kibana:8.3.3
     deploy:
       replicas: 1
       placement:
@@ -52,8 +55,8 @@ services:
     networks:
       - overlay-net
     environment:
-      - ELASTICSEARCH_HOSTS=http://tasks.elasticsearch:9200
-      - LOGGING_JSON=true
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_PUBLICBASEURL=https://database-docker.iudx.io
     logging:
       driver: "json-file"
       options:
@@ -66,7 +69,7 @@ services:
         target: /usr/share/kibana/data/kibana.keystore
 
   logstash:
-    image: ghcr.io/datakaveri/logstash:7.12.1
+    image: docker.elastic.co/logstash/logstash:8.3.3
 
     deploy:
       replicas: 1
@@ -110,7 +113,8 @@ secrets:
     file: secrets/keystores/kibana.keystore
   logstash.keystore:
     file: secrets/keystores/logstash.keystore
-
+  elastic.certificates:
+    file: secrets/pki/elastic-certificates.p12
 
 volumes:
   elastic-volume:
@@ -118,7 +122,7 @@ volumes:
 
 configs:
   elasticsearch-config:
-    file: elasticsearch/elasticsearch.yaml
+    file: elasticsearch/elasticsearch.yml
   logstash-pipelines:
     file: logstash/settings/pipelines.yaml
   logstash-settings:
