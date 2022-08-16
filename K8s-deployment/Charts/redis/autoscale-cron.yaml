@@ -12,7 +12,7 @@ spec:
           serviceAccount: redis-autoscaler
           containers:
           - name: redis-autoscaler
-            image: ghcr.io/datakaveri/redis-cluster-autoscaler:1.2
+            image: ghcr.io/datakaveri/redis-cluster-autoscaler:2.0
             env:
              #CPU usage% threshold for autoscaling
              - name: autoscale_threshold
