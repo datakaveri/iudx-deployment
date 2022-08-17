@@ -8,10 +8,20 @@ Docker swarm stack for Elasticsearch-logstash-Kibana (ELK) Deployment.
  cp -r example-secrets/secrets .
 ```
 2. To generate the passwords:
-
 ```console
 ./create-secrets.sh
 ```
+## Generate tls-cert
+```sh
+./generate-cert.sh
+```
+This will generate 2 certificates files in pki directory,
+```sh
+pki
+    ├── elastic-certificates.p12
+    ├── elastic-stack-ca.p12
+```
+
 3. Generate Keystores
 ```
 ./generate-keystore.sh
