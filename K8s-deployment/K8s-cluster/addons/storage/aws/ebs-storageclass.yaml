@@ -11,3 +11,6 @@ volumeBindingMode: WaitForFirstConsumer
 parameters:
   type: gp2
   fsType: ext4
+# Allow vloume expansion
+allowVolumeExpansion: true
+
