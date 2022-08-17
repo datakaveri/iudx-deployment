@@ -7,7 +7,7 @@ networks:
 
 services:
   rs:
-    image: ghcr.io/datakaveri/rs-depl:3.5.0-3a9d266
+    image: ghcr.io/datakaveri/rs-depl:3.5.0-b2c1add
     networks:
       - overlay-net
     secrets:
@@ -26,10 +26,10 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-file: "5"
-        max-size: "100m"
+        max-file: "3"
+        max-size: "5m"
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
-    command: bash -c "exec java $$RS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
+    command: bash -c "exec java -Xmx4096m  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
     deploy:
       replicas: 1
       placement:
@@ -46,7 +46,7 @@ services:
 
 secrets:
   config:
-    file:  ./secrets/configs/config-depl.json
+    file:  ./secrets/config.json
 
 volumes:
   rs-volume:

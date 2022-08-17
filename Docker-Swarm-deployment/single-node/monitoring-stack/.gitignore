@@ -1,3 +1,3 @@
 secrets/*
 .*.env
-mon-stack.temp.yml
+mon-stack.temp.yaml

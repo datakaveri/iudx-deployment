@@ -13,7 +13,7 @@ alerting:
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
-  - "alertrules.yml"
+  - "alertrules.yaml"
   # - "second_rules.yml"
 
 # A scrape configuration containing exactly one endpoint to scrape:
@@ -55,7 +55,7 @@ scrape_configs:
       module: [http_2xx]
     file_sd_configs:
       - files:
-          - "/metric-targets/blackbox-targets.yml"
+          - "/metric-targets/blackbox-targets.yaml"
         refresh_interval: 1m
     relabel_configs:
       - source_labels: [__address__]
