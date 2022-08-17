@@ -24,7 +24,7 @@ spec:
                valueFrom:
                  secretKeyRef:
                    name: elk-passwords
-                   key: elasticsearch-monitor-user
+                   key: elasticsearch-monitor-username
             command: ["/bin/sh", "-c", "--"]
             args: ["/home/es-autoscaler.sh"]
             volumeMounts:
