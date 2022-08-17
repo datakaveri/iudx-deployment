@@ -21,6 +21,16 @@ pki
     ├── elastic-certificates.p12
     ├── elastic-stack-ca.p12
 ```
+## Generate tls-cert
+```sh
+./generate-cert.sh
+```
+This will generate 2 certificates files in pki directory,
+```sh
+pki
+    ├── elastic-certificates.p12
+    ├── elastic-stack-ca.p12
+```
 
 3. Generate Keystores
 ```
