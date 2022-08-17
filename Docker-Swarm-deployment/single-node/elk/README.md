@@ -25,6 +25,16 @@ Please see the example-secrets directory to get more idea, can use the 'secrets'
 ```sh
 docker node update --label-add database_node=true <node_name>
 ```
+## Generate tls-cert
+```sh
+./generate-cert.sh
+```
+This will generate 2 certificates files in pki directory,
+```sh
+pki
+    ├── elastic-certificates.p12
+    ├── elastic-stack-ca.p12
+```
 
 ## Generate keystores
 Running,
