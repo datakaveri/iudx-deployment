@@ -51,7 +51,7 @@ The Dockerfile.alpine containing the building and including external module to n
 ```console
  cp -r example-secrets/secrets .
 ```
-2.  Generate proper wildcard LetsEncrypt certificate covering domains for - resource access server, Catalogue API server, AAA server, File server, GIS server, DI server, Grafana, Kibana and Keycloak.
+2.  Generate proper wildcard LetsEncrypt certificate covering domains for - resource access server, Catalogue API server, AAA server, File server, GIS server, DI server, Grafana, Kibana, Databroker and Keycloak.
 
 3. Copy certificate files to secrets directory as shown below:
 
@@ -92,7 +92,7 @@ Example:- If resource server domain is ``rs.iudx.org.in`` , then susbitiute it i
 ```
 
 ## Deploy
-Deploy monitoring stack:
+Deploy nginx stack:
 ```sh
 docker stack deploy -c nginx-stack.yaml -c nginx-stack.resources.yaml nginx-stack
 ```
