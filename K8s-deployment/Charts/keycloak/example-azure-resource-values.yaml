@@ -1,3 +1,9 @@
+ingress:
+  hostname: keycloak-hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+
 resources:
   limits:
     cpu: 1400m
