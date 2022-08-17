@@ -10,7 +10,7 @@ Please see the example-secrets directory to get more idea. Can use the 'secrets'
 ## Build the docker file
 This builds custom docker image on top of [bitnami docker redis](https://github.com/bitnami/bitnami-docker-redis) to include [rejson](https://oss.redis.com/redisjson/) module.
 ```sh
-docker build -t ghcr.io/datakaveri/redis-rejson:6.2.6-1.0.7 -f docker/redis-rejson/Dockerfile  docker/redis-rejson/ 
+docker build -t ghcr.io/datakaveri/redis-rejson:7.0.2-2.0.9 -f docker/redis-rejson/Dockerfile  docker/redis-rejson/ 
 ```
 ## Assign node labels
  The redis container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart and able to mount the same local docker volume.
