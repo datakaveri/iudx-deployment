@@ -7,6 +7,7 @@
 # Load Generic Libraries
 . /opt/bitnami/scripts/liblog.sh
 . /opt/bitnami/scripts/libfs.sh
+. /opt/bitnami/scripts/libvalidations.sh
 
 # Functions
 
@@ -39,31 +40,44 @@ group_exists() {
 # Arguments:
 #   $1 - group
 # Flags:
+#   -i|--gid - the ID for the new group
 #   -s|--system - Whether to create new user as system user (uid <= 999)
 # Returns:
 #   None
 #########################
 ensure_group_exists() {
     local group="${1:?group is missing}"
+    local gid=""
     local is_system_user=false
 
     # Validate arguments
     shift 1
     while [ "$#" -gt 0 ]; do
         case "$1" in
-            -s|--system)
-                is_system_user=true
-                ;;
-            *)
-                echo "Invalid command line flag $1" >&2
-                return 1
-                ;;
+        -i | --gid)
+            shift
+            gid="${1:?missing gid}"
+            ;;
+        -s | --system)
+            is_system_user=true
+            ;;
+        *)
+            echo "Invalid command line flag $1" >&2
+            return 1
+            ;;
         esac
         shift
     done
 
     if ! group_exists "$group"; then
         local -a args=("$group")
+        if [[ -n "$gid" ]]; then
+            if group_exists "$gid"; then
+                error "The GID $gid is already in use." >&2
+                return 1
+            fi
+            args+=("--gid" "$gid")
+        fi
         $is_system_user && args+=("--system")
         groupadd "${args[@]}" >/dev/null 2>&1
     fi
@@ -74,7 +88,9 @@ ensure_group_exists() {
 # Arguments:
 #   $1 - user
 # Flags:
+#   -i|--uid - the ID for the new user
 #   -g|--group - the group the new user should belong to
+#   -a|--append-groups - comma-separated list of supplemental groups to append to the new user
 #   -h|--home - the home directory for the new user
 #   -s|--system - whether to create new user as system user (uid <= 999)
 # Returns:
@@ -82,7 +98,9 @@ ensure_group_exists() {
 #########################
 ensure_user_exists() {
     local user="${1:?user is missing}"
+    local uid=""
     local group=""
+    local append_groups=""
     local home=""
     local is_system_user=false
 
@@ -90,28 +108,44 @@ ensure_user_exists() {
     shift 1
     while [ "$#" -gt 0 ]; do
         case "$1" in
-            -g|--group)
-                shift
-                group="${1:?missing group}"
-                ;;
-            -h|--home)
-                shift
-                home="${1:?missing home directory}"
-                ;;
-            -s|--system)
-                is_system_user=true
-                ;;
-            *)
-                echo "Invalid command line flag $1" >&2
-                return 1
-                ;;
+        -i | --uid)
+            shift
+            uid="${1:?missing uid}"
+            ;;
+        -g | --group)
+            shift
+            group="${1:?missing group}"
+            ;;
+        -a | --append-groups)
+            shift
+            append_groups="${1:?missing append_groups}"
+            ;;
+        -h | --home)
+            shift
+            home="${1:?missing home directory}"
+            ;;
+        -s | --system)
+            is_system_user=true
+            ;;
+        *)
+            echo "Invalid command line flag $1" >&2
+            return 1
+            ;;
         esac
         shift
     done
 
     if ! user_exists "$user"; then
         local -a user_args=("-N" "$user")
-        $is_system_user && user_args+=("--system")
+        if [[ -n "$uid" ]]; then
+            if user_exists "$uid"; then
+                error "The UID $uid is already in use."
+                return 1
+            fi
+            user_args+=("--uid" "$uid")
+        else
+            $is_system_user && user_args+=("--system")
+        fi
         useradd "${user_args[@]}" >/dev/null 2>&1
     fi
 
@@ -120,6 +154,15 @@ ensure_user_exists() {
         $is_system_user && group_args+=("--system")
         ensure_group_exists "${group_args[@]}"
         usermod -g "$group" "$user" >/dev/null 2>&1
+    fi
+
+    if [[ -n "$append_groups" ]]; then
+        local -a groups
+        read -ra groups <<<"$(tr ',;' ' ' <<<"$append_groups")"
+        for group in "${groups[@]}"; do
+            ensure_group_exists "$group"
+            usermod -aG "$group" "$user" >/dev/null 2>&1
+        done
     fi
 
     if [[ -n "$home" ]]; then
@@ -141,8 +184,50 @@ am_i_root() {
     if [[ "$(id -u)" = "0" ]]; then
         true
     else
-	false
+        false
     fi
+}
+
+########################
+# Print OS metadata
+# Arguments:
+#   $1 - Flag name
+# Flags:
+#   --id - Distro ID
+#   --version - Distro version
+#   --branch - Distro branch
+#   --codename - Distro codename
+# Returns:
+#   String
+#########################
+get_os_metadata() {
+    local -r flag_name="${1:?missing flag}"
+    # Helper function
+    get_os_release_metadata() {
+        local -r env_name="${1:?missing environment variable name}"
+        (
+            . /etc/os-release
+            echo "${!env_name}"
+        )
+    }
+    case "$flag_name" in
+    --id)
+        get_os_release_metadata ID
+        ;;
+    --version)
+        get_os_release_metadata VERSION_ID
+        ;;
+    --branch)
+        get_os_release_metadata VERSION_ID | sed 's/\..*//'
+        ;;
+    --codename)
+        get_os_release_metadata VERSION_CODENAME
+        ;;
+    *)
+        error "Unknown flag ${flag_name}"
+        return 1
+        ;;
+    esac
 }
 
 ########################
@@ -172,14 +257,14 @@ get_machine_size() {
     # Validate arguments
     while [[ "$#" -gt 0 ]]; do
         case "$1" in
-            --memory)
-                shift
-                memory="${1:?missing memory}"
-                ;;
-            *)
-                echo "Invalid command line flag $1" >&2
-                return 1
-                ;;
+        --memory)
+            shift
+            memory="${1:?missing memory}"
+            ;;
+        *)
+            echo "Invalid command line flag $1" >&2
+            return 1
+            ;;
         esac
         shift
     done
@@ -231,14 +316,13 @@ convert_to_mb() {
         size="${BASH_REMATCH[1]}"
         unit="${BASH_REMATCH[2]}"
         if [[ "$unit" = "g" || "$unit" = "G" ]]; then
-           amount="$((size * 1024))"
+            amount="$((size * 1024))"
         else
             amount="$size"
         fi
     fi
     echo "$amount"
 }
-
 
 #########################
 # Redirects output to /dev/null if debug mode is disabled
@@ -250,7 +334,7 @@ convert_to_mb() {
 #   None
 #########################
 debug_execute() {
-    if ${BITNAMI_DEBUG:-false}; then
+    if is_boolean_yes "${BITNAMI_DEBUG:-false}"; then
         "$@"
     else
         "$@" >/dev/null 2>&1
@@ -272,8 +356,8 @@ retry_while() {
     local sleep_time="${3:-5}"
     local return_value=1
 
-    read -r -a command <<< "$cmd"
-    for ((i = 1 ; i <= retries ; i+=1 )); do
+    read -r -a command <<<"$cmd"
+    for ((i = 1; i <= retries; i += 1)); do
         "${command[@]}" && return_value=0 && break
         sleep "$sleep_time"
     done
@@ -300,35 +384,36 @@ generate_random_string() {
     # Validate arguments
     while [[ "$#" -gt 0 ]]; do
         case "$1" in
-            -t|--type)
-                shift
-                type="$1"
-                ;;
-            -c|--count)
-                shift
-                count="$1"
-                ;;
-            *)
-                echo "Invalid command line flag $1" >&2
-                return 1
-                ;;
+        -t | --type)
+            shift
+            type="$1"
+            ;;
+        -c | --count)
+            shift
+            count="$1"
+            ;;
+        *)
+            echo "Invalid command line flag $1" >&2
+            return 1
+            ;;
         esac
         shift
     done
     # Validate type
     case "$type" in
-        ascii)
-            filter="[:print:]"
-            ;;
-        alphanumeric)
-            filter="a-zA-Z0-9"
-            ;;
-        numeric)
-            filter="0-9"
-            ;;
-        *)
+    ascii)
+        filter="[:print:]"
+        ;;
+    alphanumeric)
+        filter="a-zA-Z0-9"
+        ;;
+    numeric)
+        filter="0-9"
+        ;;
+    *)
         echo "Invalid type ${type}" >&2
         return 1
+        ;;
     esac
     # Obtain count + 10 lines from /dev/urandom to ensure that the resulting string has the expected size
     # Note there is a very small chance of strings starting with EOL character
@@ -361,4 +446,21 @@ generate_sha_hash() {
     local -r str="${1:?missing input string}"
     local -r algorithm="${2:-1}"
     echo -n "$str" | "sha${algorithm}sum" | awk '{print $1}'
+}
+
+########################
+# Converts a string to its hexadecimal representation
+# Arguments:
+#   $1 - string
+# Returns:
+#   hexadecimal representation of the string
+#########################
+convert_to_hex() {
+    local -r str=${1:?missing input string}
+    local -i iterator
+    local char
+    for ((iterator = 0; iterator < ${#str}; iterator++)); do
+        char=${str:iterator:1}
+        printf '%x' "'${char}"
+    done
 }
