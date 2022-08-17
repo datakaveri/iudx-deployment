@@ -9,7 +9,7 @@ Helm Chart for IUDX Data Ingestion Deployment
 Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
-$ cp -r example-secrets/secrets .
+ cp -r example-secrets/secrets .
 ```
 
 ```
@@ -24,6 +24,9 @@ secrets/
 Define Appropriate values of resources -
 - CPU of all data-ingestion-server verticles
 - RAM of all data-ingestion-server verticles
+- ingress.hostname
+- cert-manager issuer
+
 in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
 ## Installing the Chart
@@ -31,7 +34,7 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 To install the `data-ingestion-server`chart:
 
 ```console
-$ ./install.sh
+ ./install.sh
 ```
 
 The command deploys data-ingestion-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +51,7 @@ Following script will create :
 To uninstall/delete the `data-ingestion` deployment:
 
 ```console
-$ helm delete data-ingestion -n di
+ helm delete data-ingestion -n di
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -413,14 +416,14 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install data-ingestion data-ingestion \
+ helm install data-ingestion data-ingestion \
   --set=slack.channel="#bots",slack.token="XXXX-XXXX-XXXX"
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install data-ingestion -f values.yaml data-ingestion/
+ helm install data-ingestion -f values.yaml data-ingestion/
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

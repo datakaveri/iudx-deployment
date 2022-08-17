@@ -78,6 +78,9 @@ rancher_kubernetes_engine_config:
       always_pull_images: false
       extra_args:
         enable-aggregator-routing: 'true'
+        allow-privileged: 'true'
+        feature-gates: >-
+          CSINodeInfo=true,CSIDriverRegistry=true,CSIBlockVolume=true,VolumeSnapshotDataSource=true
       pod_security_policy: false
       secrets_encryption_config:
         enabled: true
@@ -86,6 +89,8 @@ rancher_kubernetes_engine_config:
     kubelet:
       fail_swap_on: false
       generate_serving_certificate: false
+      extra_args:
+        feature-gates: 'CSINodeInfo=true,CSIDriverRegistry=true,CSIBlockVolume=true'
     kubeproxy:
       extra_args:
         proxy-mode: ipvs

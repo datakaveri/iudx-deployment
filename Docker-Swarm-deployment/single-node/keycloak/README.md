@@ -8,10 +8,10 @@ Build and push the image to ghcr (if not present), using following commands:
 
 ``` 
 # build docker image
-docker build -t ghcr.io/datakaveri/keycloak:14.0.0-1 -f docker/Dockerfile  docker/  
+docker build -t ghcr.io/datakaveri/keycloak:18.0.2 -f docker/Dockerfile  docker/  
 
 # push docker image
-docker push  ghcr.io/datakaveri/keycloak:14.0.0-1
+docker push  ghcr.io/datakaveri/keycloak:18.0.2
 ```
 Note: The tag is of form x.y.z-a. Where x.y.z is bitnami keycloak image version and a is UI version revision (currently 1). For each version upgrade of keycloak, tag of  base image ``bitnami/keycloak`` in docker/Dockerfile must be updated . The custom image must be built, tested and pushed to ghcr.
 
