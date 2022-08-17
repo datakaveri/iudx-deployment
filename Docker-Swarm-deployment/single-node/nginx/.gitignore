@@ -2,3 +2,4 @@
 .env
 nginx-stack.custom.yaml
 nginx-stack.resources.yaml
+conf/
