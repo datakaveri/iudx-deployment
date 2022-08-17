@@ -4,6 +4,7 @@ services:
     deploy:
       resources:
         limits:
+          pids: 8192
           cpus: '2.0'
           memory: 2Gi
         reservations:
