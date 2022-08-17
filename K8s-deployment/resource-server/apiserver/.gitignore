@@ -1,4 +1,0 @@
-.*.env
-secrets/all-verticles-configs/*.json
-secrets/one-verticle-configs/*.json
-secrets/*.jks

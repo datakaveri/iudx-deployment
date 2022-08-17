@@ -1,0 +1,69 @@
+resources:
+  requests:
+    memory: 500Mi
+    cpu: 250m
+  limits:
+    memory: 750Mi
+    cpu: 400m
+nodeSelector: 
+  node.kubernetes.io/instance-type: t3.medium
+
+# @section Persistence parameters
+##
+
+## Zookeeper data Persistent Volume Storage Class
+## If defined, storageClassName: <storageClass>
+## If set to "-", storageClassName: "", which disables dynamic provisioning
+## If undefined (the default) or set to null, no storageClassName spec is
+##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+##   GKE, AWS & OpenStack)
+##
+
+persistence:
+  ## @param persistence.existingClaim Provide an existing `PersistentVolumeClaim`
+  ## If defined, PVC must be created manually before volume will be bound
+  ## The value is evaluated as a template
+  ##
+  existingClaim: ""
+  ## @param persistence.enabled Enable Zookeeper data persistence using PVC
+  ##
+  enabled: true
+  ## @param persistence.storageClass PVC Storage Class for ZooKeeper data volume
+  ## if deploying in minikube, can use "standard"
+  storageClass: "ebs-storage-class"
+  ## @param persistence.accessModes PVC Access modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size PVC Storage Request for ZooKeeper data volume
+  ##
+  size: 10Gi
+  ## @param persistence.annotations Annotations for the PVC
+  ##
+  annotations: {}
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Zookeeper's data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  dataLogDir:
+    ## @param persistence.dataLogDir.size PVC Storage Request for ZooKeeper's Data log directory
+    ##
+    size: 10Gi
+    ## @param persistence.dataLogDir.existingClaim Provide an existing `PersistentVolumeClaim` for Zookeeper's Data log directory
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    existingClaim: ""
+    ## @param persistence.dataLogDir.selector Selector to match an existing Persistent Volume for Zookeeper's Data log PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+
