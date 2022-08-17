@@ -9,7 +9,7 @@ networks:
 
 services:
   rabbitmq:
-    image: rabbitmq:3.8.11-management # using ubuntu based images as its officially supported
+    image: rabbitmq:3.10.5-management # using ubuntu based images as its officially supported
     #setting the hostname, so that when same/new container restarts it uses the same directory to save i.e "/var/lib/rabbitmq/rabbit@hostname"
     hostname: rabbitmq
    # volume stores metadata of queues, excahnges and also persistent queue messages
@@ -39,7 +39,19 @@ services:
     configs:
     - source: rabbitmq-config
       target: /etc/rabbitmq/rabbitmq.conf
-    
+    ports:
+      - target: 15671    # https management port 
+        published: 28041 
+        mode: host
+      - target: 5671     # amqps port 
+        published: 24567
+        mode: host
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     deploy:
       replicas: 1 
       #placing in particular node with label 'databroker_node=true'
@@ -81,7 +93,7 @@ services:
         delay: 5s
         window: 10s
     env_file:
-        - ./.rabbitmq-backup.env
+        - ./secrets/.rabbitmq-backup.env
 
 
 
