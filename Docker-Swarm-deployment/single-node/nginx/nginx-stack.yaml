@@ -7,7 +7,20 @@ networks:
 
 services:
   nginx:
-    image: nginx:1.20
+    image: ghcr.io/datakaveri/nginx:1.20
+    read_only: true
+    user: 1001:1001
+    # command: sh -c "while true; do sleep 3600; done"
+    volumes:
+      - type: tmpfs
+        target: /var/cache
+        read_only: false  
+      - type: tmpfs
+        target: /var/run
+        read_only: false
+      - type: tmpfs
+        target: /tmp
+        read_only: false
     deploy:
       replicas: 1
       placement:
@@ -27,36 +40,48 @@ services:
       - source: default-pki-cert
         target: /etc/default-ssl/fullchain.pem
     configs:
-      - source: keycloak-conf
-        target: /etc/nginx/templates/keycloak.conf.template
-      - source: default-conf
-        target: /etc/nginx/templates/default.conf.template 
       - source: nginx-conf
         target: /etc/nginx/nginx.conf
-      - source: file-server-conf
-        target: /etc/nginx/templates/fs.conf.template
+      - source: default-conf
+        target: /etc/nginx/conf.d/default.conf 
+      - source: error-conf
+        target: /etc/nginx/error.conf
       - source: rs-conf
-        target: /etc/nginx/templates/rs.conf.template
-      - source: auth-conf
-        target: /etc/nginx/templates/auth.conf.template
-      - source: gis-conf
-        target: /etc/nginx/templates/gis.conf.template
-      - source: di-conf
-        target: /etc/nginx/templates/di.conf.template
-      - source: kibana-conf
-        target: /etc/nginx/templates/kibana.conf.template
-      - source: grafana-conf
-        target: /etc/nginx/templates/grafana.conf.template
+        target: /etc/nginx/conf.d/rs.conf
       - source: cat-conf
-        target: /etc/nginx/templates/cat.conf.template
+        target: /etc/nginx/conf.d/cat.conf
+      - source: file-server-conf
+        target: /etc/nginx/conf.d/fs.conf
+      - source: auth-conf
+        target: /etc/nginx/conf.d/auth.conf
+      - source: gis-conf
+        target: /etc/nginx/conf.d/gis.conf
+      - source: di-conf
+        target: /etc/nginx/conf.d/di.conf
+      - source: keycloak-conf
+        target: /etc/nginx/conf.d/keycloak.conf
+      - source: kibana-conf
+        target: /etc/nginx/conf.d/kibana.conf
+      - source: grafana-conf
+        target: /etc/nginx/conf.d/grafana.conf
+
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    cap_drop:
+      - ALL
+
 
 
     networks:
       - overlay-net
-    env_file:
-      - ./.env
-
+      
 configs:
+  error-conf:
+    file: conf/error.conf
   keycloak-conf:
     file: conf/keycloak.conf
   nginx-conf:
@@ -79,10 +104,6 @@ configs:
     file: conf/kibana.conf
   grafana-conf:
     file: conf/grafana.conf
-
-
-
-
 
 
 secrets:
