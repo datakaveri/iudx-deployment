@@ -59,7 +59,25 @@ all:
     swarm-worker-nodes:                         
       hosts:
         backend-node: 
-    swarm-all-nodes:                            
+    swarm-all-nodes:
+
+   # nodes on which docker daemon metrics needs to be installed
+    docker-nodes:                                     
       hosts:
         backend-node:
         api-servers-node:
+      vars:
+        docker_metrics_port: 9323
+
+    # node on which prometheus will be deployed
+    prometheus-node:                                  
+      hosts:
+        backend-node:
+
+    # nodes on which node-exporter to be installed
+    nodes-with-exporter:                              
+      hosts:
+        backend-node:
+        api-servers-node:
+      vars:
+        exporter_metrics_port: 9100
