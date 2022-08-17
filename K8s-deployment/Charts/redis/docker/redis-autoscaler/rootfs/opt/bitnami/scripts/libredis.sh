@@ -20,14 +20,16 @@
 #   REDIS_BASE_DIR
 # Arguments:
 #   $1 - key
+#   $2 - conf file
 # Returns:
 #   None
 #########################
 redis_conf_get() {
     local -r key="${1:?missing key}"
+    local -r conf_file="${2:-"${REDIS_BASE_DIR}/etc/redis.conf"}"
 
-    if grep -q -E "^\s*$key " "${REDIS_BASE_DIR}/etc/redis.conf"; then
-        grep -E "^\s*$key " "${REDIS_BASE_DIR}/etc/redis.conf" | awk '{print $2}'
+    if grep -q -E "^\s*$key " "$conf_file"; then
+        grep -E "^\s*$key " "$conf_file" | awk '{print $2}'
     fi
 }
 
@@ -100,13 +102,14 @@ redis_major_version() {
 # Globals:
 #   REDIS_BASE_DIR
 # Arguments:
-#   None
+#   $1 - pid file
 # Returns:
 #   Boolean
 #########################
 is_redis_running() {
+    local pid_file="${1:-"${REDIS_BASE_DIR}/tmp/redis.pid"}"
     local pid
-    pid="$(get_pid_from_file "$REDIS_BASE_DIR/tmp/redis.pid")"
+    pid="$(get_pid_from_file "$pid_file")"
 
     if [[ -z "$pid" ]]; then
         false
@@ -120,12 +123,12 @@ is_redis_running() {
 # Globals:
 #   REDIS_BASE_DIR
 # Arguments:
-#   None
+#   $1 - pid file
 # Returns:
 #   Boolean
 #########################
 is_redis_not_running() {
-    ! is_redis_running
+    ! is_redis_running "$@"
 }
 
 ########################
@@ -344,6 +347,21 @@ redis_initialize() {
   redis_override_conf
 }
 
+#########################
+# Append include directives to redis.conf
+# Globals:
+#   REDIS_*
+# Arguments:
+#   None
+# Returns:
+#   None
+#########################
+redis_append_include_conf() {
+    if [[ -f "$REDIS_OVERRIDES_FILE" ]]; then
+        echo "include $REDIS_OVERRIDES_FILE" >> "${REDIS_BASE_DIR}/etc/redis.conf"
+    fi
+}
+
 ########################
 # Configures Redis permissions and general parameters (also used in redis-cluster container)
 # Globals:
@@ -370,6 +388,10 @@ redis_configure_default() {
         cp "${REDIS_MOUNTED_CONF_DIR}/redis.conf" "${REDIS_BASE_DIR}/etc/redis.conf"
     else
         info "Setting Redis config file"
+        if is_boolean_yes "$ALLOW_EMPTY_PASSWORD"; then
+            # Allow remote connections without password
+            redis_conf_set protected-mode no
+        fi
         is_boolean_yes "$REDIS_ALLOW_REMOTE_CONNECTIONS" && redis_conf_set bind "0.0.0.0 ::" # Allow remote connections
         # Enable AOF https://redis.io/topics/persistence#append-only-file
         # Leave default fsync (every second)
@@ -399,5 +421,9 @@ redis_configure_default() {
         if [[ -n "$REDIS_DISABLE_COMMANDS" ]]; then
             redis_disable_unsafe_commands
         fi
+        if [[ -n "$REDIS_ACLFILE" ]]; then
+            redis_conf_set aclfile "$REDIS_ACLFILE"
+        fi
+        redis_append_include_conf
     fi
 }
