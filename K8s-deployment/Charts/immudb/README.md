@@ -2,6 +2,9 @@
 
 Helm Chart for IUDX immudb Server Deployment
 
+## Docker image 
+``ghcr.io/datakaveri/immudb-config-generator:1.3.0`` custom docker image containing the python script to do initial setup of immudb like create users, tables required for the api-servers. The files are present at ``../../../Docker-Swarm-deployment/single-node/immudb/docker/immudb-config-generator``
+
 ## Generating secrets
 
 Make a copy of sample secrets directory:
@@ -17,7 +20,6 @@ To generate the passwords:
 ```
 # secrets directory after generation of secret files
 secrets/
-├── immudb-admin-password
 └── passwords/
     ├── admin-password
     ├── auth-password
@@ -118,7 +120,7 @@ kubectl delete pvc data-immudb-0 -n immudb
 | --------------------------- | ------------------------------------------ | -------------- |
 | `image.registry`            | image registry                             | `codenotary`   |
 | `image.repository`          | image repository                           | `immudb`       |
-| `image.tag`                 | image tag (immutable tags are recommended) | `1.0.5`        |
+| `image.tag`                 | image tag (immutable tags are recommended) | `1.3.0`        |
 | `image.pullPolicy`          | image pull policy                          | `IfNotPresent` |
 | `image.pullSecrets`         | image pull secrets                         | `{}`           |
 | `image.debug`               | Enable image debug mode                    | `false`        |
@@ -203,7 +205,7 @@ kubectl delete pvc data-immudb-0 -n immudb
 | `immudb.install.secretName`                    | Secrets for hook to connect immudb                                                                                                                  | `hook-secret`                        |
 | `immudb.install.hookImage.registry`            | hookImage registry                                                                                                                                  | `ghcr.io`                            |
 | `immudb.install.hookImage.repository`          | hookImage repository                                                                                                                                | `datakaveri/immudb-config-generator` |
-| `immudb.install.hookImage.tag`                 | hookImage tag (immutable tags are recommended)                                                                                                      | `1.0.5-1`                            |
+| `immudb.install.hookImage.tag`                 | hookImage tag (immutable tags are recommended)                                                                                                      | `1.3.0`                            |
 | `immudb.install.hookEnv`                       | Hooks env to pass on.                                                                                                                               | `nil`                                |
 
 
