@@ -1,7 +1,16 @@
 # Introduction
-Docker swarm stack for Rabbitmq Deployment
-
+Docker swarm stack for Rabbitmq Deployment.
 # Rabbitmq Installation
+##  Docker image
+* Build Rabbitmq backup image 
+
+```sh
+docker build -f backup/Dockerfile -t ghcr.io/datakaveri/rabbitmq-backup:1.0 backup/
+```
+* Push Docker image 
+```sh
+docker push ghcr.io/datakaveri/rabbitmq-backup:1.0
+```
 ## Create secret files
 1. Make a copy of sample secrets directory.
 ```console
@@ -18,9 +27,12 @@ cp /etc/letsencrypt/live/<rabbitmq-fully-qualified-domain-name>/fullchain.pem  s
 
 cp /etc/letsencrypt/live/<rabbitmq-fully-qualified-domain-name>/privkey.pem secrets/pki/rabbitmq-server-key.pem
 ```
-4.  Configure the secrets/.rabbitmq-backup.env file with appropriate values in the place holders “<>”
+### Configuring backup
+Application at backup/backup-app backs up Rabbitmq definitions files to another VM using scp command whenever there is change in queues, users, exchanges.
+* Need to generate dedicated ssh keys to use for scp to backup VM. Copy the private and public keys to ``secrets/pki/backup-ssh-privkey`` and ``secrets/pki/backup-ssh-pubkey``.
+* Configure the secrets/.rabbitmq-backup.env file with appropriate values in the place holders “<>”.
 
-5. Secrets directory after generation of secrets
+Secrets directory after generation of secrets
 ```sh
 secrets/
 |-- passwords
