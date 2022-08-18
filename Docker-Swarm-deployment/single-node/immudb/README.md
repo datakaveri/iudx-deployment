@@ -46,7 +46,7 @@ docker stack deploy -c immudb-stack.yaml -c immudb-stack.resources.yaml immudb
 ### Create users, schema required by api-servers 
 Bring up the config and basic schema generator stack(only on clean deployment),
 ```sh
-docker stack deploy -c immudb-config-generator.yml tmp 
+docker stack deploy -c immudb-config-generator.yaml tmp 
 
 # Monitor logs to ensure creation
 docker service logs tmp_immudbconfiggenerator -f
