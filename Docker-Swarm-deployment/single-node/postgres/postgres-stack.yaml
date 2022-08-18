@@ -14,9 +14,6 @@ services:
         source: postgres-db-volume
         target: /bitnami/postgresql
     configs:
-      - source: db-rs-schema
-        target: /docker-entrypoint-initdb.d/db-rs-schema.sql
-        mode: 0755
       - source: db-user-creation 
         target: /docker-entrypoint-initdb.d/db-user-creation.sh
         mode: 0755
@@ -57,8 +54,6 @@ volumes:
 configs:
   db-user-creation:
     file: init-scripts/db-user-creation.sh
-  db-rs-schema:
-    file: init-scripts/db-rs-schema.sql
 
 secrets:
   postgresql-password:
