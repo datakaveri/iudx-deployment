@@ -65,7 +65,7 @@ Deploy databroker stack:
 ```sh
 docker stack deploy -c databroker-stack.yaml -c databroker-stack.resources.yaml databroker
 ```
-RabbitMQ UI can be accessed from https://<rmq-hostname>:28041/
+RabbitMQ UI can be accessed from ``https://<rmq-hostname>:28041/``
 # NOTE
 1. If you need to expose the HTTP,AMQP ports or have custom stack configuration( see [here](example-databroker-stack.custom.yaml) for example configuration of 'databroker-stack.custom.yaml' file)  and bring up like as follows.
 
