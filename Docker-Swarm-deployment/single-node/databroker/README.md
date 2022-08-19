@@ -58,7 +58,7 @@ Define Appropriate values of resources -
 - CPU 
 - RAM 
 - PID limit 
-in `databroker-stack.resources.yaml`  for databroker as shown in sample resource-values file for [here](databroker-stack.resources.yaml)
+in `databroker-stack.resources.yaml`  for databroker as shown in sample resource-values file for [here](example-databroker-stack.resources.yaml)
 
 ## Deploy
 Deploy databroker stack:
