@@ -61,7 +61,7 @@ Deploy ELK stack:
 ```sh
 docker stack deploy -c database-stack.yaml -c database-stack.resources.yaml database
 ```
-After few minutes, kibana console can be accessed at https://<kibana-domain-name>/
+After few minutes, kibana console can be accessed at ``https://<kibana-domain-name>/``
 ## ELK Users creation
 1. Bring up the account generator stack(only on clean deployment),
 ```sh
