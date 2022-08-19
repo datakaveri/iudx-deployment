@@ -1,12 +1,18 @@
-# Install
-Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and the network.
-## Required secrets
+# Introduction
+Docker swarm stack for Redis Deployment.
+# Redis Installation
+## Create secret files
+1. To generate the passwords:
+
+```console
+./create-secrets.sh
+```
+2. Secrets directory after generation of passwords:
 ```sh
 secrets/
 └── passwords
     └── admin-password
 ```
-Please see the example-secrets directory to get more idea. Can use the 'secrets' in that directory by copying into root redis directory i.e. ```cp -r example-secrets/secrets/ .``` , for demo or local testing purpose only! For other environment, please generate strong passwords.
 ## Build the docker file
 This builds custom docker image on top of [bitnami docker redis](https://github.com/bitnami/bitnami-docker-redis) to include [rejson](https://oss.redis.com/redisjson/) module.
 ```sh
@@ -17,34 +23,31 @@ docker build -t ghcr.io/datakaveri/redis-rejson:6.2.6-1.0.7 -f docker/redis-rejs
 ```sh
 docker node update --label-add redis-node=true <node_name>
 ```
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU 
+- RAM 
+- PID limit 
+in `redis-rejson-stack.resources.yaml`  for redis as shown in sample resource-values file for [here](example-redis-rejson-stack.resources.yaml)
 ## Deploy
+Deploy redis stack:
+```sh
+docker stack deploy -c redis-rejson-stack.yaml -c redis-rejson-stack.resources.yaml redis
+```
 
-Three ways to deploy, do any one of it
-1. Quick deploy  
-```sh
-docker stack deploy -c redis-rejson-stack.yml redis
-```
-2. Setting resource reservations,limits in 'redis-rejson-stack.resources.yml' file and then deploying (see [here](example-redis-rejson-stack.resources.yml) for example configuration of 'redis-rejson-stack.resources.yml' file ). Its suitable for production environment.
-
-```sh
-docker stack deploy -c redis-rejson-stack.yml -c redis-rejson-stack.resources.yml redis
-```
-3. You can add more custom stack cofiguration in file 'redis-rejson-stack.custom.yml' that overrides base 'redis-rejson-stack.yml' file like ports mapping etc ( see [here](example-redis-rejson-stack.custom.yml) for example configuration of 'redis-rejson-stack.custom.yml' file)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
-```sh
-docker stack deploy -c redis-rejson-stack.yml  -c redis-rejson-stack.custom.yml redis
-```
-or 
-with resource limits, reservations
-```sh
-docker stack deploy -c redis-rejson-stack.yml -c redis-rejson-stack.resources.yml -c redis-rejson-stack.custom.yml redis
-```
 ## Note
 1.  The docker image 'ghcr.io/datakaveri/redis-rejson'  is tagged in accordance  to this format, ```<redis-version>:<rejson-version>```.
-2.  Following users using the passwords present at files in ```secrets/passwords/``` directory  are created:
+2. If you need to expose the redis server ports, have custom stack configuration 'redis-rejson-stack.custom.yaml' that overrides base 'redis-rejson-stack.yaml' file like ports mapping etc ( see [here](example-redis-rejson-stack.custom.yaml) for example configuration)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
+```sh
+docker stack deploy -c redis-rejson-stack.yaml -c redis-rejson-stack.resources.yaml -c redis-rejson-stack.custom.yaml redis
+``` 
+3.  Following users using the passwords present at files in ```secrets/passwords/``` directory  are created:
 
 | Username           | Password                                    | Role/Access                         |  Services                     |
 |:-------------------:|:------------------------------------------:| :---------------------------------: |:-----------------------------:|
 | default          | secrets/passwords/admin-password     |     Superuser                                            |  Used by Resource and Latest ingestion pipeline |
+
 
 # ToDO
 1. Improve RBAC in redis using [ACL list](https://redis.io/topics/acl), its stalled now due to following reasons:
