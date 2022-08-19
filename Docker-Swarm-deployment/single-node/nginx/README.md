@@ -51,14 +51,14 @@ The Dockerfile.alpine containing the building and including external module to n
 ```console
  cp -r example-secrets/secrets .
 ```
-2.  Generate proper wildcard LetsEncrypt certificate covering domains for - resource access server, Catalogue API server, AAA server, File server, GIS server, DI server, Grafana, Kibana, Databroker and Keycloak.
+2.  Generate proper wildcard LetsEncrypt certificate covering sub-domains for - resource access server, Catalogue API server, AAA server, File server, GIS server, DI server, Grafana, Kibana, Databroker and Keycloak.
 
 3. Copy certificate files to secrets directory as shown below:
 
 ```
-cp /etc/letsencrypt/live/<fully-qualified-domain-name>/fullchain.pem  secrets/fullchain.pem
+cp /etc/letsencrypt/live/<domain-name>/fullchain.pem  secrets/fullchain.pem
 
-cp /etc/letsencrypt/live/<fully-qualified-domain-name>/privkey.pem secrets/privkey.pem
+cp /etc/letsencrypt/live/<domain-name>/privkey.pem secrets/privkey.pem
 ```
 4. Secrets directory after generation of secrets
 ```sh
