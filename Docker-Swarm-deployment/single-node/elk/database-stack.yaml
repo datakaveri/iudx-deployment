@@ -52,7 +52,7 @@ services:
     networks:
       - overlay-net
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://tasks.elasticsearch:9200
       - LOGGING_JSON=true
     logging:
       driver: "json-file"
@@ -100,14 +100,8 @@ services:
         target: /usr/share/logstash/config/pipelines.yml
       - source: logstash-settings
         target: /usr/share/logstash/config/logstash.yml
-      - source: logstash-adaptor-logs-pipeline
-        target: /usr/share/logstash/pipeline/adaptor-logs.cfg
-      - source: logstash-database-queue-intake-pipeline
-        target: /usr/share/logstash/pipeline/database-queue-intake.cfg
       - source: logstash-resource-group-pipeline
         target: /usr/share/logstash/pipeline/resource-group.cfg
-      - source: logstash-latest-data-pipeline
-        target: /usr/share/logstash/pipeline/latest-data.cfg
 
 secrets:
   elasticsearch.keystore:
@@ -124,16 +118,11 @@ volumes:
 
 configs:
   elasticsearch-config:
-    file: elasticsearch/elasticsearch.yml
+    file: elasticsearch/elasticsearch.yaml
   logstash-pipelines:
-    file: logstash/settings/pipelines.yml
+    file: logstash/settings/pipelines.yaml
   logstash-settings:
-    file: logstash/settings/logstash.yml
-  logstash-adaptor-logs-pipeline:
-    file: logstash/pipeline/adaptor-logs.cfg
-  logstash-database-queue-intake-pipeline:
-    file: logstash/pipeline/database-queue-intake.cfg
+    file: logstash/settings/logstash.yaml
   logstash-resource-group-pipeline:
     file: logstash/pipeline/resource-group.cfg
-  logstash-latest-data-pipeline:
-    file: logstash/pipeline/latest-data.cfg
+

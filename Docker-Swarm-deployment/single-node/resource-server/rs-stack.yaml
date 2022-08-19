@@ -14,7 +14,7 @@ services:
       - source: config
         target: /usr/share/app/secrets/configs/config.json
     env_file:
-      - ./.rs.env
+      - ./secrets/.rs.env
     read_only: true
     volumes:
       - type: volume
