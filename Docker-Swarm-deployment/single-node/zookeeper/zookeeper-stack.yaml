@@ -1,0 +1,34 @@
+version: "3.9"
+networks:
+  default:
+    name: overlay-net
+    driver: overlay
+    external: true
+
+services:
+  zookeeper:
+    image: bitnami/zookeeper:3.7.0-debian-10-r127
+    cap_drop:
+      - ALL
+    volumes:
+      - 'zookeeper_data:/bitnami/zookeeper'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        window: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+volumes:
+  zookeeper_data:
