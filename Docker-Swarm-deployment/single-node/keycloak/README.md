@@ -1,5 +1,7 @@
-# Install
-Following deployments assume, there is a docker swarm and docker overlay network called "overlay-net" in the swarm. Please [refer](https://github.com/hackcoderr/iudx-deployment/blob/keycloak/docs/swarm-setup.md) to bring up docker swarm and the network.
+# Introduction
+Docker swarm stack for Keycloak Deployment.
+
+## Keycloak Installation
 
 ## Docker image
 A custom docker imaige based on [bitnami keycloak image](https://hub.docker.com/r/bitnami/keycloak/) includes iudx custom themes. The related files to custom keycloak image is present at docker/ dir.
@@ -15,15 +17,18 @@ docker push  ghcr.io/datakaveri/keycloak:18.0.2
 ```
 Note: The tag is of form x.y.z-a. Where x.y.z is bitnami keycloak image version and a is UI version revision (currently 1). For each version upgrade of keycloak, tag of  base image ``bitnami/keycloak`` in docker/Dockerfile must be updated . The custom image must be built, tested and pushed to ghcr.
 
-## Required secrets
-
-```sh
+## Create secret files
+1. To generate the passwords:
+```console
+./create-secrets.sh
+```
+2. Secrets directory after generation of secrets
+```
 secrets/
 └── passwords
     ├── keycloak-admin-passwd
     └── keycloak-db-passwd
- ```
-   Please see the ``example-secrets`` directory to get more idea, can use the ``secrets`` in that directory by copying into root keycloak directory i.e. ``cp -r example-secrets/secrets/ .`` for demo or local testing purpose only! For other environment, please generate strong passwords. 
+```
    
    
 ## Assign node labels
@@ -32,31 +37,26 @@ The keycloak container is constrained to run on specifc node by adding node labe
 ```sh
 docker node update --label-add keycloak-node=true <node_name>
 ```
-## Pre-requisite
-1. Before Keycloak installation, Install postgreSQL and follow this [document](../postgres/README.md) for that.
 
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU 
+- RAM 
+- PID limit 
+in `keycloak-stack.resources.yaml`  for keycloak as shown in sample resource-values file for [here](example-keycloak-stack.resources.yaml)
 
 ## Deploy
-
-Three ways to deploy, do any one of it
-1. Quick deploy  
-```sh
-docker stack deploy -c keycloak-stack.yaml keycloak
-
-```
-
-2. Setting resource reservations,limits in 'keycloak-stack.resources.yaml' file and then deploying (see [here](example-keycloak-stack-resources.yaml) for example configuration of 'keycloak-stack-resources.yaml' file ).
-
+Deploy Keycloak stack:
 ```sh
 docker stack deploy -c keycloak-stack.yaml -c keycloak-stack.resources.yaml keycloak
 ```
-3. You can add more custom stack configuration in file 'keycloak-stack-custom.yaml' that overrides base 'keycloak-stack.yaml' file like ports mapping etc ( see [here](example-keycloak-stack-custom.yaml) for example configuration of 'keycloak-stack-custom.yaml' file)  and bring up like as follows.
+Keycloak can be accessed at ``https://<keycloak-domain>/auth``
+## Configure Keycloak
+* Please refer [here](https://github.com/datakaveri/iudx-aaa-server#keycloak-setup) to do necessary keycloak configuiration for AAA server
 
-```sh
-docker stack deploy -c keycloak-stack.yaml  -c keycloak-stack-custom.yaml keycloak
-```
-or 
-with resource limits, reservations
+# NOTE
+1. If you need to expose the HTTP Port of keycloak or have custom stack configuration( see [here](example-keycloak-stack.custom.yaml) for example configuration of 'keycloak-stack.custom.yaml' file)  and bring up like as follows. 
 ```sh
 docker stack deploy -c keycloak-stack.yaml -c keycloak-stack.resources.yaml -c keycloak-stack.custom.yaml keycloak
 ```

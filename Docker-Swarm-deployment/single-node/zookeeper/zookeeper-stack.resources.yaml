@@ -1,12 +1,12 @@
 version: '3.9'
 services:
-  keycloak:
+  zookeeper:
     deploy:
       resources:
         limits:
-          pids: 3000
-          cpus: '1.0'
-          memory: 2Gi
+          pids: 512
+          cpus: '1'
+          memory: 1500M
         reservations:
-          cpus: '0.5'   
+          cpus: '0.1'   
           memory: 512Mi

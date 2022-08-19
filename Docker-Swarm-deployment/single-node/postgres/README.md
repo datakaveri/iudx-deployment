@@ -1,9 +1,14 @@
-# Install
-Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and the network.
+# Introduction
+Docker swarm stack for postgres deployment
 
- [bitnami postgres image](https://github.com/bitnami/bitnami-docker-postgresql) is used for postgres.
-## Required secrets
+## Postgres Installation
+## Create secret files
+1. To generate the passwords:
 
+```console
+./create-secrets.sh
+```
+2. Secrets directory after generation of passwords:
 ```sh
 secrets/
 └── passwords
@@ -11,38 +16,63 @@ secrets/
     ├── postgres-keycloak-password
     ├── postgresql-password
     └── postgres-rs-password
-```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root postgres  directory i.e. ``` cp -r example-secrets/secrets/ .```for demo or local testing purpose only! For other environment, please generate strong passwords.
 
+```
 ## Assign node labels
  The postgres container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart and able to mount the same local docker volume.
 ```sh
 docker node update --label-add postgres-db-node=true <node_name>
 ```
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU 
+- RAM 
+- PID limit 
+in `postgres-stack.resources.yaml`  for postgres as shown in sample resource-values file for [here](postgres-stack.resources.yaml)
 
 ## Deploy
-
-Three ways to deploy, do any one of it
-1. Quick deploy  
-```sh
-docker stack deploy -c postgres-stack.yaml postgres
-```
-
-2. Setting resource reservations,limits in 'postgres-stack.resources.yaml' file and then deploying (see [here](example-postgres-stack.resources.yaml) for example configuration of 'postgres-stack.resources.yaml' file ).
-
+Deploy Postgres stack:
 ```sh
 docker stack deploy -c postgres-stack.yaml -c postgres-stack.resources.yaml postgres
 ```
-3. You can add more custom stack cofiguration in file 'postgres-stack.custom.yaml' that overrides base 'postgres-stack.yaml' file like ports mapping etc ( see [here](example-postgres-stack.custom.yaml) for example configuration of 'postgres-stack.custom.yaml' file)  and bring up like as follows
-```sh
-docker stack deploy -c postgres-stack.yaml  -c postgres-stack.custom.yaml postgres
-```
-or 
-with resource limits, reservations
-```sh
-docker stack deploy -c postgres-stack.yaml -c postgres-stack.resources.yaml -c postgres-stack.custom.yaml postgres
-```
+## RS, auth scehma creation
+The rs and auth schema created using flyway tool. Follow below steps:
+1. Bind/publish/expose the psql port  5432 to host VM temporarily as described in 5th point in note
 
+2. ``git clone  https://github.com/datakaveri/iudx-aaa-server.git && cd iudx-aaa-server`` repo and do following
+  2.1 flyway.conf must be updated with the required data. which will be as follows
+  ```
+   flyway.url=jdbc:postgresql://127.0.0.1:5432/postgres
+   flyway.user=postgres 
+   flyway.password=<value in secrets/passwords/postgresql-password>  
+   flyway.schemas=aaa 
+   flyway.placeholders.authUser=iudx_auth_user 
+  ```
+  2.2 After this, the info command can be run to test the config. Then, the migrate command can be run to set up the database. At the /iudx-aaa-server directory, run
+
+  ```
+  mvn flyway:info -Dflyway.configFiles=flyway.conf
+  mvn flyway:migrate -Dflyway.configFiles=flyway.conf
+  ```
+ Refer here for more info: https://github.com/datakaveri/iudx-aaa-server#flyway-database-setup
+3. Similarly do for resource server,  ``git clone https://github.com/datakaveri/iudx-resource-server.git && cd iudx-resource-server``
+  3.1 flyway.conf must be updated with the required data. which will be as follows
+  ```
+  flyway.url=jdbc:postgresql://127.0.0.1:5432/iudx_rs
+  flyway.user=postgres
+  flyway.password=<value in secrets/passwords/postgresql-password>
+  flyway.schemas=public
+  flyway.placeholders.rsUser=iudx_rs_user
+  flyway.cleanDisabled=true
+  # use TRUE only for first time migration of existing DB, else use FALSE.
+  flyway.baselineOnMigrate = false
+  ```
+  2.2 After this, the info command can be run to test the config. Then, the migrate command can be run to set up the database. At the /iudx-resource-server directory, run
+  ```
+  mvn flyway:info -Dflyway.configFiles=flyway.conf
+  mvn flyway:migrate -Dflyway.configFiles=flyway.conf
+  ```
 # Note
 1. Command to dump only psql data from a particular database of a dockerized psql.
 ```sh
@@ -63,3 +93,7 @@ cat <dump_file>.sql | docker exec -i <psqldb-container> psql -U <username/role> 
 | iudx_auth_user     |   secrets/passwords/postgres-auth-password   |   Access given while setting up auth server             | Used by auth server          |
 | postgres           | secrets/passwords/postgresql-password     |     Superuser                                             |  Used to set users and RBAC  |
                             
+5.  If you need to expose the psql server port or have custom stack configuration ( see [here](example-postgres-stack.custom.yaml) for example configuration of 'postgres-stack.custom.yaml' file)  and bring up like as follows
+```sh
+docker stack deploy -c postgres-stack.yaml -c postgres-stack.resources.yaml -c postgres-stack.custom.yaml postgres
+```
