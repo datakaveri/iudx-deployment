@@ -21,11 +21,11 @@ docker push ghcr.io/datakaveri/rabbitmq-backup:1.0
 3. Copy certificate files to secrets directory as shown below:
 
 ```
-cp /etc/letsencrypt/live/<rabbitmq-fully-qualified-domain-name>/chain.pem  secrets/pki/rabbitmq-ca-cert.pem
+cp /etc/letsencrypt/live/<domain-name>/chain.pem  secrets/pki/rabbitmq-ca-cert.pem
 
-cp /etc/letsencrypt/live/<rabbitmq-fully-qualified-domain-name>/fullchain.pem  secrets/pki/rabbitmq-server-cert.pem
+cp /etc/letsencrypt/live/<domain-name>/fullchain.pem  secrets/pki/rabbitmq-server-cert.pem
 
-cp /etc/letsencrypt/live/<rabbitmq-fully-qualified-domain-name>/privkey.pem secrets/pki/rabbitmq-server-key.pem
+cp /etc/letsencrypt/live/<domain-name>/privkey.pem secrets/pki/rabbitmq-server-key.pem
 ```
 ### Configuring backup
 Application at backup/backup-app backs up Rabbitmq definitions files to another VM using scp command whenever there is change in queues, users, exchanges.
