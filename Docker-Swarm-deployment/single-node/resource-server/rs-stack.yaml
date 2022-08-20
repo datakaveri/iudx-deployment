@@ -20,6 +20,8 @@ services:
       - type: volume
         source: rs-volume
         target: /usr/share/app/storage/temp-dir
+        volume:
+          nocopy: false
       - type: tmpfs
         target: /tmp/
         read_only: false  
