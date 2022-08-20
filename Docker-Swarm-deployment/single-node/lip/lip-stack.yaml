@@ -7,7 +7,7 @@ services:
     cap_drop:
       - ALL
     env_file:
-      - ./.lip.env
+      - ./secrets/.lip.env
     command: bash -c "exec java $$LIP_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$(hostname) -c secrets/all-verticles-configs/config.json"
     logging:
        driver: "json-file"
@@ -40,4 +40,4 @@ networks:
 
 secrets:
   config:
-    file: ./secrets/configs/config-depl.json
+    file: ./secrets/config.json
