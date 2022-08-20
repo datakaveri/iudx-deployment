@@ -1,3 +1,0 @@
-CAT_URL=http://localhost
-LOG_LEVEL=INFO
-CAT_JAVA_OPTS=-Xmx4096m
