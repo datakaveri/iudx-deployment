@@ -1,9 +1,9 @@
 # Introduction
 Docker swarm stack for Latest Ingestion pipeline (LIP) Deployment.
 
+# Installation Latest ingestion pipeline server
 ## Create secret files
-1. Make a copy of sample secrets directory and add appropriate values to all files.
-
+1. Make a copy of sample secrets directory .
 ```console
  cp -r example-secrets/secrets .
 ```
@@ -23,9 +23,9 @@ docker node update --label-add lip-node=true <node_name>
 ## Define Appropriate values of resources
 
 Define Appropriate values of resources -
-- CPU of rs-server 
-- RAM of rs-server
-- PID limit of rs-server
+- CPU 
+- RAM 
+- PID limit 
 in `lip-stack.resources.yaml` for latest ingestion pipeline as shown in sample resource-values stack file for [here](example-lip-stack.resources.yaml)
 
 ## Deploy
