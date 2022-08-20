@@ -2,15 +2,10 @@ version: "3.9"
 
 services:
   file-server:
-    image: ghcr.io/datakaveri/fs-dev:3.5.0-c73f7a9
     ports:
-      - target: 8080
+      - target: 8080  # API server HTTP port
         published: 8080
         mode: host
-    secrets:
-      - source: config
-        target: /usr/share/app/secrets/configs/config.json
-
-secrets:
-  config:
-    file:  ./secrets/configs/config-dev.json
+      - target: 9000 # metrics server port 
+        published: 9000 
+        mode: host 
