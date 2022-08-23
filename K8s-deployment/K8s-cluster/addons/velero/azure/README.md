@@ -65,10 +65,7 @@ Obtain your Azure Account Subscription ID:
    AZURE_SUBSCRIPTION_ID=`az account list --query '[?isDefault].id' -o tsv`
    ```
 ##### Set permissions using service principal
-There are several ways Velero can authenticate to Azure: (1) by using a Velero-specific service principal (2) by using AAD Pod Identity or (3) by using a storage account access key.
-
-If you plan to use Velero to take Azure snapshots of your persistent volume managed disks, you **must** use the service principal or AAD Pod Identity method.
-
+There are several ways Velero can authenticate to Azure, here for our deployment gonna use a Velero-specific service principal.
 If you don't plan to take Azure disk snapshots, any method is valid.
 
 ##### Specify Role
