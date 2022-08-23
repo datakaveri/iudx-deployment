@@ -52,6 +52,10 @@ secrets
 
 ## Deploy
 
+Update the proper public-url inside [database-stack.yaml](https://github.com/pranavv0/iudx-deployment/blob/elk-version-update/Docker-Swarm-deployment/single-node/elk/database-stack.yml) Kibana environment Variable
+
+``` SERVER_PUBLICBASEURL=https://<public-url>```
+
 Three ways to deploy, do any one of it
 1. Quick deploy
 ```sh
