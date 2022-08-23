@@ -58,6 +58,11 @@ secrets/
 docker node update --label-add database_node=true <node_name>
 ```
 
+Update the proper public-url inside [database-stack.yaml](https://github.com/pranavv0/iudx-deployment/blob/elk-version-update/Docker-Swarm-deployment/single-node/elk/database-stack.yml) Kibana environment Variable
+
+``` SERVER_PUBLICBASEURL=https://<public-url>```
+
+
 ## Define Appropriate values of resources
 
 Define Appropriate values of resources -
