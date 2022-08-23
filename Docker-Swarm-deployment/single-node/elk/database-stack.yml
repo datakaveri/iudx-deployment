@@ -56,7 +56,7 @@ services:
       - overlay-net
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - SERVER_PUBLICBASEURL=https://database-docker.iudx.io
+      - SERVER_PUBLICBASEURL=https://<public-url>
     logging:
       driver: "json-file"
       options:
