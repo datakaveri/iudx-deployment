@@ -65,11 +65,9 @@ Obtain your Azure Account Subscription ID:
    AZURE_SUBSCRIPTION_ID=`az account list --query '[?isDefault].id' -o tsv`
    ```
 ##### Set permissions using service principal
-There are several ways Velero can authenticate to Azure, here for our deployment gonna use a Velero-specific service principal.
-If you don't plan to take Azure disk snapshots, any method is valid.
+There are several ways Velero can authenticate to Azure. In this deployment, we are going to use a Velero-specific service principal.
 
 ##### Specify Role
-_**Note**: This is only required for (1) by using a Velero-specific service principal and  (2) by using ADD Pod Identity._ 
 
 1. Obtain your Azure Account Subscription ID:
    ```
@@ -99,7 +97,7 @@ Use the following commands to create a custom role which has the minimum require
    _(Optional) If you are using a different Subscription for backups and cluster resources, make sure to specify both subscriptions
    inside `AssignableScopes`._
 
-##### Option 1: Create service principal
+##### Create service principal
 1. Obtain your Azure Account Tenant ID:
 
     ```bash
