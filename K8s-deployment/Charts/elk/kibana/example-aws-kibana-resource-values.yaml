@@ -10,7 +10,10 @@ resources:
 
 ingress: 
   hosts: 
-    host: kibana-hostname
+    - host: kibana-hostname
+      paths:
+        - path: /
+
   tls:
     - secretName: kibana-tls-secret
       hosts:
