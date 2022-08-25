@@ -69,7 +69,7 @@ image:
   ## Bitnami Redis&trade; image tag
   ## ref: https://github.com/bitnami/bitnami-docker-redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 6.2.5-1.0.7
+  tag: 7.0.2-2.0.9
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -399,7 +399,8 @@ redis:
   ## is down, keeping it 90s, (higher than default 15s, so that helm upgrade won't change the master)
   configmap: |-
     cluster-require-full-coverage no 
-    cluster-node-timeout 90000    
+    cluster-node-timeout 90000  
+    tcp-keepalive 120  
 
   ## @param redis.extraEnvVars An array to add extra environment variables
   ## For example:
