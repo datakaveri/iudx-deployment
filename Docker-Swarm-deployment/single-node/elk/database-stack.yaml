@@ -1,0 +1,128 @@
+version: "3.9"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  elasticsearch:
+    image: ghcr.io/datakaveri/elasticsearch:7.12.1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.database_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    networks:
+      - overlay-net
+    configs:
+      - source: elasticsearch-config
+        target:  /usr/share/elasticsearch/config/elasticsearch.yml
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    volumes:
+      - type: volume
+        source: elastic-volume
+        target: /usr/share/elasticsearch/data
+    secrets:
+      - source: elasticsearch.keystore
+        target: /usr/share/elasticsearch/config/elasticsearch.keystore
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.12.1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.database_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    cap_drop:
+      - ALL
+    networks:
+      - overlay-net
+    environment:
+      - ELASTICSEARCH_HOSTS=http://tasks.elasticsearch:9200
+      - LOGGING_JSON=true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+    secrets:
+      - source: kibana.keystore
+        target: /usr/share/kibana/data/kibana.keystore
+
+  logstash:
+    image: ghcr.io/datakaveri/logstash:7.12.1
+
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.database_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    cap_drop:
+      - ALL
+    volumes:
+      - type: volume
+        source: logstash-volume
+        target: /usr/share/logstash/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+    networks:
+      - overlay-net
+    secrets:
+      - source: logstash.keystore
+        target: /usr/share/logstash/config/logstash.keystore
+    configs:
+      - source: logstash-pipelines
+        target: /usr/share/logstash/config/pipelines.yml
+      - source: logstash-settings
+        target: /usr/share/logstash/config/logstash.yml
+      - source: logstash-resource-group-pipeline
+        target: /usr/share/logstash/pipeline/resource-group.cfg
+
+secrets:
+  elasticsearch.keystore:
+    file: secrets/keystores/elasticsearch.keystore
+  kibana.keystore:
+    file: secrets/keystores/kibana.keystore
+  logstash.keystore:
+    file: secrets/keystores/logstash.keystore
+
+
+volumes:
+  elastic-volume:
+  logstash-volume:
+
+configs:
+  elasticsearch-config:
+    file: elasticsearch/elasticsearch.yaml
+  logstash-pipelines:
+    file: logstash/settings/pipelines.yaml
+  logstash-settings:
+    file: logstash/settings/logstash.yaml
+  logstash-resource-group-pipeline:
+    file: logstash/pipeline/resource-group.cfg
+

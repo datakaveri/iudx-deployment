@@ -3,7 +3,7 @@ services:
   postgres:
     ports:
       - target: 5432 # postgresql port inside the container
-        published: 5433 # exposing postgresql port 5432 to outside at 5433
+        published: 5432 # exposing postgresql port 5432 to outside at 5432
         mode: host 
 
 

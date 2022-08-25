@@ -1,0 +1,67 @@
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 5s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "alertrules.yaml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "servers"
+    file_sd_configs:
+      - files:
+          - "/tmp/metrics-targets/node-exporter.json"
+        refresh_interval: 1m
+
+  - job_name: "docker"
+    file_sd_configs:
+      - files:
+          - "/tmp/metrics-targets/docker.json"
+        refresh_interval: 1m
+
+  - job_name: "vertx"
+    file_sd_configs:
+      - files:
+          - "/tmp/metrics-targets/vertx-targets.json"
+        refresh_interval: 1m
+    relabel_configs:
+      - source_labels: ['__address__']
+        separator:     ':'
+        regex:         '(.*):.*'
+        target_label:  'instance'
+        replacement:   '${1}'
+
+  - job_name: 'blackbox'
+    scrape_interval: 1m
+    scrape_timeout: 40s
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    file_sd_configs:
+      - files:
+          - "/metric-targets/blackbox-targets.yaml"
+        refresh_interval: 1m
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115  # Blackbox exporter scraping address
+

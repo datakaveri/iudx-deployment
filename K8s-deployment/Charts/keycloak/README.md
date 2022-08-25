@@ -26,13 +26,15 @@ secrets/
 Define Appropriate values of resources -
 - CPU of keycloak
 - RAM of keycloak
+- ingress.hostname
+- cert-manager issuer
 
 in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
 ## Deploy
 
 ```
-./install.sh --set ingress.hostname=<domain-name>
+./install.sh
 ```
 
 Following script will create :

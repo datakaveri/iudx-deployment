@@ -8,7 +8,7 @@ networks:
 
 services:
   keycloak:
-    image: ghcr.io/datakaveri/keycloak:14.0.0-1
+    image: ghcr.io/datakaveri/keycloak:18.0.2
     volumes:
       - type: volume
         source: keycloak-volume
@@ -44,15 +44,17 @@ services:
         target: /opt/bitnami/keycloak/secrets/keycloak-admin-passwd
 
     environment:
-            - KEYCLOAK_CREATE_ADMIN_USER=true
             - KEYCLOAK_DATABASE_HOST=postgres
             - KEYCLOAK_DATABASE_NAME=iudx_keycloak
             - KEYCLOAK_DATABASE_PORT=5432
             - KEYCLOAK_DATABASE_USER=iudx_keycloak_user
             - KEYCLOAK_ADMIN_USER=iudx_admin
-            - KEYCLOAK_PROXY_ADDRESS_FORWARDING=true
+            - KC_HTTP_RELATIVE_PATH=/auth 
             - KEYCLOAK_DATABASE_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-db-passwd
             - KEYCLOAK_ADMIN_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-admin-passwd
+            - KEYCLOAK_PRODUCTION=TRUE # running in production mode, https://www.keycloak.org/server/configuration#_configuring_the_server_by_using_configuration_files
+            - KEYCLOAK_PROXY=edge # proxy edge mode, allow http comm between proxy and keycloak, https://www.keycloak.org/server/reverseproxy#_proxy_modes
+            - KEYCLOAK_LOG_OUTPUT=json # structured logs, easier to parse and do queries in grafana/loki
 
 
 volumes:
@@ -64,6 +66,3 @@ secrets:
     file: secrets/passwords/keycloak-db-passwd
   keycloak-admin-passwd:
     file: secrets/passwords/keycloak-admin-passwd  
-
-   
-
