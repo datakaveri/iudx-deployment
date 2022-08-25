@@ -1,0 +1,241 @@
+version: "3.9"
+networks:
+  default:
+    name: overlay-net
+    driver: overlay
+    external: true
+services:
+  vertx_sd:
+    image: ghcr.io/datakaveri/vertx_sd:1.0.0
+    volumes:
+      - type: bind
+        source: /tmp/metrics-targets
+        target: /tmp/metrics-targets
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    cap_drop:
+      - ALL
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+  prometheus:
+    image: prom/prometheus:v2.26.0
+    user: root
+    volumes:
+      - type: volume
+        source: prometheus-volume
+        target: /prometheus
+        volume:
+          nocopy: true
+      - type: bind
+        source: /tmp/metrics-targets
+        target: /tmp/metrics-targets
+        read_only: true
+    configs:
+      - source: prometheus-settings
+        target: /etc/prometheus/prometheus.yml
+    secrets:
+      - source: blackbox-targets
+        target: /metric-targets/blackbox-targets.yaml
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    cap_drop:
+      - ALL
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+ 
+  loki:
+    image: grafana/loki:2.3.0
+    #transfer of logs to loki over overlay
+    user: root
+    volumes:
+      - type: volume
+        source: loki-volume
+        target: /data/loki
+        volume:
+          nocopy: true
+    configs: 
+      - source: loki-settings
+        target:  /usr/share/loki-conf/loki-config.yaml
+    command: -config.file=/usr/share/loki-conf/loki-config.yaml
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    cap_drop:
+      - ALL
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+  grafana:
+    image: ghcr.io/datakaveri/grafana:8.1.8
+    user: root
+    volumes:
+      - type: volume
+        source: grafana-volume
+        target: /var/lib/grafana
+        volume:
+          nocopy: true
+    secrets:
+      - grafana-super-admin-passwd
+      - grafana-super-admin-username
+    environment:
+      - GF_SECURITY_ADMIN_USER__FILE=/run/secrets/grafana-super-admin-username
+      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana-super-admin-passwd
+      - GF_PATHS_CONFIG=/usr/share/grafana-conf/custom.ini
+      - GF_PATHS_DATA=/var/lib/grafana 
+      - GF_PATHS_PROVISIONING=/usr/share/grafana-conf/provisioning
+    configs:
+      - source: grafana-settings
+        target: /usr/share/grafana-conf/custom.ini
+      - source: grafana-dashboards
+        target: /usr/share/grafana-conf/provisioning/dashboards/config.yaml
+      - source: grafana-datasources
+        target: /usr/share/grafana-conf/provisioning/datasources/config.yaml
+      - source: grafana-notifiers
+        target: /usr/share/grafana-conf/provisioning/notifiers/config.yaml
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    env_file: 
+     - ./secrets/.grafana.env 
+    cap_drop:
+      - ALL
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+  promtail:
+    image: grafana/promtail:2.3.0
+    entrypoint: /run.sh
+    user: root
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    configs:
+    - source: promtail-settings
+      target: /usr/share/promtail-conf/promtail-config.yaml
+    - source: promtail-script
+      target: /run.sh
+      mode: 0755
+    volumes:
+      - type: bind
+        source: /var/lib/docker/containers/ # all conatiner logs
+        target: /var/lib/docker/containers/
+        read_only: true
+      - type: volume
+        source: promtail-volume
+        target: /var/log/ 
+    environment:
+      - NODE_HOSTNAME={{.Node.Hostname}}
+    cap_drop:
+      - ALL
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+  blackbox:
+    image: prom/blackbox-exporter:v0.22.0
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s 
+    configs: 
+      - source: blackbox-settings
+        target:  /config/blackbox.yaml
+    command: --config.file=/config/blackbox.yaml
+    cap_drop:
+      - ALL
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+      
+volumes:
+  prometheus-volume:
+  grafana-volume:
+  loki-volume:
+  promtail-volume:
+
+configs:
+  loki-settings:
+    file: loki/conf/loki-config.yaml
+  grafana-settings:
+    file:  grafana/conf/custom.ini
+  grafana-dashboards:
+    file:  grafana/conf/provisioning/dashboards/config.yaml
+  grafana-datasources:
+    file: grafana/conf/provisioning/datasources/config.yaml
+  grafana-notifiers:
+    file: grafana/conf/provisioning/notifiers/config.yaml
+  promtail-settings:
+    file:  promtail/conf/promtail-config.yaml  
+  promtail-script:
+    file: promtail/run.sh
+  prometheus-settings:
+    file:  prometheus/conf/prometheus.yaml
+  blackbox-settings:
+    file: prometheus/blackbox-exporter/blackbox.yaml
+
+secrets:
+  grafana-super-admin-passwd:
+    file: secrets/passwords/grafana-super-admin-passwd
+  grafana-super-admin-username:
+    file: secrets/passwords/grafana-super-admin-username
+  blackbox-targets:
+    file: secrets/configs/blackbox-targets.yaml
+  
