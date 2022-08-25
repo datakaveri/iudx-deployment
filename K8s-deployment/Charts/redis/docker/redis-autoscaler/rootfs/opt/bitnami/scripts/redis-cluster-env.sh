@@ -9,6 +9,7 @@
 # 4. Environment variables set externally (i.e. current Bash context/Dockerfile/userdata)
 
 # Load logging library
+# shellcheck disable=SC1090,SC1091
 . /opt/bitnami/scripts/liblog.sh
 
 export BITNAMI_ROOT_DIR="/opt/bitnami"
@@ -22,6 +23,7 @@ export BITNAMI_DEBUG="${BITNAMI_DEBUG:-false}"
 # variable will be overridden with the value specified in that file
 redis_cluster_env_vars=(
     REDIS_DATA_DIR
+    REDIS_OVERRIDES_FILE
     REDIS_DISABLE_COMMANDS
     REDIS_DATABASE
     REDIS_AOF_ENABLED
@@ -32,9 +34,11 @@ redis_cluster_env_vars=(
     REDIS_REPLICATION_MODE
     REDIS_REPLICA_IP
     REDIS_REPLICA_PORT
+    REDIS_EXTRA_FLAGS
     ALLOW_EMPTY_PASSWORD
     REDIS_PASSWORD
     REDIS_MASTER_PASSWORD
+    REDIS_ACLFILE
     REDIS_TLS_ENABLED
     REDIS_TLS_PORT_NUMBER
     REDIS_TLS_CERT_FILE
@@ -72,6 +76,7 @@ export REDIS_BASE_DIR="${BITNAMI_ROOT_DIR}/redis"
 export REDIS_CONF_DIR="${REDIS_BASE_DIR}/etc"
 export REDIS_DATA_DIR="${REDIS_DATA_DIR:-${REDIS_VOLUME_DIR}/data}"
 export REDIS_MOUNTED_CONF_DIR="${REDIS_BASE_DIR}/mounted-etc"
+export REDIS_OVERRIDES_FILE="${REDIS_OVERRIDES_FILE:-${REDIS_MOUNTED_CONF_DIR}/overrides.conf}"
 export REDIS_CONF_FILE="${REDIS_CONF_DIR}/redis.conf"
 export REDIS_LOG_DIR="${REDIS_BASE_DIR}/logs"
 export REDIS_LOG_FILE="${REDIS_LOG_DIR}/redis.log"
@@ -96,9 +101,11 @@ export REDIS_ALLOW_REMOTE_CONNECTIONS="${REDIS_ALLOW_REMOTE_CONNECTIONS:-yes}"
 export REDIS_REPLICATION_MODE="${REDIS_REPLICATION_MODE:-}"
 export REDIS_REPLICA_IP="${REDIS_REPLICA_IP:-}"
 export REDIS_REPLICA_PORT="${REDIS_REPLICA_PORT:-}"
+export REDIS_EXTRA_FLAGS="${REDIS_EXTRA_FLAGS:-}"
 export ALLOW_EMPTY_PASSWORD="${ALLOW_EMPTY_PASSWORD:-no}"
 export REDIS_PASSWORD="${REDIS_PASSWORD:-}"
 export REDIS_MASTER_PASSWORD="${REDIS_MASTER_PASSWORD:-}"
+export REDIS_ACLFILE="${REDIS_ACLFILE:-}"
 
 # TLS settings
 export REDIS_TLS_ENABLED="${REDIS_TLS_ENABLED:-no}"

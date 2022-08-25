@@ -1,0 +1,61 @@
+server:
+  disable: true
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /var/log/positions.yaml
+  
+clients:
+  - url: http://tasks.loki:3100/loki/api/v1/push
+  
+scrape_configs:
+ #----------------- container-logs --------------------------------------------
+- job_name: container
+  static_configs:
+  - targets:
+    labels:
+      job: container-logs
+      __path__: /var/lib/docker/containers/*/*-json.log  
+  pipeline_stages:
+
+#parsing docker json
+  - json: 
+      expressions:
+        log: log
+        stream: stream
+        docker_time: time
+        container_info: attrs.tag
+
+  - json: 
+      expressions:
+        container_name: name
+        instance: id
+      source: container_info
+
+  - labels:
+      instance:
+      container_name:
+
+  - match: 
+      selector: '{container_name=~"database_logstash.*.*"}|~ "WARN"'
+      stages:
+      - json:     
+          expressions:
+            index: logEvent.action[2].metaClass.metaClass.metaClass.response.index._index
+            error_type: logEvent.action[2].metaClass.metaClass.metaClass.response.index.error.type
+          source: log
+      - labels:
+          index:
+          error_type:
+      
+  - output:
+      source: log
+
+  - timestamp:
+      source: docker_time
+      format: RFC3339
+
+
+ 
+ 

@@ -11,10 +11,12 @@ resources:
 ingress: 
   hosts: 
     host: kibana-hostname
-  tls: 
-    hosts: 
-      - kibana-hostname
+  tls:
+    - secretName: kibana-tls-secret
+      hosts:
+        - kibana-hostname
   annotations: {
     cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
   }
+
 

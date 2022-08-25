@@ -1,14 +1,16 @@
 # CENTRALIZED NGINX
-
-Following deployments assume, there is a docker swarm and docker overlay network called "overlay-net" in the swarm.
-
+* The centralised nginx acts as reverse proxy/Gateway doing TLS termination, rate limiting for all public/outward facing IUDX endpoints.
+* Its modeled similar to K8s nginx ingress and routing to different IUDX servers is based on hostname. 
+* Each IUDX server proxy is implemented in seperate nginx virtual server.
 ## Project structure
 ```sh
+.
 ├── conf
 │   ├── auth.conf
 │   ├── cat.conf
 │   ├── default.conf
 │   ├── di.conf
+│   ├── error.conf
 │   ├── fs.conf
 │   ├── gis.conf
 │   ├── grafana.conf
@@ -16,16 +18,13 @@ Following deployments assume, there is a docker swarm and docker overlay network
 │   ├── kibana.conf
 │   ├── nginx.conf
 │   └── rs.conf
-├── .env
-├── example-env
-├── example-nginx-stack.custom.yaml
+├── docker
+│   └── Dockerfile
 ├── example-nginx-stack.resources.yaml
 ├── example-secrets
 │   └── secrets
 │       ├── fullchain.pem
 │       └── privkey.pem
-├── .gitignore
-├── nginx-stack.custom.yaml
 ├── nginx-stack.resources.yaml
 ├── nginx-stack.yaml
 ├── README.md
@@ -35,42 +34,40 @@ Following deployments assume, there is a docker swarm and docker overlay network
 
 ```
 
-## Design
-* The centralised nginx acts as reverse proxy doing TLS termination, rate limiting for all public/outward facing IUDX endpoints. 
-  * Its modeled similar to K8s nginx ingress and routing to different IUDX servers is based on hostname. 
-  * Each IUDX server proxy is implemented in seperate nginx virtual server.
-  * It does proxy for cat, rs, auth, gis, di, file, keycloak, grafana and kibana.
-* Setting the domain name in a variable and an explicit DNS resolver with TTL. [Ref](https://www.nginx.com/blog/dns-service-discovery-nginx-plus/#Methods-for-Service-Discovery-with-DNS-for-NGINX-and-NGINX%C2%A0Plus)
-    * NGINX re-resolves the name according to the TTL, thus handling change in IP addresses of service containers
-    * NGINX startup or reload operation doesn't fail when the domain name can't be resolved
-    * Round-robin loadbalancing on resolved IP addresses by default
-* HTTP to HTTPS redirection
-* SSL optimization
-* Use of environment variables in the nginx config. 
-    * Environment variables are supplied through .env file (example file
-      template provided in the end)
-    * Working: env variables of config  placed in  templates directory (NGINX_ENVSUBST_TEMPLATE_DIR) are subsituted with 
-      values and is put in /etc/nginx directory (NGINX_ENVSUBST_OUTPUT_DIR).
-    * This avoids in changing the actual config and instead it can be set as varaibles in .env file
-       while deploying to various places - testing and production.
-    * Env variables are supported only in  nginx docker from version > 1.19.[Ref](https://hub.docker.com/_/nginx)
 
 # Install
 
 
-## Required secrets
+## Build nginx with [headers-more module](https://www.nginx.com/resources/wiki/modules/headers_more/)
 
 ```sh
-secrets/
-├── fullchain.pem
-├── privkey.pem
+docker build -f docker/Dockerfile --build-arg ENABLED_MODULES="headers-more" --build-arg  nginx_version=1.20 -t ghcr.io/datakaveri/nginx:1.20 docker/
+```
+The Dockerfile.alpine containing the building and including external module to nginx docker image is obtained [here](https://github.com/nginxinc/docker-nginx/tree/master/modules).
+
+
+## Create secret files
+1. Make a copy of sample secrets directory.
+```console
+ cp -r example-secrets/secrets .
+```
+2.  Generate proper wildcard LetsEncrypt certificate covering sub-domains for - resource access server, Catalogue API server, AAA server, File server, GIS server, DI server, Grafana, Kibana, Databroker and Keycloak.
+
+3. Copy certificate files to secrets directory as shown below:
 
 ```
-   Please see the ``example-secrets`` directory to get more idea, can use the ``secrets`` in that directory by copying into root keycloak directory i.e. ``cp -r example-secrets/secrets/ .`` for demo or local testing purpose only! For other environment, please generate strong passwords.
+cp /etc/letsencrypt/live/<domain-name>/fullchain.pem  secrets/fullchain.pem
 
-## Create Environment file
-Add env variables in .env file . An example is at ```example-env```
+cp /etc/letsencrypt/live/<domain-name>/privkey.pem secrets/privkey.pem
+```
+4. Secrets directory after generation of secrets
+```sh
 
+secrets/
+├── fullchain.pem (letsencrypt fullchain.pem)
+├── privkey.pem   (letsencrypt privkey.pem)
+
+```
 
 ## Assign node labels
 
@@ -79,33 +76,30 @@ The Centralized-Nginx container is constrained to run on specifc node by adding 
 docker node update --label-add centralized-nginx=true <node_name>
 ```
 
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU 
+- RAM 
+- PID limit 
+in `nginx-stack.resources.yaml`  for nginx as shown in sample resource-values file for [here](example-nginx-stack.resources.yaml)
+
+## Define domain names in configs
+For each nginx server configuration in conf/ (except for error.conf, default.conf file), substitute appropiate domain name next to ``server_name`` directive. 
+Example:- If resource server domain is ``rs.iudx.org.in`` , then susbitiute it in conf/rs.conf as follows :
+```
+        server_name         rs.iudx.org.in;
+```
+
 ## Deploy
-
-Three ways to deploy, do any one of it
-1. Quick deploy  
+Deploy nginx stack:
 ```sh
-docker stack deploy -c nginx-stack.yaml nginx.
-
+docker stack deploy -c nginx-stack.yaml -c nginx-stack.resources.yaml nginx-stack
 ```
 
-2. Setting resource reservations,limits in 'nginx-stack.resources.yaml' file and then deploying (see [here](example-nginx-stack-resources.yaml) for example configuration of 'nginx-stack-resources.yaml' file ).
-
-```sh
-docker stack deploy -c nginx-stack.yaml -c nginx-stack.resources.yaml nginx
-```
-3. You can add more custom stack configuration in file 'nginx-stack-custom.yaml' that overrides base 'nginx-stack.yaml' file like ports mapping etc ( see [here](example-nginx-stack-custom.yaml) for example configuration of 'nginx-stack-custom.yaml' file)  and bring up like as follows.
-
-```sh
-docker stack deploy -c nginx-stack.yaml  -c nginx-stack-custom.yaml nginx
-```
-or 
-with resource limits, reservations
-```sh
-docker stack deploy -c nginx-stack.yaml -c nginx-stack.resources.yaml -c nginx-stack.custom.yaml nginx
-```
-
-
-# Configuration
+# NOTE
+1. The example-secrets/secrets contains localhost certificate,key. Suitable for local, dev deployment environment.
+## Configuration
 
 ### Limit total active connections
 ```sh

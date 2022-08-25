@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/aaa-depl
-  tag: 3.5.0-f07de85
+  tag: 3.5.0-5dbc39d
   pullSecrets: {}
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1753,7 +1753,6 @@ ingress:
   annotations: {
     kubernetes.io/tls-acme: "true",
     kubernetes.io/ingress.class: "nginx",
-    cert-manager.io/cluster-issuer: "letsencrypt-prod",
     nginx.ingress.kubernetes.io/global-rate-limit: "1000",
     nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name,
     nginx.ingress.kubernetes.io/global-rate-limit-window: 1s,
