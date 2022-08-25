@@ -1,15 +1,29 @@
-# Introduction
-Docker swarm stack for Elasticsearch-logstash-Kibana (ELK) Deployment.
-
-## ELK Installation
-## Create secret files
-1. Make a copy of sample secrets directory.
-```console
- cp -r example-secrets/secrets .
+# Install
+## Required secrets
+```sh
+secrets
+|-- passwords
+|   |-- elasticsearch-cat-password
+|   |-- elasticsearch-fs-password 
+|   |-- elasticsearch-rs-password
+|   |-- elasticsearch-su-password
+|   |-- kibana-admin-password
+|   |-- kibana-admin-username
+|   |-- kibana-system-password
+|   |-- logstash-internal-password
+|   |-- logstash-rabbitmq-password
+|   |-- logstash-rabbitmq-username
+|   `-- logstash-system-password
+`-- pki
+    |-- s3-access-key
+    `-- s3-secret-key
 ```
-2. To generate the passwords:
-```console
-./create-secrets.sh
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root database directory  for demo or local testing purpose only! The kibana is tls secured through centralised nginx.
+
+## Assign node labels
+
+```sh
+docker node update --label-add database_node=true <node_name>
 ```
 ## Generate tls-cert
 ```sh
@@ -22,78 +36,59 @@ pki
     ├── elastic-stack-ca.p12
 ```
 
-3. Generate Keystores
-```
+## Generate keystores
+Running,
+```sh
 ./generate-keystore.sh
 ```
-4. Create S3 bucket and corresponding IAM user with programmatic access to only that bucket. Copy the access-key id and access-secret key to ``secrets/pki/s3-access-key`` and ``secrets/pki/s3-secret-key``
-5. Secrets directory after generation of secrets
-
+will generate 3 keystore files in the secrets directory,
 ```sh
-secrets/
-├── keystores
-│   ├── elasticsearch.keystore
-│   ├── kibana.keystore
-│   └── logstash.keystore
-├── passwords
-│   ├── elasticsearch-cat-password
-│   ├── elasticsearch-fs-password
-│   ├── elasticsearch-rs-password
-│   ├── elasticsearch-su-password
-│   ├── kibana-admin-password
-│   ├── kibana-admin-username
-│   ├── kibana-system-password
-│   ├── logstash-internal-password
-│   ├── logstash-rabbitmq-password
-│   ├── logstash-rabbitmq-username
-│   └── logstash-system-password
-└── pki
-    ├── s3-access-key
-    └── s3-secret-key
+secrets
+|-- keystores
+|   |-- elasticsearch.keystore
+|   |-- kibana.keystore
+|   `-- logstash.keystore
 ```
 
-## Assign node labels
-
-```sh
-docker node update --label-add database_node=true <node_name>
-```
+## Deploy
 
 Update the proper public-url inside [database-stack.yaml](https://github.com/pranavv0/iudx-deployment/blob/elk-version-update/Docker-Swarm-deployment/single-node/elk/database-stack.yml) Kibana environment Variable
 
 ``` SERVER_PUBLICBASEURL=https://<public-url>```
 
-
-## Define Appropriate values of resources
-
-Define Appropriate values of resources -
-- CPU 
-- RAM 
-- PID limit 
-in `database-stack.resources.yaml`  for elk as shown in sample resource-values file for [here](example-database-stack.resources.yaml)
-
-## Deploy
-Deploy ELK stack:
+Three ways to deploy, do any one of it
+1. Quick deploy
 ```sh
-docker stack deploy -c database-stack.yaml -c database-stack.resources.yaml database
+docker stack deploy -c database-stack.yml database
 ```
-After few minutes, kibana console can be accessed at ``https://<kibana-domain-name>/``
-## ELK Users creation
-1. Bring up the account generator stack(only on clean deployment),
+2. Setting resource reservations,limits in 'database-stack.yml' file and then deploying (see [here](example-database-stack.resources.yml) for example configuration of 'database-stack.resources.yml' file ). Its suitable for production environment.
+
 ```sh
-docker stack deploy -c account-generator.yaml tmp 
+docker stack deploy -c database-stack.yml -c database-stack.resources.yml database
 ```
-2. Monitor logs to ensure creation
+3. You can add more custom stack cofiguration in file 'database-stack.custom.yml' that overrides base 'database-stack.yml' file like ports mapping etc ( see [here](example-database-stack.custom.yml) for example configuration of 'database-stack.custom.yml' file)  and bring up like as follows.
+```sh
+docker stack deploy -c database-stack.yml  -c database-stack.custom.yml database
+```
+or
+with resource limits, reservations and exposing port number
+```sh
+docker stack deploy -c database-stack.yml -c database-stack.resources.yml -c database-stack.custom.yml database
+```
+
+Bring up the account generator stack(only on clean deployment),
+```sh
+docker stack deploy -c account-generator.yml tmp 
+```
+
+# Monitor logs to ensure creation
 ```sh
 docker service logs tmp_account-generator -f
 ```
-3. Remove stack, once users are created
+
+# Remove stack
 ```sh
 docker stack rm tmp 
 ```
-# Note
-1. If you need to expose the HTTP port of kibana or have custom stack configuration( see [here](example-database-stack.custom.yaml) for example configuration of 'database-stack.custom.yaml' file)  and bring up like as follows.
 
-```sh
-docker stack deploy -c database-stack.yaml -c database-stack.resources.yaml -c database-stack.custom.yaml database
-```
-This is generally useful in local, dev/test environment.
+
