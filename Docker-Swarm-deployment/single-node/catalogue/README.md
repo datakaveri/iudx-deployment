@@ -32,6 +32,7 @@ Deploy Catalogue api server:
 ```sh
 docker stack deploy -c cat-stack.yaml -c cat-stack.resources.yaml cat
 ```
+The apis documentation will be available at https://<cat-api-server-domain-name>/apis
 # NOTE
 1. The upstream code for Catalogue Server pipeline is available [here](https://github.com/datakaveri/iudx-catalogue-server).
 2. If you need to expose the HTTP ports or have custom stack configuration (see [here](example-cat-stack.custom.yaml) for example configuration of 'cat-stack.custom.yaml' file)  and bring up like as follows.
