@@ -39,7 +39,7 @@ Deploy AAA/auth server:
 ```sh
 docker stack deploy -c auth-stack.yaml -c auth-stack.resources.yaml auth
 ```
-
+The apis documentation will be available at https://<auth-server-domain-name>/apis
 # NOTE
 1. The upstream code for auth (aaa) server is available at https://github.com/datakaveri/iudx-aaa-server.
 2. If you need to expose the HTTP ports or have custom stack configuration( see [here](example-auth-stack.custom.yaml) for example configuration of 'auth-stack.custom.yaml' file)  and bring up like as follows.
