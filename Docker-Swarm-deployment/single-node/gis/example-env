@@ -1,3 +1,0 @@
-GIS_URL=https://localhost
-LOG_LEVEL=INFO
-GIS_JAVA_OPTS=-Xmx4096m
