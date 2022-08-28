@@ -33,6 +33,7 @@ Deploy File server stack:
 ```sh
 docker stack deploy -c file-server-stack.yaml -c file-server-stack.resources.yaml file-server
 ```
+The apis documentation will be available at https://<file-server-domain-name>/apis
 # NOTE
 1. The upstream code for file server is available at [here](https://github.com/datakaveri/iudx-file-server).
 2. If you need to expose the HTTP ports or have custom stack configuration( see [here](example-file-server-stack.custom.yaml) for example configuration of 'rs-stack.custom.yaml' file)  and bring up like as follows.

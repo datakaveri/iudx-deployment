@@ -38,7 +38,7 @@ Deploy resource server:
 ```sh
 docker stack deploy -c rs-stack.yaml -c rs-stack.resources.yaml rs
 ```
-
+The apis documentation will be available at https://<rs-server-domain-name>/apis
 # NOTE
 1. The upstream code for resource server is available at [here](https://github.com/datakaveri/iudx-resource-server).
 
