@@ -1,45 +1,45 @@
-# Install
- Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and the network.
-## Required secrets
+# Introduction
+Docker swarm stack for IUDX gis interface deployment
+
+# Installation of GIS interface server
+## Create secret files
+1. Make a copy of sample secrets directory.
+
+```console
+ cp -r example-secrets/secrets .
+```
+2. Substitute appropriate values using commands mentioned in config files.
+3. Configure the secrets/.gis-api.env file with appropriate values in the place holders “<>”
+4. Secrets directory after generation of secret files
 ```sh
 secrets/
-└── configs
-    ├── config-depl.json
-    ├── config-dev.json
+├── config.json
+└── .gis-api.env
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into gis  directory  for demo or local testing purpose only! For other environment, please generate strong passwords. Please get and refer for latest config at https://github.com/datakaveri/iudx-gis-interface/blob/3.5.0/configs/config-dev.json and setup.md 
+
 ## Assign node labels
  The gis container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
 ```sh
 docker node update --label-add gis-node=true <node_name>
 ```
-## Pre-requisites for deploying gis server
-1. For running the vertx clustered gis server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
-The  docker image ```ghcr.io/datakaveri/gis-dev:tag``` deploys a non-clustered vertx data ingestion server.
-2. AAA server and Catalogue server needs to up.
-3. immudb server needs to be up and setup for gis server use.
-4. postgres server needs to be up and setup for gis server use.
-5. Define environment file ```.gis.env```. An example env file is present [here](example-env).
+
+## Define Appropriate values of resources
+
+Define Appropriate values of resources -
+- CPU 
+- RAM 
+- PID limit
+in `gis-stack.resources.yaml` as shown in sample resource-values file for [here](example-gis-stack.resources.yaml)
+
 ## Deploy
-
-Three ways to deploy, do any one of it
-1. Quick deploy  
-```sh
-docker stack deploy -c gis-stack.yaml gis 
-```
-2. Setting resource reservations,limits in 'gis-stack.resources.yaml' file and then deploying (see [here](example-gis-stack.resources.yaml) for example configuration of 'gis-stack.resources.yaml' file ). Its suitable for production environment.
-
+Deploy GIS interface server:
 ```sh
 docker stack deploy -c gis-stack.yaml -c gis-stack.resources.yaml gis
 ```
-3. You can add more custom stack cofiguration in file 'gis-stack.custom.yaml' that overrides base 'gis-stack.yaml' file like ports mapping etc ( see [here](example-gis-stack.custom.yaml) for example configuration of 'gis-stack.custom.yaml' file)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
-```sh
-docker stack deploy -c gis-stack.yaml  -c gis-stack.custom.yaml gis
-```
-or 
-with resource limits, reservations
+The apis documentation will be available at https://<gis-server-domain-name>/apis
+# NOTE
+1. The upstream code for gis server is available at https://github.com/datakaveri/iudx-gis-interface.
+2. If you need to expose the HTTP ports or have custom stack configuration( see [here](example-gis-stack.custom.yaml) for example configuration of 'gis-stack.custom.yaml' file)  and bring up like as follows.
 ```sh
 docker stack deploy -c gis-stack.yaml -c gis-stack.resources.yaml -c gis-stack.custom.yaml gis
 ```
-# NOTE
-1. The upstream code for gis server is available at https://github.com/datakaveri/iudx-gis-interface.
