@@ -1,4 +1,0 @@
-DI_URL=https://localhost
-LOG_LEVEL=INFO
-DI_JAVA_OPTS=-Xmx4096m
-
