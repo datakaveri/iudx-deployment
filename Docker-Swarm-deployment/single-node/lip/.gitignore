@@ -1,5 +1,5 @@
 secrets/
 .*.env
-lip-stack.resources.yml
-lip-stack.custom.yml
+lip-stack.resources.yaml
+lip-stack.custom.yaml
 
