@@ -2,10 +2,6 @@ version: "3.9"
 
 services:
   gis:
-    image: ghcr.io/datakaveri/gis-dev:3.5.0-2dee63b
-    secrets:
-      - source: config
-        target: /usr/share/app/secrets/configs/config.json
     ports: 
       - target: 8080           # Geographic information server http server port
         published: 8080        # published port to host 
@@ -13,7 +9,3 @@ services:
       - target: 9000           # geographic information server metrics server port
         published: 9000        # published port to host 
         mode: host 
-  
-secrets:
-  config: 
-    file: ./secrets/configs/config-dev.json
