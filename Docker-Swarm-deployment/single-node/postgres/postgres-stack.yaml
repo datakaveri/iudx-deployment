@@ -14,6 +14,9 @@ services:
         source: postgres-db-volume
         target: /bitnami/postgresql
     configs:
+      - source: pg_hba
+        target: /bitnami/postgresql/conf/pg_hba.conf
+
       - source: db-user-creation 
         target: /docker-entrypoint-initdb.d/db-user-creation.sh
         mode: 0755
@@ -55,6 +58,9 @@ volumes:
 configs:
   db-user-creation:
     file: init-scripts/db-user-creation.sh
+  pg_hba:
+    file: config/pg_hba.conf
+
 
 secrets:
   postgresql-password:
