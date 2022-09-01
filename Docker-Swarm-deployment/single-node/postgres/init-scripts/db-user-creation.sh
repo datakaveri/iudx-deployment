@@ -10,8 +10,7 @@ keycloak_passwd=$(cat /opt/bitnami/postgresql/secrets/postgres-keycloak-password
 keycloak_db_name=iudx_keycloak
 auth_username=iudx_auth_user
 auth_passwd=$(cat /opt/bitnami/postgresql/secrets/postgres-auth-password)
-auth_db_name=iudx_auth
-
+##auth server uses default postgres db
 PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/postgresql-password) psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$rs_db_name" <<-EOSQL
 CREATE ROLE $rs_username WITH NOSUPERUSER NOINHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS;
 ALTER ROLE $rs_username WITH  ENCRYPTED PASSWORD '$rs_passwd';
