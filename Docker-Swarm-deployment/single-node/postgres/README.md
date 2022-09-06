@@ -40,7 +40,7 @@ docker stack deploy -c postgres-stack.yaml -c postgres-stack.resources.yaml post
 The rs and auth schema created using flyway tool. Follow below steps:
 1. Bind/publish/expose the psql port  5432 to host VM temporarily as described in 5th point in note
 
-2. ``git clone  https://github.com/datakaveri/iudx-aaa-server.git && cd iudx-aaa-server`` repo and do following
+2. ``git clone -b 3.5.0 https://github.com/datakaveri/iudx-aaa-server.git && cd iudx-aaa-server`` repo and do following
   2.1 flyway.conf must be updated with the required data. which will be as follows
   ```
    flyway.url=jdbc:postgresql://127.0.0.1:5432/postgres
@@ -49,14 +49,16 @@ The rs and auth schema created using flyway tool. Follow below steps:
    flyway.schemas=aaa 
    flyway.placeholders.authUser=iudx_auth_user 
   ```
-  2.2 After this, the info command can be run to test the config. Then, the migrate command can be run to set up the database. At the /iudx-aaa-server directory, run
+  2.2 Remove this particular statement ``SET default_table_access_method = heap;``  at line 78 in ``iudx-aaa/src/main/resources/db/migration/V1__Initialize_tables.sql``. As its incompatible with 11.14 version of postgres.
+
+  2.3 After this, the info command can be run to test the config. Then, the migrate command can be run to set up the database. At the /iudx-aaa-server directory, run
 
   ```
   mvn flyway:info -Dflyway.configFiles=flyway.conf
   mvn flyway:migrate -Dflyway.configFiles=flyway.conf
   ```
  Refer here for more info: https://github.com/datakaveri/iudx-aaa-server#flyway-database-setup
-3. Similarly do for resource server,  ``git clone https://github.com/datakaveri/iudx-resource-server.git && cd iudx-resource-server``
+3. Similarly do for resource server,  ``git clone -b 3.5.0 https://github.com/datakaveri/iudx-resource-server.git && cd iudx-resource-server``
   3.1 flyway.conf must be updated with the required data. which will be as follows
   ```
   flyway.url=jdbc:postgresql://127.0.0.1:5432/iudx_rs
@@ -65,7 +67,7 @@ The rs and auth schema created using flyway tool. Follow below steps:
   flyway.schemas=public
   flyway.placeholders.rsUser=iudx_rs_user
   flyway.cleanDisabled=true
-  # use TRUE only for first time migration of existing DB, else use FALSE.
+  # use FALSE on first/clean postgres deployment, use TRUE only for first time migration of existing non-flyway created schemas in iudx_rs DB
   flyway.baselineOnMigrate = false
   ```
   2.2 After this, the info command can be run to test the config. Then, the migrate command can be run to set up the database. At the /iudx-resource-server directory, run
@@ -76,12 +78,12 @@ The rs and auth schema created using flyway tool. Follow below steps:
 # Note
 1. Command to dump only psql data from a particular database of a dockerized psql.
 ```sh
-docker exec <psqldb-container> pg_dump -a -U <username/role name>  <db_name> > <dump-file>.sql
+docker exec <psqldb-container> PGPASSWORD=`cat $POSTGRESQL_PASSWORD_FILE` pg_dumpall -U postgres > /tmp/dump.sql
 ```
 2. Command to restore psql dump data (of a particular database) to dockerized  psql.
 
 ```sh
-cat <dump_file>.sql | docker exec -i <psqldb-container> psql -U <username/role> -d <dbname>
+cat <dump_file>.sql | docker exec -i <psqldb-container> PGPASSWORD=`cat $POSTGRESQL_PASSWORD_FILE` psql -U postgres
 ```
 3. Please refer [here](https://docs.docker.com/compose/extends/#multiple-compose-files) for info on why and how to use multiple stack files.
 4.  Following users using the passwords present at ```secrets/passwords/``` directory and dbs are created accordingly using init scripts present at ```init-scripts/```:
