@@ -19,6 +19,7 @@ Docker swarm stack for Elasticsearch-logstash-Kibana (ELK) Deployment.
 4. Create S3 bucket and corresponding IAM user with programmatic access to only that bucket. Copy the access-key id and access-secret key to ``secrets/pki/s3-access-key`` and ``secrets/pki/s3-secret-key``
 5. Secrets directory after generation of secrets
 
+## Required secrets
 ```sh
 secrets/
 ├── keystores
@@ -42,6 +43,8 @@ secrets/
     └── s3-secret-key
 ```
 
+Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root database directory  for demo or local testing purpose only! The kibana is tls secured through centralised nginx.
+
 ## Assign node labels
 
 ```sh
@@ -55,6 +58,7 @@ Define Appropriate values of resources -
 - RAM 
 - PID limit 
 in `database-stack.resources.yaml`  for elk as shown in sample resource-values file for [here](example-database-stack.resources.yaml)
+
 
 ## Deploy
 Deploy ELK stack:
@@ -82,3 +86,5 @@ docker stack rm tmp
 docker stack deploy -c database-stack.yaml -c database-stack.resources.yaml -c database-stack.custom.yaml database
 ```
 This is generally useful in local, dev/test environment.
+
+
