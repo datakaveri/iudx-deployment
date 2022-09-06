@@ -463,13 +463,13 @@ postgresql:
   dbUserConnectionLimit: ""
   ## @param postgresql.tcpKeepalivesInterval TCP keepalives interval
   ##
-  tcpKeepalivesInterval: ""
+  tcpKeepalivesInterval: "120"
   ## @param postgresql.tcpKeepalivesIdle TCP keepalives idle
   ##
-  tcpKeepalivesIdle: ""
+  tcpKeepalivesIdle: "120"
   ## @param postgresql.tcpKeepalivesCount TCP keepalives count
   ##
-  tcpKeepalivesCount: ""
+  tcpKeepalivesCount: "3"
   ## @param postgresql.statementTimeout Statement timeout
   ##
   statementTimeout: ""
