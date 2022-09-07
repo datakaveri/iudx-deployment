@@ -1,16 +1,16 @@
 # Introduction
 Docker swarm stack for IUDX rs-server Deployment
 
+# Installation of Resource server
 ## Create secret files
-Make a copy of sample secrets directory and add appropriate values to all files.
+1. Make a copy of sample secrets directory.
 
 ```console
  cp -r example-secrets/secrets .
 ```
-Substitute appropriate values using commands whatever mentioned in config files. Configure the secrets/.rs.env file with appropriate values in the place holders “<>”
-
+2. Substitute appropriate values using commands whatever mentioned in config files. Configure the secrets/.rs.env file with appropriate values in the place holders “<>”
+3. Secrets directory after generation of secret files
 ```sh
-# secrets directory after generation of secret files
 secrets/
 ├── config.json
 └── .rs.env
@@ -38,7 +38,7 @@ Deploy resource server:
 ```sh
 docker stack deploy -c rs-stack.yaml -c rs-stack.resources.yaml rs
 ```
-
+The apis documentation will be available at https://<rs-server-domain-name>/apis
 # NOTE
 1. The upstream code for resource server is available at [here](https://github.com/datakaveri/iudx-resource-server).
 

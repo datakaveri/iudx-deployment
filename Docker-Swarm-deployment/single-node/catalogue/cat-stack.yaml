@@ -2,14 +2,14 @@ version: "3.9"
 
 services:
   cat:
-    image: ghcr.io/datakaveri/cat-prod:3.5.0-64074dd
+    image: ghcr.io/datakaveri/cat-prod:3.5.0-05b6b35
     networks:
       - overlay-net
     secrets:
       - source: config
         target: /usr/share/app/secrets/configs/config.json
     env_file:
-      - ./.cat.env
+      - ./secrets/.cat.env
     cap_drop:
       - ALL
     read_only: true
@@ -40,6 +40,6 @@ networks:
 
 secrets:
   config:
-    file:  ./secrets/configs/config-depl.json
+    file:  ./secrets/config.json
 
 
