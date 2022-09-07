@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   auth:
-    image: ghcr.io/datakaveri/aaa-depl:3.5.0-110dcde
+    image: ghcr.io/datakaveri/aaa-depl:3.5.0-5dbc39d
     command: bash -c "exec java $$AUTH_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
     cap_drop:
       - ALL
@@ -11,8 +11,8 @@ services:
       - type: tmpfs
         target: /tmp/
         read_only: false
-    environment:
-      - ./.auth.env
+    env_file:
+      - ./secrets/.aaa.env
     logging:
        driver: "json-file"
        options:
@@ -44,4 +44,4 @@ secrets:
   keystore:
     file: ./secrets/keystore.jks
   config:
-    file: ./secrets/configs/config-depl.json 
+    file: ./secrets/config.json 

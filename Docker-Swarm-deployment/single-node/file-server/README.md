@@ -1,48 +1,42 @@
-# Install
- Following deployments assume, there is a docker swarm and  docker overlay network called "overlay-net"  in the swarm. Please [refer](../../../docs/swarm-setup.md) to bring up docker swarm and the network.
-## Required secrets
+# Introduction
+Docker swarm stack for IUDX file-server Deployment
+
+# Installation of File server
+## Create secret files
+1. Make a copy of sample secrets directory.
+
+```console
+ cp -r example-secrets/secrets .
+```
+2. Substitute appropriate values using commands whatever mentioned in config files. Configure the secrets/.fs.env file with appropriate values in the place holders “<>”
+3. Secrets directory after generation of secret files
 ```sh
 secrets/
-├── configs
-│   ├── config-depl.json
-│   └── config-dev.json
+├── config.json
+└── .fs.env
 ```
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into file-server  directory  for demo or local testing purpose only! For other environment, please generate strong passwords. Populate .file-server-api.env environment file based on [here](example-secrets/example-env). Please refer latest config at https://github.com/datakaveri/iudx-file-server/blob/3.5.0/example-configs/config-depl.json and corresponding SETUP.md.
-
 ## Assign node labels
  The file-server container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
 ```sh
 docker node update --label-add file-server-node=true <node_name>
 ```
+## Define Appropriate values of resources
 
-## Pre-requisites for deploying file-server
-1. For running the vertx clustered file-server, need to bring zookeeper in docker swarm as mentioned [here](../zookeeper/README.md).
-The  docker image ```ghcr.io/datakaveri/fs-dev:tag``` deploys a non-clustered vertx file server.
-2. Define environment file ```.file-server.env```. An example env file is present [here](example-env).
-3. Elasticsearch needs to deployed and setup for file-server use.
-4. AAA server needs to be deployed. 
-5. Catalogue server needs to be deployed.
+Define Appropriate values of resources -
+- CPU 
+- RAM 
+- PID limit 
+in `file-server-stack.resources.yaml` as shown in sample resource-values file for [here](example-file-server-stack.resources.yaml)
+
 ## Deploy
-
-Three ways to deploy, do any one of it
-1. Quick deploy  
-```sh
-docker stack deploy -c file-server-stack.yaml file-server 
-```
-2. Setting resource reservations,limits in 'file-server-stack.resources.yaml' file and then deploying (see [here](example-file-server-stack.resources.yaml) for example configuration of 'file-server-stack.resources.yaml' file ). Its suitable for production environment.
-
+Deploy File server stack:
 ```sh
 docker stack deploy -c file-server-stack.yaml -c file-server-stack.resources.yaml file-server
 ```
-3. You can add more custom stack cofiguration in file 'file-server-stack.custom.yaml' that overrides base 'file-server-stack.yaml' file like ports mapping etc ( see [here](example-file-server-stack.custom.yaml) for example configuration of 'file-server-stack.custom.yaml' file)  and bring up like as follows. It is suitable for trying out locally,dev, staging and testing environment where some custom configuration such as host port mapping is needed.
-```sh
-docker stack deploy -c file-server-stack.yaml  -c file-server-stack.custom.yaml file-server
-```
-or 
-with resource limits, reservations
+The apis documentation will be available at https://<file-server-domain-name>/apis
+# NOTE
+1. The upstream code for file server is available at [here](https://github.com/datakaveri/iudx-file-server).
+2. If you need to expose the HTTP ports or have custom stack configuration( see [here](example-file-server-stack.custom.yaml) for example configuration of 'rs-stack.custom.yaml' file)  and bring up like as follows.
 ```sh
 docker stack deploy -c file-server-stack.yaml -c file-server-stack.resources.yaml -c file-server-stack.custom.yaml file-server
 ```
-
-# NOTE
-1. The upstream code for file server is available at [here](https://github.com/datakaveri/iudx-file-server).

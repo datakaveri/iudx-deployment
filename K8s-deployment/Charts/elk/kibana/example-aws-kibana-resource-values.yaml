@@ -8,11 +8,12 @@ resources:
     cpu: "500m"
     memory: "1.5Gi"
 
-ingress:
-  hosts:
+ingress: 
+  hosts: 
     - host: kibana-hostname
       paths:
         - path: /
+
   tls:
     - secretName: kibana-tls-secret
       hosts:
@@ -20,3 +21,5 @@ ingress:
   annotations: {
     cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
   }
+
+
