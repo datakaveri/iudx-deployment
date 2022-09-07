@@ -2,19 +2,19 @@ version: "3.9"
 
 services:
   file-server:
-    image: ghcr.io/datakaveri/fs-depl:3.5.0-c73f7a9
+    image: ghcr.io/datakaveri/fs-depl:3.5.0-684f019
     command: bash -c "exec java $$FS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
     cap_drop:
       - ALL
     read_only: true
     env_file:
-      - ./.file-server.env
+      - ./secrets/.fs.env
     volumes:
       - type: volume
         source: fs-volume
         target: /usr/share/app/storage
         volume:
-          nocopy: true
+          nocopy: false
       - type: tmpfs
         target: /tmp/
         read_only: false
@@ -42,7 +42,7 @@ networks:
 
 secrets:
   config:
-    file: ./secrets/configs/config-depl.json
+    file: ./secrets/config.json
 
 volumes:
   fs-volume:
