@@ -8,15 +8,7 @@ networks:
 
 services:
   keycloak:
-    image: ghcr.io/datakaveri/keycloak:18.0.2
-    volumes:
-      - type: volume
-        source: keycloak-volume
-        target: /opt/bitnami/
-        volume:
-          nocopy: false
-        read_only: false
-
+    image: ghcr.io/datakaveri/keycloak:18.0.1-1
     cap_drop:
        - ALL
 
@@ -57,8 +49,6 @@ services:
             - KEYCLOAK_LOG_OUTPUT=json # structured logs, easier to parse and do queries in grafana/loki
 
 
-volumes:
-  keycloak-volume:
 
 
 secrets:
