@@ -9,14 +9,6 @@ networks:
 services:
   keycloak:
     image: ghcr.io/datakaveri/keycloak:14.0.0-1
-    volumes:
-      - type: volume
-        source: keycloak-volume
-        target: /opt/bitnami/
-        volume:
-          nocopy: false
-        read_only: false
-
     cap_drop:
        - ALL
 
@@ -54,9 +46,6 @@ services:
             - KEYCLOAK_DATABASE_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-db-passwd
             - KEYCLOAK_ADMIN_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-admin-passwd
 
-
-volumes:
-  keycloak-volume:
 
 
 secrets:
