@@ -11,6 +11,7 @@ keycloak_db_name=iudx_keycloak
 auth_username=iudx_auth_user
 auth_passwd=$(cat /opt/bitnami/postgresql/secrets/postgres-auth-password)
 ##auth server uses default postgres db
+
 PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/postgresql-password) psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
 CREATE DATABASE $rs_db_name WITH ENCODING 'UTF8';
 CREATE ROLE $rs_username WITH NOSUPERUSER NOINHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS;
