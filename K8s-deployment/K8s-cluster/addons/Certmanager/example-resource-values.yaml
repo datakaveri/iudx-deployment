@@ -6,4 +6,4 @@ resources:
     memory: 750Mi
     cpu: 400m
 nodeSelector: 
-  node.kubernetes.io/instance-type: t3.medium
+  node.kubernetes.io/instance-type: <instance-type>
