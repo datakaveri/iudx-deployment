@@ -8,12 +8,15 @@ networks:
 
 services:
   postgres:
-    image: bitnami/postgresql:11.14.0
+    image: bitnami/postgresql:14.4.0
     volumes:
       - type: volume
         source: postgres-db-volume
         target: /bitnami/postgresql
     configs:
+      - source: pg_hba
+        target: /bitnami/postgresql/conf/pg_hba.conf
+
       - source: db-user-creation 
         target: /docker-entrypoint-initdb.d/db-user-creation.sh
         mode: 0755
@@ -32,6 +35,7 @@ services:
       - POSTGRESQL_TCP_KEEPALIVES_IDLE=120
       - POSTGRESQL_TCP_KEEPALIVES_INTERVAL=120
       - POSTGRESQL_TCP_KEEPALIVES_COUNT=3
+
     deploy:
       replicas: 1
       placement:
@@ -54,6 +58,9 @@ volumes:
 configs:
   db-user-creation:
     file: init-scripts/db-user-creation.sh
+  pg_hba:
+    file: config/pg_hba.conf
+
 
 secrets:
   postgresql-password:
