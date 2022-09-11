@@ -17,7 +17,7 @@ cp -r example-secrets/secrets .
 ```
 ./create-secrets.sh
 ```
- 3. Config Telegrambot for grafana's alerts is detailed [here](https://gist.github.com/abhilashvenkatesh/50478502ccd257a28d2c441ac51a8d65). Then appropiately define the environment file  secrets/grafana-env-secret. The template is defined as follow:
+ 3. Config Telegrambot for grafana's alerts is detailed [here](https://gist.github.com/abhilashvenkatesh/50478502ccd257a28d2c441ac51a8d65). Then appropiately define the environment file  secrets/.grafana.env. The template is defined as follow:
  Please do not include comments and substitute appropiate correct values in the placeholders ``<placholder>``.
 ```
 GF_SERVER_ROOT_URL=https://<grafana-domain-name>/

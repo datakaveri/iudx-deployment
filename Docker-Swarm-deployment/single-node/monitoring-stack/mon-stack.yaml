@@ -23,7 +23,7 @@ services:
         window: 10s
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.38.0
     user: root
     volumes:
       - type: volume
@@ -112,7 +112,7 @@ services:
         delay: 5s
         window: 10s
     env_file: 
-     - ./.grafana.env 
+     - ./secrets/.grafana.env 
 
   promtail:
     image: grafana/promtail:2.6.1
