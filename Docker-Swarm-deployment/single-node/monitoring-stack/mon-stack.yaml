@@ -37,7 +37,7 @@ services:
         read_only: true
     configs:
       - source: prometheus-settings
-        target: /etc/prometheus/prometheus.yml
+        target: /etc/prometheus/prometheus.yaml
     deploy:
       placement:
         constraints:
@@ -60,8 +60,8 @@ services:
           nocopy: true
     configs: 
       - source: loki-settings
-        target:  /usr/share/loki-conf/loki-config.yml
-    command: -config.file=/usr/share/loki-conf/loki-config.yml
+        target:  /usr/share/loki-conf/loki-config.yaml
+    command: -config.file=/usr/share/loki-conf/loki-config.yaml
     deploy:
       placement:
         constraints:
@@ -97,11 +97,11 @@ services:
       - source: grafana-settings
         target: /usr/share/grafana-conf/custom.ini
       - source: grafana-dashboards
-        target: /usr/share/grafana-conf/provisioning/dashboards/config.yml
+        target: /usr/share/grafana-conf/provisioning/dashboards/config.yaml
       - source: grafana-datasources
-        target: /usr/share/grafana-conf/provisioning/datasources/config.yml
+        target: /usr/share/grafana-conf/provisioning/datasources/config.yaml
       - source: grafana-notifiers
-        target: /usr/share/grafana-conf/provisioning/notifiers/config.yml
+        target: /usr/share/grafana-conf/provisioning/notifiers/config.yaml
     deploy:
       replicas: 1
       placement:
@@ -126,13 +126,13 @@ services:
         window: 10s
     configs:
     - source: promtail-settings
-      target: /usr/share/promtail-conf/promtail-config.yml
+      target: /usr/share/promtail-conf/promtail-config.yaml
     - source: promtail-script
       target: /run.sh
       mode: 0755
     volumes:
       - type: bind
-        source: /var/log/  #this is to store postions.yml,auth logs
+        source: /var/log/  #this is to store postions.yaml,auth logs
         target: /var/log/
       - type: bind
         source: /var/lib/docker/containers/ # all conatiner logs
@@ -152,21 +152,21 @@ volumes:
 
 configs:
   loki-settings:
-    file: loki/conf/loki-config.yml
+    file: loki/conf/loki-config.yaml
   grafana-settings:
     file:  grafana/conf/custom.ini
   grafana-dashboards:
-    file:  grafana/conf/provisioning/dashboards/config.yml
+    file:  grafana/conf/provisioning/dashboards/config.yaml
   grafana-datasources:
-    file: grafana/conf/provisioning/datasources/config.yml
+    file: grafana/conf/provisioning/datasources/config.yaml
   grafana-notifiers:
-    file: grafana/conf/provisioning/notifiers/config.yml
+    file: grafana/conf/provisioning/notifiers/config.yaml
   promtail-settings:
-    file:  promtail/conf/promtail-config.yml  
+    file:  promtail/conf/promtail-config.yaml  
   promtail-script:
     file: promtail/run.sh
   prometheus-settings:
-    file:  prometheus/conf/prometheus.yml
+    file:  prometheus/conf/prometheus.yaml
 
 secrets:
   grafana-super-admin-passwd:
