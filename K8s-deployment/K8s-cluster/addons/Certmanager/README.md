@@ -31,7 +31,7 @@ kubectl delete namespace cert-manager
 Here LetsEncrypt issuer is being used.
 
 ## Deploy
-Before deploying, please define appropriate email-id required for letsencrypt issuer.
+Before deploying, please define appropriate email-id required for letsencrypt issuer in [cert-manager-cluster-issuer.yaml](https://github.com/pranavv0/iudx-deployment/blob/k8s-Certmanager-update/K8s-deployment/K8s-cluster/addons/Certmanager/cert-manager-cluster-issuer.yaml)
 
 To Deploy Issuer
 ```
