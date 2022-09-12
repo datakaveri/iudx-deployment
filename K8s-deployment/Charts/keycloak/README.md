@@ -16,7 +16,7 @@ Custom docker image ``ghcr.io/datakaveri/keycloak:14.0.0-1`` based on [bitnami k
 secrets/
 ├── admin-password
 ├── admin-username
-├── database-password
+├── password (database password)
 ├── management-password
 └── management-username
 ```
@@ -49,5 +49,5 @@ Following script will create :
 KEYCLOAK_ADMIN_PASSWORD=$(kubectl get secret --namespace keycloak keycloak-passwords -o jsonpath="{.data.admin-password}" | base64 --decode)
 KEYCLOAK_MANAGEMENT_PASSWORD=$(kubectl get secret --namespace keycloak keycloak-passwords -o jsonpath="{.data.management-password}" | base64 --decode)
 
-helm upgrade   -f values.yaml -f resource-values.yaml  --set ingress.hostname=<domain-name> --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD     --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD  keycloak  --version 4.0.1 bitnami/keycloak -n keycloak 
+helm upgrade   -f values.yaml -f resource-values.yaml  --set ingress.hostname=<domain-name> --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD     --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD  keycloak  --version 9.7.2 bitnami/keycloak -n keycloak 
 ```
