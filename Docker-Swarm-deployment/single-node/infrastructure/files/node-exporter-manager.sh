@@ -29,14 +29,14 @@ while getopts ":a:" opt; do
 	esac
 done
 
-release="https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz"
+release="https://github.com/prometheus/node_exporter/releases/download/v1.4.0-rc.0/node_exporter-1.4.0-rc.0.linux-amd64.tar.gz"
 bin_dst="/usr/local/bin"
 bin="node_exporter"
 service_path="/etc/systemd/system/$bin.service"
 
 if [[ $action == "install" ]]; then
 	curl -L -s $release --output ne.tar.gz
-	tar -xzvf ne.tar.gz -C $bin_dst "node_exporter-1.2.2.linux-amd64/$bin" --strip-components 1
+	tar -xzvf ne.tar.gz -C $bin_dst "node_exporter-1.4.0-rc.0.linux-amd64/$bin" --strip-components 1
 	rm ne.tar.gz
 
 	cat > $service_path <<EOF
