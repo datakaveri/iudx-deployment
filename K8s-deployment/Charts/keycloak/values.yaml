@@ -93,13 +93,13 @@ image:
 auth:
   ## @param auth.adminUser Keycloak administrator user
   ##
-  adminUser: user
+  adminUser: ""
   ## @param auth.adminPassword Keycloak administrator password for the new user
   ##
   adminPassword: ""
   ## @param auth.managementUser Wildfly management user
   ##
-  managementUser: manager
+  managementUser: ""
   ## @param auth.managementPassword Wildfly management password
   ##
   managementPassword: ""
@@ -255,6 +255,8 @@ extraEnvVars:
     value: "5432"
   - name: KEYCLOAK_HTTP_RELATIVE_PATH
     value: "/auth/"
+  - name: KEYCLOAK_PRODUCTION
+    value: "TRUE"
   - name: KEYCLOAK_DATABASE_NAME
     value: "iudx_keycloak"
   - name: KEYCLOAK_DATABASE_USER
@@ -281,7 +283,7 @@ replicaCount: 1
 containerPorts:
   http: 8080
   https: 8443
-  management: 9990
+  ## management: 9990
 ## Keycloak pods' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Keycloak pods' Security Context
@@ -367,7 +369,6 @@ customLivenessProbe:
 ## @param customReadinessProbe Custom Rediness probes Keycloak
 ##
 customReadinessProbe:
-  readinessProbe:
   failureThreshold: 3
   initialDelaySeconds: 100
   periodSeconds: 10
