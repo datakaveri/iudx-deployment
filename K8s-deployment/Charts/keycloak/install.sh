@@ -6,5 +6,5 @@ kubectl create secret generic keycloak-env-secret   --from-file=password=./secre
 sleep 10
 # install keycloak cluster 
 helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
-helm install -f values.yaml -f resource-values.yaml keycloak  --version 9.7.2 $@ bitnami/keycloak -n keycloak
+helm install -f values.yaml -f resource-values.yaml keycloak  --version 9.3.1 $@ bitnami/keycloak -n keycloak
 
