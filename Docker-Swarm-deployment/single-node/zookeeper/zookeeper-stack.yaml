@@ -7,7 +7,7 @@ networks:
 
 services:
   zookeeper:
-    image: bitnami/zookeeper:3.8.0
+    image: bitnami/zookeeper:3.8.0-debian-11-r33
     cap_drop:
       - ALL
     volumes:
