@@ -1,0 +1,39 @@
+version: "3.9"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  rmq-init-setup:
+    image: ghcr.io/datakaveri/alpine-tools:3.16.2
+    command: bash -c '. /usr/share/app/rmq-init-script.sh'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      - RMQ_HOST=tasks.rabbitmq
+    networks:
+      - overlay-net
+    configs:
+      - source: rmq-init-script
+        target: /usr/share/app/rmq-init-script.sh
+        mode: 0777
+      - source: rmq-init-config
+        target: /usr/share/app/init-config.json
+    secrets:
+      - source: admin-password
+        target: /usr/share/app/secrets/passwords/admin-password
+
+
+configs:
+  rmq-init-script:
+    file: ./init-scripts/rmq-init-script.sh
+  rmq-init-config:
+    file: ./init-scripts/init-config.json
+secrets:
+  admin-password:
+    file: ./secrets/passwords/rabbitmq-admin-passwd
+  
