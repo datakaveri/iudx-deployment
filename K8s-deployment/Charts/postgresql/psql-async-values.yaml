@@ -519,8 +519,18 @@ postgresql:
   ##   host     all            repmgr    0.0.0.0/0    md5
   ##   host     repmgr         repmgr    0.0.0.0/0    md
   ##   ...
-  ##
-  pgHbaConfiguration: ""
+  ## md5 auth can be removed once, all passwords are migrated to SCRAM-SHA256
+  pgHbaConfiguration: |-
+    host     all              all       0.0.0.0/0    md5
+    host     all            repmgr    0.0.0.0/0     scram-sha-256
+    host     repmgr         repmgr    0.0.0.0/0     scram-sha-256
+    host     repmgr         repmgr    ::/0     scram-sha-256
+    host     replication      repmgr    0.0.0.0/0     scram-sha-256
+    host     replication      repmgr    ::/0     scram-sha-256
+    host     all              all       0.0.0.0/0    scram-sha-256
+    host     all              all       ::/0         scram-sha-256
+    local    all              all                    scram-sha-256
+
   ## @param postgresql.configurationCM Name of existing ConfigMap with configuration files
   ## NOTE: This will override postgresql.repmgrConfiguration, postgresql.configuration and postgresql.pgHbaConfiguration
   ##
