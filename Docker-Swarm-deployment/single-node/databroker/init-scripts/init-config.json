@@ -1,0 +1,113 @@
+{
+
+    "vhosts": [
+        {
+            "vhost_name": "IUDX"
+
+        },
+        {
+            "vhost_name": "IUDX-INTERNAL"
+
+        },
+        {
+            "vhost_name": "IUDX-EXTERNAL"
+
+        }    
+
+    ],
+    "users" : [
+        {
+            "username": "admin",
+            "password_file" : "/usr/share/app/secrets/passwords/admin-password",
+            "permissions": [],
+            "role": "adminstrator"
+        }
+    ],
+    "exchanges": [
+        {
+            "exchange_vhost" : "IUDX-INTERNAL",
+            "exchange_name" : "invalid-sub",
+            "exchange_type" : "topic"
+            
+        },
+        {
+            "exchange_vhost" : "IUDX-INTERNAL",
+            "exchange_name" : "latest-data-unique-attributes",
+            "exchange_type" : "topic"
+            
+        },
+        {
+            "exchange_vhost" : "IUDX-INTERNAL",
+            "exchange_name" : "processed-messages",
+            "exchange_type" : "topic"
+            
+        }
+
+    ],
+    "queues": [
+        {
+            "queue_name": "database",
+            "queue_vhost": "IUDX",
+            "queue_binding_exchange": "",
+            "queue_binding_key": ""
+            
+        },
+        {
+            "queue_name": "redis-latest",
+            "queue_vhost": "IUDX",
+            "queue_binding_exchange": "",
+            "queue_binding_key": ""
+            
+        },
+        {
+            "queue_name": "fs-invalid-sub",
+            "queue_vhost": "IUDX-INTERNAL",
+            "queue_binding_exchange": "invalid-sub",
+            "queue_binding_key": "#"
+            
+        },
+        {
+            "queue_name": "gis-invalid-sub",
+            "queue_vhost": "IUDX-INTERNAL",
+            "queue_binding_exchange": "invalid-sub",
+            "queue_binding_key": "#"
+            
+        },
+        {
+            "queue_name": "lip-invalid-sub",
+            "queue_vhost": "IUDX-INTERNAL",
+            "queue_binding_exchange": "invalid-sub",
+            "queue_binding_key": "#"
+            
+        },
+        {
+            "queue_name": "rs-invalid-sub",
+            "queue_vhost": "IUDX-INTERNAL",
+            "queue_binding_exchange": "invalid-sub",
+            "queue_binding_key": "#"
+            
+        },
+        {
+            "queue_name": "lip-unique-attributes",
+            "queue_vhost": "IUDX-INTERNAL",
+            "queue_binding_exchange": "latest-data-unique-attributes",
+            "queue_binding_key": "#"
+            
+        },
+        {
+            "queue_name": "rs-unique-attributes",
+            "queue_vhost": "IUDX-INTERNAL",
+            "queue_binding_exchange": "latest-data-unique-attributes",
+            "queue_binding_key": "#"
+            
+        },
+                {
+            "queue_name": "lip-processed-messages",
+            "queue_vhost": "IUDX-INTERNAL",
+            "queue_binding_exchange": "processed-messages",
+            "queue_binding_key": "#"
+            
+        }
+
+    ]
+}
