@@ -55,12 +55,13 @@ controller:
     ssl-session-cache: "true"
     ## custom error-pages 
     server-snippet: "include /etc/nginx/conf.d/error.conf;"
+    lua-shared-dicts: "global-rate-limit-data: 100"
+    global-rate-limit-memcached-connect-timeout: "2000"
+    global-rate-limit-memcached-max-idle-timeout: "2000"
     limit-req-status-code: "429"
     log-format-escape-json: "true"
     ## json access log format
-    log-format-upstream: '{"connection_requests": "$connection_requests", "request_id": "$request_id", "request_length": "$request_length", "remote_addr": "$remote_addr", "remote_user": "$remote_user", "time_iso8601": "$time_iso8601", "request": "$request", "status": "$status", "bytes_sent": "$bytes_sent", "http_user_agent": "$http_user_agent", "http_host": "$http_host", "server_name": "$server_name", "request_time": "$request_time", "proxy_upstream_name":  "$proxy_upstream_name", "upstream_response_time": "$upstream_response_time", "upstream_response_length": "$upstream_response_length", "upstream_status": "$upstream_status", "scheme": "$scheme", "request_method": "$request_method", "server_protocol": "$server_protocol", "pipe": "$pipe" }'
-
-
+    log-format-upstream: '{"connection_requests": "$connection_requests", "request_id": "$request_id", "request_length": "$request_length", "remote_addr": "$remote_addr", "remote_user": "$remote_user", "time_iso8601": "$time_iso8601", "request": "$request", "status": "$status", "bytes_sent": "$bytes_sent", "http_user_agent": "$http_user_agent", "http_host": "$http_host", "server_name": "$server_name", "request_time": "$request_time", "proxy_upstream_name":  "$proxy_upstream_name", "upstream_response_time": "$upstream_response_time", "upstream_response_length": "$upstream_response_length", "upstream_status": "$upstream_status", "scheme": "$scheme", "request_method": "$request_method", "server_protocol": "$server_protocol", "pipe": "$pipe", "global_rate_limit_exceeding":$global_rate_limit_exceeding"}'
 
   # -- Annotations to be added to the controller config configuration configmap.
   configAnnotations: {}
