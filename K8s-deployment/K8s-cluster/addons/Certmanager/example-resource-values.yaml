@@ -6,4 +6,13 @@ resources:
     memory: 750Mi
     cpu: 400m
 nodeSelector: 
-  node.kubernetes.io/instance-type: <instance-type>
+  node.kubernetes.io/instance-type: Standard_D2as_v4
+cainjector:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_D2as_v4
+startupapicheck:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_D2as_v4
+webhook:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_D2as_v4
