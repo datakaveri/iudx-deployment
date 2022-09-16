@@ -157,8 +157,7 @@ podLabels: {}
 #     - "1.1.1.1"
 #     - "8.8.8.8"
 
-nodeSelector:
-  node.kubernetes.io/instance-type: Standard_D2as_v4
+nodeSelector: []
 ingressShim: {}
   # defaultIssuerName: ""
   # defaultIssuerKind: ""
@@ -287,8 +286,7 @@ webhook:
     successThreshold: 1
     timeoutSeconds: 1
 
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_D2as_v4
+  nodeSelector: []
   affinity: {}
 
   tolerations: []
@@ -402,8 +400,7 @@ cainjector:
     #   cpu: 10m
     #   memory: 32Mi
 
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_D2as_v4
+  nodeSelector: []
 
   affinity: {}
 
@@ -492,8 +489,7 @@ startupapicheck:
     #   cpu: 10m
     #   memory: 32Mi
 
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_D2as_v4
+  nodeSelector: []
   affinity: {}
 
   tolerations: []
