@@ -29,5 +29,8 @@ ab -v 3 -n 200 -c 50 https://hello-world.info/  > /tmp/logs-conns.txt
 cat /tmp/logs-conns.txt | grep 503
 # atleast some requests will be rejected with 503 status cpde
 
-kubectl apply -f example-ingress-grl.yaml
+# tear down of test resources 
+kubectl delete -f example-ingress-grl.yaml
+kubectl delete deployment web 
+kubectl delete service web
 
