@@ -121,3 +121,45 @@ nlpSearch:
 
   nodeSelector:
     node.kubernetes.io/instance-type: Standard_B2s
+
+
+## rating resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param rating.resources.limits The resources limits for the rating containers
+## @param rating.resources.requests The requested resources for the rating containers
+##
+
+
+rating:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 0.4Gi
+    requests:
+      cpu: 50m
+      memory: 0.4Gi
+  autoscaling:
+    enabled: false
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_D2as_v4
+## databroker resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param databroker.resources.limits The resources limits for the rating containers
+## @param databroker.resources.requests The requested resources for the rating containers
+##
+
+
+databroker:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 0.4Gi
+    requests:
+      cpu: 50m
+      memory: 0.4Gi
+  autoscaling:
+    enabled: false
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_D2as_v4
+
+
