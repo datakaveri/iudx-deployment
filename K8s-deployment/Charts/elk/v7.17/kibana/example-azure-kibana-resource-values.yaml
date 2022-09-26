@@ -1,0 +1,28 @@
+extraConfiguration:
+  server.publicBaseUrl: <kibana-server-url>
+persistence:
+  storageClass: "azuredisk-storage-class"
+  size: 10 Gi
+nodeSelector:
+  beta.kubernetes.io/instance-type: Standard_B2s
+resources:
+  requests:
+    cpu: "250m"
+    memory: "1Gi"
+  limits:
+    cpu: "500m"
+    memory: "1.5Gi"
+
+ingress:
+  hostname: kibana-hostname
+  hosts:
+    - host: kibana-hostname
+      paths:
+        - path: /
+  extraTls:
+    - hosts:
+        - kibana-hostname
+      secretName: kibana-tls-secret  
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }

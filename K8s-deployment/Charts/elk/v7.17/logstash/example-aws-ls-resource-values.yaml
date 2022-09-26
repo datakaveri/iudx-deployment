@@ -1,0 +1,15 @@
+extraEnvVars:
+  - name: LOGSTASH_HEAP_SIZE
+    value: 2048m
+nodeSelector:
+  node.kubernetes.io/instance-type: t3a.medium
+resources:
+  requests:
+    cpu: "800m"
+    memory: "2.5Gi"
+  limits:
+    cpu: "1200m"
+    memory: "3Gi"
+persistence:
+  storageClass: "ebs-csi-storage-class"
+  size: 10Gi
