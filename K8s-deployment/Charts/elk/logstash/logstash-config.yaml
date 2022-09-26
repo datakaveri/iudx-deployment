@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstashconfig
+  labels:
+    app.kubernetes.io/name: logstash
+    app.kubernetes.io/instance: logstash
+data:
+  logstash.yml: |
+    api.http.host: 0.0.0.0
+    log.format: json
+
+  pipelines.yml: |
+    - pipeline.id: resource-group
+      path.config: "/bitnami/logstash/config/resource-group.cfg"
+      queue.type: persisted
+      queue.max_bytes: 75mb
+
+  resource-group.cfg: |
+    input {
+      rabbitmq {
+        host => "rabbitmq-logstash-client.rabbitmq.svc.cluster.local"
+        port => 5671
+        ssl => true
+        vhost => "IUDX"
+        user => "${rabbitmq_username}"
+        password => "${rabbitmq_password}"
+        queue => "database"
+        durable => true
+        metadata_enabled => true
+      }
+    }
+    filter {
+      mutate {
+        gsub => [
+          "[@metadata][rabbitmq_properties][exchange]", "\/", "__"
+        ]
+        remove_field => [ "@timestamp", "@version" ]
+      }
+    }
+    output {
+      elasticsearch {
+        hosts => [ "http://elasticsearch.elastic.svc.cluster.local:9200" ]
+        manage_template => false
+        user => "${elasticsearch_username}"
+        password => "${elasticsearch_password}"
+        index => "%{[@metadata][rabbitmq_properties][exchange]}"
+      }
+    }
