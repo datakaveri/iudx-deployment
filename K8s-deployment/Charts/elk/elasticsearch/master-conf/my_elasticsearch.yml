@@ -1,0 +1,20 @@
+node.roles: 
+- master
+- ingest
+- data
+- data_hot
+- data_cold
+- data_warm
+- data_frozen
+- data_content
+- transform
+network.tcp.keep_alive: true
+network.tcp.keep_idle: 120
+network.tcp.keep_interval : 120
+network.tcp.keep_count: 3
+action.auto_create_index: +.*
+xpack.security.audit.enabled: false
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: /certs/elastic-certificates.p12

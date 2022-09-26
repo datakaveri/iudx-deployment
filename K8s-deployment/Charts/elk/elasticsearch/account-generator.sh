@@ -2,7 +2,6 @@
 
 elastic_username='elastic'
 elastic_password=$(cat /usr/share/secrets/elasticsearch-su-password)
-
 change_password(){
     curl -X POST "$ELASTICSEARCH_HOST/_security/user/$1/_password?pretty" \
         -u $elastic_username:$elastic_password \
@@ -40,7 +39,7 @@ echo 'Updating system-user passwords'
 
 change_password \
     kibana_system \
-    $(cat /usr/share/secrets/kibana-system-password)
+    $(cat /usr/share/secrets/kibana-password)
 
 change_password \
     logstash_system \
