@@ -1,7 +1,7 @@
 #!/bin/bash
 
-keystore="./secrets/keystores"
-passwords="./secrets/passwords"
+keystore="/opt/bitnami/logstash/secrets/keystores"
+passwords="/opt/bitnami/logstash/secrets/passwords"
 
 echo "y" | logstash-keystore create 
 
@@ -11,4 +11,4 @@ cat "$passwords/logstash-rabbitmq-password" | logstash-keystore add rabbitmq_pas
 echo "logstash-internal" | logstash-keystore add elasticsearch_username 
 cat "$passwords/logstash-internal-password" | logstash-keystore add elasticsearch_password
 
-cp /usr/share/logstash/config/logstash.keystore "$keystore"
+cp /opt/bitnami/logstash/config/logstash.keystore "$keystore"
