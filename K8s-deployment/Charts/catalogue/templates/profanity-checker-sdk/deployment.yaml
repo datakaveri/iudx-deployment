@@ -66,8 +66,8 @@ spec:
         {{- end }}
       containers:
         - name: profanity-check-sdk
-          image: {{ template "catalogue.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: {{ template "profanityCheck.image" . }}
+          imagePullPolicy: {{ .Values.profanityCheckSdk.image.pullPolicy }}
           {{- if .Values.profanityCheckSdk.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.profanityCheckSdk.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -94,9 +94,6 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.profanityCheckSdk.sidecars "context" $) | nindent 8 }}
         {{- end }}
           ports:
-            - name: hazelcast
-              containerPort: {{ .Values.containerPorts.hazelcast }}
-              protocol: TCP
             - name: prometheus
               containerPort: {{ .Values.containerPorts.prometheus }}
               protocol: TCP
@@ -147,7 +144,7 @@ spec:
       {{- if .Values.serviceAccount.create }}    
       serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
       {{- end }}
-      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      {{- include "profanityCheck.imagePullSecrets" . | nindent 6 }}
       
       {{- if .Values.profanityCheckSdk.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.hostAliases "context" $) | nindent 8 }}
