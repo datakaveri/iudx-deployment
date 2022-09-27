@@ -28,7 +28,7 @@ rules:
   verbs: ["get"]
 - apiGroups: ["apps"]
   resources: ["statefulsets"]
-  resourceNames: ["elasticsearch-data-nodes","elasticsearch-mcd","elasticsearch-metrics"]
+  resourceNames: ["elasticsearch-data-nodes","elasticsearch-mcd"]
   verbs: ["get", "patch"]
 ---
 kind: RoleBinding

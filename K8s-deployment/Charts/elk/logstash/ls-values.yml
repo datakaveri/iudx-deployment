@@ -520,7 +520,7 @@ persistence:
 volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
-  enabled: false
+  enabled: true
   ## The security context for the volumePermissions init container
   ## @param volumePermissions.securityContext.runAsUser User ID for the volumePermissions init container
   ##
