@@ -35,7 +35,7 @@ data:
         gsub => [
           "[@metadata][rabbitmq_properties][exchange]", "\/", "__"
         ]
-        remove_field => [ "@timestamp", "@version" ]
+        remove_field => [ "@timestamp", "@version", "event" ]
       }
     }
     output {
