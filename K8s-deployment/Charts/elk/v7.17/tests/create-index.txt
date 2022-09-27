@@ -42,8 +42,7 @@ PUT test-itms
            "type": "keyword"
        },
        "location": {
-           "type": "geo_shape",
-           "strategy": "recursive"
+           "type": "geo_shape"
        },
        "observationDateTime": {
            "type": "date"

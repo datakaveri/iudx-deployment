@@ -433,7 +433,7 @@ persistence:
 volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
-  enabled: false
+  enabled: true
   ## The security context for the volumePermissions init container
   ## @param volumePermissions.securityContext.runAsUser User ID for the volumePermissions init container
   ##
@@ -566,7 +566,7 @@ ingress:
 metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
-  enabled: false
+  enabled: true
   ## Bitnami Logstash Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/logstash-exporter/tags/
   ## @param metrics.image.registry Logstash Relay image registry
