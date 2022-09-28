@@ -27,14 +27,3 @@ data:
     limits:
       cpu: "3800m"
       memory: "15Gi"
-
-metrics:
-  nodeSelector:
-    beta.kubernetes.io/instance-type: t3a.xlarge
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "100m"
-      memory: "128Mi"

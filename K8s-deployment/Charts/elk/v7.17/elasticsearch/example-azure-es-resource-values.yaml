@@ -2,7 +2,7 @@ master:
   heapSize: 8192m
   nodeSelector:
     beta.kubernetes.io/instance-type: Standard_B4ms
-  persistence:
+  persistence: 
     storageClass: "azuredisk-storage-class"
     size: 120Gi
   resources:
@@ -27,14 +27,3 @@ data:
     limits:
       cpu: "3800m"
       memory: "15Gi"
-
-metrics:
-  nodeSelector:
-    beta.kubernetes.io/instance-type: Standard_B4ms
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
-      cpu: "100m"
-      memory: "128Mi"

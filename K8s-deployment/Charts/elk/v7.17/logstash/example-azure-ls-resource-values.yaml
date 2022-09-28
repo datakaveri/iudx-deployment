@@ -1,7 +1,7 @@
 extraEnvVars:
   - name: LOGSTASH_HEAP_SIZE
     value: 2048m
-nodeSelector:
+nodeSelector: 
   node.kubernetes.io/instance-type: Standard_B2s
 resources:
   requests:
