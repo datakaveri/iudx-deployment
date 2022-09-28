@@ -1,20 +1,14 @@
-# Install ELK
-
+# Install ELK v7.17.x using bitnami helm charts
+## Required for migrating from ELK v7.12.x to 8.3.3
 ## Generating secrets
 
-Make a copy of sample secrets directory:
+Make a copy of elk secrets directory:
 
 ```sh
-cp -r example-secrets/secrets .
+cp -r ../secrets .
 ```
-To generate the passwords:
 
-```sh
-./create-secrets.sh
-```
-Appropriately define the `s3-access-key` and `s3-secret-key` in `secrets/passwords/s3-credentials` file
-```
-# secrets directory after generation of secret files
+# secrets directory
 secrets/
 ├── passwords/
 │   ├── elasticsearch-cat-password
@@ -69,7 +63,6 @@ secrets/
 - generates CA, signed certs from ./elasticsearch/generate-certs.sh
 - creates K8s secrets from above credentials
 - deploys es through helm 
-- deploys es-autoscaler-cron job in K8s which autoscales the es-data-nodes
 
 Deploy es as follows:
 
