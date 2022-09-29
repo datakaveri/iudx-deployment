@@ -1,0 +1,34 @@
+version: '3.9'
+
+networks:
+  overlay-net:
+          external: true
+          driver: overlay
+
+services:
+  profanity-check-sdk:
+    image: ghcr.io/datakaveri/profanity-check-sdk:4.0.0-2
+    networks:
+      - overlay-net
+    secrets:
+      - source: config
+        target: /usr/share/app/config.json
+    networks:
+      - overlay-net
+    logging:
+         driver: "json-file"
+         options:
+             max-file: "3"
+             max-size: "5m"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.cat-node==true"
+      restart_policy:
+        condition: any
+        max_attempts: 5
+
+secrets:
+  config:
+    file:  ./secrets/profanity-config/config.json
