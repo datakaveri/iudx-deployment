@@ -1,8 +1,5 @@
 extraConfiguration:
   server.publicBaseUrl: <kibana-server-url>
-persistence:
-  storageClass: "ebs-csi-storage-class"
-  size: 10 Gi
 nodeSelector:
   beta.kubernetes.io/instance-type: t3a.medium
 resources:

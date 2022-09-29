@@ -1,8 +1,5 @@
 extraConfiguration:
   server.publicBaseUrl: <kibana-server-url>
-persistence:
-  storageClass: "azuredisk-storage-class"
-  size: 10 Gi
 nodeSelector:
   beta.kubernetes.io/instance-type: Standard_B2s
 resources:
