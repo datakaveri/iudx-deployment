@@ -497,7 +497,7 @@ sidecars: []
 service:
   ## @param service.type Kubernetes service type
   ##
-  type: clusterIP
+  type: ClusterIP
   ## @param service.ports.http Keycloak service HTTP port
   ## @param service.ports.https Keycloak service HTTPS port
   ##
