@@ -5,5 +5,3 @@ docker run  --rm  -it  -v $(pwd)/secrets:/tmp/secrets \
                 /bin/sh -c " \
                         elasticsearch-certutil ca --out /tmp/secrets/pki/elastic-stack-ca.p12 --pass '' && \
                         elasticsearch-certutil cert --name security-master  --ca /tmp/secrets/pki/elastic-stack-ca.p12 --pass '' --ca-pass '' --out /tmp/secrets/pki/elastic-certificates.p12"
-
-~                   
