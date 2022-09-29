@@ -5,7 +5,7 @@ Docker swarm stack for Catalogue api server deployment.
 ## Create secret files
 1. Make a copy of sample secrets directory 
 ```console
- cp -r example-secrets/secrets .
+ cp -r example-secrets/ .
 ```
 2. Substitute appropriate values using commands whatever mentioned in config files. Configure the secrets/.cat.env file with appropriate values in the place holders “<>”
 3. Secrets directory after generation of secret files
@@ -13,6 +13,9 @@ Docker swarm stack for Catalogue api server deployment.
 secrets/
 ├── .cat.env
 └── config.json
+└── profanity-config
+        └── config.json
+
 ```
 ## Assign node labels
  The cat container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
@@ -39,3 +42,11 @@ The apis documentation will be available at https://<cat-api-server-domain-name>
 ```sh
 docker stack deploy -c cat-stack.yaml -c cat-stack.resources.yaml -c cat-stack.custom.yaml cat
 ```
+
+## Deploy Profanity Check
+
+Deploy Profanity Check Sdk:
+```sh
+docker stack deploy -c profanity-check-sdk.yaml  profanity-check 
+```
+
