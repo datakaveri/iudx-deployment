@@ -303,7 +303,7 @@ postgresql:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 100
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -319,7 +319,7 @@ postgresql:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 100
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -521,7 +521,12 @@ postgresql:
   ##   ...
   ## md5 auth can be removed once, all passwords are migrated to SCRAM-SHA256
   pgHbaConfiguration: |-
-    host     all              all       0.0.0.0/0    md5
+     local    all             all                                     trust
+     host     all             all             0.0.0.0/0               md5
+     local   all             all                                      md5
+     host     all             all             ::/0                    md5
+     host     all             all        127.0.0.1/32                 md5
+     host     all             all        ::1/128                      md5      
     host     all            repmgr    0.0.0.0/0     scram-sha-256
     host     repmgr         repmgr    0.0.0.0/0     scram-sha-256
     host     repmgr         repmgr    ::/0     scram-sha-256
@@ -824,7 +829,7 @@ pgpool:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 100
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -840,7 +845,7 @@ pgpool:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 100
     periodSeconds: 5
     timeoutSeconds: 5
     successThreshold: 1
@@ -1175,7 +1180,7 @@ metrics:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 100
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -1191,7 +1196,7 @@ metrics:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 100
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -1480,7 +1485,7 @@ service:
   ## e.g:
   ## clusterIP: None
   ##
-  clusterIP: ""
+  clusterIP: None
   ## @param service.externalTrafficPolicy Enable client source IP preservation
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
