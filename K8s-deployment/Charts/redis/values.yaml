@@ -137,6 +137,7 @@ podSecurityContext:
   enabled: true
   fsGroup: 1001
   runAsUser: 1001
+  runAsNonRoot: true
   ## Uncomment the setting below to increase the net.core.somaxconn value
   ## e.g:
   ## sysctls:
@@ -214,7 +215,8 @@ tls:
 service:
   ## @param service.port Kubernetes Service port
   ##
-  port: 6379
+  ports: 
+    redis: 6379
   ## @param service.annotations Provide any additional annotations which may be required.
   ## This can be used to set the LoadBalancer service type to internal only.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -293,7 +295,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r141
+    tag: 11-debian-11-r14
     pullPolicy: Always
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -360,7 +362,10 @@ redis:
   useAOFPersistence: "yes"
   ## @param redis.port Redis&trade; port
   ##
-  port: 6379
+  containerPorts:
+    redis: 6379
+    bus: 16379
+
   ## @param redis.lifecycleHooks LifecycleHook to set additional configuration before or after startup. Evaluated as a template
   ##
   lifecycleHooks: {}
@@ -785,7 +790,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.24.0-debian-10-r38
+    tag: 1.43.0-debian-11-r7
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -906,7 +911,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 10-debian-10-r141
+  tag: 11-debian-11-r14
   pullPolicy: Always
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
