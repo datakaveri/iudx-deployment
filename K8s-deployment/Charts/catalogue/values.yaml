@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/cat-prod
-  tag: 4.0-alpha-5405c82
+  tag: 4.0-alpha-2c9969c
   pullSecrets:
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2103,7 +2103,7 @@ profanityCheckSdk:
   image:
     registry: ghcr.io
     repository: datakaveri/profanity-check-sdk
-    tag: 4.0.0-2
+    tag: 4.0.0-5
     pullSecrets:
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2283,7 +2283,9 @@ profanityCheckSdk:
   ##   - name: FOO
   ##     value: "bar"
   ##
-  extraEnvVars: []
+  extraEnvVars:
+    - name: PYTHONUNBUFFERED
+      value: "1"
   ## @param profanityCheckSdk.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ProfanityCheckSdk nodes
   ##
   extraEnvVarsCM: ""
