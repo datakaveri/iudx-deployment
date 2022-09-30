@@ -129,6 +129,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            {{- if .Values.profanityCheckSdk.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           envFrom:
             {{- if .Values.profanityCheckSdk.extraEnvVarsCM }}
             - configMapRef:
@@ -137,9 +140,6 @@ spec:
             {{- if .Values.profanityCheckSdk.extraEnvVarsSecret }}
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.extraEnvVarsSecret "context" $) }}
-            {{- end }}
-            {{- if .Values.profanityCheckSdk.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
       {{- if .Values.serviceAccount.create }}    
       serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
