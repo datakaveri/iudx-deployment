@@ -1,5 +1,7 @@
+extraConfiguration:
+  server.publicBaseUrl: <kibana-server-url>
 nodeSelector:
-  beta.kubernetes.io/instance-type: t3.medium
+  beta.kubernetes.io/instance-type: t3a.medium
 resources:
   requests:
     cpu: "250m"
@@ -8,18 +10,12 @@ resources:
     cpu: "500m"
     memory: "1.5Gi"
 
-ingress: 
-  hosts: 
-    - host: kibana-hostname
-      paths:
-        - path: /
-
-  tls:
-    - secretName: kibana-tls-secret
-      hosts:
+ingress:
+  hostname: kibana-hostname
+  extraTls:
+    - hosts:
         - kibana-hostname
+      secretName: kibana-tls-secret
   annotations: {
     cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
   }
-
-

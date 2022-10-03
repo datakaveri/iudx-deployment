@@ -12,7 +12,7 @@ spec:
         command: ["/usr/bin/share/account-generator.sh"]
         env:
           - name: ELASTICSEARCH_HOST
-            value: http://elasticsearch-mcd:9200
+            value: http://elasticsearch:9200
         volumeMounts:
           - name: elk-passwords
             mountPath: /usr/share/secrets/

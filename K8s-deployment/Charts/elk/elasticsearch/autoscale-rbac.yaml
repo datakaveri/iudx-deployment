@@ -24,11 +24,11 @@ rules:
   verbs: ["get", "patch"]
 - apiGroups: [""]
   resources: ["services"]
-  resourceNames: ["elasticsearch-data-nodes-headless","elasticsearch-data-nodes"]
+  resourceNames: ["elasticsearch-data-nodes-hl","elasticsearch"]
   verbs: ["get"]
 - apiGroups: ["apps"]
   resources: ["statefulsets"]
-  resourceNames: ["elasticsearch-data-nodes"]
+  resourceNames: ["elasticsearch-data-nodes","elasticsearch-mcd"]
   verbs: ["get", "patch"]
 ---
 kind: RoleBinding
