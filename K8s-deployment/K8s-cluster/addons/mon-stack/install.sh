@@ -7,6 +7,7 @@ kubectl create namespace mon-stack
 # kubectl apply -f sealed-secrets/
 kubectl create secret generic grafana-env-secret   --from-env-file=secrets/grafana-env-secret -n mon-stack
 kubectl create secret generic grafana-credentials   --from-file=./secrets/admin-user --from-file=./secrets/admin-password -n mon-stack
+kubectl create secret generic blackbox-targets  --from-file=./black-box/blackbox-targets.yaml -n mon-stack
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics
@@ -20,4 +21,5 @@ sleep 20
 helm install --version=6.16.10 -f grafana/grafana-values.yaml -f grafana/resource-values.yaml  grafana -n mon-stack   grafana/grafana
 sleep 20
 helm install --version=3.8.1 -f promtail/promtail-values.yaml -f promtail/resource-values.yaml -n mon-stack promtail grafana/promtail
-
+sleep 20
+helm install --version=7.0.1 -f black-box/black-box-values.yaml -n mon-stack blackbox prometheus-community/prometheus-blackbox-exporter
