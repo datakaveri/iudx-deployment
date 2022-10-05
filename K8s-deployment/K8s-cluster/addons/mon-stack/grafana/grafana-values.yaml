@@ -721,6 +721,12 @@ grafana.ini:
     check_for_updates: true
   log:
     mode: console
+    level: info
+    filters: context:warn
+  log.console: 
+    format: json
+  metrics: 
+    enabled: true
   grafana_net:
     url: https://grafana.net
   server:
