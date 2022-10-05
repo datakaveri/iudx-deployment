@@ -158,7 +158,7 @@ loki:
     {{- end }}
 
   # Should authentication be enabled
-  auth_enabled: true
+  auth_enabled: false
 
   # -- Check https://grafana.com/docs/loki/latest/configuration/#server for more info on the server configuration.
   serverConfig:
@@ -176,7 +176,7 @@ loki:
   # -- Check https://grafana.com/docs/loki/latest/configuration/#common_config for more info on how to provide a common configuration
   commonConfig:
     path_prefix: /var/loki
-    replication_factor: 3
+    replication_factor: 1
 
   # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
   storage:
