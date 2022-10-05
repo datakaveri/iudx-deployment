@@ -281,7 +281,25 @@ config:
   # @default -- See `values.yaml`
   snippets:
     pipelineStages:
-      - cri: {}
+    - json:
+        expressions:
+          log: log
+          stream: stream
+          docker_time: time
+
+    - match:
+        selector: '{pod=~"logstash-logstash.*"}|~ "WARN"'
+        stages:
+        - json:
+            expressions:
+              index: logEvent.action[2].metaClass.metaClass.metaClass.response.index._index
+              error_type: logEvent.action[2].metaClass.metaClass.metaClass.response.index.error.type
+              source: log
+        - labels:
+            index:
+            error_type:
+    - output:
+        source: log
     common:
       - action: replace
         source_labels:

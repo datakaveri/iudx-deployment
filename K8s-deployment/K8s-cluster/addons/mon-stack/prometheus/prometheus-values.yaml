@@ -11,7 +11,7 @@ imagePullSecrets:
 ##
 serviceAccounts:
   alertmanager:
-    create: true
+    create: false
     name:
     annotations: {}
   nodeExporter:
@@ -19,7 +19,7 @@ serviceAccounts:
     name:
     annotations: {}
   pushgateway:
-    create: true
+    create: false
     name:
     annotations: {}
   server:
@@ -30,7 +30,7 @@ serviceAccounts:
 alertmanager:
   ## If false, alertmanager will not be installed
   ##
-  enabled: true
+  enabled: false
 
   ## Use a ClusterRole (and ClusterRoleBinding)
   ## - If set to false - we define a Role and RoleBinding in the defined namespaces ONLY
@@ -773,7 +773,17 @@ server:
 
   ## Additional InitContainers to initialize the pod
   ##
-  extraInitContainers: []
+  extraInitContainers: 
+    - name: file-permissions
+      image: busybox:latest
+      command: ['chown', '-R', '65534:65534', '/data/']
+      volumeMounts:
+        - mountPath: /data
+          name: storage-volume
+
+      securityContext:
+        privileged: true
+        runAsUser: 0
 
   ## Additional Prometheus server Volume mounts
   ##
@@ -1169,7 +1179,7 @@ server:
 pushgateway:
   ## If false, pushgateway will not be installed
   ##
-  enabled: true
+  enabled: false
 
   ## Use an alternate scheduler, e.g. "stork".
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
@@ -1872,7 +1882,7 @@ extraScrapeConfigs: |
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: prometheus-blackbox-exporter:9115
+        replacement: blackbox-prometheus-blackbox-exporter:9115
 
 # Adds option to add alert_relabel_configs to avoid duplicate alerts in alertmanager
 # useful in H/A prometheus with different external labels but the same alerts
