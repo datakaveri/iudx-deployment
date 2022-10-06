@@ -1653,13 +1653,13 @@ serverFiles:
             regex: __meta_kubernetes_service_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
-            target_label: namespace
+            target_label: kubernetes_namespace
           - source_labels: [__meta_kubernetes_service_name]
             action: replace
-            target_label: service
+            target_label: kubernetes_name
           - source_labels: [__meta_kubernetes_pod_node_name]
             action: replace
-            target_label: node
+            target_label: kubernetes_node
 
       # Scrape config for slow service endpoints; same as above, but with a larger
       # timeout and a larger interval
@@ -1708,13 +1708,13 @@ serverFiles:
             regex: __meta_kubernetes_service_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
-            target_label: namespace
+            target_label: kubernetes_namespace
           - source_labels: [__meta_kubernetes_service_name]
             action: replace
-            target_label: service
+            target_label: kubernetes_name
           - source_labels: [__meta_kubernetes_pod_node_name]
             action: replace
-            target_label: node
+            target_label: kubernetes_node
 
       - job_name: 'prometheus-pushgateway'
         honor_labels: true
@@ -1756,9 +1756,9 @@ serverFiles:
           - action: labelmap
             regex: __meta_kubernetes_service_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
-            target_label: namespace
+            target_label: kubernetes_namespace
           - source_labels: [__meta_kubernetes_service_name]
-            target_label: service
+            target_label: kubernetes_name
 
       # Example scrape config for pods
       #
@@ -1804,10 +1804,10 @@ serverFiles:
             regex: __meta_kubernetes_pod_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
-            target_label: namespace
+            target_label: kubernetes_namespace
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
-            target_label: pod
+            target_label: kubernetes_pod_name
           - source_labels: [__meta_kubernetes_pod_phase]
             regex: Pending|Succeeded|Failed|Completed
             action: drop
@@ -1856,10 +1856,10 @@ serverFiles:
             regex: __meta_kubernetes_pod_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
-            target_label: namespace
+            target_label: kubernetes_namespace
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
-            target_label: pod
+            target_label: kubernetes_pod_name
           - source_labels: [__meta_kubernetes_pod_phase]
             regex: Pending|Succeeded|Failed|Completed
             action: drop
