@@ -175,7 +175,7 @@ loki:
 
   # -- Check https://grafana.com/docs/loki/latest/configuration/#common_config for more info on how to provide a common configuration
   commonConfig:
-    path_prefix: /var/loki
+    path_prefix: /data/loki
     replication_factor: 1
 
   # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
@@ -199,8 +199,8 @@ loki:
       requestTimeout: "0s"
       enableHttp2: true
     filesystem:
-      chunks_directory: /var/loki/chunks
-      rules_directory: /var/loki/rules
+      chunks_directory: /data/loki/chunks
+      rules_directory: /data/loki/rules
 
   # -- Configure memcached as an external cache for chunk and results cache. Disabled by default
   # must enable and specify a host for each cache you would like to use.
@@ -235,7 +235,13 @@ loki:
       up_to: 3
 
   # --  Optional compactor configuration
-  compactor: {}
+  compactor: 
+    working_directory: /data/loki/boltdb-shipper-compactor
+    shared_store: filesystem
+    compaction_interval: 10m
+    retention_enabled: true
+    retention_delete_delay: 2h
+    retention_delete_worker_count: 150
 
 enterprise:
   # Enable enterprise features, license must be provided
