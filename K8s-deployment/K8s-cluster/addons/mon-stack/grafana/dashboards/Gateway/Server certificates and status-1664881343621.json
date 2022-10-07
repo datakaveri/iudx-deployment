@@ -9,18 +9,17 @@
       "pluginName": "Prometheus"
     }
   ],
-  "__elements": {},
   "__requires": [
     {
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "9.1.5"
+      "version": "7.2.2"
     },
     {
       "type": "panel",
       "id": "graph",
-      "name": "Graph (old)",
+      "name": "Graph",
       "version": ""
     },
     {
@@ -40,39 +39,26 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": {
-          "type": "datasource",
-          "uid": "grafana"
-        },
+        "datasource": "-- Grafana --",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
-        "target": {
-          "limit": 100,
-          "matchAny": false,
-          "tags": [],
-          "type": "dashboard"
-        },
         "type": "dashboard"
       }
     ]
   },
   "description": "",
   "editable": true,
-  "fiscalYearStartMonth": 0,
   "gnetId": 13230,
   "graphTooltip": 0,
   "id": null,
+  "iteration": 1665143890435,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -81,30 +67,17 @@
       },
       "id": 7,
       "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "Certificate and connection monitoring",
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "displayMode": "auto",
-            "filterable": false,
-            "inspect": false
+            "align": null,
+            "filterable": false
           },
           "mappings": [],
           "thresholds": {
@@ -460,13 +433,6 @@
       },
       "id": 2,
       "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
         "frameIndex": 1,
         "showHeader": true,
         "sortBy": [
@@ -476,13 +442,9 @@
           }
         ]
       },
-      "pluginVersion": "9.1.5",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_ssl_earliest_cert_expiry{instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*|https://iudx.org.in/\"}-time()",
           "format": "table",
           "hide": false,
@@ -492,10 +454,6 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_status_code{instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -504,10 +462,6 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"resolve\",instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -516,10 +470,6 @@
           "refId": "G"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"connect\",instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -528,10 +478,6 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"tls\",instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -540,10 +486,6 @@
           "refId": "E"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"processing\",instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -552,10 +494,6 @@
           "refId": "F"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"transfer\",instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -564,6 +502,8 @@
           "refId": "C"
         }
       ],
+      "timeFrom": null,
+      "timeShift": null,
       "title": "Production Certificate & Connection Monitoring ",
       "transformations": [
         {
@@ -627,17 +567,13 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "displayMode": "auto",
-            "filterable": false,
-            "inspect": false
+            "align": null,
+            "filterable": false
           },
           "mappings": [],
           "thresholds": {
@@ -993,13 +929,6 @@
       },
       "id": 5,
       "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
         "frameIndex": 1,
         "showHeader": true,
         "sortBy": [
@@ -1009,13 +938,9 @@
           }
         ]
       },
-      "pluginVersion": "9.1.5",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_ssl_earliest_cert_expiry{instance=~\"https://[A-Za-z0-9.]+.iudx.io[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}-time()",
           "format": "table",
           "hide": false,
@@ -1025,10 +950,6 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_status_code{instance=~\"https://[A-Za-z0-9.]+.iudx.io[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -1037,10 +958,6 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"resolve\",instance=~\"https://[A-Za-z0-9.]+.iudx.io[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -1049,10 +966,6 @@
           "refId": "G"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"connect\",instance=~\"https://[A-Za-z0-9.]+.iudx.io[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -1061,10 +974,6 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"tls\",instance=~\"https://[A-Za-z0-9.]+.iudx.io[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -1073,10 +982,6 @@
           "refId": "E"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"processing\",instance=~\"https://[A-Za-z0-9.]+.iudx.io[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -1085,10 +990,6 @@
           "refId": "F"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_duration_seconds{phase=\"transfer\",instance=~\"https://[A-Za-z0-9.]+.iudx.io[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}",
           "format": "table",
           "instant": true,
@@ -1097,6 +998,8 @@
           "refId": "C"
         }
       ],
+      "timeFrom": null,
+      "timeShift": null,
       "title": "Test Certificate & Connection Monitoring",
       "transformations": [
         {
@@ -1161,10 +1064,7 @@
     },
     {
       "collapsed": false,
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1173,15 +1073,6 @@
       },
       "id": 9,
       "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "Alerts on server certificates and status",
       "type": "row"
     },
@@ -1227,11 +1118,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Any production server if responded with non success status i.e. not 200,  alert is sent",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1258,7 +1152,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.1.5",
+      "pluginVersion": "7.2.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1268,10 +1162,6 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": "probe_http_status_code{instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*|https://iudx.org.in/\"}",
           "hide": false,
           "interval": "",
@@ -1295,7 +1185,9 @@
           "value": 200
         }
       ],
+      "timeFrom": null,
       "timeRegions": [],
+      "timeShift": null,
       "title": "Production Server status Alert",
       "tooltip": {
         "shared": true,
@@ -1304,7 +1196,9 @@
       },
       "type": "graph",
       "xaxis": {
+        "buckets": null,
         "mode": "time",
+        "name": null,
         "show": true,
         "values": []
       },
@@ -1312,18 +1206,25 @@
         {
           "$$hashKey": "object:203",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         },
         {
           "$$hashKey": "object:204",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false
+        "align": false,
+        "alignLevel": null
       }
     },
     {
@@ -1367,11 +1268,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Production servers Certificates Expiry Alert, alert will be sent 2 weeks before",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1398,7 +1302,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.1.5",
+      "pluginVersion": "7.2.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1408,10 +1312,6 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": " probe_ssl_earliest_cert_expiry{instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*|https://iudx.org.in/\"} - time() ",
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -1427,16 +1327,20 @@
           "value": 1210000
         }
       ],
+      "timeFrom": null,
       "timeRegions": [],
+      "timeShift": null,
       "title": "Production servers Cert Expiry Alert",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 1,
         "value_type": "individual"
       },
       "type": "graph",
       "xaxis": {
+        "buckets": null,
         "mode": "time",
+        "name": null,
         "show": true,
         "values": []
       },
@@ -1444,18 +1348,25 @@
         {
           "$$hashKey": "object:198",
           "format": "s",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         },
         {
           "$$hashKey": "object:199",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false
+        "align": false,
+        "alignLevel": null
       }
     },
     {
@@ -1499,11 +1410,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Test servers Certificates Expiry Alert, alert will be sent 2 weeks before",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1530,7 +1444,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.1.5",
+      "pluginVersion": "7.2.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1540,10 +1454,6 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
           "expr": " probe_ssl_earliest_cert_expiry{instance=~\"https://[A-Za-z0-9.]+.iudx.io[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"} - time() ",
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -1559,7 +1469,9 @@
           "value": 1210000
         }
       ],
+      "timeFrom": null,
       "timeRegions": [],
+      "timeShift": null,
       "title": "Test servers Cert Expiry Alert",
       "tooltip": {
         "shared": true,
@@ -1568,7 +1480,9 @@
       },
       "type": "graph",
       "xaxis": {
+        "buckets": null,
         "mode": "time",
+        "name": null,
         "show": true,
         "values": []
       },
@@ -1576,32 +1490,36 @@
         {
           "$$hashKey": "object:198",
           "format": "s",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         },
         {
           "$$hashKey": "object:199",
           "format": "short",
+          "label": null,
           "logBase": 1,
+          "max": null,
+          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false
+        "align": false,
+        "alignLevel": null
       }
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 37,
+  "schemaVersion": 26,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
-        },
+        "datasource": "Prometheus",
         "filters": [],
         "hide": 0,
         "label": "",
@@ -1619,6 +1537,5 @@
   "timezone": "",
   "title": "Server certificates and status",
   "uid": "r8eWoHpGz",
-  "version": 1,
-  "weekStart": ""
+  "version": 1
 }
