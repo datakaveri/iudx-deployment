@@ -7,7 +7,7 @@ kubectl create namespace mon-stack
 # kubectl apply -f sealed-secrets/
 kubectl create secret generic grafana-env-secret   --from-env-file=secrets/grafana-env-secret -n mon-stack
 kubectl create secret generic grafana-credentials   --from-file=./secrets/admin-user --from-file=./secrets/admin-password -n mon-stack
-kubectl create secret generic blackbox-targets  --from-file=./black-box/blackbox-targets.yaml -n mon-stack
+kubectl create secret generic blackbox-targets  --from-file=./secrets/blackbox-targets.yaml -n mon-stack
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics
