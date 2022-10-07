@@ -1,9 +1,9 @@
 #!/bin/sh
 
-es_nodes=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch-mcd:9200/_nodes | jq ._nodes.total | sed -r 's/\s+//g')
-es_shards=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch-mcd:9200/_cat/health | awk '{print $7}'| sed -r 's/\s+//g')
-jvm_maxheap_per_node=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch-mcd:9200/_cat/nodes?h=heap.max | awk 'NR==1')
-all_disk_usage=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch-mcd:9200/_cat/nodes?h=disk.used_percent)
+es_nodes=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch:9200/_nodes | jq ._nodes.total | sed -r 's/\s+//g')
+es_shards=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch:9200/_cat/health | awk '{print $7}'| sed -r 's/\s+//g')
+jvm_maxheap_per_node=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch:9200/_cat/nodes?h=heap.max | awk 'NR==1')
+all_disk_usage=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch:9200/_cat/nodes?h=disk.used_percent)
 
 heap_size=$(echo "$jvm_maxheap_per_node"| awk '{print substr($0,1,length($0)-2)}')
 heap_unit=$(echo "$jvm_maxheap_per_node" | awk '{print substr($0,length($0)-1,2)}')
@@ -31,7 +31,8 @@ echo "Data nodes required =" $totalDataNodesRequired
 if [ $totalDataNodesRequired -gt $es_nodes ]
 then
     echo "Scale up es-data-node by  $(($totalDataNodesRequired - $es_nodes))"
-    helm repo add elastic  https://helm.elastic.co && helm upgrade --reuse-values --set replicas=$(($totalDataNodesRequired - 3)) --version=7.12.1 elasticsearch-data elastic/elasticsearch -n elastic
+    # total data nodes required - 3 master nodes to get total data-only nodes required and set scale
+    helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami && helm upgrade --reuse-values --set data.replicas=$(($totalDataNodesRequired - 3)) --version 19.2.4 elasticsearch bitnami/elasticsearch -n elastic
     exit 0
 else
     echo "No need to scale up"
@@ -55,9 +56,10 @@ echo "Total Disk Usage =  " $totalDiskUsage"%"
 
 if [ $totalDiskUsage -gt 80 ]
 then
-    echo "Total disk usage exceeded lower watermark of 5%"
+    echo "Total disk usage exceeded lower watermark of 80%"
     echo "scaling up replicas"
-    helm repo add elastic  https://helm.elastic.co && helm upgrade --reuse-values --set replicas=$(($es_nodes - 2)) --version=7.12.1 elasticsearch-data elastic/elasticsearch -n elastic
+    # total esNodes-2 to get dataNodes+1
+    helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami && helm upgrade --reuse-values --set data.replicas=$(($es_nodes - 2)) --version 19.2.4 elasticsearch bitnami/elasticsearch -n elastic
     exit 0
 else
     echo "Total disk usage is below lower watermark ; No need to scale"

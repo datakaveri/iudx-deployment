@@ -75,7 +75,7 @@
                 </div>
             <#else>
                 <h1 id="kc-page-title"><#nested "header"></h1>
-                <h1 id="custom-logo-wrapper"></h1>
+                <a href="https://catalogue.iudx.org.in/" id="custom-logo-wrapper"></a>
             </#if>
         <#else>
             <#if displayRequiredFields>
