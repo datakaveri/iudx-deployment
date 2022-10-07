@@ -22,4 +22,5 @@ helm install --version=6.38.3 -f grafana/grafana-values.yaml -f grafana/resource
 sleep 20
 helm install --version=6.4.0 -f promtail/promtail-values.yaml -f promtail/resource-values.yaml -n mon-stack promtail grafana/promtail
 sleep 20
-helm install --version=7.0.1 -f black-box/black-box-values.yaml -n mon-stack blackbox prometheus-community/prometheus-blackbox-exporter
+helm install --version=7.0.1 -f blackbox/blackbox-values.yaml -f blackbox/resource-values.yaml -n mon-stack blackbox prometheus-community/prometheus-blackbox-exporter
+
