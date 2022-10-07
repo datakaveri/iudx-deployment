@@ -68,7 +68,7 @@
 .custom-pf-c-form-control {
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 12px;
+  padding: 12px 19px;
   width: 100%;
   outline: none;
   color: #2c2c2c;
@@ -112,12 +112,17 @@ h1#kc-page-title {
   width: 95px;
   background-repeat: no-repeat;
   display: inline-block;
+  transform: translatey(25%);
 }
 
 .custom-pf-c-form__label-text {
   font-weight: 400;
   color: #6c6c6c;
   font-size: 14px;
+}
+.custom-pf-c-form__label-text::after {
+  content: " *";
+  color:#ff0000;
 }
 
 #kc-info-wrapper {
@@ -133,11 +138,12 @@ h1#kc-page-title {
 
 #kc-info-wrapper a:hover {
   text-decoration: none;
+  color: #0088ce;
 }
 
 .custom-label-wrapper,
 .custom-input-wrapper {
-  padding: 0;
+  padding: 0 20px;
 }
 
 .custom-form-group {

@@ -1,10 +1,10 @@
-{{- if .Values.database.autoscaling.enabled }}
+{{- if .Values.profanityCheckSdk.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: gis-database
+  name: profanity-check-sdk
   labels:
-    app: gis-database
+    app: profanity-check-sdk
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: gis-database
-  minReplicas: {{ .Values.database.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.database.autoscaling.maxReplicas }}
+    name: profanity-check-sdk
+  minReplicas: {{ .Values.profanityCheckSdk.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.profanityCheckSdk.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.database.autoscaling.targetCPU }}
+    {{- if .Values.profanityCheckSdk.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.database.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.profanityCheckSdk.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.database.autoscaling.targetMemory }}
+    {{- if .Values.profanityCheckSdk.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.database.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.profanityCheckSdk.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
