@@ -34,7 +34,7 @@ ingress:
     # change it to - cert-manager.io/cluster-issuer: "letsencrypt-prod",
     # when deployed in production/ need proper certficates
     cert-manager.io/cluster-issuer: "letsencrypt-staging"
-  host: 
+  hosts: 
     - grafana-domain-name
 
   tls:
