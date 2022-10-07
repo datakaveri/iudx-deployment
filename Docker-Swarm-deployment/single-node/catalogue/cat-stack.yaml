@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   cat:
-    image: ghcr.io/datakaveri/cat-prod:3.5.0-05b6b35
+    image: ghcr.io/datakaveri/cat-prod:4.0-alpha-2c9969c
     networks:
       - overlay-net
     secrets:
@@ -33,6 +33,35 @@ services:
         condition: any
         max_attempts: 5
 
+  profanity-check-sdk:
+    image: ghcr.io/datakaveri/profanity-check-sdk:4.0.0-5
+    networks:
+      - overlay-net
+    cap_drop:
+      - ALL
+    read_only: true
+    environment: 
+      - PYTHONUNBUFFERED=1
+    secrets:
+      - source: profanity-check-config
+        target: /usr/share/app/config.json
+    networks:
+      - overlay-net
+    logging:
+         driver: "json-file"
+         options:
+             max-file: "3"
+             max-size: "5m"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.cat-node==true"
+      restart_policy:
+        condition: any
+        max_attempts: 5
+
+
 networks:
   overlay-net:
     external: true
@@ -41,5 +70,5 @@ networks:
 secrets:
   config:
     file:  ./secrets/config.json
-
-
+  profanity-check-config:
+    file:  ./secrets/profanity-config/config.json
