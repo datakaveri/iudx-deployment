@@ -1,1 +1,4 @@
 secrets/
+loki/resource-values.yaml
+promtail/resource-values.yaml
+grafana/resource-values.yaml
