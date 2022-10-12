@@ -1,7 +1,7 @@
 {
 	"clientID": "<Client-ID>",
 	"clientSecret": "<Client-Secret>",
-	"Time": "15:03",
+	"Time": "10",
 	"Info": [{
 			"Test-Name": "REDIS",
 			"Server-Name": "RS",
