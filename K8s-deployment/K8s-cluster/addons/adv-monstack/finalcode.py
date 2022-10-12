@@ -63,7 +63,7 @@ rtt_metric = prom.Gauge('api_rtt','api_rtt',["Servername","Url","Name"])
 api_req_time = prom.Gauge('api_req_time','api_req_time',["Servername","Url","Name"])
 IST = pytz.timezone('Asia/Kolkata')
 #schedule.every().day.at(config["Time"]).do(AMS,config,status_dict,time_dict)
-schedule.every(1).seconds.do(AMS,config,status_dict,time_dict,IST)
+schedule.every(10).minutes.do(AMS,config,status_dict,time_dict,IST)
 
 
 
