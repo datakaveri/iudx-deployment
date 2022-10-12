@@ -33,7 +33,15 @@ def AMS(config,status_dict,time_dict,IST):
         for info in config["Info"]:
                 if info["Type"] == "private":
                         auth_token = token(config["clientID"],config["clientSecret"],info["Auth-Request-Body"],info["Auth-Server-Url"])
-                        req = request(info["Request-Method"],str(auth_token),info["Server-Url"],info["Request-Body"],"",info["Test-Name"])            
+                        req = request(info["Request-Method"],str(auth_token),info["Server-Url"],info["Request-Body"],"",info["Test-Name"]) 
+                elif info["Type"] == "array_check":
+                        req = request(info["Request-Method"],"",info["Server-Url"],info["Request-Body"],"",info["Test-Name"])
+                        json_object = json.loads(req.text)
+                        if len(json_object["results"]) == 0:
+                                status_code_metric.labels(info["Server-Name"]+"-Array",info["Server-Url"],info["Test-Name"]).set(0)
+                        else :
+                                status_code_metric.labels(info["Server-Name"]+"-Arrya",info["Server-Url"],info["Test-Name"]).set(1)
+                                
                 else :
                         req = request(info["Request-Method"],"",info["Server-Url"],info["Request-Body"],"",info["Test-Name"])
                 status_code = str(req.status_code)
@@ -62,7 +70,7 @@ status_code_metric = prom.Gauge('http_status_code','http_status_code',["Serverna
 rtt_metric = prom.Gauge('api_rtt','api_rtt',["Servername","Url","Name"])
 api_req_time = prom.Gauge('api_req_time','api_req_time',["Servername","Url","Name"])
 IST = pytz.timezone('Asia/Kolkata')
-schedule.every(config["Time"]).minutes.do(AMS,config,status_dict,time_dict,IST)
+schedule.every(1).minutes.do(AMS,config,status_dict,time_dict,IST)
 
 
 
