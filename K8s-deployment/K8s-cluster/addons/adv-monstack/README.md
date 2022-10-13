@@ -12,6 +12,9 @@
 secrets/
 └── adv-mon-stack-conf.json
 ```
+## Define Appropriate values of resources
+
+Define Appropriate nodeSelector value in the [`adv-monstack.yaml`](./adv-monstack.yaml)
 
 ## Deploy
 
