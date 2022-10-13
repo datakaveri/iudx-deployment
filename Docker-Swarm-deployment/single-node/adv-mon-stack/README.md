@@ -2,7 +2,7 @@
 
 Docker swarm stack for advance monitoring stack
 
-# Build Docker Image
+## Build Docker Image
 ```sh
 docker build -t ghcr.io/datakaveri/ams:4.0.0-1 -f docker/Dockerfile docker/
 ```
