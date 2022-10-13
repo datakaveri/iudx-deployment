@@ -1,0 +1,41 @@
+version: '3.9'
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+
+  ams:
+    image: ghcr.io/datakaveri/ams:4.0.0-1
+    read_only: true
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    environment:
+      - PYTHONUNBUFFERED=1
+    secrets:
+      - source: config
+        target: /usr/share/app/adv-mon-stack-conf.json
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      restart_policy:
+        condition: any
+        delay: 5s
+        window: 10s
+        max_attempts: 5
+    cap_drop:
+      - ALL
+
+secrets:
+  config:
+    file:  ./secrets/adv-mon-stack-conf.json

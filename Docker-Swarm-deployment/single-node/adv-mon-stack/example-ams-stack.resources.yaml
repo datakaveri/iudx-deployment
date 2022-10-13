@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  ams:
+    deploy:
+      resources:
+        limits:
+          pids: 512
+          cpus: '0.20'
+          memory: 200M
+        reservations:
+          cpus: '0.10'
+          memory: 100M
