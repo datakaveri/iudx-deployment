@@ -9,7 +9,7 @@ kubectl create secret generic elk-passwords --from-file=./secrets/passwords -n e
 kubectl create configmap  account-generator --from-file=./elasticsearch/account-generator.sh -n elastic
 kubectl create configmap elasticsearch-data-node-config --from-file=./elasticsearch/data-conf/my_elasticsearch.yml -n elastic
 kubectl create configmap elasticsearch-master-node-config --from-file=./elasticsearch/master-conf/my_elasticsearch.yml -n elastic
-
+kubectl create configmap elastic-java-net-options --from-file=./elasticsearch/java-net.options -n elastic
 helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
 # brings up Elastic mcd and data-only nodes
 helm install -f elasticsearch/es-values.yml -f elasticsearch/es-resource-values.yaml -n elastic elasticsearch --version 19.2.4 $@  bitnami/elasticsearch  &&
