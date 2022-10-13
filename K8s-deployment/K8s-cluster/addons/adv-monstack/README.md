@@ -1,24 +1,22 @@
-# Advance Monitoing Stack
+# Installation of Advance monitoring Stack
 
-Docker swarm stack for advance monitoring stack
+## Create secret files
+1. Make a copy of sample secrets directory.
 
-# 1.Build Docker Image
+```console
+ cp -r example-secrets/secrets .
+```
+2. Substitute appropriate values using commands whatever mentioned in config files.
+3. Secrets directory after generation of secret files
 ```sh
-docker build -t ams:v1 .
+secrets/
+└── adv-mon-stack-conf.json
 ```
 
-# 2.Update credentials in adv-mon-stack-conf.json file
-
-# 3.Deploy
+## Deploy
 
 Deploy advance monitoring stack
+
 ```sh
 ./install.sh
 ```
-
-You can access advance monitoring stacks metrics using <ip>:8089
-
-
-
-
-
