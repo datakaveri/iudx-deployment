@@ -111,6 +111,9 @@ extraVolumes:
     secret:
       defaultMode: 420
       secretName: elastic-certificates
+  - name: elastic-java-net-options
+    configMap:
+      name: elastic-java-net-options
 ## @param extraVolumeMounts A list of volume mounts to be added to the pod
 ## extraVolumeMounts:
 ##   - name: es-certs
@@ -120,6 +123,9 @@ extraVolumeMounts:
   - name: elastic-certificates
     mountPath: /certs
     readOnly: true
+  - name: elastic-java-net-options
+    mountPath: /opt/bitnami/elasticsearch/config/jvm.options.d/java-net.options
+    subPath: java-net.options
 ## @param initScripts Dictionary of init scripts. Evaluated as a template.
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
