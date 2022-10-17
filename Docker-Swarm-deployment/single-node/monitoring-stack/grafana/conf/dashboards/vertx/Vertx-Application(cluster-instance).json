@@ -1,66 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_LOKI",
-      "label": "Loki",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "loki",
-      "pluginName": "Loki"
-    },
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "panel",
-      "id": "gauge",
-      "name": "Gauge",
-      "version": ""
-    },
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "7.2.0"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "logs",
-      "name": "Logs",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "loki",
-      "name": "Loki",
-      "version": "1.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -77,8 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1639056972088,
+  "id": 12,
+  "iteration": 1665981934452,
   "links": [],
   "panels": [
     {
@@ -96,7 +34,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_LOKI}",
+      "datasource": "Loki",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -119,7 +57,7 @@
       "pluginVersion": "7.2.0",
       "targets": [
         {
-          "expr": "{job=~\"auth-logs|other-container-logs\"} ",
+          "expr": "{container_name=\"$instance\"}",
           "legendFormat": "",
           "refId": "A"
         }
@@ -189,7 +127,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "sum(up{cluster=\"$cluster\"})",
@@ -270,7 +208,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "process_cpu_usage{instance=\"$instance\"} ",
@@ -382,7 +320,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "sum(jvm_memory_used_bytes{instance=\"$instance\", area=\"nonheap\"})*100/sum(jvm_memory_max_bytes{instance=\"$instance\", area=\"nonheap\"})",
@@ -459,7 +397,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "sum(jvm_memory_used_bytes{instance=\"$instance\", area=\"heap\"})*100/sum(jvm_memory_max_bytes{instance=\"$instance\", area=\"heap\"})",
@@ -541,7 +479,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -679,7 +617,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -815,7 +753,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -964,7 +902,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1092,7 +1030,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1218,7 +1156,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1354,7 +1292,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1466,7 +1404,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1566,7 +1504,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1682,7 +1620,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1784,7 +1722,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1913,7 +1851,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2017,7 +1955,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2144,7 +2082,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2287,7 +2225,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2388,7 +2326,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2488,7 +2426,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2604,7 +2542,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2720,7 +2658,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2844,7 +2782,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2930,7 +2868,7 @@
       }
     }
   ],
-  "refresh": "30s",
+  "refresh": false,
   "schemaVersion": 26,
   "style": "dark",
   "tags": [],
@@ -2957,7 +2895,11 @@
       },
       {
         "allValue": null,
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "iudx-catalogue-cluster",
+          "value": "iudx-catalogue-cluster"
+        },
         "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(cluster)",
         "hide": 0,
@@ -2979,7 +2921,12 @@
       },
       {
         "allValue": null,
-        "current": {},
+        "current": {
+          "isNone": true,
+          "selected": false,
+          "text": "None",
+          "value": ""
+        },
         "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(up{cluster=\"$cluster\"},instance)",
         "hide": 0,
@@ -3032,5 +2979,5 @@
   "timezone": "",
   "title": "Vertx-Application(cluster-instance)",
   "uid": "BCXHlxVGPo",
-  "version": 6
+  "version": 2
 }

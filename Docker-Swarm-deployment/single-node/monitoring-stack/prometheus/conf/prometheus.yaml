@@ -65,3 +65,10 @@ scrape_configs:
       - target_label: __address__
         replacement: blackbox:9115  # Blackbox exporter scraping address
 
+  - job_name: 'cadvisor'
+    dns_sd_configs:
+    - names:
+      - 'tasks.cadvisor'
+      type: 'A'
+      port: 8080
+
