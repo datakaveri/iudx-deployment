@@ -35,10 +35,12 @@ spec:
               memory: 128Mi
           volumeMounts:
             - name: advance-config
-              mountPath: /usr/share/app
+              mountPath: /usr/share/app/adv-mon-stack-conf.json
+              subPath: adv-mon-stack-conf.json
+
           env:
             - name: PYTHONUNBUFFERED
-              value: 1
+              value: "1"
       volumes:
         - name: advance-config
           secret:
