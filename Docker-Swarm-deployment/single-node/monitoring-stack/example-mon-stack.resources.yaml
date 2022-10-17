@@ -53,3 +53,13 @@ services:
         reservations:
           cpus: '0.10'
           memory: 100M
+
+  cadvisor:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 256M
+        reservations:
+          cpus: '0.20'
+          memory: 128M

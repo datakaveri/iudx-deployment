@@ -30,8 +30,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 4,
-  "iteration": 1639056941759,
+  "id": 7,
+  "iteration": 1665981828054,
   "links": [],
   "panels": [
     {
@@ -181,7 +181,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -481,7 +481,7 @@
     ]
   },
   "timezone": "",
-  "title": "Database",
+  "title": "Logstash-Elasticsearch",
   "uid": "OYWgQeFMk",
   "version": 2
 }

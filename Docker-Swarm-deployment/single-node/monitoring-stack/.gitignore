@@ -1,3 +1,5 @@
 secrets/*
 .*.env
 mon-stack.temp.yaml
+mon-stack.custom.yaml
+mon-stack.resources.yaml
