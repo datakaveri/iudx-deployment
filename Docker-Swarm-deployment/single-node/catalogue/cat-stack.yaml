@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   cat:
-    image: ghcr.io/datakaveri/cat-prod:4.0.0-8085327
+    image: ghcr.io/datakaveri/cat-prod:4.5.0-alpha-5cdd89c
     networks:
       - overlay-net
     secrets:
