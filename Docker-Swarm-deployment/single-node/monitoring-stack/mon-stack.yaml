@@ -7,6 +7,7 @@ networks:
 services:
   vertx_sd:
     image: ghcr.io/datakaveri/vertx_sd:1.0.0
+    read_only: true
     volumes:
       - type: bind
         source: /tmp/metrics-targets
@@ -31,6 +32,7 @@ services:
 
   prometheus:
     image: prom/prometheus:v2.38.0
+    read_only: true
     volumes:
       - type: volume
         source: prometheus-volume
@@ -67,6 +69,7 @@ services:
  
   loki:
     image: grafana/loki:2.6.1
+    read_only: true
     #transfer of logs to loki over overlay
     volumes:
       - type: volume
@@ -103,6 +106,7 @@ services:
 
   grafana:
     image: ghcr.io/datakaveri/grafana:9.1.1
+    read_only: true
     volumes:
       - type: volume
         source: grafana-volume
@@ -149,6 +153,7 @@ services:
 
   promtail:
     image: grafana/promtail:2.6.1
+    read_only: true
     entrypoint: /run.sh
     user: root
     deploy:
@@ -184,6 +189,7 @@ services:
 
   blackbox:
     image: prom/blackbox-exporter:v0.22.0
+    read_only: true
     deploy:
       placement:
         constraints:
@@ -208,6 +214,7 @@ services:
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.45.0
+    read_only: true
     command: -logtostderr -docker_only
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
