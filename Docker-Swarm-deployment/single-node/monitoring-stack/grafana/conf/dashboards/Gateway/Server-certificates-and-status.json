@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": 13230,
   "graphTooltip": 0,
-  "id": 10,
-  "iteration": 1639057133903,
+  "id": 5,
+  "iteration": 1665981906006,
   "links": [],
   "panels": [
     {
@@ -406,7 +406,7 @@
           }
         ]
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "probe_ssl_earliest_cert_expiry{instance=~\"https://[A-Za-z0-9.]+.iudx.org.in[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*|https://iudx.org.in/\"}-time()",
@@ -902,7 +902,7 @@
           }
         ]
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "probe_ssl_earliest_cert_expiry{instance=~\"https://[A-Za-z0-9.]+.iudx.io[:0-9]*/[A-Za-z0-9.\\\\-\\\\/]*\"}-time()",
@@ -1116,7 +1116,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1266,7 +1266,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1408,7 +1408,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1501,5 +1501,5 @@
   "timezone": "",
   "title": "Server certificates and status",
   "uid": "r8eWoHpGz",
-  "version": 33
+  "version": 1
 }

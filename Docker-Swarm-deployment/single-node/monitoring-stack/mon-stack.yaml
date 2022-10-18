@@ -7,6 +7,7 @@ networks:
 services:
   vertx_sd:
     image: ghcr.io/datakaveri/vertx_sd:1.0.0
+    read_only: true
     volumes:
       - type: bind
         source: /tmp/metrics-targets
@@ -30,8 +31,8 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   prometheus:
-    image: prom/prometheus:v2.26.0
-    user: root
+    image: prom/prometheus:v2.38.0
+    read_only: true
     volumes:
       - type: volume
         source: prometheus-volume
@@ -67,13 +68,18 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
  
   loki:
-    image: grafana/loki:2.3.0
+    image: grafana/loki:2.6.1
+    read_only: true
     #transfer of logs to loki over overlay
-    user: root
     volumes:
       - type: volume
         source: loki-volume
         target: /data/loki
+        volume:
+          nocopy: true
+      - type: volume
+        source: loki-wal-volume
+        target: /wal
         volume:
           nocopy: true
     configs: 
@@ -99,8 +105,8 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   grafana:
-    image: ghcr.io/datakaveri/grafana:8.1.8
-    user: root
+    image: ghcr.io/datakaveri/grafana:9.1.1
+    read_only: true
     volumes:
       - type: volume
         source: grafana-volume
@@ -146,7 +152,8 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   promtail:
-    image: grafana/promtail:2.3.0
+    image: grafana/promtail:2.6.1
+    read_only: true
     entrypoint: /run.sh
     user: root
     deploy:
@@ -182,6 +189,7 @@ services:
 
   blackbox:
     image: prom/blackbox-exporter:v0.22.0
+    read_only: true
     deploy:
       placement:
         constraints:
@@ -204,12 +212,48 @@ services:
         max-size: "5m"
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
-      
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.45.0
+    read_only: true
+    command: -logtostderr -docker_only
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    cap_drop:
+      - ALL
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
 volumes:
   prometheus-volume:
+    external: true
+    name: mon-stack_prometheus-volume
   grafana-volume:
+    external: true
+    name: mon-stack_grafana-volume
   loki-volume:
+    external: true
+    name: mon-stack_loki-volume
   promtail-volume:
+    external: true
+    name: mon-stack_promtail-volume
+  loki-wal-volume:
+    external: true
+    name: mon-stack_loki-wal-volume
 
 configs:
   loki-settings:
