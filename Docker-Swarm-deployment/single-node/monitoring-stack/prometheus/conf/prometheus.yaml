@@ -75,4 +75,3 @@ scrape_configs:
   - job_name: 'ams'
     static_configs:
       - targets: ["tasks.ams:8089"]
-~                                          
