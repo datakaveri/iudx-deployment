@@ -75,3 +75,7 @@ scrape_configs:
   - job_name: 'ams'
     static_configs:
       - targets: ["tasks.ams:8089"]
+
+  - job_name: 'immudbmetrics'
+    static_configs:
+      - targets: ["tasks.immudb:9497"]
