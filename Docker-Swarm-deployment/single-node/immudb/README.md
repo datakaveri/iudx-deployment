@@ -19,6 +19,12 @@ secrets/
 ```
 3. Disclaimer: check if all the passwords  contain upper and lower case letters, digits, punctuation mark or symbol. If not, regenerate the secrets using the script.
 
+4. Copy the env file from example-env to secrets/
+```console
+cp example-env/* secrets/
+```
+5. Properly configure env file immudb.env file, this will be used for immudb-config-generator
+
 ## Build the docker file
 This is to create a custom docker image containing the python script to do initial setup of immudb like create users, tables required for the api-servers.
 ```sh
