@@ -28,6 +28,37 @@ services:
       cap_drop:
         - ALL
 
+
+    immudb-audit:
+      image: codenotary/immuclient:1.4.0
+      command: audit-mode
+      read_only: true
+      volumes:
+      - type: tmpfs
+        target: /tmp/
+        read_only: false
+      networks:
+        - overlay-net
+      env_file:
+        - ./secrets/.audit.env
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "5m"
+          max-file: "3"
+          tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: any
+          max_attempts: 5
+        placement:
+          constraints:
+            - "node.labels.immudb-node==true"
+      cap_drop:
+        - ALL
+
+
 networks:
   overlay-net:
     external: true
@@ -35,4 +66,3 @@ networks:
 
 volumes:
   immudb-data:
-
