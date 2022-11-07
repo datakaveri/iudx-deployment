@@ -2,6 +2,7 @@ version: '3.9'
 services:
     immudb-config-generator:
       image: ghcr.io/datakaveri/immudb-config-generator:1.4.0
+      read_only: true
       networks:
         - overlay-net
       secrets:
@@ -17,6 +18,11 @@ services:
         replicas: 1
         restart_policy:
           condition: on-failure
+        placement:
+          constraints:
+            - "node.labels.immudb-node==true"
+      cap_drop:
+        - ALL
       env_file:
         - ./secrets/.immudb.env
       logging:
@@ -39,7 +45,6 @@ secrets:
     file: secrets/passwords/rs-password
   auth-password:
     file: secrets/passwords/auth-password
-  cat-password:
+  cat-password: 
     file: secrets/passwords/cat-password
-
 
