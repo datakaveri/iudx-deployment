@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  annotations: {}
+  labels: 
+    app: immudb-audit
+  name: immudb-audit
+  namespace: immudb
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: immudb-audit
+  template: 
+    metadata: 
+      labels: 
+        app: immudb-audit
+    spec: 
+      containers: 
+        - name: immudb-audit
+          image: "codenotary/immuclient:1.4.0"
+          args: 
+            - audit-mode
+          env: 
+            - name: IMMUCLIENT_AUDIT_USERNAME
+              value: immudb
+            - name: IMMUCLIENT_AUDIT_PASSWORD
+              valueFrom: 
+                secretKeyRef: 
+                  name: hook-secret
+                  key: admin-password
+            - name: IMMUCLIENT_IMMUDB_ADDRESS
+              value: immudb.immudb.svc.cluster.local
