@@ -24,7 +24,7 @@ services:
       cap_drop:
         - ALL
       env_file:
-        - ./secrets/.immudb.env
+        - ./secrets/.config.env
       logging:
         driver: "json-file"
         options:
