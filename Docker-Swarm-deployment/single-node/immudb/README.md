@@ -5,7 +5,7 @@ Docker swarm stack for Immudb Deployment.
 ## Create secret files
 1. Copy the file from example-secrets/ to secrets/
 ```console
-cp -r example-secrets/* secrets/
+cp -r example-secrets/secrets .
 ```
 2. Properly configure env file immudb.env and audit.env file, this will be used for immudb-config-generator and immudb-audit
 
