@@ -3,7 +3,8 @@ Docker swarm stack for Immudb Deployment.
 
 # Immudb Installation
 ## Create secret files
-1. Copy the file from example-secrets/ to secrets/
+1. Make a copy of sample secrets directory:
+
 ```console
 cp -r example-secrets/secrets .
 ```
