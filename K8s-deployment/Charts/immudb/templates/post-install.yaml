@@ -10,13 +10,14 @@ spec:
   containers:
   - name: hook-immudb
     image: {{ template "immudbHook.image" . }}
-    env:
-    {{- if .Values.immudb.install.hookEnv }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.immudb.install.hookEnv "context" $) | nindent 4 }}
-    {{- end }}
     volumeMounts:
     - name: hook-secret
       mountPath: /run/secrets/password
+    envFrom:
+    {{- if .Values.immudb.install.hookEnvFile }}
+    - configMapRef:
+      name: {{ include "common.tplvalues.render" (dict "value" .Values.immudb.install.hookEnvFile "context" $) }}
+    {{- end }}
 
   volumes:
   - name: hook-secret
