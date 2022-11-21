@@ -3,12 +3,19 @@ Docker swarm stack for Immudb Deployment.
 
 # Immudb Installation
 ## Create secret files
-1. To generate the passwords:
+1. Make a copy of sample secrets directory:
+
+```console
+cp -r example-secrets/secrets .
+```
+2. Properly configure env file immudb.env and audit.env file, this will be used for immudb-config-generator and immudb-audit
+
+3. To generate the passwords:
 
 ```console
 ./create-secrets.sh
 ```
-2. Secrets directory after generation of passwords:
+4. Secrets directory after generation of passwords:
 ```sh
 secrets/
 └── passwords
@@ -17,12 +24,12 @@ secrets/
     ├── cat-password
     └── rs-password
 ```
-3. Disclaimer: check if all the passwords  contain upper and lower case letters, digits, punctuation mark or symbol. If not, regenerate the secrets using the script.
+5. Disclaimer: check if all the passwords  contain upper and lower case letters, digits, punctuation mark or symbol. If not, regenerate the secrets using the script.
 
 ## Build the docker file
 This is to create a custom docker image containing the python script to do initial setup of immudb like create users, tables required for the api-servers.
 ```sh
-docker build -t ghcr.io/datakaveri/immudb-config-generator:1.3.0 -f docker/immudb-config-generator/Dockerfile docker/immudb-config-generator 
+docker build -t ghcr.io/datakaveri/immudb-config-generator:1.4.0 -f docker/immudb-config-generator/Dockerfile docker/immudb-config-generator 
 ```
 
 ## Assign node labels
@@ -67,7 +74,7 @@ docker stack deploy -c immudb-stack.yaml -c immudb-stack.resources.yaml -c immud
 
 | Username           | Password                                    | Role/Access                         |  Services                     |
 |:-------------------:|:------------------------------------------:| :---------------------------------: |:-----------------------------:|
-| iudx_rs       | secrets/passwords/rs-password       | Read Write access to ```iudxrs``` Database   | Used by resource server  to audit to ```auditing``` table     |
+| iudx_rs       | secrets/passwords/rs-password       | Read Write access to ```iudxrsorg``` Database   | Used by resource server  to audit to ```auditing``` table     |
 | iudx_cat | secrets/passwords/cat-password |   Read Write access to ```iudxcat``` database                   | Used by catalogue server to audit to ```auditingtable``` table     |
 | iudx_auth     |   secrets/passwords/auth-password   |   Read Write access to ```iudxauth``` database          | Used by auth server  to audit to ```table_auditing``` table        |
 | immudb          | secrets/passwords/admin-password     |     Superuser                                            |  Used to create dbs, set users and RBAC  |
