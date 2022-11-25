@@ -1,0 +1,13 @@
+nodeSelector: 
+  node.kubernetes.io/instance-type: c5a.large
+resources:
+  limits:
+    cpu: "1800m"
+    memory: "3.8Gi"
+  requests:
+    cpu: "1500m"
+    memory: "3Gi"
+persistence:
+  storageClass: "ebs-storage-class"
+  size: 10Gi
+

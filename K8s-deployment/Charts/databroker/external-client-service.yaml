@@ -3,14 +3,14 @@ apiVersion: v1
 metadata:
   annotations:
     # For aws service
-    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    #service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
     ## specify the elastic ip allocation id in quotes 
-    service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "<eip-alloc-id>"
+    #service.beta.kubernetes.io/aws-load-balancer-eip-allocations: "<eip-alloc-id>"
     ## specify the  subnet-id in quotes in K8s cluster is deployed 
-    service.beta.kubernetes.io/aws-load-balancer-subnets: "<subnet-id>"
+    # service.beta.kubernetes.io/aws-load-balancer-subnets: "<subnet-id>"
 
     # For azure service, uncomment below and comment annotations of aws and specify resource group in quotes
-  # service.beta.kubernetes.io/azure-load-balancer-resource-group: "<resource-group>"
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: "resourceGroupName"
 
   namespace: rabbitmq
   name: rabbitmq-external-client
@@ -20,7 +20,7 @@ metadata:
 spec:
   type: LoadBalancer
   # create a public ip beforehand and specify here
-  loadBalancerIP: <public-ip>
+  loadBalancerIP: <loadbalancerIP>
   externalTrafficPolicy: Local
   ports:
    - name: https
@@ -32,6 +32,6 @@ spec:
      port: 24567
      targetPort: 5671
      protocol: TCP
-
-  selector:
-    app: rabbitmq
+  selector: 
+    app.kubernetes.io/name: rabbitmq
+    app.kubernetes.io/instance: rabbitmq
