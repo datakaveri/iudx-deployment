@@ -220,7 +220,7 @@ clustering:
   ## @param clustering.rebalance Rebalance master for queues in cluster when new replica is created
   ## ref: https://www.rabbitmq.com/rabbitmq-queues.8.html#rebalance
   ##
-  rebalance: false
+  rebalance: true
   ## @param clustering.forceBoot Force boot of an unexpectedly shut down cluster (in an unexpected order).
   ## forceBoot executes 'rabbitmqctl force_boot' to force boot cluster shut down unexpectedly in an unknown order
   ## ref: https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot
@@ -404,7 +404,6 @@ configuration: |-
   log.file = false
   # Monitoring
   collect_statistics_interval = 10000
-  #prometheus.tcp.port = 15692
   prometheus.tcp.ip = 0.0.0.0
 
 ## @param extraConfiguration [string] Configuration file content: extra configuration to be appended to RabbitMQ configuration
