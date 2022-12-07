@@ -12,7 +12,7 @@ To generate the passwords:
 ```sh
 ./create-secrets.sh
 ```
-Appropriately define the `s3-access-key` and `s3-secret-key` in the `secrets/pki` directory
+Appropriately define the `s3-access-key` and `s3-secret-key` in `secrets/passwords/s3-credentials` file
 ```
 # secrets directory after generation of secret files
 secrets/
@@ -29,17 +29,16 @@ secrets/
 │   ├── elasticsearch-su-username
 │   ├── kibana-admin-password
 │   ├── kibana-admin-username
-│   ├── kibana-system-password
+│   ├── kibana-password
 │   ├── kibana-system-username
 │   ├── logstash-internal-password
 │   ├── logstash-internal-username
 │   ├── logstash-rabbitmq-password
 │   ├── logstash-rabbitmq-username
 │   ├── logstash-system-password
-│   └── logstash-system-username
+│   ├── logstash-system-username
+│   └── s3-credentials
 └── pki/
-    ├── s3-access-key
-    └── s3-secret-key
 ```
 ## Define Appropriate values of resources
 
@@ -54,22 +53,15 @@ in `elasticsearch/es-resource-values.yaml`, `logstash/ls-resource-values.yaml`, 
 
 Define Appropriate nodeSelector value in the [`elasticsearch/autoscale-cron.yml`](./elasticsearch/autoscale-cron.yml)
 
-## Build custom Elasticsearch docker image
-Custom docker image include S3 snapshot plugin (Recommeded way)[https://github.com/elastic/helm-charts/blob/master/elasticsearch/README.md#how-to-install-plugins]
-```sh
-docker build -t ghcr.io/datakaveri/elasticsearch:7.12.1 --build-arg es_version=7.12.1 -f elasticsearch/docker/Dockerfile .
-```
-
 ## Deploy Elasticsearch
 
 es-install.sh script
 - generates the keystores from ./generate-keystores.sh
-- will generate 3 keystore files in the secrets directory,
+- will generate 2 keystore files in the secrets directory,
 
 ```
 secrets/
 ├── keystores
-│   ├── elasticsearch.keystore
 │   ├── kibana.keystore
 │   └── logstash.keystore
 
