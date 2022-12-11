@@ -16,9 +16,13 @@ docker push ghcr.io/datakaveri/rabbitmq-backup:1.0
 ```console
  cp -r example-secrets/secrets .
 ```
-2. Re-use the certficates generated during [nginx install](../nginx/README.md#create-secret-files) for next step
+2. To generate the passwords:
+```console
+./create-secrets.sh
+```
+3. Re-use the certficates generated during [nginx install](../nginx/README.md#create-secret-files) for next step
 
-3. Copy certificate files to secrets directory as shown below:
+4. Copy certificate files to secrets directory as shown below:
 
 ```
 cp /etc/letsencrypt/live/<domain-name>/chain.pem  secrets/pki/rabbitmq-ca-cert.pem
@@ -35,15 +39,21 @@ Application at backup/backup-app backs up Rabbitmq definitions files to another 
 Secrets directory after generation of secrets
 ```sh
 secrets/
-|-- passwords
-|   |-- rabbitmq-admin-passwd
-|   `-- rabbitmq-definitions.json
-`-- pki
-    |-- backup-ssh-privkey 
-    |-- backup-ssh-pubkey
-    |-- rabbitmq-ca-cert.pem   (letsencrpt chain.pem)
-    |-- rabbitmq-server-cert.pem (letsencrpt fullchain.pem)
-    `-- rabbitmq-server-key.pem  (letsencrypt privkey.pem)
+├── passwords
+│   ├── admin-password
+│   ├── cat-password
+│   ├── di-password
+│   ├── fs-password
+│   ├── gis-password
+│   ├── lip-password
+│   ├── profanity-cat-password
+│   └── rs-password
+└── pki
+    ├── backup-ssh-privkey
+    ├── backup-ssh-pubkey
+    ├── rabbitmq-ca-cert.pem
+    ├── rabbitmq-server-cert.pem
+    └── rabbitmq-server-key.pem
 ```
 
 ## Assign node labels
@@ -66,6 +76,20 @@ Deploy databroker stack:
 docker stack deploy -c databroker-stack.yaml -c databroker-stack.resources.yaml databroker
 ```
 RabbitMQ UI can be accessed from ``https://<rmq-hostname>:28041/``
+## RMQ  vhosts, users, exchanges, queues, policies creation
+1. Bring up the account generator stack (clean deployment or whenever any change in init-config)
+```sh
+docker stack deploy -c rmq-init-setup.yaml  rmq-tmp
+```
+2. Monitor logs to ensure creation
+```sh
+docker service logs rmq-tmp_rmq-init-setup -f
+```
+3. Remove stack, once vhosts, users, exchanges, queues, policies are created
+```sh
+docker stack rm rmq-tmp
+```
+
 # NOTE
 1. If you need to expose the HTTP,AMQP ports or have custom stack configuration( see [here](example-databroker-stack.custom.yaml) for example configuration of 'databroker-stack.custom.yaml' file)  and bring up like as follows.
 
