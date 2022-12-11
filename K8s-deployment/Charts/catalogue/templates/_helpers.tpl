@@ -55,3 +55,10 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
+{{- define "profanityCheck.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.profanityCheckSdk.image ) }}
+{{- end -}}
+
+{{- define "profanityCheck.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.profanityCheckSdk.image ) ) -}}
+{{- end -}}

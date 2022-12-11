@@ -1,5 +1,5 @@
 nodeSelector:
-  node.kubernetes.io/instance-type: t3.medium
+  node.kubernetes.io/instance-type: t3a.medium
 resources: 
   limits: 
     cpu: 600m
@@ -14,10 +14,10 @@ resources:
 persistence:
   type: pvc
   enabled: true
-  storageClassName: "ebs-storage-class"
+  storageClassName: "ebs-csi-storage-class"
   accessModes:
     - ReadWriteOnce
-  size: 10Gi
+  size: 30Gi
   # annotations: {}
   finalizers:
     - kubernetes.io/pvc-protection
@@ -34,7 +34,7 @@ ingress:
     # change it to - cert-manager.io/cluster-issuer: "letsencrypt-prod",
     # when deployed in production/ need proper certficates
     cert-manager.io/cluster-issuer: "letsencrypt-staging"
-  host: 
+  hosts: 
    - grafana-domain-name
 
   tls:
