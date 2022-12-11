@@ -7,8 +7,7 @@ networks:
 
 services:
   rmq-init-setup:
-    image: ghcr.io/datakaveri/alpine-tools:3.16.2
-    command: bash -c '. /usr/share/app/rmq-init-script.sh'
+    image: ghcr.io/datakaveri/rabbitmq-init:1.0
     deploy:
       replicas: 1
       restart_policy:
@@ -18,22 +17,45 @@ services:
     networks:
       - overlay-net
     configs:
-      - source: rmq-init-script
-        target: /usr/share/app/rmq-init-script.sh
-        mode: 0777
       - source: rmq-init-config
         target: /usr/share/app/init-config.json
     secrets:
       - source: admin-password
         target: /usr/share/app/secrets/passwords/admin-password
+      - source: rs-password
+        target: /usr/share/app/secrets/passwords/rs-password
+      - source: lip-password
+        target: /usr/share/app/secrets/passwords/lip-password
+      - source: cat-password
+        target: /usr/share/app/secrets/passwords/cat-password
+      - source: profanity-cat-password
+        target: /usr/share/app/secrets/passwords/profanity-cat-password
+      - source: fs-password
+        target: /usr/share/app/secrets/passwords/fs-password
+      - source: gis-password
+        target: /usr/share/app/secrets/passwords/gis-password
+      - source: di-password
+        target: /usr/share/app/secrets/passwords/di-password
+
 
 
 configs:
-  rmq-init-script:
-    file: ./init-scripts/rmq-init-script.sh
   rmq-init-config:
     file: ./init-scripts/init-config.json
 secrets:
   admin-password:
-    file: ./secrets/passwords/rabbitmq-admin-passwd
-  
+    file: ./secrets/passwords/admin-password
+  rs-password:
+    file: ./secrets/passwords/rs-password
+  lip-password:
+    file: ./secrets/passwords/lip-password
+  cat-password:
+    file: ./secrets/passwords/cat-password
+  profanity-cat-password:
+    file: ./secrets/passwords/profanity-cat-password
+  fs-password:
+    file: ./secrets/passwords/fs-password
+  gis-password:
+    file: ./secrets/passwords/gis-password
+  di-password:
+    file: ./secrets/passwords/di-password 
