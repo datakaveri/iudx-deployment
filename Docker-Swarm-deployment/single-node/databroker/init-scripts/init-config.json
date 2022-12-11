@@ -97,6 +97,16 @@
                 }
         ],
             "role": "None"
+        },
+        {
+            "username": "dx-logstash-user",
+            "password_file" : "/usr/share/app/secrets/passwords/logstash-password",
+            "permissions": [ 
+                { "vhost": "IUDX",
+                  "permission": {"configure":"^$","write":"^$","read":"^database$"}
+                }
+        ],
+            "role": "None"
         }
     ],
     "exchanges": [
