@@ -17,12 +17,16 @@ GF_SERVER_DOMAIN=<grafana-domain-name>
 TELEGRAM_CHAT_ID=<telegram-chat-id>
 TELEGRAM_BOT_TOKEN=<telegram-chat-token>
 ```
-```
-# secrets directory after generation of secrets
+4. Define targets to monitor using blacbox in ``secrets/blackbox-targets.yaml``. A example is shown at ``example-secrets/secrets/blackbox-targets.yaml``
+
+5. Secrets directory after generation of secrets
+
+``` 
 secrets/
 ├── admin-password (to set grafana admin Password)
 ├── admin-user    ( To set grafana admin username)
-├── grafana-env-secret (Refer below for env vars to be set) 
+├── grafana-env-secret (Refer above for env vars to be set) 
+├── blackbox-targets.yaml (targets to be probed by blackbox)
 ```
 ## Define Appropriate values of resources
 
@@ -33,7 +37,7 @@ Define Appropriate values of resources -
 - Storage class name
 - cert-manager issuer and ingress hostname in grafana/resource-values.yaml
 
-in `grafana/resource-values.yaml`, `loki/resource-values.yaml`, `prometheus/resource-values.yaml` and `promtail/resource-values.yaml` as shown in sample resource-values files present in the [`grafana/`](./grafana/),[`loki`](./loki/), [`prometheus/`](./prometheus/), and [`promtail/`](./promtail/) directories respectively.
+in `grafana/resource-values.yaml`, `loki/resource-values.yaml`, `prometheus/resource-values.yaml`, `blackbox/resource-values.yaml` and `promtail/resource-values.yaml` as shown in sample resource-values files present in the [`grafana/`](./grafana/),[`loki`](./loki/), [`prometheus/`](./prometheus/),[`blackbox`](./blackbox/) and [`promtail/`](./promtail/) directories respectively.
 
 ## Deploy
 1. To install the mon-stack
