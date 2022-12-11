@@ -1,0 +1,104 @@
+version: "3.9"
+networks:
+  default:
+    name: overlay-net
+    driver: overlay
+    external: true
+services:
+  prometheus:
+    image: busybox
+    user: root
+    command: sh -c "mkdir -p /prometheus && mkdir -p /tmp/metrics-targets && chown -R 65534 /prometheus"
+    volumes:
+      - type: volume
+        source: prometheus-volume
+        target: /prometheus
+        volume:
+          nocopy: true
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+ 
+  loki:
+    image: busybox
+    user: root
+    command: sh -c " mkdir -p /wal && mkdir -p /data/loki && chown -R 10001  /data/loki && chown -R 10001 /wal"
+    volumes:
+      - type: volume
+        source: loki-volume
+        target: /data/loki
+        volume:
+          nocopy: true
+      - type: volume
+        source: loki-wal-volume
+        target: /wal
+        volume:
+          nocopy: true
+
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+  grafana:
+    image: busybox
+    user: root
+    command: sh -c "mkdir -p /var/lib/grafana/ && mkdir -p /usr/share/grafana/ && mkdir -p /etc/grafana &&  chown -R 472 /var/lib/grafana && chown -R 472 /usr/share/grafana  && chown -R root:root /etc/grafana && chmod -R a+r /etc/grafana"
+    volumes:
+      - type: volume
+        source: grafana-volume
+        target: /var/lib/grafana
+        volume:
+          nocopy: true
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.monitoring_node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+      
+volumes:
+  prometheus-volume:
+    external: true
+    name: mon-stack_prometheus-volume
+  grafana-volume:
+    external: true
+    name: mon-stack_grafana-volume
+  loki-volume:
+    external: true
+    name: mon-stack_loki-volume
+  loki-wal-volume:
+    external: true
+    name: mon-stack_loki-wal-volume

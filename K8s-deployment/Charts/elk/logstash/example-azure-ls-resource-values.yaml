@@ -1,6 +1,8 @@
-nodeSelector: 
+extraEnvVars:
+  - name: LOGSTASH_HEAP_SIZE
+    value: 2048m
+nodeSelector:
   node.kubernetes.io/instance-type: Standard_B2s
-logstashJavaOpts: "-Xmx2g -Xms2g -Dlog4j2.formatMsgNoLookups=true"
 resources:
   requests:
     cpu: "800m"
@@ -8,9 +10,6 @@ resources:
   limits:
     cpu: "1200m"
     memory: "3Gi"
-volumeClaimTemplate:
-  storageClassName: "azuredisk-storage-class"
-  resources:
-    requests:
-      storage: 10Gi
-
+persistence:
+  storageClass: "azuredisk-storage-class"
+  size: 10Gi

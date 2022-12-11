@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: advance-monitoring-stack
+  namespace: adv-monstack
+  labels: 
+    app.kubernetes.io/component: advance-monitoring-stack
+    app: advance-monitoring-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: advance-monitoring-stack
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "8089"
+        prometheus.io/scrape: "true"
+      labels:
+        app: advance-monitoring-stack
+        app.kubernetes.io/component: advance-monitoring-stack
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_D2as_v4
+      containers:
+        - name: advance-monitoring-stack
+          image: ghcr.io/datakaveri/ams:4.0.0-1
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: advance-config
+              mountPath: /usr/share/app/adv-mon-stack-conf.json
+              subPath: adv-mon-stack-conf.json
+
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+      volumes:
+        - name: advance-config
+          secret:
+            secretName: advance-config

@@ -20,7 +20,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.2.0"
+      "version": "7.2.2"
     },
     {
       "type": "panel",
@@ -65,7 +65,7 @@
   "gnetId": 1860,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1639057055477,
+  "iteration": 1665981858013,
   "links": [],
   "panels": [
     {
@@ -123,7 +123,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "sum(up{job=\"servers\"} ==  bool 1)",
@@ -180,7 +180,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "sum(up{job=\"servers\"} < bool  1 )",
@@ -272,7 +272,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "(((count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))) - avg(sum by (mode)(irate(node_cpu_seconds_total{mode=\"idle\",host=~\"$node\"}[5m])))) * 100) / count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu))",
@@ -350,7 +350,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "avg(node_load5{host=~\"$node\"}) /  count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu)) * 100",
@@ -429,7 +429,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "avg(node_load15{host=~\"$node\"}) /  count(count(node_cpu_seconds_total{host=~\"$node\"}) by (cpu)) * 100",
@@ -501,7 +501,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "((node_memory_MemTotal_bytes{host=~\"$node\"} - node_memory_MemFree_bytes{host=~\"$node\"}) / (node_memory_MemTotal_bytes{host=~\"$node\"} )) * 100 ",
@@ -590,7 +590,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "((node_memory_SwapTotal_bytes{host=~\"$node\"} - node_memory_SwapFree_bytes{host=~\"$node\"}) / (node_memory_SwapTotal_bytes{host=~\"$node\"} )) * 100",
@@ -667,7 +667,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "targets": [
         {
           "expr": "100 - ((node_filesystem_avail_bytes{host=~\"$node\",mountpoint=\"/\",fstype!=\"rootfs\"} * 100) / node_filesystem_size_bytes{host=~\"$node\",mountpoint=\"/\",fstype!=\"rootfs\"})",
@@ -1219,7 +1219,7 @@
         "alertThreshold": true
       },
       "percentage": true,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1420,7 +1420,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1610,7 +1610,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1734,7 +1734,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1868,7 +1868,7 @@
         "alertThreshold": true
       },
       "percentage": true,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2071,7 +2071,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2263,7 +2263,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2388,7 +2388,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2493,7 +2493,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2698,7 +2698,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2843,7 +2843,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.2.0",
+      "pluginVersion": "7.2.2",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2987,5 +2987,5 @@
   "timezone": "browser",
   "title": "Basic System Metrics",
   "uid": "rYdddlPWk",
-  "version": 5
+  "version": 1
 }

@@ -56,10 +56,10 @@ in `mon-stack.resources.yaml`  for grafana, prometheus, loki, promtail, blackbox
 ## Deploy
 Deploy monitoring stack:
 ```sh
- docker stack deploy -c mon-stack.yaml -c mon-stack.resources.yaml mon-stack
+./install.sh
 ```
 ## Description
-* Installs Vertx_SD, Prometheus, Loki, Grafana, blackbox swarm services with replicas as one at node with "node.labels.monitoring_node==true" .
+* Installs Vertx\_sd, Prometheus, Loki, Grafana, blackbox swarm services with replicas as one at node with "node.labels.monitoring\_node==true" .
 * Promtail service installed in global mode i.e. all nodes have one promtail task running.
 
 
@@ -70,7 +70,7 @@ Deploy monitoring stack:
    running/restarting the docker with new admin credentials doesn't overwrite
    the password stored in Grafana db.
 2. Pipeline stages might be different for each application , this can be done using [match stage](https://grafana.com/docs/loki/latest/clients/promtail/stages/match/)
-3. mon-stack.yaml contains additional service vertx_sd, which discover vertx instances from zookeeper for prometheus.
+3. mon-stack.yaml contains additional service vertx\_sd, which discover vertx instances from zookeeper for prometheus.
 4.  The grafana is now secured through centralised nginx.
 5. If you need to expose/access grafana HTTP port or have custom stack configuration( see [here](example-mon-stack.custom.yaml) for example configuration of 'mon-stack.custom.yaml' file). You can bring up as follows.
 ```sh
