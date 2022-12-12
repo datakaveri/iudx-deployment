@@ -6,4 +6,4 @@ kubectl create secret generic rabbitmq-erlang-cookie --from-file=./secrets/crede
 kubectl create secret generic rabbitmq-definition-file --from-file=./secrets/credentials/rabbitmq-definitions.json -n rabbitmq
 kubectl create secret generic rabbitmq-admin-password --from-file=./secrets/credentials/rabbitmq-password -n rabbitmq
 kubectl apply -f external-client-service.yaml -n rabbitmq
-helm install rabbitmq bitnami/rabbitmq -f values.yaml -f resource-values.yaml -n rabbitmq --version 10.1.14
+helm install rabbitmq bitnami/rabbitmq -f values.yaml -f resource-values.yaml -n rabbitmq --version 11.1.5
