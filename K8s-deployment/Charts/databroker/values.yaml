@@ -30,7 +30,8 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.10.5-debian-11-r11
+  tag: 3.11.4-debian-11-r0
+  digest: ""  
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
   ##
@@ -73,6 +74,9 @@ extraDeploy: []
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param servicenameOverride String to partially override headless service name
+##
+servicenameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -121,6 +125,10 @@ auth:
   ## ref: https://github.com/bitnami/bitnami-docker-rabbitmq#environment-variables
   ##
   password: ""
+  ## @param auth.securePassword Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions and 'true' when not setting the auth.password parameter.
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
+  ##
+  securePassword: false
   ## @param auth.existingPasswordSecret Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)
   ## e.g:
   ## existingPasswordSecret: name-of-existing-secret
@@ -291,6 +299,23 @@ containerPorts:
   epmd: 4369
   metrics: 15692
 
+## @param initScripts Dictionary of init scripts. Evaluated as a template.
+## Specify dictionary of scripts to be run at first boot
+## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+## For example:
+## initScripts:
+##   my_init_script.sh: |
+##      #!/bin/sh
+##      echo "Do something."
+##
+initScripts: {}
+## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
+## Note: This will override initScripts
+##
+initScriptsCM: ""
+## @param initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
+##
+initScriptsSecret: ""
 ## @param extraContainerPorts Extra ports to be included in container spec, primarily informational
 ## E.g:
 ## extraContainerPorts:
@@ -306,7 +331,9 @@ configuration: |-
   ## Username and password
   ##
   default_user = {{ .Values.auth.username }}
-  default_pass = CHANGEME
+  {{- if and (not .Values.auth.securePassword) .Values.auth.password }}
+  default_pass = {{ .Values.auth.password }}
+  {{- end }}
   {{- if .Values.clustering.enabled }}
   ## Clustering
   ##
@@ -1057,6 +1084,8 @@ ingress:
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
   ingressClassName: ""
+  ## @param ingress.existingSecret It is you own the certificate as secret.
+  existingSecret: ""
 
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -1256,7 +1285,8 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r10
+    tag: 11-debian-11-r56
+    digest: ""    
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
