@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/gis-depl
-  tag: 4.5.0-alpha-545874a
+  tag: 4.5.0-alpha-775823a
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
