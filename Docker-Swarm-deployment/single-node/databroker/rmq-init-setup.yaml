@@ -13,7 +13,7 @@ services:
       restart_policy:
         condition: on-failure
     environment: 
-      - RMQ_HOST=tasks.rabbitmq
+      - RMQ_HOST=tasks.rabbitmq:15672
     networks:
       - overlay-net
     configs:
