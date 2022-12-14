@@ -9,14 +9,14 @@ initial_password="admin"
 users=`echo "$init_config"| jq  -r .users`
 admin_username=`echo $users | jq -r .[0].username`
 admin_password=`cat $(echo $users | jq -r .[0].password_file)`
-curl -s  -u "$initial_username":"$initial_password" -X PUT "http://$RMQ_HOST:15672/api/users/$admin_username" -d "{\"password\":\"$admin_password\",\"tags\":\"administrator\"}"
+curl -s  -u "$initial_username":"$initial_password" -X PUT "http://$RMQ_HOST/api/users/$admin_username" -d "{\"password\":\"$admin_password\",\"tags\":\"administrator\"}"
 echo "admin user updated"
-# require RMQ_HOST env variable with value being internal service address to rmq host
+# require RMQ_HOST env variable with value being internal service address + port to rmq host
 # create vhosts
 vhosts=`echo "$init_config"| jq  -r .vhosts[].vhost_name`
 sleep 5
 for i in $vhosts; do
-    curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST:15672/api/vhosts/$i"
+    curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/vhosts/$i"
     echo "vhost $i created"
 done
 
@@ -28,7 +28,7 @@ for ((i=0; i<$exchanges_len; i++)) ; do
     vhost=`echo $exchanges | jq -r .[$i].exchange_vhost`
     exchange_name=`echo $exchanges | jq -r .[$i].exchange_name`
     exchange_type=`echo $exchanges | jq -r .[$i].exchange_type`
-    curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST:15672/api/exchanges/$vhost/$exchange_name" -d "{\"type\":\"$exchange_type\",\"auto_delete\":false,\"durable\":true,\"internal\":false,\"arguments\":{}}"
+    curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/exchanges/$vhost/$exchange_name" -d "{\"type\":\"$exchange_type\",\"auto_delete\":false,\"durable\":true,\"internal\":false,\"arguments\":{}}"
     echo "exchange $exchange_name created"
 done
 
@@ -40,11 +40,11 @@ for ((i=0; i < $queues_len; i++)); do
     queue_name=`echo $queues | jq -r .[$i].queue_name`
     queue_binding_exchange=`echo $queues | jq -r .[$i].queue_binding_exchange`
     queue_binding_key=`echo $queues | jq -r .[$i].queue_binding_key`
-    curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST:15672/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{}}"
+    curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{}}"
     echo "queue $queue_name created"
     # create exchange-queue bindings if present
     if [[ -n  $queue_binding_exchange ]]; then
-        curl  -s -u "$admin_username":"$admin_password" -X POST "http://$RMQ_HOST:15672/api/bindings/$vhost/e/$queue_binding_exchange/q/$queue_name" -d "{\"routing_key\":\"$queue_binding_key\"}"
+        curl  -s -u "$admin_username":"$admin_password" -X POST "http://$RMQ_HOST/api/bindings/$vhost/e/$queue_binding_exchange/q/$queue_name" -d "{\"routing_key\":\"$queue_binding_key\"}"
         echo "exchange-queue binding $queue_binding_exchange $queue_name created with binding key $queue_binding_key"
     fi
 done
@@ -59,14 +59,14 @@ for ((i=0; i < $users_len; i++)); do
     if [[ $tag == "adminstrator" ]]; then
         echo "Adminsrator user already created"
     else
-        curl  -s -u "$admin_username":"$admin_password" -X PUT http://"$RMQ_HOST":15672/api/users/$username -d "{\"password\":\"$password\",\"tags\":\"$tag\"}"
+        curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/users/$username" -d "{\"password\":\"$password\",\"tags\":\"$tag\"}"
         echo "user $username created"
         # set permissions
         permissions_len=`echo $permissions | jq length`
         for ((j=0;j<$permissions_len;j++)) ; do
             vhost=`echo $permissions | jq -r .[$j].vhost`
             permission=`echo $permissions | jq -r .[$j].permission`
-            curl  -s -u "$admin_username":"$admin_password" -X PUT http://"$RMQ_HOST":15672/api/permissions/$vhost/$username -d "$permission"
+            curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/permissions/$vhost/$username" -d "$permission"
         done
         echo "user $username with permissions $permissions created"
     fi
@@ -83,6 +83,6 @@ for ((i=0; i < $policies_len; i++)); do
     policy_apply=`echo $policies | jq -r .[$i].policy_apply`
     policy_priority=`echo $policies | jq -r .[$i].policy_priority`
 
-    curl -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST:15672/api/policies/$vhost/$policy_name" -d "{\"pattern\":\"$policy_pattern\", \"definition\": $policy_definition , \"priority\": $policy_priority, \"apply-to\": \"$policy_apply\"}"
+    curl -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/policies/$vhost/$policy_name" -d "{\"pattern\":\"$policy_pattern\", \"definition\": $policy_definition , \"priority\": $policy_priority, \"apply-to\": \"$policy_apply\"}"
     echo "policy $policy_name created"
 done

@@ -46,14 +46,15 @@ secrets/
 │   ├── fs-password
 │   ├── gis-password
 │   ├── lip-password
+│   ├── logstash-password
 │   ├── profanity-cat-password
 │   └── rs-password
 └── pki
     ├── backup-ssh-privkey
     ├── backup-ssh-pubkey
-    ├── rabbitmq-ca-cert.pem
-    ├── rabbitmq-server-cert.pem
-    └── rabbitmq-server-key.pem
+    ├── rabbitmq-ca-cert.pem (letsencrpt chain.pem)
+    ├── rabbitmq-server-cert.pem (letsencrpt fullchain.pem)
+    └── rabbitmq-server-key.pem (letsencrpt privkey.pem)
 ```
 
 ## Assign node labels
