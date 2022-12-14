@@ -244,15 +244,15 @@ clustering:
 loadDefinition:
   ## @param loadDefinition.enabled Enable loading a RabbitMQ definitions file to configure RabbitMQ
   ##
-  enabled: true
+  enabled: false
   ## @param loadDefinition.file Name of the definitions file
   ##
-  file: "/app/rabbitmq-definitions.json"
+  file: ""
   ## @param loadDefinition.existingSecret Existing secret with the load definitions file
   ## Can be templated if needed, e.g:
   ## existingSecret: "{{ .Release.Name }}-load-definition"
   ##
-  existingSecret: "rabbitmq-definition-file"
+  existingSecret: ""
 
 ## @param command Override default container command (useful when using custom images)
 ##
