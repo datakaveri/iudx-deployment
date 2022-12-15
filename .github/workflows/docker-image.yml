@@ -7,7 +7,6 @@ on:
 jobs:
 
   build:
-    if: ${{ github.event.registry_package.name == 'test' }}
     runs-on: self-hosted
 
     steps:
