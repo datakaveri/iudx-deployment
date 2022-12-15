@@ -31,6 +31,8 @@ cp /etc/letsencrypt/live/<domain-name>/fullchain.pem  secrets/pki/rabbitmq-serve
 
 cp /etc/letsencrypt/live/<domain-name>/privkey.pem secrets/pki/rabbitmq-server-key.pem
 ```
+5. If required, edit the config - ``secrets/init-config.json`` to suit the needs 
+for users, exchanges, queues, bindings and policies.
 ### Configuring backup
 Application at backup/backup-app backs up Rabbitmq definitions files to another VM using scp command whenever there is change in queues, users, exchanges.
 * Need to generate dedicated ssh keys to use for scp to backup VM. Copy the private and public keys to ``secrets/pki/backup-ssh-privkey`` and ``secrets/pki/backup-ssh-pubkey``.
@@ -39,6 +41,7 @@ Application at backup/backup-app backs up Rabbitmq definitions files to another 
 Secrets directory after generation of secrets
 ```sh
 secrets/
+├── init-config.json
 ├── passwords
 │   ├── admin-password
 │   ├── cat-password
@@ -52,9 +55,9 @@ secrets/
 └── pki
     ├── backup-ssh-privkey
     ├── backup-ssh-pubkey
-    ├── rabbitmq-ca-cert.pem (letsencrpt chain.pem)
-    ├── rabbitmq-server-cert.pem (letsencrpt fullchain.pem)
-    └── rabbitmq-server-key.pem (letsencrpt privkey.pem)
+    ├── rabbitmq-ca-cert.pem
+    ├── rabbitmq-server-cert.pem
+    └── rabbitmq-server-key.pem
 ```
 
 ## Assign node labels
