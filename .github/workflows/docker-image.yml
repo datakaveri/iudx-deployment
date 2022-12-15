@@ -19,9 +19,10 @@ jobs:
         git checkout docker-tag
         export tag=`(head -n1 <(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.PAT }}" https://api.github.com/orgs/datakaveri/packages/container/rs-depl/versions | jq ' .[].metadata.container.tags[0]' ) | grep 4.5.0-alpha)`
         export newtag="ghcr.io/datakaveri/rs-depl:$tag"
-        export oldtag=`yq -r .services.rs.image rs-stack.yaml`
-        sed -i "s/$oldtag/$newtag/g" rs-stack.yaml
-        git add rs-stack.yaml
+        export oldtag=`yq -r .services.rs.image Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml`
+        env
+        sed -i "s/$oldtag/$newtag/g" Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml
+        git add Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml
         git commit -m "Updated rs image tag"
         git push --set-upstream origin docker-tag
 
