@@ -12,4 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the docker image
-      run: ls
+      env:
+        USERNAME: ${{ github.actor }}
+        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: echo ${{ secrets.GITHUB_TOKEN }}
