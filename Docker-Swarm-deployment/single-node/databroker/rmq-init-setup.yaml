@@ -44,7 +44,7 @@ services:
 
 configs:
   rmq-init-config:
-    file: ./init-scripts/init-config.json
+    file: ./secrets/init-config.json
 secrets:
   admin-password:
     file: ./secrets/passwords/admin-password
