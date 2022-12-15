@@ -12,7 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the docker image
-      env:
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: echo ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo ${{ secrets.GITHUB_TOKEN }} > a.txt
+        cat a.txt
+        ls
+        pwd
