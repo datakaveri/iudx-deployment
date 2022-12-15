@@ -15,7 +15,7 @@ jobs:
       run: |
         ls
         pwd
-        git status
+        git fetch
         git checkout workflow
         echo "test message" > a.txt
         git add a.txt
