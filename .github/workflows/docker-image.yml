@@ -13,8 +13,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the docker image
       run: |
-        echo ${{ secrets.GITHUB_TOKEN }} > a.txt
-        cat a.txt
-        ls
-        echo "${{ secrets.DOCKERPW }}" | docker login -u "tharak1242" --password-stdin
-        pwd
+        git checkout workflow
+        echo "test message" > a.txt
+        git add a.txt
+        git commit -m "added test file"
+        git push --set-upstream origin workflow
