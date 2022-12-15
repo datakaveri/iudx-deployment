@@ -22,4 +22,8 @@ jobs:
         echo "test message 1" > a.txt
         git add a.txt
         git commit -m "added test file"
-        git push --set-upstream origin workflow
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: workflow
