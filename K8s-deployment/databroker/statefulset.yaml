@@ -155,7 +155,7 @@ spec:
       name: rabbitmq-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "ebs-storage-class"
+      storageClassName: "ebs-csi-storage-class"
       resources:
         requests:
           storage: 20Gi
