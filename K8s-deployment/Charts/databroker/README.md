@@ -11,7 +11,18 @@
 ```
 ./create_secrets.sh
 ```
-3. Secrets directory after generation of secret files
+3. Generate TLS Certficiates (Letsencrypt) and copy certificate files
+to secret directory as shown below: 
+```
+cp /etc/letsencrypt/live/<domain-name>/chain.pem  secrets/pki/ca.crt
+
+cp /etc/letsencrypt/live/<domain-name>/fullchain.pem  secrets/pki/tls.crt
+
+cp /etc/letsencrypt/live/<domain-name>/privkey.pem secrets/pki/tls.key
+```
+4. If required, edit the config - ``secrets/init-config.json`` to suit the needs 
+for users, exchanges, queues, bindings and policies.
+5. Secrets directory after generation of secret files
 ```sh
 secrets/
 ├── credentials
@@ -25,10 +36,11 @@ secrets/
 │   ├── profanity-cat-password
 │   ├── rabbitmq-erlang-cookie
 │   └── rs-password
+├── init-config.json
 └── pki
-    ├── ca.crt (letsencrpt chain.pem)
-    ├── tls.crt (letsencrpt fullchain.pem) 
-    └── tls.key (letsencrpt privkey.pem)
+    ├── ca.crt
+    ├── tls.crt
+    └── tls.key
 ```
 
 ## Define Appropriate values of resources
