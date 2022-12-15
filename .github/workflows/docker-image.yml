@@ -19,7 +19,7 @@ jobs:
         git config --global user.password ${{ secrets.PAT }}
         git fetch
         git checkout workflow
-        echo "test message 1" > a.txt
-        git add a.txt
-        git commit -m "added test file"
-        git push --set-upstream origin workflow
+        head -n1 <(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.PAT }}" https://api.github.com/orgs/datakaveri/packages/container/rs-depl/versions | jq ' .[].metadata.container.tags[0]' ) | grep 4.5.0-alpha
+        #git add a.txt
+        #git commit -m "added test file"
+        #git push --set-upstream origin workflow
