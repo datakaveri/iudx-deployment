@@ -16,4 +16,5 @@ jobs:
         echo ${{ secrets.GITHUB_TOKEN }} > a.txt
         cat a.txt
         ls
+        echo "${{ secrets.DOCKERPW }}" | docker login -u "tharak1242" --password-stdin
         pwd
