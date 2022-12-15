@@ -29,7 +29,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass: "ebs-storage-class"
+  storageClass: "ebs-csi-storage-class"
   ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:

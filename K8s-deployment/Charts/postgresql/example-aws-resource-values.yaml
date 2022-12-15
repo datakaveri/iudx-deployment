@@ -61,7 +61,7 @@ pgpool:
     node.kubernetes.io/instance-type: t3.medium
 
 persistence:
-  storageClass: "ebs-storage-class"
+  storageClass: "ebs-csi-storage-class"
   accessModes:
     - ReadWriteOnce
   size: 30Gi

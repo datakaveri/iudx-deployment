@@ -20,7 +20,7 @@ apiServer:
       cpu: 700m
       memory: 1.2Gi
   persistence:
-    storageClass: "ebs-storage-class"
+    storageClass: "ebs-csi-storage-class"
 
 ## authenticator resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
