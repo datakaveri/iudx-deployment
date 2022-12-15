@@ -18,6 +18,9 @@ jobs:
         git fetch
         git checkout workflow
         echo "test message" > a.txt
+        echo "1"
         git add a.txt
+        echo "2"
         git commit -m "added test file"
+        echo "3"
         git push --set-upstream origin workflow
