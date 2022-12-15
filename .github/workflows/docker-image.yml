@@ -15,12 +15,11 @@ jobs:
       run: |
         ls
         pwd
+        git config --global user.name 'tharak1242'
+        git config --global user.password ${{ secret.PAT }}
         git fetch
         git checkout workflow
-        echo "test message" > a.txt
-        echo "1"
+        echo "test message 1" > a.txt
         git add a.txt
-        echo "2"
         git commit -m "added test file"
-        echo "3"
         git push --set-upstream origin workflow
