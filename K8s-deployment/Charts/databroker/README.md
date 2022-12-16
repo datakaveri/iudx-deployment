@@ -2,25 +2,45 @@
 
 ## Create secret files
 
-Make a copy of sample secrets directory and add appropriate values to all files.
+1. Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
  cp -r example-secrets/secrets .
 ```
-
+2. Generate secrets 
 ```
-# secrets directory after generation of secret files
+./create_secrets.sh
+```
+3. Generate TLS Certficiates (Letsencrypt) and copy certificate files
+to secret directory as shown below: 
+```
+cp /etc/letsencrypt/live/<domain-name>/chain.pem  secrets/pki/ca.crt
+
+cp /etc/letsencrypt/live/<domain-name>/fullchain.pem  secrets/pki/tls.crt
+
+cp /etc/letsencrypt/live/<domain-name>/privkey.pem secrets/pki/tls.key
+```
+4. If required, edit the config - ``secrets/init-config.json`` to suit the needs 
+for users, exchanges, queues, bindings and policies.
+5. Secrets directory after generation of secret files
 ```sh
 secrets/
 ├── credentials
-|   ├── rabbitmq-erlang-cookie (Random characters - 50)
-│   ├── rabbitmq-password
-│   └── rabbitmq-definitions.json
+│   ├── admin-password
+│   ├── cat-password
+│   ├── di-password
+│   ├── fs-password
+│   ├── gis-password
+│   ├── lip-password
+│   ├── logstash-password
+│   ├── profanity-cat-password
+│   ├── rabbitmq-erlang-cookie
+│   └── rs-password
+├── init-config.json
 └── pki
-    ├── rabbitmq-ca-cert.pem (letsencrpt chain.pem)
-    ├── rabbitmq-server-cert.pem (letsencrpt fullchain.pem)
-    └── rabbitmq-server-key.pem (letsencrpt privkey.pem)
-
+    ├── ca.crt
+    ├── tls.crt
+    └── tls.key
 ```
 
 ## Define Appropriate values of resources
@@ -37,16 +57,6 @@ Define Appropriate values of loadbalancer configuration -
 
 in `external-client-service.yaml` as shown in sample service files for [`aws`](./external-client-aws-service.yaml) and [`azure`](./external-client-azure-service.yaml)
 
-## Required storage class
-```sh
-# For ebs as storage class, deploy ebs-storage class in K8s cluster if not present
-kubectl apply -f ../../K8s-cluster/addons/storage/aws/ebs-storageclass.yaml
-```
-## Required cluster-autoscaler
-```sh
-# Deploy cluster-autoscaler if not present in K8s cluster
-kubectl apply -f ../../K8s-cluster/cloud-specific/aws/cluster-autoscaler-autodiscover.yaml
-```
 ## Deploy
 ## Installing the Chart
 
