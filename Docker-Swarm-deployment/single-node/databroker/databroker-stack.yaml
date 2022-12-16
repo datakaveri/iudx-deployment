@@ -32,10 +32,6 @@ services:
         uid: '999' 
         gid: '999'
         mode: 0600
-      - source: rabbitmq-definitions.json #provision admin user, vhost
-        uid: '999' 
-        gid: '999'
-        mode: 0600 
     configs:
     - source: rabbitmq-config
       target: /etc/rabbitmq/rabbitmq.conf
@@ -113,15 +109,13 @@ secrets:
     file: secrets/pki/rabbitmq-server-cert.pem
   rabbitmq-server-key.pem:
     file: secrets/pki/rabbitmq-server-key.pem
-  rabbitmq-definitions.json:
-    file: secrets/passwords/rabbitmq-definitions.json
 
   backup-ssh-privkey: #remote machine backup's private key
     file: secrets/pki/backup-ssh-privkey
   backup-ssh-pubkey: #remote machine backup's public key
     file: secrets/pki/backup-ssh-pubkey
   rabbitmq-admin-passwd: # rabbimq passwd of admin user
-    file: secrets/passwords/rabbitmq-admin-passwd
+    file: secrets/passwords/admin-password
 
       
     
