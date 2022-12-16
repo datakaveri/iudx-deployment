@@ -8,4 +8,3 @@ kubectl create secret generic rabbitmq-admin-password --from-file=rabbitmq-passw
 kubectl create configmap rmq-init-config --from-file=./secrets/init-config.json -n rabbitmq
 kubectl apply -f external-client-service.yaml -n rabbitmq
 helm install rabbitmq bitnami/rabbitmq -f values.yaml -f resource-values.yaml -n rabbitmq --version 11.1.5
-kubectl apply -f rmq-init-setup.yaml
