@@ -53,7 +53,8 @@ Following script will create :
 ## RS, auth scehma creation
 The rs and auth schema created using flyway using following steps:
 1. Port forward the pgpool (postgres proxy) on one terminal
-```kubectl port-forward -n postgres svc/psql-postgresql-ha-pgpool 5432
+```
+kubectl port-forward -n postgres svc/psql-postgresql-ha-pgpool 5432
 ```
 2. In another terminal, ``git clone  https://github.com/datakaveri/iudx-aaa-server.git && cd iudx-aaa-server`` repo and do following
   2.1 flyway.conf must be updated with the required data. which will be as follows
