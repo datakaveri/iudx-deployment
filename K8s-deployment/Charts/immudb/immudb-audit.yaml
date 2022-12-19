@@ -20,7 +20,7 @@ spec:
     spec: 
       containers: 
         - name: immudb-audit
-          image: "codenotary/immuclient:1.4.0"
+          image: "codenotary/immuclient:1.4.1"
           args: 
             - audit-mode
           env: 
