@@ -16,7 +16,7 @@ spec:
     envFrom:
     {{- if .Values.immudb.install.hookEnvFile }}
     - configMapRef:
-      name: {{ include "common.tplvalues.render" (dict "value" .Values.immudb.install.hookEnvFile "context" $) }}
+        name: {{ include "common.tplvalues.render" (dict "value" .Values.immudb.install.hookEnvFile "context" $) }}
     {{- end }}
 
   volumes:
