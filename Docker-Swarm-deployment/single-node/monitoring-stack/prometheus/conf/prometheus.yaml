@@ -80,7 +80,6 @@ scrape_configs:
     static_configs:
       - targets: ["tasks.immudb:9497"]
 
-
   - job_name: 'immudb-audit'
     static_configs:
       - targets: ["tasks.immudb-audit:9497"]
