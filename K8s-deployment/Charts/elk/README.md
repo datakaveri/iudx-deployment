@@ -11,9 +11,7 @@ To generate the passwords:
 
 ```sh
 ./create-secrets.sh
-```
-Appropriately define the `s3-access-key` and `s3-secret-key` in `secrets/passwords/s3-credentials` file
-```
+
 # secrets directory after generation of secret files
 secrets/
 ├── passwords/
@@ -37,9 +35,21 @@ secrets/
 │   ├── logstash-rabbitmq-username
 │   ├── logstash-system-password
 │   ├── logstash-system-username
-│   └── s3-credentials
+│   └── snap-credentials
 └── pki/
 ```
+
+### Snapshot and Restore 
+For AWS-S3, define the `s3-access-key` and `s3-secret-key` in file secrets/passwords/snap-credentials and remove remaining params as shown below
+```
+s3.client.default.access_key=<s3-access-key>,s3.client.default.secret_key=<s3-secret-key>
+```
+
+For Azure-Blob-Storage, define the `storage-access-key` and `storage-account-name` in `secrets/passwords/snap-credentials` and remove remaining params as shown below
+```
+azure.client.default.account=<storage_account_name>,azure.client.default.key=<access-key> 
+```
+
 ## Define Appropriate values of resources
 
 Define Appropriate values of resources -
