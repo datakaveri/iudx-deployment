@@ -1861,6 +1861,7 @@ cache:
 
 ## @section async parameters
 async:
+  enabled: true
 ## @param async.replicaCount Number of psqlVerticle replicas to deploy
   replicaCount: 1
   
