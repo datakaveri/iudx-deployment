@@ -26,7 +26,7 @@ jobs:
         echo "4"
         git add Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml
         echo "5"
-        git commit -m "Updated rs image tag"
+        git commit --allow-empty -m "Updated rs image tag"
         echo "6"
         git push --set-upstream origin docker-tag
         echo "7"
