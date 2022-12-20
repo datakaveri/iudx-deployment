@@ -1,4 +1,4 @@
-{{- if and .Values.validator.enabled .Values.validator.autoscaling.enabled }}
+{{- if .Values.validator.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

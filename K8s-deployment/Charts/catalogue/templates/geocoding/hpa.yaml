@@ -1,4 +1,4 @@
-{{- if and .Values.geocoding.enabled .Values.geocoding.autoscaling.enabled }}
+{{- if .Values.geocoding.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

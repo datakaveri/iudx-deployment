@@ -113,8 +113,6 @@ podAnnotations:
 ## @section ApiServer Parameters
 
 apiServer:
-  ## @param apiServer.enabled Enable apiServer Verticle for deployment
-  enabled: true
 
   ## @param apiServer.replicaCount Number of ApiServer replicas to deploy
 
@@ -336,8 +334,7 @@ apiServer:
 
 ## @section Auditing Parameters
 auditing:
-  ## @param auditing.enabled Enable auditing Verticle for deployment
-  enabled: true
+
   ## @param auditing.replicaCount Number of Auditing replicas to deploy
 
   replicaCount: 1
@@ -556,8 +553,7 @@ auditing:
 
 ## @section Authenticator Parameters
 authenticator:
-  ## @param authenticator.enabled Enable authenticator Verticle for deployment
-  enabled: true
+
   ## @param authenticator.replicaCount Number of Authenticator replicas to deploy
 
   replicaCount: 1
@@ -778,8 +774,7 @@ authenticator:
 
 ## @section Database Parameters
 database:
-  ## @param database.enabled Enable database Verticle for deployment
-  enabled: true
+
   ## @param database.replicaCount Number of Database replicas to deploy
 
   replicaCount: 1
@@ -1003,8 +998,7 @@ database:
 ## @section Validator Parameters
 
 validator:
-  ## @param validator.enabled Enable validator Verticle for deployment
-  enabled: true
+
   ## @param validator.replicaCount Number of Validator replicas to deploy
 
   replicaCount: 1  
@@ -1225,8 +1219,7 @@ validator:
 ## @section geocoding Parameters
 
 geocoding:
-  ## @param geocoding.enabled Enable geocoding Verticle for deployment
-  enabled: true
+
   ## @param geocoding.replicaCount Number of geocoding replicas to deploy
 
   replicaCount: 1  
@@ -1447,8 +1440,7 @@ geocoding:
 ## @section nlpSearch Parameters
 
 nlpSearch:
-  ## @param nlpSearch.enabled Enable nlpSearch Verticle for deployment
-  enabled: true
+
   ## @param nlpSearch.replicaCount Number of nlpSearch replicas to deploy
 
   replicaCount: 1  
@@ -1667,8 +1659,7 @@ nlpSearch:
     targetMemory:
 ## @section Rating Parameters
 rating:
-  ## @param rating.enabled Enable rating Verticle for deployment
-  enabled: true
+
   ## @param rating.replicaCount Number of Rating replicas to deploy
 
   replicaCount: 1  
@@ -1888,8 +1879,7 @@ rating:
 
 ## @section Databroker Parameters
 databroker:
-  ## @param databroker.enabled Enable databroker Verticle for deployment
-  enabled: true
+
   ## @param databroker.replicaCount Number of Databroker replicas to deploy
 
   replicaCount: 1  
@@ -2109,8 +2099,7 @@ databroker:
 
 ## @section ProfanityCheckSdk Parameters
 profanityCheckSdk:
-  ## @param profanityCheckSdk.enabled Enable databroker Verticle for deployment
-  enabled: true
+
   image:
     registry: ghcr.io
     repository: datakaveri/profanity-check-sdk

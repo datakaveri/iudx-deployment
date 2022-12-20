@@ -1,4 +1,4 @@
-{{- if and .Values.nlpSearch.enabled .Values.nlpSearch.autoscaling.enabled }}
+{{- if .Values.nlpSearch.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

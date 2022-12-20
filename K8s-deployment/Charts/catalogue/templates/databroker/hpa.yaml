@@ -1,4 +1,4 @@
-{{- if and .Values.databroker.enabled .Values.databroker.autoscaling.enabled }}
+{{- if .Values.databroker.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

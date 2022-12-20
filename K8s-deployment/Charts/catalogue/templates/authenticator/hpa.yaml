@@ -1,4 +1,4 @@
-{{- if and .Values.authenticator.enabled .Values.authenticator.autoscaling.enabled }}
+{{- if .Values.authenticator.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:

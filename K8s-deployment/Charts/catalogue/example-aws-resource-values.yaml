@@ -9,7 +9,6 @@ ingress:
 ## @param apiServer.resources.requests The requested resources for the ApiServer containers
 ##
 apiServer:
-  enabled: true
   resources:
     limits:
       cpu: 800m
@@ -27,7 +26,6 @@ apiServer:
 ## @param auditing.resources.requests The requested resources for the Auditing containers
 ##
 auditing:
-  enabled: true
   resources:
     limits:
       cpu: 500m
@@ -45,7 +43,6 @@ auditing:
 ## @param authenticator.resources.requests The requested resources for the Authenticator containers
 ##
 authenticator:
-  enabled: true
   resources:
     limits:
       cpu: 500m
@@ -63,7 +60,6 @@ authenticator:
 ## @param database.resources.requests The requested resources for the Database containers
 ##
 database:
-  enabled: true
   resources:
     limits:
       cpu: 800m
@@ -81,7 +77,6 @@ database:
 ## @param validator.resources.requests The requested resources for the Validator containers
 ##
 validator:
-  enabled: true
   resources:
     limits:
       cpu: 800m
@@ -99,7 +94,6 @@ validator:
 ## @param geocoding.resources.requests The requested resources for the geocoding containers
 ##
 geocoding:
-  enabled: true
   resources:
     limits:
       cpu: 800m
@@ -117,7 +111,6 @@ geocoding:
 ## @param nlpSearch.resources.requests The requested resources for the nlpSearch containers
 ##
 nlpSearch:
-  enabled: true
   resources:
     limits:
       cpu: 800m
@@ -136,7 +129,6 @@ nlpSearch:
 
 
 rating:
-  enabled: true
   resources:
     limits:
       cpu: 100m
@@ -156,7 +148,6 @@ rating:
 
 
 databroker:
-  enabled: true
   resources:
     limits:
       cpu: 100m
@@ -177,7 +168,6 @@ databroker:
 
 
 profanityCheckSdk:
-  enabled: true
   resources:
     limits:
       cpu: 100m
