@@ -1,3 +1,4 @@
+{{- if .Values.nlpSearch.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -170,3 +171,4 @@ spec:
         {{- if .Values.nlpSearch.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.nlpSearch.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}
