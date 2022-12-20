@@ -2,7 +2,7 @@
 version: '2.4'
 services:
   rancher:
-    image: rancher/rancher:v2.5.9
+    image: rancher/rancher:v2.6.9
     restart: always
     privileged: true
     volumes:

@@ -9,7 +9,7 @@ immudb:
       cpu: 1500m
       memory: 7Gi
   persistence:
-    storageClass: "ebs-storage-class"
+    storageClass: "ebs-csi-storage-class"
     size: 80Gi
   install:
     createUsers: true

@@ -1,3 +1,4 @@
 logs.txt
 !secrets/.gitkeep
 secrets/
+resource-values.yaml

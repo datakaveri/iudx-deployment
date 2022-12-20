@@ -1,7 +1,7 @@
 version: '3.9'
 services:
     immudb:
-      image: codenotary/immudb:1.4.0
+      image: codenotary/immudb:1.4.1
       read_only: true
       volumes:
         - immudb-data:/var/lib/immudb
@@ -30,7 +30,7 @@ services:
 
 
     immudb-audit:
-      image: codenotary/immuclient:1.4.0
+      image: codenotary/immuclient:1.4.1
       command: audit-mode
       read_only: true
       volumes:
