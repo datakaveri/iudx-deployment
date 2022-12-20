@@ -1,4 +1,4 @@
-{{- if .Values.postgres.autoscaling.enabled }}
+{{- if and .Values.postgres.enabled .Values.postgres.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
