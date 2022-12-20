@@ -17,11 +17,15 @@ jobs:
         git config --global user.password ${{ secrets.PAT }}
         git clone git@github.com:tharak1242/iudx-deployment.git 
         cd iudx-deployment
-        git checkout -b test-branch
+        git checkout test-branch
         export newtag=`(head -n1 <(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.PAT }}" https://api.github.com/orgs/datakaveri/packages/container/rs-depl/versions | jq ' .[].metadata.container.tags[0]' ) | grep 4.5.0-alpha | sed -e 's/^"//' -e 's/"$//')`
         export oldtag=`yq -r .services.rs.image Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml | cut -d : -f 2`
         sed -i s/$oldtag/$newtag/g Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml
-        git add Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml
+        export oldappersion = `yq -r .appVersion K8s-deployment/Charts/resource-server/Chart.yaml`
+        export newappversion = `yq -r .appVersion K8s-deployment/Charts/resource-server/Chart.yaml | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}' `
+        sed -i s/$oldappversion/$newappversion/g K8s-deployment/Charts/resource-server/Chart.yaml
+        sed -i s/$oldtag/$newtag/g K8s-deployment/Charts/resource-server/values.yaml
+        git add Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml K8s-deployment/Charts/resource-server/values.yaml K8s-deployment/Charts/resource-server/Chart.yaml
         git commit --allow-empty -m "Updated rs image tag"
         git push --set-upstream origin test-branch
 
