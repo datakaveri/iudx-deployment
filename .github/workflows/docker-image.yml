@@ -19,10 +19,15 @@ jobs:
         git clone git@github.com:tharak1242/iudx-deployment.git -b docker-tag
         echo "2"
         cd iudx-deployment
+        echo "3"
         export newtag=`(head -n1 <(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.PAT }}" https://api.github.com/orgs/datakaveri/packages/container/rs-depl/versions | jq ' .[].metadata.container.tags[0]' ) | grep 4.5.0-alpha | sed -e 's/^"//' -e 's/"$//')`
         export oldtag=`yq -r .services.rs.image Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml | cut -d : -f 2`
         sed -i s/$oldtag/$newtag/g Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml
+        echo "4"
         git add Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml
+        echo "5"
         git commit -m "Updated rs image tag"
+        echo "6"
         git push --set-upstream origin docker-tag
+        echo "7"
 
