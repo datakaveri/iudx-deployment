@@ -110,7 +110,7 @@ podAnnotations:
 
 ## @section apiServer Parameters
 apiServer:
-
+  enabled: true
 ## @param apiServer.replicaCount Number of apiServer replicas to deploy
   ##
   replicaCount: 1
@@ -332,6 +332,7 @@ apiServer:
 
 ## @section archivesDatabase parameters
 archivesDatabase:
+  enabled: true
 ## @param archivesDatabase.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1
   
@@ -551,6 +552,7 @@ archivesDatabase:
 
 ## @section authenticator parameters
 authenticator:
+  enabled: true
 ## @param authenticator.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1
   
@@ -771,6 +773,7 @@ authenticator:
 ## @section databroker parameters
 
 databroker:
+  enabled: true
 ## @param databroker.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1
   
@@ -989,6 +992,7 @@ databroker:
 
 ## @section latestDatabase parameters
 latestDatabase:
+  enabled: true
 ## @param latestDatabase.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1
   
@@ -1209,6 +1213,7 @@ latestDatabase:
 ## @section metering parameters
 
 metering:
+  enabled: true
 ## @param metering.replicaCount Number of apiServer replicas to deploy
   replicaCount: 1  
   ## Configure extra options for metering containers' liveness and readiness probes
@@ -1426,6 +1431,7 @@ metering:
 
 ## @section postgres parameters
 postgres:
+  enabled: true
 ## @param postgres.replicaCount Number of psqlVerticle replicas to deploy
   replicaCount: 1
   
@@ -1644,6 +1650,7 @@ postgres:
 
 ## @section cache parameters
 cache:
+  enabled: true
 ## @param cache.replicaCount Number of psqlVerticle replicas to deploy
   replicaCount: 1
   
@@ -1861,6 +1868,7 @@ cache:
 
 ## @section async parameters
 async:
+  enabled: true
 ## @param async.replicaCount Number of psqlVerticle replicas to deploy
   replicaCount: 1
   
