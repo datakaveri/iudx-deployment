@@ -1,3 +1,4 @@
+{{- if .Values.latestDatabase.enabled -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -156,3 +157,4 @@ spec:
         {{- if .Values.latestDatabase.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.latestDatabase.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}
