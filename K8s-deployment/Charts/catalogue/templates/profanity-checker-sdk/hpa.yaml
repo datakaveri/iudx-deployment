@@ -1,4 +1,4 @@
-{{- if .Values.profanityCheckSdk.autoscaling.enabled }}
+{{- if and .Values.profanityCheckSdk.enabled .Values.profanityCheckSdk.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
