@@ -26,6 +26,6 @@ jobs:
         sed -i s/$oldappversion/$newappversion/g K8s-deployment/Charts/resource-server/Chart.yaml
         sed -i s/$oldtag/$newtag/g K8s-deployment/Charts/resource-server/values.yaml
         git add Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml K8s-deployment/Charts/resource-server/values.yaml K8s-deployment/Charts/resource-server/Chart.yaml
-        git commit --allow-empty -m "Updated rs image tag"
+        git commit --allow-empty -m "Updated RS image tag"
         git push --set-upstream origin test-branch1
 
