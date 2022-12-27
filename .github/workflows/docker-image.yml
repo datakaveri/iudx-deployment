@@ -18,7 +18,7 @@ jobs:
         git clone git@github.com:datakaveri/iudx-deployment.git
         cd iudx-deployment
         git remote add jenkins-fork https://github.com/tharak1242/iudx-deployment.git
-        git checkout test-branch1
+        git checkout -b test-branch1
         export newtag=`(head -n1 <(curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.PAT }}" https://api.github.com/orgs/datakaveri/packages/container/rs-depl/versions | jq ' .[].metadata.container.tags[0]' ) | grep 4.5.0-alpha | sed -e 's/^"//' -e 's/"$//')`
         export oldtag=`yq -r .services.rs.image Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml | cut -d : -f 2`
         sed -i s/$oldtag/$newtag/g Docker-Swarm-deployment/single-node/resource-server/rs-stack.yaml
