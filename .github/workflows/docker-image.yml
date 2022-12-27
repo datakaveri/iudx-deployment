@@ -31,5 +31,5 @@ jobs:
         git commit --allow-empty -m "Updated RS image tag"
         git push --set-upstream jenkins-fork testbranch2
         gh repo set-default datakaveri/iudx-deployment
-        gh pr create --fill
+        gh pr create --fill || echo "PR exists"
 
