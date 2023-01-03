@@ -27,7 +27,8 @@ data:
         password => "${rabbitmq_password}"
         queue => "database"
         durable => true
-        metadata_enabled => true
+        metadata_enabled => "basic"
+        passive => true
       }
     }
     filter {
