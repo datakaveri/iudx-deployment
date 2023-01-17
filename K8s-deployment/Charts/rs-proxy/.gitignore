@@ -1,0 +1,3 @@
+resource-values.yaml
+!secrets/.gitkeep
+secrets/
