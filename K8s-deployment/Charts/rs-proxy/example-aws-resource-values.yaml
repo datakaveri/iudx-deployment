@@ -12,7 +12,7 @@ ingress:
 apiServer:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
@@ -29,7 +29,7 @@ apiServer:
 authenticator:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 600m
@@ -46,7 +46,7 @@ authenticator:
 databroker:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 500m
@@ -63,7 +63,7 @@ databroker:
 metering:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 700m
@@ -80,7 +80,7 @@ metering:
 database:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 600m
@@ -97,7 +97,7 @@ database:
 cache:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 400m
