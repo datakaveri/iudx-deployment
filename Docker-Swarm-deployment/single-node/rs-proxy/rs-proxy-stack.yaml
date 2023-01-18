@@ -7,7 +7,7 @@ networks:
 
 services:
   rs-proxy:
-          image: ghcr.io/datakaveri/rs-proxy-depl:4.5.0-27ef2c8
+    image: ghcr.io/datakaveri/rs-proxy-depl:4.5.0-27ef2c8
     networks:
       - overlay-net
     secrets:
