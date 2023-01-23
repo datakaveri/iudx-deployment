@@ -38,6 +38,12 @@ services:
         target: /usr/share/app/secrets/passwords/di-password
       - source: logstash-password
         target: /usr/share/app/secrets/passwords/logstash-password
+      - source: rs-proxy-adapter-password
+        target: /usr/share/app/secrets/passwords/rs-proxy-adapter-password
+      - source: rs-proxy-password
+        target: /usr/share/app/secrets/passwords/rs-proxy-password
+
+
 
 
 
@@ -64,4 +70,8 @@ secrets:
     file: ./secrets/passwords/di-password 
   logstash-password:
     file: ./secrets/passwords/logstash-password
+  rs-proxy-adapter-password:
+    file: ./secrets/passwords/rs-proxy-adapter-password
+  rs-proxy-password:
+    file: ./secrets/passwords/rs-proxy-password
 
