@@ -7,7 +7,7 @@ networks:
 
 services:
   rs:
-    image: ghcr.io/datakaveri/rs-depl:4.5.0-alpha-43a5bb5
+    image: ghcr.io/datakaveri/rs-depl:4.5.0-alpha-9a92b37
     networks:
       - overlay-net
     secrets:
