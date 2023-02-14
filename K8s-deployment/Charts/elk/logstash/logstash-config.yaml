@@ -19,7 +19,7 @@ data:
   resource-group.cfg: |
     input {
       rabbitmq {
-        host => "rabbitmq-logstash-client.rabbitmq.svc.cluster.local"
+        host => "rabbitmq.rabbitmq.svc.cluster.local"
         port => 5671
         ssl => true
         vhost => "IUDX"
@@ -27,7 +27,8 @@ data:
         password => "${rabbitmq_password}"
         queue => "database"
         durable => true
-        metadata_enabled => true
+        metadata_enabled => "basic"
+        passive => true
       }
     }
     filter {

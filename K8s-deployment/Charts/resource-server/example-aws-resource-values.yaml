@@ -10,6 +10,7 @@ ingress:
 ## @param apiServer.resources.requests The requested resources for the apiServer containers
 ##
 apiServer:
+  enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
   resources:
@@ -26,6 +27,7 @@ apiServer:
 ## @param archivesDatabase.resources.requests The requested resources for the archivesDatabase containers
 ##
 archivesDatabase:
+  enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
   resources:
@@ -42,6 +44,7 @@ archivesDatabase:
 ## @param authenticator.resources.requests The requested resources for the authenticator containers
 ##
 authenticator:
+  enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
   resources:
@@ -58,6 +61,7 @@ authenticator:
 ## @param databroker.resources.requests The requested resources for the databroker containers
 ##
 databroker:
+  enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
   resources:
@@ -74,6 +78,7 @@ databroker:
 ## @param latestDatabase.resources.requests The requested resources for the latestDatabase containers
 ##
 latestDatabase:
+  enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
   resources:
@@ -90,6 +95,7 @@ latestDatabase:
 ## @param metering.resources.requests The requested resources for the metering containers
 ##
 metering:
+  enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
   resources:
@@ -106,6 +112,7 @@ metering:
 ## @param postgres.resources.requests The requested resources for the postgres containers
 ##
 postgres:
+  enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
   resources:
@@ -122,6 +129,7 @@ postgres:
 ## @param cache.resources.requests The requested resources for the cache containers
 ##
 cache:
+  enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
   resources:
@@ -138,6 +146,7 @@ cache:
 ## @param async.resources.requests The requested resources for the async containers
 ##
 async:
+  enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
   resources:

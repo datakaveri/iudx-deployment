@@ -1,0 +1,160 @@
+{{- if .Values.metering.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: rs-proxy-metering
+  labels: 
+    app.kubernetes.io/component: metering
+    app: rs-proxy-metering
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.metering.replicaCount }}
+  {{- if .Values.metering.updateStrategy }}
+  strategy: {{- toYaml .Values.metering.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: rs-proxy-metering
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: rs-proxy-metering
+        app.kubernetes.io/component: metering
+        {{- if .Values.metering.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metering.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.metering.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.metering.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.metering.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.metering.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metering.priorityClassName }}
+      priorityClassName: {{ .Values.metering.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.metering.schedulerName }}
+      schedulerName: {{ .Values.metering.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.metering.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.metering.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.metering.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.metering.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: rs-proxy-metering
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.metering.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.metering.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.metering.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.metering.args }}
+          args: [{{- range $index, $str := .Values.metering.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.metering.resources }}
+          resources: {{- toYaml .Values.metering.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.metering.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.metering.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.metering.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metering.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metering.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.metering.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.metering.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.metering.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.metering.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.metering.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metering.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.metering.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metering.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.metering.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metering.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.metering.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metering.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.metering.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metering.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.metering.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.metering.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.metering.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.metering.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.metering.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.metering.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.metering.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metering.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.metering.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metering.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.metering.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.metering.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.metering.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metering.podAffinityPreset "component" "metering" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.metering.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "metering" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.metering.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metering.nodeAffinityPreset.type "key" .Values.metering.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.metering.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metering.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
