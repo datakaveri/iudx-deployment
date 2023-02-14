@@ -2,17 +2,24 @@ kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
   name: azurefile-storage-class
-provisioner: kubernetes.io/azure-file
+provisioner: file.csi.azure.com
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
 mountOptions:
   - dir_mode=0700
   - file_mode=0700
   - uid=1001
   - gid=1001
+  - mfsymlinks
+  - cache=strict
+  - nosharesock
+  - actimeo=30
 parameters:
   skuName: Standard_LRS
   location: centralindia
-  storageAccount: <storage-account-name>
-
+  storageAccount: k8sazurefile
+  
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

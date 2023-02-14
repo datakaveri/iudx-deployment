@@ -11,9 +11,9 @@ kernel.keys.root_maxbytes = 25000000
 EOF
 sysctl -p /etc/sysctl.d/90-kubelet.conf
 
-curl -sL https://releases.rancher.com/install-docker/19.03.sh | sh
+curl -sL https://releases.rancher.com/install-docker/20.10.sh | sh
 sudo usermod -aG docker ubuntu
 
 K8S_ROLES="--etcd --controlplane"
 
-sudo docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.5.5 --server https://<rancher_server_url> --token <token_value> --ca-checksum <ca_checksum_value> --address azpublic --internal-address azprivate ${K8S_ROLES}
+sudo docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.6.9 --server https://<rancher_server_url> --token <token_value>  --address azpublic --internal-address azprivate ${K8S_ROLES}

@@ -1,3 +1,4 @@
+{{- if .Values.authenticator.enabled -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -156,3 +157,4 @@ spec:
         {{- if .Values.authenticator.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.authenticator.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}

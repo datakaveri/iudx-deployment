@@ -527,14 +527,14 @@ postgresql:
      host     all             all             ::/0                    md5
      host     all             all        127.0.0.1/32                 md5
      host     all             all        ::1/128                      md5      
-    host     all            repmgr    0.0.0.0/0     scram-sha-256
-    host     repmgr         repmgr    0.0.0.0/0     scram-sha-256
-    host     repmgr         repmgr    ::/0     scram-sha-256
-    host     replication      repmgr    0.0.0.0/0     scram-sha-256
-    host     replication      repmgr    ::/0     scram-sha-256
-    host     all              all       0.0.0.0/0    scram-sha-256
-    host     all              all       ::/0         scram-sha-256
-    local    all              all                    scram-sha-256
+     host     all            repmgr    0.0.0.0/0     scram-sha-256
+     host     repmgr         repmgr    0.0.0.0/0     scram-sha-256
+     host     repmgr         repmgr    ::/0     scram-sha-256
+     host     replication      repmgr    0.0.0.0/0     scram-sha-256
+     host     replication      repmgr    ::/0     scram-sha-256
+     host     all              all       0.0.0.0/0    scram-sha-256
+     host     all              all       ::/0         scram-sha-256
+     local    all              all                    scram-sha-256
 
   ## @param postgresql.configurationCM Name of existing ConfigMap with configuration files
   ## NOTE: This will override postgresql.repmgrConfiguration, postgresql.configuration and postgresql.pgHbaConfiguration
