@@ -154,7 +154,7 @@ extraEnvVars:
     valueFrom:
       secretKeyRef:
         name: elk-passwords
-        key: s3-credentials
+        key: snapshot-credentials
 ## @param extraEnvVarsCM ConfigMap containing extra env vars to be added to all pods (evaluated as a template)
 ##
 extraEnvVarsCM: ""
