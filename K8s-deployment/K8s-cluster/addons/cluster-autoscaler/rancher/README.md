@@ -40,21 +40,30 @@ spec:
         cluster.provisioning.cattle.io/autoscaler-min-size: "1"
         cluster.provisioning.cattle.io/autoscaler-max-size: "3"
 ```
-**Add annotation to all worker machinePools that need autoscaling*
+** Add annotation to all worker machinePools that need autoscaling*
 
-**This can be added by editing the cluster configuration as yaml on Rancher*
+** This can be added by editing the cluster configuration as yaml on Rancher*
 
 
-## Running the Autoscaler
-    
+## Deploy the Cluster Autoscaler
+   
+1. Add helm repo for cluster autoscaler 
+```sh
+helm repo add autoscaler https://kubernetes.github.io/autoscaler
+```
+2. Define Appropriate values of resources -
+  - CPU of requests and limits
+  - RAM of resuests and limits
+as shown in sample resource value file present at [example-resource-values.yaml](./example-resource-values.yaml)
+3. Create ca config secret
 ```sh
 kubectl create secret generic ca-config --from-file=./config.yaml -n kube-system
-
-helm install ca autoscaler/cluster-autoscaler -n kube-system -f values.yaml
 ```
+4. Install cluster autoscaler through helm
+```
+helm install ca autoscaler/cluster-autoscaler -n kube-system -f values.yaml
+``` 
     
-    
-    
-**For more information refer [here](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/rancher/README.md)*
+** For more information refer [here](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/rancher/README.md)*
 
 

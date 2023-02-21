@@ -1,0 +1,9 @@
+# resources -- Pod resource requests and limits.
+resources: 
+  limits:
+    cpu: 300m
+    memory: 750Mi
+  requests:
+    cpu: 200m
+    memory: 512Mi
+
