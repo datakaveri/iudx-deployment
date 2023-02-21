@@ -144,10 +144,7 @@ containerSecurityContext: {}
 
 deployment:
   # deployment.annotations -- Annotations to add to the Deployment object.
-  annotations:
-    prometheus.io/port: "8085"
-    prometheus.io/scrape: "true"
-
+  annotations: {}
 # dnsPolicy -- Defaults to `ClusterFirst`. Valid values are:
 # `ClusterFirstWithHostNet`, `ClusterFirst`, `Default` or `None`.
 # If autoscaler does not depend on cluster DNS, recommended to set this to `Default`.
@@ -255,10 +252,14 @@ kubeTargetVersionOverride: ""
 nameOverride: ""
 
 # nodeSelector -- Node labels for pod assignment. Ref: https://kubernetes.io/docs/user-guide/node-selection/.
-nodeSelector: {}
-
+nodeSelector: 
+  node-role.kubernetes.io/control-plane: "true"
 # podAnnotations -- Annotations to add to each pod.
-podAnnotations: {}
+podAnnotations:
+  prometheus.io/port: "8085"
+  prometheus.io/scrape: "true"
+
+
 
 # podDisruptionBudget -- Pod disruption budget.
 podDisruptionBudget:
@@ -368,8 +369,13 @@ prometheusRule:
   rules: []
 
 # tolerations -- List of node taints to tolerate (requires Kubernetes >= 1.6).
-tolerations: []
-
+tolerations: 
+  - effect: NoSchedule
+    operator: "Equal"
+    key: node-role.kubernetes.io/control-plane
+  - effect: NoExecute
+    key: node-role.kubernetes.io/etcd
+    operator: "Equal"
 # topologySpreadConstraints -- You can use topology spread constraints to control how Pods are spread across your cluster among failure-domains such as regions, zones, nodes, and other user-defined topology domains. (requires Kubernetes >= 1.19).
 topologySpreadConstraints: []
   # - maxSkew: 1
