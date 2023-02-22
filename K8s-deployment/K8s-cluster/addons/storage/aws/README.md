@@ -16,7 +16,7 @@ kubectl apply -f ebs-storageclass.yaml
 2.  Install the drivers by following the steps [here](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/install.md#installation)
 3. Deploy the storage class
 ```console
-kubectl apply -f ebs/ebs-csi-storageclass.yaml
+kubectl apply -f ebs-csi-storageclass.yaml
 ```
 
 ## Deploy efs storage-class
