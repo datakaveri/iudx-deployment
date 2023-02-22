@@ -10,14 +10,24 @@ The `cluster-autoscaler` for Rancher needs a configuration file to work by
 using `--cloud-config` parameter. Example configuration file - 
 [config.yaml](./config.yaml).
 
-### Permissions
+## Create a CA user on Rancher
 
-The Rancher server account provided in the `cloud-config` requires the
-following permissions on the Rancher server:
+The Rancher server account provided in the `cloud-config` requires the Administrator Global Permissions on the Rancher server.
 
-* Get/Update of the `clusters.provisioning.cattle.io` resource to autoscale
-* List of `machines.cluster.x-k8s.io` in the namespace of the cluster resource
-    
+- On Rancher portal, go to Users and Authentication
+- Click Create
+- Set the User Credentials
+- Assign the Administrator role in Global Permissions
+- Create User
+- Login to Rancher with the created CA user 
+- From the top right User menu, Go to Account and API Keys
+- Click on Create API Key
+- Set the token expiry and keep the scope set to 'No Scope'
+- Click on Create
+- Note the bearer token which will be used in the `cloud-config`
+
+*Note: As of version 2.6.x Bearer tokens do not work when assigned a scope. Therefore it has to be created without a scope.
+
 ## Enabling Autoscaling
 
 In order for the autoscaler to function, the RKE2 cluster needs to be
