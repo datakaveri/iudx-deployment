@@ -59,7 +59,7 @@ spec:
    
 1. Add helm repo for cluster autoscaler 
 ```sh
-helm repo add autoscaler https://kubernetes.github.io/autoscaler
+helm repo add autoscaler https://kubernetes.github.io/autoscaler && helm repo update
 ```
 2. Define Appropriate values of resources -
   - CPU of requests and limits
@@ -71,7 +71,7 @@ kubectl create secret generic ca-config --from-file=./config.yaml -n kube-system
 ```
 4. Install cluster autoscaler through helm
 ```
-helm install ca autoscaler/cluster-autoscaler -n kube-system -f values.yaml
+helm install ca autoscaler/cluster-autoscaler --version 9.25.0 -n kube-system -f values.yaml
 ``` 
     
 ** For more information refer [here](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/rancher/README.md)*
