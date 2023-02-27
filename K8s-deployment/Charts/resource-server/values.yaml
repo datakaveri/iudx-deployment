@@ -181,7 +181,6 @@ apiServer:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiServer.containerSecurityContext.enabled Enabled apiServer containers' Security Context
@@ -416,7 +415,6 @@ archivesDatabase:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
 
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -649,7 +647,6 @@ authenticator:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param authenticator.containerSecurityContext.enabled Enabled authenticator containers' Security Context
@@ -882,7 +879,6 @@ databroker:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param databroker.containerSecurityContext.enabled Enabled databroker containers' Security Context
@@ -1114,7 +1110,6 @@ latestDatabase:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param latestDatabase.containerSecurityContext.enabled Enabled latestDatabase containers' Security Context
@@ -1347,7 +1342,6 @@ metering:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metering.containerSecurityContext.enabled Enabled metering containers' Security Context
@@ -1579,7 +1573,6 @@ postgres:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param postgres.containerSecurityContext.enabled Enabled postgres containers' Security Context
@@ -1811,7 +1804,6 @@ cache:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param cache.containerSecurityContext.enabled Enabled cache containers' Security Context
@@ -2042,7 +2034,6 @@ async:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param async.containerSecurityContext.enabled Enabled async containers' Security Context
