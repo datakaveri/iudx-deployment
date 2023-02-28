@@ -186,7 +186,6 @@ apiServer:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apiServer.containerSecurityContext.enabled Enabled ApiServer containers' Security Context
@@ -424,7 +423,6 @@ auditing:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param auditing.containerSecurityContext.enabled Enabled Auditing containers' Security Context
@@ -659,7 +657,6 @@ admin:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param admin.containerSecurityContext.enabled Enabled admin containers' Security Context
@@ -892,7 +889,6 @@ registration:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param registration.containerSecurityContext.enabled Enabled registration containers' Security Context
@@ -1126,7 +1122,6 @@ token:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param token.containerSecurityContext.enabled Enabled token containers' Security Context
@@ -1365,7 +1360,6 @@ policy:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param policy.containerSecurityContext.enabled Enabled policy containers' Security Context
@@ -1597,7 +1591,6 @@ apd:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-    supplementalGroups: [1001]
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apd.containerSecurityContext.enabled Enabled apd containers' Security Context
