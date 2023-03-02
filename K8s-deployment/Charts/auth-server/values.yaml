@@ -302,7 +302,7 @@ apiServer:
     - name: aaa-keystore
       secret:
         secretName: aaa-keystore
-    - name: rs-tmp
+    - name: aaa-tmp
       emptyDir:
         medium: Memory
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ApiServer container(s)
@@ -312,7 +312,7 @@ apiServer:
       mountPath: /usr/share/app/secrets/configs
     - name: aaa-keystore
       mountPath: /usr/share/app/secrets/
-    - name: rs-tmp
+    - name: aaa-tmp
       mountPath: /tmp
   
   ## @param apiServer.sidecars Add additional sidecar containers to the ApiServer pod(s)
@@ -536,7 +536,7 @@ auditing:
     - name: aaa-config
       secret:
         secretName: aaa-config
-    - name: rs-tmp
+    - name: aaa-tmp
       emptyDir:
         medium: Memory
   ## @param auditing.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Auditing container(s)
@@ -544,7 +544,7 @@ auditing:
   extraVolumeMounts:
     - name: aaa-config 
       mountPath: /usr/share/app/secrets/configs
-    - name: rs-tmp
+    - name: aaa-tmp
       mountPath: /tmp
   
   ## @param auditing.sidecars Add additional sidecar containers to the Auditing pod(s)
@@ -770,7 +770,7 @@ admin:
     - name: aaa-config
       secret:
         secretName: aaa-config
-    - name: rs-tmp
+    - name: aaa-tmp
       emptyDir:
         medium: Memory
   ## @param admin.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the admin container(s)
@@ -778,7 +778,7 @@ admin:
   extraVolumeMounts: 
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
-    - name: rs-tmp
+    - name: aaa-tmp
       mountPath: /tmp
   
   ## @param admin.sidecars Add additional sidecar containers to the admin pod(s)
@@ -1003,7 +1003,7 @@ registration:
     - name: aaa-config
       secret:
         secretName: aaa-config
-    - name: rs-tmp
+    - name: aaa-tmp
       emptyDir:
         medium: Memory
   ## @param registration.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the registration container(s)
@@ -1011,7 +1011,7 @@ registration:
   extraVolumeMounts:
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
-    - name: rs-tmp
+    - name: aaa-tmp
       mountPath: /tmp
 
   ## @param registration.sidecars Add additional sidecar containers to the registration pod(s)
@@ -1238,7 +1238,7 @@ token:
     - name: aaa-keystore
       secret:
         secretName: aaa-keystore
-    - name: rs-tmp
+    - name: aaa-tmp
       emptyDir:
         medium: Memory
   ## @param token.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the token container(s)
@@ -1248,7 +1248,7 @@ token:
       mountPath: /usr/share/app/secrets/configs
     - name: aaa-keystore
       mountPath: /usr/share/app/secrets/
-    - name: rs-tmp
+    - name: aaa-tmp
       mountPath: /tmp
 
   ## @param token.sidecars Add additional sidecar containers to the token pod(s)
@@ -1472,7 +1472,7 @@ policy:
     - name: aaa-config
       secret:
         secretName: aaa-config
-    - name: rs-tmp
+    - name: aaa-tmp
       emptyDir:
         medium: Memory
   ## @param policy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the policy container(s)
@@ -1480,7 +1480,7 @@ policy:
   extraVolumeMounts: 
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
-    - name: rs-tmp
+    - name: aaa-tmp
       mountPath: /tmp
   
   ## @param policy.sidecars Add additional sidecar containers to the policy pod(s)
@@ -1705,7 +1705,7 @@ apd:
     - name: aaa-config
       secret:
         secretName: aaa-config
-    - name: rs-tmp
+    - name: aaa-tmp
       emptyDir:
         medium: Memory
   ## @param apd.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apd container(s)
@@ -1713,7 +1713,7 @@ apd:
   extraVolumeMounts:
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
-    - name: rs-tmp
+    - name: aaa-tmp
       mountPath: /tmp
 
   ## @param apd.sidecars Add additional sidecar containers to the apd pod(s)
