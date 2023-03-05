@@ -26,7 +26,7 @@ class OnMyWatch:
 
 
 class Handler(FileSystemEventHandler): 
-	exec_string = f'/usr/share/app/backup.sh'
+	exec_string = f'/usr/share/app/src/backup.sh'
 
 	def on_any_event(self,event): 
 		file_name=event.src_path.split('/')[-1]
