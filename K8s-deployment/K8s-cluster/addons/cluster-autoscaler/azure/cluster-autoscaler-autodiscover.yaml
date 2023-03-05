@@ -163,22 +163,24 @@ spec:
       nodeSelector:
         node-role.kubernetes.io/controlplane: "true"
       containers:
-        - image: k8s.gcr.io/autoscaling/cluster-autoscaler:v1.23.0
+        - image: k8s.gcr.io/autoscaling/cluster-autoscaler:v1.24.0
           imagePullPolicy: Always
           name: cluster-autoscaler
           resources:
             limits:
-              cpu: 100m
-              memory: 300Mi
+              cpu: 250m
+              memory: 750Mi
             requests:
-              cpu: 100m
-              memory: 300Mi
+              cpu: 150m
+              memory: 512Mi
           command:
             - ./cluster-autoscaler
             - --v=3
             - --logtostderr=true
             - --cloud-provider=azure
             - --skip-nodes-with-local-storage=false
+            - --skip-nodes-with-system-pods=false 
+            - --expander=least-waste
             - --node-group-auto-discovery=label:cluster-autoscaler-enabled=true,cluster-autoscaler-name=<YOUR CLUSTER NAME>
           env:
             - name: ARM_SUBSCRIPTION_ID

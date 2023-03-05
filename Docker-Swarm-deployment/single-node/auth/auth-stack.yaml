@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   auth:
-    image: ghcr.io/datakaveri/aaa-depl:4.5.0-alpha-3bef618
+    image: ghcr.io/datakaveri/aaa-depl:4.5.0-alpha-c1dd70b
     command: bash -c "exec java $$AUTH_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
     cap_drop:
       - ALL
