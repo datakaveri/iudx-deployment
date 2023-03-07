@@ -2410,9 +2410,7 @@ profanityCheckSdk:
     - name: profanity-check-config
       secret:
         secretName: profanity-check-config
-    - name: cat-tmp
-      emptyDir:
-        medium: Memory
+
 
   ## @param profanityCheckSdk.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ProfanityCheckSdk container(s)
   ##
@@ -2420,8 +2418,7 @@ profanityCheckSdk:
     - name: profanity-check-config
       mountPath: /usr/share/app/config.json
       subPath: config.json
-    - name: cat-tmp
-      mountPath: /tmp  
+ 
   ## @param profanityCheckSdk.sidecars Add additional sidecar containers to the ProfanityCheckSdk pod(s)
   ## e.g:
   ## sidecars:
