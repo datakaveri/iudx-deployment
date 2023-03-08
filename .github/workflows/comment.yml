@@ -1,18 +1,32 @@
+if: contains(github.event.comment.html_url, '/pull/') # check if the comments come from pull request, exclude those from issue.
 name: pull request comment
 on:
   issue_comment:                                     
     types: [created, edited, deleted]
 
 jobs:
-  job01:
-    if: contains(github.event.comment.html_url, '/pull/')    # check if the comments come from pull request, exclude those from issue.
-    runs-on: self-hosted
+  if: contains(github.event.comment.body, '/test_rs')  # check the comment if it contains the keywords
+  test_rs:
+    runs-on: ubuntu-20.04
     steps:
-      - name: say hello
-        if: contains(github.event.comment.body, '/support')   # check the comment if it contains the keywords
-        run: |
-          echo say hello
-      - name: test
-        if: contains(github.event.comment.body, '/test')  # check the comment if it contains the keywords
-        run: |
-          echo test
+    - name: checkout repository
+      uses: actions/checkout@v3 
+      
+    - name: 'Deploy'
+      uses: 'deliverybot/helm@v1'
+      with:
+        release: 'nginx'
+        namespace: 'test'
+        chart: 'iudx-deployment/K8s-deployment/Charts/resource-server'
+        token: '${{ github.token }}'
+        values: |
+          name: foobar
+        value-files: >-
+          [
+          "resource-values.yaml"
+          ]
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBE_CONFIG }}'
+ 
+      
+         
