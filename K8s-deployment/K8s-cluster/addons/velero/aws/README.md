@@ -193,7 +193,7 @@ velero restore create <restore-name> --from-schedule <schedule-name>
 ## Migrate persistent volumes across aws availability zone
 
 Creating volumes from a snapshot across availability zones isn't natively supported by velero as of v1.10.1.
-As a work-around, the following [script](./velero-change-aws-az.sh) can be used to manually change the snapshot and persistent volume manifests to create the volume in correct availability zone.
+As a work-around (suggestions taken from [velero issue](https://github.com/vmware-tanzu/velero/issues/1624#issuecomment-541476780)), the following [script](./velero-change-aws-az.sh) can be used to manually change the snapshot and persistent volume manifests to create the volume in correct availability zone.
 
 - Requires aws cli to be installed and configured with s3 access
 
