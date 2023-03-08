@@ -188,3 +188,22 @@ velero restore create <restore-name> --from-schedule <schedule-name>
 2. Upgrading of velero and velero-aws-plugin: 
    velero : velero 1.6 to 1.9 - https://velero.io/docs/v1.9/upgrade-to-1.9/#instructions
    velero-aws-plugin: from v1.2.0 to v1.5.0 ``velero plugin remove velero/velero-plugin-for-aws:v1.2.0 && velero plugin add velero/velero-plugin-for-aws:v1.5.0``
+
+
+## Migrate persistent volumes across aws availability zone
+
+Creating volumes from a snapshot across availability zones isn't natively supported by velero as of v1.10.1.
+As a work-around (suggestions taken from [velero issue](https://github.com/vmware-tanzu/velero/issues/1624#issuecomment-541476780)), the following [script](./velero-change-aws-az.sh) can be used to manually change the snapshot and persistent volume manifests to create the volume in correct availability zone.
+
+- Requires aws cli to be installed and configured with s3 access
+
+Run the script:
+```sh
+./velero-change-aws-az.sh <bucket-name> <velero-backup-name> <old-az> <new-az>
+```
+
+Verify the change:
+```sh
+velero describe backup <velero-backup-name> --details
+```
+It should reflect the new availability zone. Proceed with restoring the backup as usual.
