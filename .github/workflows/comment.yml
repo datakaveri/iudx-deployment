@@ -22,6 +22,10 @@ jobs:
           echo $GITHUB_WORKSPACE
           echo "${{ github.token }}"
           env
+    
+    - name: Dump context
+      run: echo '${{ toJSON(github.event) }}' | jq
+      shell: bash
   
     - name: Install kubectl
       uses: azure/setup-kubectl@v1
