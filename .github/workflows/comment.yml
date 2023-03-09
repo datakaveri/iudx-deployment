@@ -11,7 +11,16 @@ jobs:
     steps:
     - name: checkout repository
       uses: actions/checkout@v3 
-      
+    - name: List Files
+      run: |
+          pwd
+          ls -a
+          echo $GITHUB_SHA
+          echo $GITHUB_REPOSITORY
+          echo $GITHUB_WORKSPACE
+          echo "${{ github.token }}"
+          env
+  
     - name: Install kubectl
       uses: azure/setup-kubectl@v1
       with:
