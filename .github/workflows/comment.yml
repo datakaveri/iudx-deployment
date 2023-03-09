@@ -3,7 +3,8 @@ name: pull request comment
 on:
   issue_comment:                                     
     types: [created, edited, deleted]
-
+  pull_request:
+    branches: [ $default-branch ]
 jobs:
   test_rs:
     if: contains(github.event.comment.body, '/test_rs') && contains(github.event.comment.html_url, '/pull/') # check if the comments come from pull request, exclude those from issue. # check the comment if it contains the keywords
@@ -35,6 +36,8 @@ jobs:
       
     - name: Install Helm
       uses: azure/setup-helm@v3
+      with:
+         token: ${{ github.token }} 
    
     
          
