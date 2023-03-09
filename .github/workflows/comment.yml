@@ -12,21 +12,14 @@ jobs:
     - name: checkout repository
       uses: actions/checkout@v3 
       
-    - name: 'Deploy'
-      uses: 'deliverybot/helm@v1'
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v1
       with:
-        release: 'nginx'
-        namespace: 'test'
-        chart: 'iudx-deployment/K8s-deployment/Charts/resource-server'
-        token: '${{ github.token }}'
-        values: |
-          name: foobar
-        value-files: >-
-          [
-          "resource-values.yaml"
-          ]
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBE_CONFIG }}'
- 
+        version: 'v1.24.8'
+      id: install
       
+    - name: Install Helm
+      uses: azure/setup-helm@v3
+   
+    
          
