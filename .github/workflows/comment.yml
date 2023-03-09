@@ -15,6 +15,8 @@ jobs:
       run: |
           pwd
           ls -a
+          ls .github/workflows
+          git branch
           echo $GITHUB_SHA
           echo $GITHUB_REPOSITORY
           echo $GITHUB_WORKSPACE
