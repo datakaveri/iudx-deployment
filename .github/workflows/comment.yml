@@ -29,7 +29,7 @@ jobs:
       shell: bash
   
     - name: Install kubectl
-      uses: azure/setup-kubectl@v1
+      uses: azure/setup-kubectl@v3
       with:
         version: 'v1.24.8'
       id: install
