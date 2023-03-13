@@ -64,9 +64,10 @@ jobs:
    ##   uses: kubeshop/testkube-docker-action@v1
 
 
-    - name: configure resource server and deploy
+    - name: configure resource server
       run: |
         cp -r K8s-deployment/Charts/resource-server/example-secrets/* K8s-deployment/Charts/resource-server/
+        echo "${{ secrets.RS_RESOURCE_VALUES}}" > K8s-deployment/Charts/resource-server/resource-values.yaml
         
     - name: deploy
       run: |
