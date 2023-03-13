@@ -41,6 +41,9 @@ jobs:
         mkdir -p $HOME/.kube
         echo "${{ secrets.KUBE_CONFIG }} | base64 --decode" > $HOME/.kube/config
           
+    - name: Inspect kubectl config
+      run: kubectl config view 
+     
     - name: Check kubectl
       run: |
         kubectl get node
