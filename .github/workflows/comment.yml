@@ -1,14 +1,17 @@
 name: Test Resource Server
 
 on:
-  issue_comment:
-    types: [created,]
+  pull_request:
+    types: [opened, synchronize]
+#on:
+ # issue_comment:
+  #  types: [created,]
 
 jobs:
   test_job:
     runs-on: ubuntu-latest
 
-    if: contains(github.event.comment.body, '/test_rs') 
+    #if: contains(github.event.comment.body, '/test_rs') 
     env:
       RESOURCE_VALUES: ${{ secrets.RESOURCE_VALUES }}
     steps:
