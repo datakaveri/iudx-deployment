@@ -34,8 +34,11 @@ jobs:
       with:
          token: ${{ github.token }}
 
-    - name: Download Testkube CLI
-      run: curl -sL https://testkube.com/install | sh -
+    ##- name: Download Testkube CLI
+    ##   run: curl -sL https://testkube.com/install | sh -
+      
+   ## - name: testkube
+   ##   uses: kubeshop/testkube-docker-action@v1
 
     - name: configure resource server and deploy
       run: |
