@@ -27,7 +27,7 @@ jobs:
     - name: Checkout PR code
       uses: actions/checkout@v3
       with:
-        repository: ${{ github.event.pull_request.head.repo.clone_url }}
+        repository: ${{ github.repository }}/${{ github.event.pull_request.head.repo.name }}
         ref: ${{ github.event.pull_request.head.ref }}
 
     
