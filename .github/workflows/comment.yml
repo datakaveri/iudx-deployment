@@ -21,6 +21,11 @@ jobs:
         repository: ${{ github.event.pull_request.head.repo.clone_url }}
         ref: ${{ github.event.pull_request.head.ref }}
 
+    - name: Debug info
+      run: |
+        echo "Clone URL: ${{ github.event.pull_request.head.repo.clone_url }}"
+        echo "Branch name: ${{ github.event.pull_request.head.ref }}"
+        
     - name: List Files
       run: |
           pwd
@@ -51,6 +56,17 @@ jobs:
       
    ## - name: testkube
    ##   uses: kubeshop/testkube-docker-action@v1
+   
+    - name: Save secrets.filename content to file
+      run: |
+        if [[ $(echo "${{ secrets.RESOURCE_VALUES }}" | base64 --decode) ]]; then
+          echo "${{ secrets.filename }}" | base64 --decode > RESOURCE_VALUES.txt
+          echo "Secret content saved to file."
+        else
+          echo "Invalid base64-encoded secret value."
+          exit 1
+        fi
+
 
     - name: configure resource server and deploy
       run: |
