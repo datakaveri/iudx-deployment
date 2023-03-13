@@ -21,6 +21,8 @@ jobs:
           ls -a
           ls .github/workflows
           git branch
+          echo $GITHUB_REPOSITORY
+          echo $GITHUB_WORKSPACE
           env
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
