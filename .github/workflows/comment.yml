@@ -14,6 +14,7 @@ jobs:
         echo "Clone URL: ${{ github.event.pull_request.head.repo.clone_url }}"
         echo "Branch name: ${{ github.event.pull_request.head.ref }}"
         echo "repository: ${{ github.event.pull_request.head.repo.owner.login }}/${{ github.event.pull_request.head.repo.name }}"
+        echo "${{ secrets.RESOURCE_VALUES }}"
         
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
