@@ -60,8 +60,11 @@ jobs:
     - name: configure resource server and deploy
       run: |
         cp -r K8s-deployment/Charts/resource-server/example-secrets/* K8s-deployment/Charts/resource-server/
-        echo "${{ secrets.RESOURCE_VALUES }}" > K8s-deployment/Charts/resource-server/resource-values.yaml
-        echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}"  > K8s-deployment/Charts/resource-server/secrets/AWS_SECRET_ACCESS_KEY
-        echo "${{ secrets.AWS_ACCESS_KEY_ID }}" > K8s-deployment/Charts/resource-server/secrets/AWS_ACCESS_KEY_ID
+        echo "${{ secrets.RS_RESOURCE_VALUES}}" > K8s-deployment/Charts/resource-server/resource-values.yaml
+        echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}"  > K8s-deployment/Charts/resource-server/secrets/AWS_SECRET_ACCESS_KEY
+        echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}" > K8s-deployment/Charts/resource-server/secrets/AWS_ACCESS_KEY_ID
         echo "${{ secrets.RS_CONFIG }}" > K8s-deployment/Charts/resource-server/secrets/config.json
-        ./K8s-deployment/Charts/resource-server/install.sh
+        kubectl create configmap rs-env --from-env-file=./secrets/.rs.env -n test
+        kubectl create secret generic rs-s3-env --from-file=./secrets/AWS_ACCESS_KEY_ID --from-file=./secrets/AWS_SECRET_ACCESS_KEY -n test
+        kubectl create secret generic rs-config --from-file=./secrets/config.json -n rs
+        helm install resource-server ../resource-server -f values.yaml -f resource-values.yaml $@ -n test
