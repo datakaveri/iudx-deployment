@@ -8,15 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-    - name: Debug info
-      run: |
-        echo "Clone URL: ${{ github.event.pull_request.head.repo.clone_url }}"
-        echo "Branch name: ${{ github.event.pull_request.head.ref }}"
-        echo "repository: ${{ github.event.pull_request.head.repo.owner.login }}/${{ github.event.pull_request.head.repo.name }}"
-        echo "${{ secrets.RESOURCE_VALUES }}" > RESOURCE_VALUES.yaml
-        cat RESOURCE_VALUES.yaml
-        
+    steps:        
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
       shell: bash
@@ -45,10 +37,18 @@ jobs:
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
       id: install
       
+    - name: Check kubectl
+      run: |
+        kubectl get node
+        
+      
     - name: Install Helm
       uses: azure/setup-helm@v3
       with:
          token: ${{ github.token }}
+    - name: Check kubectl
+      run: |
+        helm list -n zookeeper
 
     ##- name: Download Testkube CLI
     ##   run: curl -sL https://testkube.com/install | sh -
