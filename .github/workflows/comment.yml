@@ -1,43 +1,37 @@
+name: Test Resource Server
 
-name: pull request comment
 on:
-  issue_comment:                                     
-    types: [created, edited, deleted]
-  pull_request:
-    branches: [ master ]
+  issue_comment:
+    types: [created]
+
 jobs:
-  test_rs:
-    ###if: contains(github.event.comment.body, '/test_rs') && contains(github.event.comment.html_url, '/pull/') # check if the comments come from pull request, exclude those from issue. # check the comment if it contains the keywords
-    runs-on: ubuntu-20.04
+  test_job:
+    runs-on: ubuntu-latest
+
+    if: contains(github.event.comment.body, '/test_rs') && github.event.comment.user.type == 'Admin'
+
     steps:
-    - name: checkout repository
-      uses: actions/checkout@v3 
-    - name: List Files
-      run: |
-          pwd
-          ls -a
-          ls .github/workflows
-          git branch
-          echo $GITHUB_SHA
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-          echo "${{ github.token }}"
-          env
-    
-    - name: Dump context
-      run: echo '${{ toJSON(github.event) }}' | jq
-      shell: bash
-  
+    - uses: actions/checkout@v3
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
       with:
         version: 'v1.24.8'
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
       id: install
       
     - name: Install Helm
       uses: azure/setup-helm@v3
       with:
-         token: ${{ github.token }} 
-   
-    
-         
+         token: ${{ github.token }}
+
+    - name: Download Testkube CLI
+      run: curl -sL https://testkube.com/install | sh -
+
+    - name: configure resource server and deploy
+      run: |
+        cp -r K8s-deployment/Charts/resource-server/example-secrets/* K8s-deployment/Charts/resource-server/
+        echo "${{ secrets.RESOURCE_VALUES }}" > K8s-deployment/Charts/resource-server/resource-values.yaml
+        echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}" > K8s-deployment/Charts/resource-server/secrets/AWS_SECRET_ACCESS_KEY
+        echo "${{ secrets.AWS_ACCESS_KEY_ID }}" > K8s-deployment/Charts/resource-server/secrets/AWS_ACCESS_KEY_ID
+        echo "${{ secrets.RS_CONFIG }}" > K8s-deployment/Charts/resource-server/secrets/config.json
+        ./K8s-deployment/Charts/resource-server/install.sh
