@@ -15,16 +15,22 @@ jobs:
     env:
       RESOURCE_VALUES: ${{ secrets.RESOURCE_VALUES }}
     steps:
+    - name: Debug info
+      run: |
+        echo "Clone URL: ${{ github.event.pull_request.head.repo.clone_url }}"
+        echo "Branch name: ${{ github.event.pull_request.head.ref }}"
+        
+    - name: Dump context
+      run: echo '${{ toJSON(github.event) }}' | jq
+      shell: bash
+      
     - name: Checkout PR code
       uses: actions/checkout@v3
       with:
         repository: ${{ github.event.pull_request.head.repo.clone_url }}
         ref: ${{ github.event.pull_request.head.ref }}
 
-    - name: Debug info
-      run: |
-        echo "Clone URL: ${{ github.event.pull_request.head.repo.clone_url }}"
-        echo "Branch name: ${{ github.event.pull_request.head.ref }}"
+    
         
     - name: List Files
       run: |
@@ -35,9 +41,7 @@ jobs:
           echo $GITHUB_REPOSITORY
           echo $GITHUB_WORKSPACE
           env
-    - name: Dump context
-      run: echo '${{ toJSON(github.event) }}' | jq
-      shell: bash
+    
       
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
