@@ -12,9 +12,12 @@ jobs:
     env:
       RESOURCE_VALUES: ${{ secrets.RESOURCE_VALUES }}
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout PR code
+      uses: actions/checkout@v3
       with:
-          ref: ${{ github.event.pull_request.head.sha }}
+        repository: ${{ github.event.pull_request.head.repo.clone_url }}
+        ref: ${{ github.event.pull_request.head.ref }}
+
     - name: List Files
       run: |
           pwd
@@ -24,6 +27,10 @@ jobs:
           echo $GITHUB_REPOSITORY
           echo $GITHUB_WORKSPACE
           env
+    - name: Dump context
+      run: echo '${{ toJSON(github.event) }}' | jq
+      shell: bash
+      
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
       with:
