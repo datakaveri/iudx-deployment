@@ -34,9 +34,13 @@ jobs:
       uses: azure/setup-kubectl@v3
       with:
         version: 'v1.24.8'
-        kubeconfig: ${{ secrets.KUBE_CONFIG }}
       id: install
       
+    - name: Configure kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
+          
     - name: Check kubectl
       run: |
         kubectl get node
