@@ -9,9 +9,19 @@ jobs:
     runs-on: ubuntu-latest
 
     if: contains(github.event.comment.body, '/test_rs') 
-
+    env:
+      RESOURCE_VALUES: ${{ secrets.RESOURCE_VALUES }}
     steps:
     - uses: actions/checkout@v3
+      with:
+          ref: ${{ github.event.pull_request.head.ref }}
+    - name: List Files
+      run: |
+          pwd
+          ls -a
+          ls .github/workflows
+          git branch
+          env
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
       with:
