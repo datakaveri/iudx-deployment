@@ -1,4 +1,0 @@
-prometheus_client
-requests
-schedule
-pytz
