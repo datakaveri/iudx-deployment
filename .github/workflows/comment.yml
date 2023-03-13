@@ -13,7 +13,7 @@ jobs:
       run: |
         echo "Clone URL: ${{ github.event.pull_request.head.repo.clone_url }}"
         echo "Branch name: ${{ github.event.pull_request.head.ref }}"
-        echo "html url name: ${{ github.event.pull_request.head.repo.html_url }}"
+        echo "repository: ${{ github.event.pull_request.head.repo.owner.login }}/${{ github.event.pull_request.head.repo.name }}"
         
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
