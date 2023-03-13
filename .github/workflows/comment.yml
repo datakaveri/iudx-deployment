@@ -70,6 +70,7 @@ jobs:
         echo "${{ secrets.RS_RESOURCE_VALUES }}" > K8s-deployment/Charts/resource-server/resource-values.yaml
         echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}"  > K8s-deployment/Charts/resource-server/secrets/AWS_SECRET_ACCESS_KEY
         echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}" > K8s-deployment/Charts/resource-server/secrets/AWS_ACCESS_KEY_ID
+        echo "${{ secrets.RS_CONFIG }}" > K8s-deployment/Charts/resource-server/secrets/config.json
         
     - name: deploy
       run: |
