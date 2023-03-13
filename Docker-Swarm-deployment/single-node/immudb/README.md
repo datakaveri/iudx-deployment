@@ -26,12 +26,6 @@ secrets/
 ```
 5. Disclaimer: check if all the passwords  contain upper and lower case letters, digits, punctuation mark or symbol. If not, regenerate the secrets using the script.
 
-## Build the docker file
-This is to create a custom docker image containing the python script to do initial setup of immudb like create users, tables required for the api-servers.
-```sh
-docker build -t ghcr.io/datakaveri/immudb-config-generator:1.4.0 -f docker/immudb-config-generator/Dockerfile docker/immudb-config-generator 
-```
-
 ## Assign node labels
  The immudb container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart and able to mount the same local docker volume.
 ```sh
