@@ -54,10 +54,10 @@ jobs:
    ## - name: testkube
    ##   uses: kubeshop/testkube-docker-action@v1
    
-    - name: Save secrets.filename content to file
+    - name: Save secrets content to file
       run: |
         if [[ $(echo "${{ secrets.RESOURCE_VALUES }}" | base64 --decode) ]]; then
-          echo "${{ secrets.filename }}" | base64 --decode > RESOURCE_VALUES.txt
+          echo "${{ secrets.RESOURCE_VALUES }}" | base64 --decode > RESOURCE_VALUES.txt
           echo "Secret content saved to file."
         else
           echo "Invalid base64-encoded secret value."
