@@ -67,7 +67,9 @@ jobs:
     - name: configure resource server
       run: |
         cp -r K8s-deployment/Charts/resource-server/example-secrets/* K8s-deployment/Charts/resource-server/
-        echo "${{ secrets.RS_RESOURCE_VALUES}}" > K8s-deployment/Charts/resource-server/resource-values.yaml
+        echo "${{ secrets.RS_RESOURCE_VALUES }}" > K8s-deployment/Charts/resource-server/resource-values.yaml
+        echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}"  > K8s-deployment/Charts/resource-server/secrets/AWS_SECRET_ACCESS_KEY
+        echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}" > K8s-deployment/Charts/resource-server/secrets/AWS_ACCESS_KEY_ID
         
     - name: deploy
       run: |
