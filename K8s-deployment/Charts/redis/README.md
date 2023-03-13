@@ -10,29 +10,6 @@ This helm chart deploys a 6-node Redis Cluster with sharding, having 3 masters a
 This installs a  Redis clustered setup.
 The helm chart is based on bitnami : https://github.com/bitnami/charts/tree/master/bitnami/redis-cluster
 
-## Create Custom Docker image
-Creating custom image to include the [ReJSON module](https://github.com/RedisJSON/JRedisJSON)  on top of [bitnami redis-cluster docker image](https://github.com/bitnami/bitnami-docker-redis-cluster)
-
-**Build docker image**
-
-Redis-rejson image
-```
-docker build -t ghcr.io/datakaveri/redis-cluster-rejson:7.0.2-2.0.9 -f docker/redis-rejson/Dockerfile docker/redis-rejson
-```
-Redis-autoscaler image
-```
-docker build -t ghcr.io/datakaveri/redis-cluster-autoscaler:7.0.2 -f docker/redis-autoscaler/Dockerfile docker/redis-autoscaler
-```
-**Push docker image**
-
-Redis-rejson image
-```
-docker push ghcr.io/datakaveri/redis-cluster-rejson:7.0.2-2.0.9 
-```
-Redis-autoscaler image
-```
-docker push ghcr.io/datakaveri/redis-cluster-autoscaler:7.0.2
-```
 ## Generate required secrets
 To generate the secrets:
 
@@ -58,7 +35,9 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 
 ##  Run Install script
 
-``` ./install.sh```
+``` 
+./install.sh
+```
  - This will create namespace, redis password as k8s secret, redis, redis autoscaler 
 
 ## Notes:
