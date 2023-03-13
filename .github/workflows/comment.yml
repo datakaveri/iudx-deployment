@@ -19,7 +19,7 @@ jobs:
       run: |
         echo "Clone URL: ${{ github.event.pull_request.head.repo.clone_url }}"
         echo "Branch name: ${{ github.event.pull_request.head.ref }}"
-        
+        echo "html url name: ${{ github.event.pull_request.head.repo.html_url }}"
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
       shell: bash
@@ -27,7 +27,7 @@ jobs:
     - name: Checkout PR code
       uses: actions/checkout@v3
       with:
-        repository: ${{ github.repository }}/${{ github.event.pull_request.head.repo.name }}
+        repository:
         ref: ${{ github.event.pull_request.head.ref }}
 
     
