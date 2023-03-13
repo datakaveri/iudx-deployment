@@ -1,16 +1,6 @@
 # Introduction
 Docker swarm stack for Rabbitmq Deployment.
 # Rabbitmq Installation
-##  Docker image
-* Build Rabbitmq backup image 
-
-```sh
-docker build -f backup/Dockerfile -t ghcr.io/datakaveri/rabbitmq-backup:1.0 backup/
-```
-* Push Docker image 
-```sh
-docker push ghcr.io/datakaveri/rabbitmq-backup:1.0
-```
 ## Create secret files
 1. Make a copy of sample secrets directory.
 ```console
