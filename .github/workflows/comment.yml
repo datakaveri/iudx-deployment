@@ -2,7 +2,7 @@ name: Test Resource Server
 
 on:
   issue_comment:
-    types: [created]
+    types: [created,]
 
 jobs:
   test_job:
@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
     - name: List Files
       run: |
           pwd
@@ -45,8 +45,8 @@ jobs:
     - name: configure resource server and deploy
       run: |
         cp -r K8s-deployment/Charts/resource-server/example-secrets/* K8s-deployment/Charts/resource-server/
-        echo "${{ secrets.RESOURCE_VALUES }}" > K8s-deployment/Charts/resource-server/resource-values.yaml
-        echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}" > K8s-deployment/Charts/resource-server/secrets/AWS_SECRET_ACCESS_KEY
-        echo "${{ secrets.AWS_ACCESS_KEY_ID }}" > K8s-deployment/Charts/resource-server/secrets/AWS_ACCESS_KEY_ID
-        echo "${{ secrets.RS_CONFIG }}" > K8s-deployment/Charts/resource-server/secrets/config.json
+        echo "${{ secrets.RESOURCE_VALUES }}" | base64 --decode > K8s-deployment/Charts/resource-server/resource-values.yaml
+        echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}" | base64 --decode > K8s-deployment/Charts/resource-server/secrets/AWS_SECRET_ACCESS_KEY
+        echo "${{ secrets.AWS_ACCESS_KEY_ID }}" | base64 --decode > K8s-deployment/Charts/resource-server/secrets/AWS_ACCESS_KEY_ID
+        echo "${{ secrets.RS_CONFIG }}" | base64 --decode > K8s-deployment/Charts/resource-server/secrets/config.json
         ./K8s-deployment/Charts/resource-server/install.sh
