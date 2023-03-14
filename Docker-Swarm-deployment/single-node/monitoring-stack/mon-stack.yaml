@@ -6,7 +6,7 @@ networks:
     external: true
 services:
   vertx_sd:
-    image: ghcr.io/datakaveri/vertx_sd:1.0.0
+    image: ghcr.io/datakaveri/vertx_sd:1.0.1
     read_only: true
     volumes:
       - type: bind
