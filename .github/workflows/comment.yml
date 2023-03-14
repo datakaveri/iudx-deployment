@@ -41,29 +41,11 @@ jobs:
       run: |
         mkdir -p $HOME/.kube
         echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
-        
-    - name: Check kubectl
-      run: |
-        kubectl get node
-          
-    - name: install testkube
-      run: |
-        wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add - && echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install -y testkube
-        kubectl testkube get test
       
     - name: Install Helm
       uses: azure/setup-helm@v3
       with:
          token: ${{ github.token }}
-    - name: Check helm
-      run: |
-        helm list -n zookeeper
-
-    ##- name: Download Testkube CLI
-    ##   run: curl -sL https://testkube.com/install | sh -
-      
-   ## - name: testkube
-   ##   uses: kubeshop/testkube-docker-action@v1
 
 
     - name: configure resource server
@@ -73,7 +55,7 @@ jobs:
         echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}"  > K8s-deployment/Charts/resource-server/secrets/AWS_SECRET_ACCESS_KEY
         echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}" > K8s-deployment/Charts/resource-server/secrets/AWS_ACCESS_KEY_ID
         echo "${{ secrets.RS_CONFIG }}" | base64 --decode > K8s-deployment/Charts/resource-server/secrets/config.json
-      
+        echo "${{ secrets.RS_TEST_CONFIG }}" > K8s-deployment/Charts/resource-server/secrets/rs_test_config.json
         
     - name: deploy
       run: |
@@ -84,16 +66,27 @@ jobs:
         kubectl create secret generic rs-config --from-file=./secrets/config.json -n test
         helm install resource-server "../resource-server" -f values.yaml -f resource-values.yaml -n test
         
-    - name: Install TestKube
+    - name: Install Testkube
       run: |
-        curl -sfL https://raw.githubusercontent.com/kubeshop/testkube/main/install.sh | sh -
-        sudo mv tk /usr/local/bin/
+        wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add - && echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install -y testkube
+        kubectl testkube get test
+        pwd
         
-    - name: Check testkube
+    - name: Test Execute
       run: |
-        tk get executor | grep "pytest-executor-1" | awk '{ print $1 }'
+        testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_rs.py" --command "--html=/share/test/reports/rs_report.html" --feature artifacts --content-type string
+        testkube create test --name rs_test --namespace testkube --file ./secrets/rs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test rs_test --download-artifacts
+        
+    - name: Upload test reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: Test Reports
+        path: artifacts/
         
     - name: Delete deployment
       run: |
-       kubectl delete ns test    
+       kubectl delete ns test 
+       testkube  delete executor pytest-executor-gh
+       testkube  delete test rs_test
     
