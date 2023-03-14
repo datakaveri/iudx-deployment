@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: contains(github.event.comment.body, '/test_rs')
+    #if: contains(github.event.comment.body, '/test_rs')
     steps:        
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
