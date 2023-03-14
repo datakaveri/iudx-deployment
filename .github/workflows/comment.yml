@@ -9,12 +9,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: contains(github.event.comment.body, 'test_rs') && github.event.sender.permissions.push == true
+    
     steps:        
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
       shell: bash
       
+      if: contains(github.event.comment.body, 'test_rs') && github.event.sender.permissions.push == true  
     - name: Checkout PR code
       uses: actions/checkout@v3
       with:
