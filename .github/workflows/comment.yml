@@ -82,7 +82,7 @@ jobs:
     - name: Download Test reports
       run: |
         sleep 1m
-        sudo snap install jq -y
+        sudo apt install jq -y
         execution_output=$(tk get execution --test rs-test --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
         kubectl testkube download artifacts $result_id
