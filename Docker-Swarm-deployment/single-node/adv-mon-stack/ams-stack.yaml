@@ -8,7 +8,7 @@ networks:
 services:
 
   ams:
-    image: ghcr.io/datakaveri/ams:4.0.0-1
+    image: ghcr.io/datakaveri/ams:4.0.0-2
     read_only: true
     logging:
       driver: "json-file"
