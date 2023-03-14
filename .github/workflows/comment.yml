@@ -91,5 +91,7 @@ jobs:
       run: |
         tk get executor | grep "pytest-executor-1" | awk '{ print $1 }'
         
-        
+    - name: Delete deployment
+      run: |
+       kubectl delete ns test    
     
