@@ -60,11 +60,11 @@ jobs:
     - name: deploy
       run: |
         cd K8s-deployment/Charts/resource-server/
-        kubectl create ns rs_test
-        kubectl create configmap rs-env --from-env-file=./secrets/.rs.env -n rs_test
-        kubectl create secret generic rs-s3-env --from-file=./secrets/AWS_ACCESS_KEY_ID --from-file=./secrets/AWS_SECRET_ACCESS_KEY -n rs_test
-        kubectl create secret generic rs-config --from-file=./secrets/config.json -n rs_test
-        helm install resource-server "../resource-server" -f values.yaml -f resource-values.yaml -n rs_test
+        kubectl create ns rs-test
+        kubectl create configmap rs-env --from-env-file=./secrets/.rs.env -n rs-test
+        kubectl create secret generic rs-s3-env --from-file=./secrets/AWS_ACCESS_KEY_ID --from-file=./secrets/AWS_SECRET_ACCESS_KEY -n rs-test
+        kubectl create secret generic rs-config --from-file=./secrets/config.json -n rs-test
+        helm install resource-server "../resource-server" -f values.yaml -f resource-values.yaml -n rs-test
         
     - name: Install Testkube
       run: |
@@ -86,7 +86,7 @@ jobs:
         
     - name: Delete deployment
       run: |
-       kubectl delete ns rs_test 
+       kubectl delete ns rs-test 
        testkube  delete executor pytest-executor-gh
        testkube  delete test rs_test
     
