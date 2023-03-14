@@ -46,13 +46,10 @@ jobs:
       run: |
         kubectl get node
           
-    - name: Run test
-      id: run_test
-      uses: kubeshop/testkube-docker-action@v1
-      with:
-        command: get
-        resource: test
-        
+    - name: install testkube
+      run: |
+        wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add - && echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install -y testkube
+        kubectl testkube get test
       
     - name: Install Helm
       uses: azure/setup-helm@v3
