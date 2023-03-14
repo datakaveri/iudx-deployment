@@ -92,9 +92,9 @@ jobs:
         name: Test Reports
         path: artifacts/
         
-    #- name: Delete deployment
-    #  run: |
-    #   kubectl delete ns rs-test 
-    #   testkube  delete executor pytest-executor-gh
-    #   testkube  delete test rs-test
+    - name: Delete deployment
+      run: |
+       kubectl delete ns rs-test 
+       testkube  delete executor pytest-executor-gh
+       testkube  delete test rs-test
     
