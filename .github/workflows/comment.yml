@@ -79,6 +79,14 @@ jobs:
         testkube run test rs-test --download-artifacts
         ls -a
         
+    - name: Download Test reports
+      run: |
+        sleep 1000ms
+        sudo snap install jq -y
+        execution_output=$(tk get execution --test rs-test --output json)
+        result_id=$(echo $execution_output | jq -r '.results[0].id')
+        kubectl testkube download artifacts $result_id
+        
     - name: Upload test reports
       uses: actions/upload-artifact@v3
       with:
