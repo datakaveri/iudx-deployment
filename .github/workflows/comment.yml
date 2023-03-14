@@ -29,7 +29,13 @@ jobs:
           echo $GITHUB_WORKSPACE
           env
     
-      
+    - name: Run test
+      id: run_test
+      uses: kubeshop/testkube-docker-action@v1
+      with:
+        command: get
+        resource: test
+          
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
       with:
