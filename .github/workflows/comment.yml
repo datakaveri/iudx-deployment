@@ -81,8 +81,7 @@ jobs:
         
     - name: Download Test reports
       run: |
-        sleep 1m
-        sudo apt install jq -y
+        sleep 2m
         execution_output=$(tk get execution --test rs-test --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
         kubectl testkube download artifacts $result_id
@@ -93,9 +92,9 @@ jobs:
         name: Test Reports
         path: artifacts/
         
-    - name: Delete deployment
-      run: |
-       kubectl delete ns rs-test 
-       testkube  delete executor pytest-executor-gh
-       testkube  delete test rs-test
+    #- name: Delete deployment
+    #  run: |
+    #   kubectl delete ns rs-test 
+    #   testkube  delete executor pytest-executor-gh
+    #   testkube  delete test rs-test
     
