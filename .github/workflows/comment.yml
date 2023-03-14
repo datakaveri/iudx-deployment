@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.comment.body, 'test_rs')
+      contains(github.event.comment.body, '/test_rs')
       && github.event.issue.pull_request
       && github.event.action == 'created'
       && github.event.sender.permissions.push == true
