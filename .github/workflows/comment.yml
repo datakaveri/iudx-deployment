@@ -29,12 +29,7 @@ jobs:
           echo $GITHUB_WORKSPACE
           env
     
-    - name: Run test
-      id: run_test
-      uses: kubeshop/testkube-docker-action@v1
-      with:
-        command: get
-        resource: test
+
           
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
@@ -47,12 +42,12 @@ jobs:
         mkdir -p $HOME/.kube
         echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
           
-    - name: Inspect kubectl config
-      run: kubectl config view 
-     
-    - name: Check kubectl
-      run: |
-        kubectl get node
+    - name: Run test
+      id: run_test
+      uses: kubeshop/testkube-docker-action@v1
+      with:
+        command: get
+        resource: test
         
       
     - name: Install Helm
