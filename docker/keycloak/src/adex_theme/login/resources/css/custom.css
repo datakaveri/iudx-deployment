@@ -1,0 +1,264 @@
+.login-pf body {
+  /* background: url("../img/keycloak-bg.png") no-repeat center center fixed;
+    background-size: cover;
+    height: 100%; */
+  background: #f1f7fa;
+  background-size: cover;
+  height: auto;
+  padding-bottom: 30px;
+}
+
+.login-pf-page {
+  min-height: 100vh;
+}
+
+#custom-card-pf {
+  border: none;
+  padding: 0;
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 0 auto;
+  box-shadow: var(--pf-global--BoxShadow--lg);
+  width: 460px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  border-color: var(--pf-global--primary-color--100);
+  position: absolute;
+  position: a;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#kc-form-444 {
+  padding: 0 35px 0 35px;
+  margin-top: 25px;
+}
+
+.custom-button-group {
+  float: right;
+}
+
+.custom-forgot-password a,
+.custom-button-group a {
+  color: #0a9;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+}
+
+.custom-forgot-password a:hover,
+.custom-button-group a:hover {
+  text-decoration: none;
+}
+
+.custom-forgot-password a:hover {
+  text-decoration: none;
+}
+
+.form-col {
+  display: flex;
+  justify-content: space-between;
+}
+
+#form-col-full {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.custom-pf-c-form-control {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 12px 19px;
+  width: 100%;
+  outline: none;
+  color: #2c2c2c;
+  margin-top: 4px;
+}
+
+/* #form-group-1,#form-group-2,#form-group-3,#form-group-4,#form-group-5{
+    width: 100%;
+} */
+
+.custom-pf-c-form-control::placeholder {
+  color: #6c6c6c;
+}
+
+.custom-pf-c-button.custom-pf-m-primary {
+  border-radius: 8px;
+  background-color: #0a9;
+  color: #fff;
+  border: none;
+  padding: 18px 40px;
+  width: 200px;
+  margin: 0 auto;
+  display: block;
+  margin-bottom: 15px;
+}
+
+h1#kc-page-title {
+  font-weight: 600;
+  margin-top: 25px;
+  padding-bottom: 20px;
+}
+
+#kc-header-wrapper {
+  font-family: "Helvetica", "sans-serif";
+  display: none;
+}
+
+#custom-logo-wrapper {
+  background-image: url(../img/adex-logo.png);
+  background-size: contain;
+  width: 95px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  transform: translatey(25%);
+}
+
+.custom-pf-c-form__label-text {
+  font-weight: 400;
+  color: #6c6c6c;
+  font-size: 14px;
+}
+.custom-pf-c-form__label-text::after {
+  content: " *";
+  color:#ff0000;
+}
+
+#kc-info-wrapper {
+  background-color: transparent;
+  font-size: 14px;
+}
+
+#kc-info-wrapper a {
+  color: #0a9;
+  font-weight: 600;
+  outline: none;
+}
+
+#kc-info-wrapper a:hover {
+  text-decoration: none;
+  color: #0088ce;
+}
+
+.custom-label-wrapper,
+.custom-input-wrapper {
+  padding: 0 20px;
+}
+
+.custom-form-group {
+  width: 47.5%;
+  margin-bottom: 20px;
+}
+
+.custom-login-text,
+.custom-login-helper-text {
+  font-size: 14px;
+}
+
+.custom-login-text {
+  color: #0a9;
+  margin-left: 5px;
+  font-weight: 600;
+}
+
+.custom-login-helper-text {
+  text-align: center;
+}
+
+#kc-register-form {
+  padding: 0 30px 30px 30px;
+  margin-top: 25px;
+}
+
+.custom-header {
+  padding: 0 30px 0px 30px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+}
+
+#kc-info {
+  margin: 0;
+}
+
+/* Password Reset */
+
+#kc-reset-password-form {
+  margin-top: 25px;
+  padding: 0 35px;
+}
+
+/* Update Password */
+
+#custom-kc-passwd-update-form{
+  padding: 0 30px;
+  margin-top: 20px
+}
+
+.pw-update-form-group{
+  margin-bottom: 20px;
+}
+
+.label-wrapper{
+  padding: 0;
+}
+
+#custom-kc-form-buttons{
+  margin: 10px 0;
+}
+
+/* Page expired */
+
+#custom-instruction1{
+  padding: 10px 30px;
+}
+
+
+@media (max-width: 767px) {
+  #custom-card-pf {
+    position: relative;
+    transform: none;
+    left: 0;
+    right: 0;
+    width: auto;
+    border-radius: 0;
+    height: 100vh;
+  }
+
+  .login-pf-page {
+    padding-top: 0;
+  }
+
+  .login-pf body {
+    padding-bottom: 0;
+  }
+
+  #kc-header {
+    margin: 0;
+  }
+
+  .custom-pf-c-form__label-text {
+    font-size: 16px;
+  }
+
+  .custom-pf-c-button.custom-pf-m-primary {
+    font-size: 16px;
+  }
+}
+
+
+#instruction-one{
+  color:'#ddd';
+  text-align: center;
+  margin-top: 20px;
+  padding: 0 30px;
+}
+
+#instruction-two{
+  color:'#ddd'
+}
+
+
+
+

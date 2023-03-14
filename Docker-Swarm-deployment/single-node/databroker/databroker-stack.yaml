@@ -60,7 +60,7 @@ services:
         window: 10s
       
   backup:
-    image: ghcr.io/datakaveri/rabbitmq-backup:1.0
+    image: ghcr.io/datakaveri/rabbitmq-backup:1.0.1
     hostname: backup
     volumes:
       - type: volume
