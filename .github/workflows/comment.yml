@@ -76,7 +76,20 @@ jobs:
     - name: deploy
       run: |
         cd K8s-deployment/Charts/resource-server/
+        kubectl create ns test
         kubectl create configmap rs-env --from-env-file=./secrets/.rs.env -n test
         kubectl create secret generic rs-s3-env --from-file=./secrets/AWS_ACCESS_KEY_ID --from-file=./secrets/AWS_SECRET_ACCESS_KEY -n test
         kubectl create secret generic rs-config --from-file=./secrets/config.json -n test
         helm install resource-server "../resource-server" -f values.yaml -f resource-values.yaml -n test
+        
+    - name: Install TestKube
+      run: |
+        curl -sfL https://raw.githubusercontent.com/kubeshop/testkube/main/install.sh | sh -
+        sudo mv tk /usr/local/bin/
+        
+    - name: Check testkube
+      run: |
+        tk get executor | grep "pytest-executor-1" | awk '{ print $1 }'
+        
+        
+    
