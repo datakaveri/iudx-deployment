@@ -3,13 +3,13 @@ name: Test Resource Server
 on:
   issue_comment:
     types: [created,edited]
-  pull_request_target:
-    types: [opened, reopened, synchronize]
+  #pull_request_target:
+  #  types: [opened, reopened, synchronize]
   
 jobs:
   build:
     runs-on: ubuntu-latest
-    #if: contains(github.event.comment.body, '/test_rs')
+    if: contains(github.event.comment.body, '/test_rs')
     steps:        
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
