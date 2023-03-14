@@ -182,8 +182,9 @@ processor:
   ## @param processor.podSecurityContext.fsGroup Set processor pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
-    fsGroup: 1001
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param processor.containerSecurityContext.enabled Enabled processor containers' Security Context
@@ -191,9 +192,14 @@ processor:
   ## @param processor.containerSecurityContext.runAsNonRoot Set processor containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param processor.existingConfigmap The name of an existing ConfigMap with your custom configuration for processor
   ##
@@ -292,11 +298,16 @@ processor:
     - name: lip-config
       secret:
         secretName: lip-config
+    - name: lip-tmp
+      emptyDir:
+        medium: Memory
   ## @param processor.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the processor container(s)
   ##
   extraVolumeMounts: 
     - name: lip-config
       mountPath: /usr/share/app/secrets/configs
+    - name: lip-tmp
+      mountPath: /tmp
   
   ## @param processor.sidecars Add additional sidecar containers to the processor pod(s)
   ## e.g:
@@ -402,8 +413,9 @@ rabbitmq:
   ## @param rabbitmq.podSecurityContext.fsGroup Set rabbitmq pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
-    fsGroup: 1001
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rabbitmq.containerSecurityContext.enabled Enabled rabbitmq containers' Security Context
@@ -411,9 +423,14 @@ rabbitmq:
   ## @param rabbitmq.containerSecurityContext.runAsNonRoot Set rabbitmq containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param rabbitmq.existingConfigmap The name of an existing ConfigMap with your custom configuration for rabbitmq
   ##
@@ -512,11 +529,16 @@ rabbitmq:
     - name: lip-config
       secret:
         secretName: lip-config
+    - name: lip-tmp
+      emptyDir:
+        medium: Memory
   ## @param rabbitmq.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the rabbitmq container(s)
   ##
   extraVolumeMounts:
     - name: lip-config
       mountPath: /usr/share/app/secrets/configs
+    - name: lip-tmp
+      mountPath: /tmp
   
   ## @param rabbitmq.sidecars Add additional sidecar containers to the rabbitmq pod(s)
   ## e.g:
@@ -623,8 +645,9 @@ redis:
   ## @param redis.podSecurityContext.fsGroup Set redis pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
-    fsGroup: 1001
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param redis.containerSecurityContext.enabled Enabled redis containers' Security Context
@@ -632,9 +655,14 @@ redis:
   ## @param redis.containerSecurityContext.runAsNonRoot Set redis containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param redis.existingConfigmap The name of an existing ConfigMap with your custom configuration for redis
   ##
@@ -733,11 +761,16 @@ redis:
     - name: lip-config
       secret:
         secretName: lip-config
+    - name: lip-tmp
+      emptyDir:
+        medium: Memory
   ## @param redis.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the redis container(s)
   ##
   extraVolumeMounts: 
     - name: lip-config
       mountPath: /usr/share/app/secrets/configs
+    - name: lip-tmp
+      mountPath: /tmp
   
   ## @param redis.sidecars Add additional sidecar containers to the redis pod(s)
   ## e.g:
@@ -845,8 +878,9 @@ postgres:
   ## @param postgres.podSecurityContext.fsGroup Set postgres pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
-    fsGroup: 1001
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param postgres.containerSecurityContext.enabled Enabled postgres containers' Security Context
@@ -854,9 +888,14 @@ postgres:
   ## @param postgres.containerSecurityContext.runAsNonRoot Set postgres containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param postgres.existingConfigmap The name of an existing ConfigMap with your custom configuration for postgres
   ##
@@ -955,11 +994,16 @@ postgres:
     - name: lip-config
       secret:
         secretName: lip-config
+    - name: lip-tmp
+      emptyDir:
+        medium: Memory
   ## @param postgres.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the postgres container(s)
   ##
   extraVolumeMounts: 
     - name: lip-config
       mountPath: /usr/share/app/secrets/configs
+    - name: lip-tmp
+      mountPath: /tmp
   
   ## @param postgres.sidecars Add additional sidecar containers to the postgres pod(s)
   ## e.g:
@@ -1068,8 +1112,9 @@ cache:
   ## @param cache.podSecurityContext.fsGroup Set cache pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
-    fsGroup: 1001
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param cache.containerSecurityContext.enabled Enabled cache containers' Security Context
@@ -1077,9 +1122,14 @@ cache:
   ## @param cache.containerSecurityContext.runAsNonRoot Set cache containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param cache.existingConfigmap The name of an existing ConfigMap with your custom configuration for cache
   ##
@@ -1178,11 +1228,16 @@ cache:
     - name: lip-config
       secret:
         secretName: lip-config
+    - name: lip-tmp
+      emptyDir:
+        medium: Memory
   ## @param cache.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the cache container(s)
   ##
   extraVolumeMounts: 
     - name: lip-config
       mountPath: /usr/share/app/secrets/configs
+    - name: lip-tmp
+      mountPath: /tmp
   
   ## @param cache.sidecars Add additional sidecar containers to the cache pod(s)
   ## e.g:
