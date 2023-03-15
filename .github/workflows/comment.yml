@@ -9,12 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: contains(github.event.comment.body, '/test_rs')
-    steps:  
-    - name: Token
-      env:
+    env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        
+    if: contains(github.event.comment.body, '/test_rs')
+    steps:        
     - name: Fetch pull request details
       uses: octokit/request-action@v2.x
       id: pr-details
