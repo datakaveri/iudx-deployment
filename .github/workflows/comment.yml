@@ -10,18 +10,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: contains(github.event.comment.body, '/test_rs')
-    steps:  
-    - name: tocken
-      run: echo "${{ github.token }}"
-      shell: bash
-      
+    steps:        
     - name: Fetch pull request details
       uses: octokit/request-action@v2.x
       id: pr-details
       with:
         route: GET /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}
         headers: |
-          Authorization: ${{ github.token}}
+          Authorization: ${{ secrets.TOKEN}}
       
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
