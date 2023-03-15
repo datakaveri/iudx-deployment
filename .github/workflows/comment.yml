@@ -13,36 +13,24 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: contains(github.event.comment.body, '/test_rs')
     steps:
-    - name: Get Pull Request Details
-      id: pr
-      uses: octokit/request-action@v2.x
-      with:
-        route: GET /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}
-      
-    - name: context
-      run: echo ${{ steps.pr.outputs.data.head.sha }}
-
-    - name: Checkout PR octokit
-      uses: actions/checkout@v2
-      with:
-        repository: ${{ steps.pr.outputs.data.head.repo.owner.login }}/${{ steps.pr.outputs.data.head.repo.name }}
-        ref: ${{ steps.pr.outputs.data.head.ref }}
-        
-    - name: Get Pull Request Number
-      id: extract_pr_num
-      run: echo "::set-output name=number::$(echo ${{ github.event.issue.pull_request.url }} | cut -d'/' -f7)"
-
-    - name: Get Pull Request Head SHA
-      id: extract_head_sha
+    - name: Get Pull Request context
+      id: extract_pr
       run: |
-        PR_NUMBER=${{ steps.extract_pr_num.outputs.number }}
-        SHA=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUMBER} | jq -r '.head.sha')
+        SHA=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.sha')
+        OWNER=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.sha')
+        REPO=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.sha')
+        REF=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.sha')
         echo "::set-output name=sha::$SHA"
+        echo "::set-output name=owner::$OWNER"
+        echo "::set-output name=repo::$REPO"
+        echo "::set-output name=ref::$REF"
+        
 
     - name: Checkout PR API
       uses: actions/checkout@v3
       with:
-        ref: ${{ steps.extract_head_sha.outputs.sha }}
+        repository: ${{ steps.extract_pr.outputs.owner}}/${{ steps.extract_pr.outputs.repo }}
+        ref: ${{ steps.extract_pr.outputs.ref }}
       
         
     - name: Dump context
