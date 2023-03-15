@@ -177,7 +177,9 @@ apiServer:
   ## @param apiServer.podSecurityContext.fsGroup Set apiServer pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -186,9 +188,14 @@ apiServer:
   ## @param apiServer.containerSecurityContext.runAsNonRoot Set apiServer containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param apiServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for apiServer
   ##
@@ -288,11 +295,16 @@ apiServer:
     - name: di-config
       secret:
         secretName: di-config
+    - name: di-tmp
+      emptyDir:
+        medium: Memory
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
   ##
   extraVolumeMounts: 
     - name: di-config
       mountPath: /usr/share/app/secrets/configs
+    - name: di-tmp
+      mountPath: /tmp
   
   ## @param apiServer.sidecars Add additional sidecar containers to the apiServer pod(s)
   ## e.g:
@@ -399,7 +411,9 @@ authenticator:
   ## @param authenticator.podSecurityContext.fsGroup Set authenticator pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -408,9 +422,14 @@ authenticator:
   ## @param authenticator.containerSecurityContext.runAsNonRoot Set authenticator containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param authenticator.existingConfigmap The name of an existing ConfigMap with your custom configuration for authenticator
   ##
@@ -509,13 +528,17 @@ authenticator:
     - name: di-config
       secret:
         secretName: di-config
-
+    - name: di-tmp
+      emptyDir:
+        medium: Memory
     
   ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the authenticator container(s)
   ##
   extraVolumeMounts:
     - name: di-config
       mountPath: /usr/share/app/secrets/configs
+    - name: di-tmp
+      mountPath: /tmp
 
   ## @param authenticator.sidecars Add additional sidecar containers to the authenticator pod(s)
   ## e.g:
@@ -621,7 +644,9 @@ databroker:
   ## @param databroker.podSecurityContext.fsGroup Set databroker pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -630,9 +655,14 @@ databroker:
   ## @param databroker.containerSecurityContext.runAsNonRoot Set databroker containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param databroker.existingConfigmap The name of an existing ConfigMap with your custom configuration for databroker
   ##
@@ -731,12 +761,16 @@ databroker:
     - name: di-config
       secret:
         secretName: di-config
-
+    - name: di-tmp
+      emptyDir:
+        medium: Memory
   ## @param databroker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the databroker container(s)
   ##
   extraVolumeMounts: 
     - name: di-config
       mountPath: /usr/share/app/secrets/configs
+    - name: di-tmp
+      mountPath: /tmp
   
   ## @param databroker.sidecars Add additional sidecar containers to the databroker pod(s)
   ## e.g:
@@ -842,7 +876,9 @@ metering:
   ## @param metering.podSecurityContext.fsGroup Set metering pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -851,9 +887,14 @@ metering:
   ## @param metering.containerSecurityContext.runAsNonRoot Set metering containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param metering.existingConfigmap The name of an existing ConfigMap with your custom configuration for metering
   ##
@@ -952,12 +993,16 @@ metering:
     - name: di-config
       secret:
         secretName: di-config
-
+    - name: di-tmp
+      emptyDir:
+        medium: Memory
   ## @param metering.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
   ##
   extraVolumeMounts: 
     - name: di-config
       mountPath: /usr/share/app/secrets/configs
+    - name: di-tmp
+      mountPath: /tmp
   
   ## @param metering.sidecars Add additional sidecar containers to the metering pod(s)
   ## e.g:

@@ -2,11 +2,6 @@
 
 Docker swarm stack for advance monitoring stack
 
-## Build Docker Image
-```sh
-docker build -t ghcr.io/datakaveri/ams:4.0.0-1 -f docker/Dockerfile docker/
-```
-
 # Installation of Advance monitoring Stack
 ## Create secret files
 1. Make a copy of sample secrets directory.
