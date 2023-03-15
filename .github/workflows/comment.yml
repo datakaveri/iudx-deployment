@@ -12,10 +12,10 @@ jobs:
     if: contains(github.event.comment.body, '/test_rs')
     steps:        
     - name: Authenticate with GitHub
-        uses: octokit/auth-action@v1.x
-        id: auth
-        with:
-          github_token: ${{ secrets.TOKEN }}
+      uses: octokit/auth-action@v1.x
+      id: auth
+      with:
+        github_token: ${{ secrets.TOKEN }}
           
     - name: Fetch pull request details
       uses: octokit/request-action@v2.x
