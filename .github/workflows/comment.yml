@@ -10,31 +10,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: contains(github.event.comment.body, '/test_rs')
-    steps: 
-    - name: Check permissions
-      id: permissions
-      uses: tcardonne/github-action-permissions@v3
-      with:
-        args: push
-        
+    steps:         
     - name: Fetch pull request details
       uses: octokit/request-action@v2.x
       id: pr-details
       with:
         route: GET /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}
         headers: |
-          Authorization: ${{ secrets.GITHUB_TOKEN }}
+          Authorization: ${{ github.token}}
       
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
       shell: bash
       
     - name: Checkout PR code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ steps.pr-details.outputs.data.head.ref }}
         repository: ${{ steps.pr-details.outputs.data.head.repo.full_name }}
-        token: ${{ github.token  }}
         
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
