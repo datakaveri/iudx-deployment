@@ -17,13 +17,14 @@ jobs:
       id: extract_pr
       run: |
         SHA=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.sha')
-        OWNER=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.sha')
-        REPO=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.sha')
-        REF=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.sha')
+        OWNER=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.repo.owner.login')
+        REPO=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.repo.name')
+        REF=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.ref')
         echo "::set-output name=sha::$SHA"
         echo "::set-output name=owner::$OWNER"
         echo "::set-output name=repo::$REPO"
         echo "::set-output name=ref::$REF"
+        
         
 
     - name: Checkout PR API
