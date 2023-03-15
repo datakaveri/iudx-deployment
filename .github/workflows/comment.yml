@@ -13,6 +13,17 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: contains(github.event.comment.body, '/test_rs')
     steps:
+    - name: Get Pull Request Details
+      id: pr
+      uses: octokit/request-action@v2.x
+      with:
+        route: GET /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}
+
+    - name: Checkout PR octokit
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ steps.pr.outputs.data.head.sha }}
+        
     - name: Get Pull Request Number
       id: extract_pr_num
       run: echo "::set-output name=number::$(echo ${{ github.event.issue.pull_request.url }} | cut -d'/' -f7)"
