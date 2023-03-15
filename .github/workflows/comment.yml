@@ -11,13 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.comment.body, '/test_rs')
     steps:        
+    - name: Authenticate with GitHub
+        uses: octokit/auth-action@v1.x
+        id: auth
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          
     - name: Fetch pull request details
       uses: octokit/request-action@v2.x
       id: pr-details
       with:
         route: GET /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}
         headers: |
-          Authorization: ${{ secrets.TOKEN}}
+          Authorization: ${{ steps.auth.outputs.authorization }}
       
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
