@@ -8,7 +8,7 @@ networks:
 
 services:
   keycloak:
-    image: ghcr.io/datakaveri/keycloak:18.0.1-3
+    image: ghcr.io/datakaveri/keycloak:18.0.1-6
     cap_drop:
        - ALL
 

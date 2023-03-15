@@ -24,7 +24,7 @@ spec:
         node.kubernetes.io/instance-type: Standard_D2as_v4
       containers:
         - name: advance-monitoring-stack
-          image: ghcr.io/datakaveri/ams:4.0.0-1
+          image: ghcr.io/datakaveri/ams:4.0.0-2
           imagePullPolicy: IfNotPresent
           resources:
             limits:
