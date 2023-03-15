@@ -21,7 +21,7 @@ jobs:
       with:
         route: GET /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}
         headers: |
-          Authorization: ${{ GITHUB_TOKEN  }}
+          Authorization: ${{ env.GITHUB_TOKEN  }}
       
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
