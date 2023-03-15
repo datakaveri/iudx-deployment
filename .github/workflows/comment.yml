@@ -18,6 +18,10 @@ jobs:
       uses: octokit/request-action@v2.x
       with:
         route: GET /repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}
+      
+    - name: context
+      run: echo ${{ steps.pr.outputs.data }}
+      shell: bash
 
     - name: Checkout PR octokit
       uses: actions/checkout@v2
