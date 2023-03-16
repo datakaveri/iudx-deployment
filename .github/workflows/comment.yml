@@ -19,7 +19,8 @@ jobs:
     - name: Dump context
       run: |
         echo ${{ github.event.sender.login }}
-        echo ${{ env[concat('github.repository.permissions.', github.event.sender.login)] }}
+        echo "SENDER_LOGIN=${{ github.event.sender.login }}" >> $GITHUB_ENV
+        echo "${{github.repository.permissions.${{ env.SENDER_LOGIN }}}}"
       shell: bash
       
     - name: Get Pull Request context
