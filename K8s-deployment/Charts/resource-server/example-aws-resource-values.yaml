@@ -12,7 +12,7 @@ ingress:
 apiServer:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
@@ -29,7 +29,7 @@ apiServer:
 archivesDatabase:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
@@ -46,7 +46,7 @@ archivesDatabase:
 authenticator:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 600m
@@ -63,7 +63,7 @@ authenticator:
 databroker:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 500m
@@ -80,7 +80,7 @@ databroker:
 encryption:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 500m
@@ -97,7 +97,7 @@ encryption:
 latestDatabase:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
@@ -114,7 +114,7 @@ latestDatabase:
 metering:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 700m
@@ -131,7 +131,7 @@ metering:
 postgres:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 600m
@@ -148,7 +148,7 @@ postgres:
 cache:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 400m
@@ -165,7 +165,7 @@ cache:
 async:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
