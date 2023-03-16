@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
-    if: contains(github.event.comment.body, '/test_rs') && github.event.issue.pull_request != null
+    if: contains(github.event.comment.body, '/test_rs') && github.event.issue.pull_request != null && github.repository.permissions.${{ github.event.sender.login }} == 'write'
     steps:
     - name: Dump context
       run: echo '${{ toJSON(github.event) }}' | jq
