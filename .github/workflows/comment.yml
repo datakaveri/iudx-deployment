@@ -13,6 +13,18 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: contains(github.event.comment.body, '/test_rs') && github.event.issue.pull_request != null && github.repository.permissions.${{ github.event.sender.login }} == 'write'
     steps:
+    - name: Get user permissions
+      uses: octokit/request-action@v2.x
+      id: permissions
+      with:
+        route: GET /repos/:owner/:repo/collaborators/:username/permission
+        owner: ${{ github.event.repository.owner.login }}
+        repo: ${{ github.event.repository.name }}
+        username: ${{ github.event.sender.login }}
+
+    - name: Print user permission level
+      run: echo "User permission level is ${{ steps.permissions.outputs.data.permission }}"
+  
     - uses: actions-cool/check-user-permission@v2
       id: check
       with:
