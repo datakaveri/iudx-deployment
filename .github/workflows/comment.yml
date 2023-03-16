@@ -13,6 +13,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: contains(github.event.comment.body, '/test_rs') && github.event.issue.pull_request != null
     steps:
+    - name: Dump context
+      run: echo '${{ toJSON(github.event) }}' | jq
+      shell: bash
+      
     - name: Get Pull Request context
       id: extract_pr
       run: |        
