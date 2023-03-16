@@ -13,7 +13,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: contains(github.event.comment.body, '/test_rs') && github.event.issue.pull_request != null && github.repository.permissions.${{ github.event.sender.login }} == 'write'
     steps:
-    - name: check user access
+    - name: check user access with mgs
       run: |
         #!/bin/bash
 
