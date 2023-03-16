@@ -19,8 +19,7 @@ jobs:
     - name: Dump context
       run: |
         echo ${{ github.event.sender.login }}
-        echo "SENDER_LOGIN=${{ github.event.sender.login }}" >> $GITHUB_ENV
-        echo "${{github.repository.permissions.${{ env.SENDER_LOGIN }}}}"
+        echo "${{github.repository.permissions.pranavv1 }}"
       shell: bash
       
     - name: Get Pull Request context
