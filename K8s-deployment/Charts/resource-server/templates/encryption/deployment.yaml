@@ -1,0 +1,160 @@
+{{- if .Values.encryption.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: rs-encryption
+  labels: 
+    app.kubernetes.io/component: encryption
+    app: rs-encryption
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.encryption.replicaCount }}
+  {{- if .Values.encryption.updateStrategy }}
+  strategy: {{- toYaml .Values.encryption.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: rs-encryption
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: rs-encryption
+        app.kubernetes.io/component: encryption
+        {{- if .Values.encryption.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.encryption.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.encryption.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.encryption.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.encryption.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.encryption.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.encryption.priorityClassName }}
+      priorityClassName: {{ .Values.encryption.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.encryption.schedulerName }}
+      schedulerName: {{ .Values.encryption.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.encryption.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.encryption.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.encryption.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.encryption.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: rs-encryption
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.encryption.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.encryption.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.encryption.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.encryption.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.encryption.args }}
+          args: [{{- range $index, $str := .Values.encryption.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.encryption.resources }}
+          resources: {{- toYaml .Values.encryption.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.encryption.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.encryption.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.encryption.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.encryption.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.encryption.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.encryption.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.encryption.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.encryption.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.encryption.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.encryption.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.encryption.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.encryption.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.encryption.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.encryption.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.encryption.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.encryption.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.encryption.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.encryption.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.encryption.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.encryption.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.encryption.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.encryption.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.encryption.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.encryption.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.encryption.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.encryption.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.encryption.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.encryption.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.encryption.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.encryption.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.encryption.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.encryption.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.encryption.podAffinityPreset "component" "encryption" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.encryption.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "encryption" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.encryption.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.encryption.nodeAffinityPreset.type "key" .Values.encryption.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.encryption.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.encryption.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
