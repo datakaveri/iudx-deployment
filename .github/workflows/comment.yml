@@ -13,6 +13,29 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: contains(github.event.comment.body, '/test_rs') && github.event.issue.pull_request != null && github.repository.permissions.${{ github.event.sender.login }} == 'write'
     steps:
+    - name: Check if user has write access
+      run: |
+          # Get the owner and repository name
+          OWNER=$(echo ${{ github.repository }} | cut -d/ -f1)
+          REPO=$(echo ${{ github.repository }} | cut -d/ -f2)
+
+          # Get the commenter's username
+          SENDER=$(echo ${{ github.event.comment.user.login }})
+
+          # Get a token with repo scope from the secrets
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+
+          # Make a call to the API to check the user's permissions
+          PERMS=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/repos/$OWNER/$REPO/collaborators/$SENDER/permission")
+
+          # Check if the user has write access
+          if [[ $(echo $PERMS | jq -r '.permission') == "admin" || $(echo $PERMS | jq -r '.permission') == "write" ]]; then
+            echo "User $SENDER has write access to $OWNER/$REPO"
+          else
+            echo "User $SENDER does not have write access to $OWNER/$REPO"
+            exit 1
+          fi
+    
     - name: Get user permissions
       uses: octokit/request-action@v2.x
       id: permissions
