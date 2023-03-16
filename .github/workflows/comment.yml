@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
-    if: contains(github.event.comment.body, '/test_rs')
+    if: contains(github.event.comment.body, '/test_rs') && github.event.issue.pull_request != null
     steps:
     - name: Get Pull Request context
       id: extract_pr
