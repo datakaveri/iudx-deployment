@@ -16,6 +16,30 @@ jobs:
     - name: check user access
       run: |
         #!/bin/bash
+
+        # Get the owner and repository name from the GITHUB_REPOSITORY environment variable
+        IFS='/' read -r -a array <<< "$GITHUB_REPOSITORY"
+        owner="${array[0]}"
+        repo="${array[1]}"
+
+        # Get the user who triggered the workflow
+        sender_login=$(echo "$GITHUB_EVENT_PATH" | jq -r .sender.login)
+
+        # Get the user's permissions on the repository
+        permissions=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }} "https://api.github.com/repos/$owner/$repo/collaborators/$sender_login/permission")
+
+        # Check if the user has write permission
+        if [[ $(echo "$permissions" | jq -r .permission) != "admin" && $(echo "$permissions" | jq -r .permission) != "write" ]]; then
+          # Add a comment to the PR
+          pr_number=$(echo "$GITHUB_EVENT_PATH" | jq -r .issue.number)
+          curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }} -X POST -d "{\"body\":\"@${sender_login} You are not authorized to trigger this workflow. Only users with write permission can trigger this workflow.\"}" "https://api.github.com/repos/$owner/$repo/issues/$pr_number/comments"
+          exit 1
+        fi
+
+      
+    - name: check user access
+      run: |
+        #!/bin/bash
         set -e  # exit immediately if a command exits with a non-zero status
         set -x  # enable debugging output
 
@@ -27,7 +51,7 @@ jobs:
         SENDER=$(jq -r ".comment.user.login" "$GITHUB_EVENT_PATH")
 
         # Get the permissions of the user who created the comment
-        PERMISSIONS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/collaborators/$SENDER/permission" | jq -r ".permission")
+        PERMISSIONS=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }} "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/collaborators/$SENDER/permission" | jq -r ".permission")
 
         # Check if the user has write permission
         if [ "$PERMISSIONS" == "write" ]; then
