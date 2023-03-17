@@ -16,18 +16,8 @@ jobs:
     - name: check user access with mgs
       run: |      
         #!/bin/bash
-        set -e  # exit immediately if a command exits with a non-zero status
-        set -x  # enable debugging output
-
-        # Extract the repository owner and name from the event payload
-        REPO_OWNER=$(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f 1)
-        REPO_NAME=$(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f 2)
-
-        # Get the username of the user who created the comment
-        SENDER=$(jq -r ".comment.user.login" "$GITHUB_EVENT_PATH")
-
         # Get the permissions of the user who created the comment
-        PERMISSIONS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/collaborators/$SENDER/permission" | jq -r ".permission")
+        PERMISSIONS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/${{ github.repository }}/collaborators/${{ github.event.comment.user.login }}/permission" | jq -r ".permission")
 
         # Check if the user has write permission
         if [ "$PERMISSIONS" == "write" ]; then
@@ -35,87 +25,8 @@ jobs:
         else
           echo "User does not have write permission"
           pr_number=$(jq -r ".issue.number" "$GITHUB_EVENT_PATH")
-          curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -X POST -d "{\"body\":\"@$SENDER You are not authorized to trigger this workflow. Only users with write permission can trigger this workflow.\"}" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$pr_number/comments"
+          curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -X POST -d "{\"body\":\"@${{ github.event.comment.user.login }} You are not authorized to trigger this workflow. Only users with write permission can trigger this workflow.\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
         fi
-
-
-      
-    - name: check user access
-      run: |
-        #!/bin/bash
-        set -e  # exit immediately if a command exits with a non-zero status
-        set -x  # enable debugging output
-
-        # Extract the repository owner and name from the event payload
-        REPO_OWNER=$(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f 1)
-        REPO_NAME=$(echo "${GITHUB_REPOSITORY}" | cut -d "/" -f 2)
-
-        # Get the username of the user who created the comment
-        SENDER=$(jq -r ".comment.user.login" "$GITHUB_EVENT_PATH")
-
-        # Get the permissions of the user who created the comment
-        PERMISSIONS=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }} "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/collaborators/$SENDER/permission" | jq -r ".permission")
-
-        # Check if the user has write permission
-        if [ "$PERMISSIONS" == "write" ]; then
-          echo "User has write permission"
-        else
-          echo "User does not have write permission"
-        fi
-        
-    - name: Check if user has write access
-      run: |
-          # Get the owner and repository name
-          OWNER=$(echo ${{ github.repository }} | cut -d/ -f1)
-          REPO=$(echo ${{ github.repository }} | cut -d/ -f2)
-
-          # Get the commenter's username
-          SENDER=$(echo ${{ github.event.comment.user.login }})
-
-          # Get a token with repo scope from the secrets
-          TOKEN="${{ secrets.GITHUB_TOKEN }}"
-
-          # Make a call to the API to check the user's permissions
-          PERMS=$(curl -s -H "Authorization: token ${{ env.GITHUB_TOKEN }} "https://api.github.com/repos/$OWNER/$REPO/collaborators/$SENDER/permission")
-
-          # Check if the user has write access
-          if [[ $(echo $PERMS | jq -r '.permission') == "admin" || $(echo $PERMS | jq -r '.permission') == "write" ]]; then
-            echo "User $SENDER has write access to $OWNER/$REPO"
-          else
-            echo "User $SENDER does not have write access to $OWNER/$REPO"
-            exit 1
-          fi
-    
-    - name: Get user permissions
-      uses: octokit/request-action@v2.x
-      id: permissions
-      with:
-        route: GET /repos/:owner/:repo/collaborators/:username/permission
-        owner: ${{ github.event.repository.owner.login }}
-        repo: ${{ github.event.repository.name }}
-        username: ${{ github.event.sender.login }}
-
-    - name: Print user permission level
-      run: echo "User permission level is ${{ steps.permissions.outputs.data.permission }}"
-  
-    - uses: actions-cool/check-user-permission@v2
-      id: check
-      with:
-        require: 'write'
-        check-contributor: true
-
-    - run: echo "user-permission = ${{ steps.check.outputs.user-permission }}"
-    - run: echo "require-result = ${{ steps.check.outputs.require-result }}"
-    - run: echo "check-result = ${{ steps.check.outputs.check-result }}"
-        
-    - name: Dump context
-      run: echo '${{ toJSON(github.event) }}' | jq
-      shell: bash
-    - name: Dump context
-      run: |
-        echo ${{ github.event.sender.login }}
-        echo "${{github.repository}}"
-      shell: bash
       
     - name: Get Pull Request context
       id: extract_pr
