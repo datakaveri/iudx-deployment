@@ -2,10 +2,7 @@ name: Test Resource Server
 
 on:
   issue_comment:
-    types: [created,edited]
-permissions:
-  issues: write
-  
+    types: [created,edited]  
 jobs:
   build:
     runs-on: ubuntu-latest
