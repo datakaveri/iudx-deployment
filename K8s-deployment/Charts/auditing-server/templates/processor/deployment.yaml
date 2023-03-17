@@ -1,0 +1,173 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: auditing-processor 
+  labels: 
+    app.kubernetes.io/component: processor
+    app: auditing-processor 
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.processor.replicaCount }}
+  {{- if .Values.processor.updateStrategy }}
+  strategy: {{- toYaml .Values.processor.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: auditing-processor 
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: auditing-processor 
+        app.kubernetes.io/component: processor
+        {{- if .Values.processor.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.processor.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.processor.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.processor.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.processor.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.processor.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.processor.priorityClassName }}
+      priorityClassName: {{ .Values.processor.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.processor.schedulerName }}
+      schedulerName: {{ .Values.processor.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.processor.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.processor.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "catalogue.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command: {}
+          
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: foo
+              mountPath: bar
+        {{- end }}
+        {{- if .Values.processor.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.processor.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: auditing-processor 
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.processor.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.processor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.processor.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.processor.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.processor.args }}
+          args: [{{- range $index, $str := .Values.processor.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.processor.resources }}
+          resources: {{- toYaml .Values.processor.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.processor.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.processor.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.processor.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.processor.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.processor.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.processor.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.processor.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.processor.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.processor.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.processor.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.processor.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.processor.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.processor.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.processor.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.processor.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.processor.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.processor.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.processor.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.processor.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.processor.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.processor.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.processor.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.processor.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.processor.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.processor.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.processor.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.processor.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.processor.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.processor.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.processor.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.processor.affinity "context" $) | nindent 8 }}
+      {{/*- if .Values.processor.podAffinityPreset or .Values.processor.podAntiAffinityPreset or  .Values.processor.nodeAffinityPreset.type*/}}
+      {{- else }}
+      affinity:
+        {{- if .Values.processor.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.processor.podAffinityPreset "component" "processor" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.processor.podAntiAffinityPreset}}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.processor.podAntiAffinityPreset "component" "processor" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.processor.nodeAffinityPreset.type}}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.processor.nodeAffinityPreset.type "key" .Values.processor.nodeAffinityPreset.key "values" .Values.processor.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.processor.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.processor.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
