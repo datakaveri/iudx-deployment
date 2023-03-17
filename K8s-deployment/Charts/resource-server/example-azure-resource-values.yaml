@@ -80,7 +80,7 @@ databroker:
 encryption:
   enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3a.medium
+    node.kubernetes.io/instance-type: Standard_B2s
   resources:
     limits:
       cpu: 500m
