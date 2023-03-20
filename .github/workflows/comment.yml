@@ -33,7 +33,6 @@ jobs:
     - name: Check Comment
       uses: actions/github-script@v4
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const comment = context.payload.comment.body;
           const commentList = ["test_rs", "test2", "test3"];
