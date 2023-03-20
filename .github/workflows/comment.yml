@@ -58,6 +58,9 @@ jobs:
         # Check if the user has write permission
         if [ "$PERMISSIONS" == "write" ]; then
           echo "User has write permission"
+          
+        elif  [ "$PERMISSIONS" == "admin" ]; then
+          echo "User has admin permission"
         else
           echo "User does not have write permission"
           pr_number=$(jq -r ".issue.number" "$GITHUB_EVENT_PATH")
