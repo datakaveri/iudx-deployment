@@ -8,12 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
+    if: startsWith(github.event.comment.body, '/test_') && github.event.issue.pull_request != null
     steps:
     - name: Check Comment
       run: |
         #!/bin/bash
+
         # Define the list of comments
-        comments=("/test_rs", "/test_cat", "/test_fs", "/test_di", "/test_gis" )
+        comments=("/test_rs" "/test_cat" "/test_fs" "/test_di" "/test_gis" )
 
         # Get the comment body from the event payload
         comment_body=$(jq -r ".comment.body" "$GITHUB_EVENT_PATH")
@@ -24,13 +26,30 @@ jobs:
           if [[ "$comment_body" == *"$i"* ]]; then
             # The comment matches one of the defined comments, so run the desired command
             echo "The comment matches \"$i\""
-            echo "COMMENT=$i" >> $GITHUB_ENV
+            echo "COMMENT=${i}" >> $GITHUB_ENV
             break
           fi
         done
     - name: Check Comment
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const comment = context.payload.comment.body;
+          const commentList = ["test_rs", "test2", "test3"];
+          const jobList = ["job1", "job2", "job3"];
+
+          for (let i = 0; i < commentList.length; i++) {
+            if (comment.startsWith('/' + commentList[i])) {
+                const jobName = jobList[i];
+                console.log('Triggering ' + jobName);
+                process.env.JOB_NAME = jobName;
+                break;
+              }
+            }
+    - name: Check Comment
       run: |
-        echo "${{ env.COMMENT }}" 
+        echo "${{ env.JOB_NAME }}" 
     - name: check user access with mgs
       run: |      
         #!/bin/bash
