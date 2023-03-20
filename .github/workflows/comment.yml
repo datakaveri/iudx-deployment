@@ -2,14 +2,35 @@ name: Test Resource Server
 
 on:
   issue_comment:
-    types: [created,edited]  
+    types: [created, edited]  
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
-    if: contains(github.event.comment.body, '/test_rs') && github.event.issue.pull_request != null
     steps:
+    - name: Check Comment
+      run: |
+        #!/bin/bash
+        # Define the list of comments
+        comments=("/test_rs", "/test_cat", "/test_fs", "/test_di", "/test_gis" )
+
+        # Get the comment body from the event payload
+        comment_body=$(jq -r ".comment.body" "$GITHUB_EVENT_PATH")
+
+        # Check if the comment matches any of the defined comments
+        for i in "${comments[@]}"
+        do
+          if [[ "$comment_body" == *"$i"* ]]; then
+            # The comment matches one of the defined comments, so run the desired command
+            echo "The comment matches \"$i\""
+            echo "COMMENT=$i" >> $GITHUB_ENV
+            break
+          fi
+        done
+    - name: Check Comment
+      run: |
+        echo "${{ env.COMMENT }}" 
     - name: check user access with mgs
       run: |      
         #!/bin/bash
