@@ -9,6 +9,11 @@ initial_password="admin"
 users=`echo "$init_config"| jq  -r .users`
 admin_username=`echo $users | jq -r .[0].username`
 admin_password=`cat $(echo $users | jq -r .[0].password_file)`
+until [ "$(curl -s -X GET -u "$initial_username":"$initial_password" http://$RMQ_HOST/api/aliveness-test/%2F | jq -r .status | grep 'ok')" ];
+do
+    echo --- waiting for rabbitmq to start ---
+    sleep 10
+done
 curl -s  -u "$initial_username":"$initial_password" -X PUT "http://$RMQ_HOST/api/users/$admin_username" -d "{\"password\":\"$admin_password\",\"tags\":\"administrator\"}"
 echo "admin user updated"
 # require RMQ_HOST env variable with value being internal service address + port to rmq host
