@@ -73,18 +73,4 @@ postgres:
       cpu: 800m
       memory: 800Mi
 
-## cache resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param cache.resources.limits The resources limits for the cache containers
-## @param cache.resources.requests The requested resources for the cache containers
-##
-cache:
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1Gi
-    requests: 
-      cpu: 800m
-      memory: 800Mi
+
