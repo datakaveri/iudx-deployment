@@ -1,10 +1,10 @@
-{{- if .Values.metering.autoscaling.enabled }}
+{{- if .Values.immudb.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: auditing-metering 
+  name: auditing-immudb 
   labels:
-    app: auditing-metering 
+    app: auditing-immudb 
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: auditing-metering 
-  minReplicas: {{ .Values.metering.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.metering.autoscaling.maxReplicas }}
+    name: auditing-immudb 
+  minReplicas: {{ .Values.immudb.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.immudb.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.metering.autoscaling.targetCPU }}
+    {{- if .Values.immudb.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.metering.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.immudb.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.metering.autoscaling.targetMemory }}
+    {{- if .Values.immudb.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.metering.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.immudb.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}

@@ -363,22 +363,22 @@ processor:
     targetMemory:
 
 
-## @section metering Parameters
-metering:
+## @section immudb Parameters
+immudb:
 
-  ## @param metering.replicaCount Number of metering replicas to deploy
+  ## @param immudb.replicaCount Number of immudb replicas to deploy
 
   replicaCount: 1
   
-  ## Configure extra options for metering containers' liveness and readiness probes
+  ## Configure extra options for immudb containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param metering.livenessProbe.enabled Enable livenessProbe on metering containers
-  ## @param metering.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param metering.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param metering.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param metering.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param metering.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param metering.livenessProbe.path Path for httpGet
+  ## @param immudb.livenessProbe.enabled Enable livenessProbe on immudb containers
+  ## @param immudb.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param immudb.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param immudb.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param immudb.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param immudb.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param immudb.livenessProbe.path Path for httpGet
   ##
   livenessProbe:
     enabled: true
@@ -388,12 +388,12 @@ metering:
     timeoutSeconds: 10
     #failureThreshold: 10
     #successThreshold: 10
-  ## @param metering.readinessProbe.enabled Enable readinessProbe on metering containers
-  ## @param metering.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param metering.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param metering.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param metering.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param metering.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param immudb.readinessProbe.enabled Enable readinessProbe on immudb containers
+  ## @param immudb.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param immudb.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param immudb.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param immudb.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param immudb.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: false
@@ -402,12 +402,12 @@ metering:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param metering.startupProbe.enabled Enable startupProbe on metering containers
-  ## @param metering.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param metering.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param metering.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param metering.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param metering.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param immudb.startupProbe.enabled Enable startupProbe on immudb containers
+  ## @param immudb.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param immudb.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param immudb.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param immudb.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param immudb.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -416,19 +416,19 @@ metering:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param metering.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param immudb.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param metering.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param immudb.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param metering.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param immudb.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## metering resource requests and limits
+  ## immudb resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param metering.resources.limits The resources limits for the metering containers
-  ## @param metering.resources.requests The requested resources for the metering containers
+  ## @param immudb.resources.limits The resources limits for the immudb containers
+  ## @param immudb.resources.requests The requested resources for the immudb containers
   ##
   resources:
     limits:
@@ -439,8 +439,8 @@ metering:
       memory: 800Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metering.podSecurityContext.enabled Enabled metering pods' Security Context
-  ## @param metering.podSecurityContext.fsGroup Set metering pod's Security Context fsGroup
+  ## @param immudb.podSecurityContext.enabled Enabled immudb pods' Security Context
+  ## @param immudb.podSecurityContext.fsGroup Set immudb pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -449,9 +449,9 @@ metering:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metering.containerSecurityContext.enabled Enabled metering containers' Security Context
-  ## @param metering.containerSecurityContext.runAsUser Set metering containers' Security Context runAsUser
-  ## @param metering.containerSecurityContext.runAsNonRoot Set metering containers' Security Context runAsNonRoot
+  ## @param immudb.containerSecurityContext.enabled Enabled immudb containers' Security Context
+  ## @param immudb.containerSecurityContext.runAsUser Set immudb containers' Security Context runAsUser
+  ## @param immudb.containerSecurityContext.runAsNonRoot Set immudb containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -463,69 +463,69 @@ metering:
           - ALL
     readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param metering.existingConfigmap The name of an existing ConfigMap with your custom configuration for metering
+   ## @param immudb.existingConfigmap The name of an existing ConfigMap with your custom configuration for immudb
   ##
   existingConfigmap:
     
-  ## @param metering.command Override default container command (useful when using custom images)
+  ## @param immudb.command Override default container command (useful when using custom images)
   ##
   command: ["/bin/bash"]
-  ## @param metering.args Override default container args (useful when using custom images)
+  ## @param immudb.args Override default container args (useful when using custom images)
   ##
   args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.auditing.server.immudb.ImmudbVerticle"]
-  ## @param metering.hostAliases metering pods host aliases
+  ## @param immudb.hostAliases immudb pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param metering.podLabels Extra labels for metering pods
+  ## @param immudb.podLabels Extra labels for immudb pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
   
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  ## @param metering.podAffinityPreset Pod affinity preset. Ignored if `metering.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param immudb.podAffinityPreset Pod affinity preset. Ignored if `immudb.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param metering.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `metering.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param immudb.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `immudb.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-  ## Node metering.affinity preset
+  ## Node immudb.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param metering.nodeAffinityPreset.type Node affinity preset type. Ignored if `metering.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param immudb.nodeAffinityPreset.type Node affinity preset type. Ignored if `immudb.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param metering.nodeAffinityPreset.key Node label key to match. Ignored if `metering.affinity` is set
+    ## @param immudb.nodeAffinityPreset.key Node label key to match. Ignored if `immudb.affinity` is set
     ##
     key: ""
-    ## @param metering.nodeAffinityPreset.values Node label values to match. Ignored if `metering.affinity` is set
+    ## @param immudb.nodeAffinityPreset.values Node label values to match. Ignored if `immudb.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param metering.affinity Affinity for metering pods assignment
+  ## @param immudb.affinity Affinity for immudb pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `metering.podAffinityPreset`, `metering.podAntiAffinityPreset`, and `metering.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `immudb.podAffinityPreset`, `immudb.podAntiAffinityPreset`, and `immudb.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param metering.nodeSelector Node labels for metering pods assignment
+  ## @param immudb.nodeSelector Node labels for immudb pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
 
 
-  ## @param metering.tolerations Tolerations for metering pods assignment
+  ## @param immudb.tolerations Tolerations for immudb pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param metering.updateStrategy.type metering statefulset strategy type
+  ## @param immudb.updateStrategy.type immudb statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -533,30 +533,30 @@ metering:
     ## Can be set to RollingUpdate or OnDelete
     ##
     ##type: RollingUpdate
-  ## @param metering.priorityClassName metering pods' priorityClassName
+  ## @param immudb.priorityClassName immudb pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param metering.schedulerName Name of the k8s scheduler (other than default) for metering pods
+  ## @param immudb.schedulerName Name of the k8s scheduler (other than default) for immudb pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param metering.lifecycleHooks for the metering container(s) to automate configuration before or after startup
+  ## @param immudb.lifecycleHooks for the immudb container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param metering.extraEnvVars Array with extra environment variables to add to metering nodes
+  ## @param immudb.extraEnvVars Array with extra environment variables to add to immudb nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param metering.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for metering nodes
+  ## @param immudb.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for immudb nodes
   ##
   extraEnvVarsCM: "auditing-env"
-  ## @param metering.extraEnvVarsSecret Name of existing Secret containing extra env vars for metering nodes
+  ## @param immudb.extraEnvVarsSecret Name of existing Secret containing extra env vars for immudb nodes
   ##
   extraEnvVarsSecret:
-  ## @param metering.extraVolumes Optionally specify extra list of additional volumes for the metering pod(s)
+  ## @param immudb.extraVolumes Optionally specify extra list of additional volumes for the immudb pod(s)
   ##
   extraVolumes:
     - name: auditing-config
@@ -566,7 +566,7 @@ metering:
       emptyDir:
         medium: Memory
     
-  ## @param metering.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
+  ## @param immudb.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the immudb container(s)
   ##
   extraVolumeMounts: 
     - name: auditing-config
@@ -574,7 +574,7 @@ metering:
     - name: auditing-tmp
       mountPath: /tmp
   
-  ## @param metering.sidecars Add additional sidecar containers to the metering pod(s)
+  ## @param immudb.sidecars Add additional sidecar containers to the immudb pod(s)
   ## e.g:
   ## sidecars:
   ## - name: your-image-name
@@ -585,7 +585,7 @@ metering:
   ##       containerPort: 1234
   ##
   sidecars: {}
-  ## @param metering.initContainers Add additional init containers to the metering pod(s)
+  ## @param immudb.initContainers Add additional init containers to the immudb pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -597,11 +597,11 @@ metering:
   initContainers: {}
 
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param metering.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param metering.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param metering.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param metering.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param metering.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param immudb.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param immudb.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param immudb.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param immudb.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param immudb.autoscaling.targetMemory Target Memory utilization percentage
 
   autoscaling:
     enabled: false
@@ -803,7 +803,7 @@ postgres:
     - name: auditing-tmp
       emptyDir:
         medium: Memory
-  ## @param postgres.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
+  ## @param postgres.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the postgres container(s)
   ##
   extraVolumeMounts: 
     - name: auditing-config
@@ -1181,120 +1181,6 @@ serviceHeadless:
   ## @param serviceHeadless.extraPorts Extra ports to expose in serviceHeadless (normally used with the `sidecars` value)
   ##
   extraPorts: []
-## ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
-##
-ingress:
-  ## @param ingress.enabled Enable ingress record generation for %%MAIN_CONTAINER_NAME%%
-  ##
-  enabled: true
-  ## @param ingress.pathType Ingress path type
-  ##
-  pathType: ImplementationSpecific
-  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
-  ##
-  apiVersion:
-  ## @param ingress.hostname Default host for the ingress record
-  ##
-  hostname: auditing-hostname
-  ## @param ingress.path Default path for the ingress record
-  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
-  ##
-  path: /
-  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
-  ## Use this parameter to set the required annotations for cert-manager, see
-  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-  ## e.g:
-  ## annotations:
-  ##   kubernetes.io/ingress.class: nginx
-  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
-  ##
-  ## @param ingress.serviceName Backend ingress Service Name 
-  serviceName: "auditing-api-server"
-  annotations: {
-    kubernetes.io/tls-acme: "true",
-    kubernetes.io/ingress.class: "nginx",
-    nginx.ingress.kubernetes.io/global-rate-limit: "1000",
-    nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name,
-    nginx.ingress.kubernetes.io/global-rate-limit-window: 1s,
-    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1",
-    nginx.ingress.kubernetes.io/limit-connections: "100",
-    nginx.ingress.kubernetes.io/limit-rps: "100",
-    nginx.ingress.kubernetes.io/proxy-body-size: 1024m,
-    nginx.ingress.kubernetes.io/app-root: "/apis"
-  }
-  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
-  ## You can:
-  ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Relay on cert-manager to create it by setting the corresponding annotations
-  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
-  ##
-  tls:
-    secretName: auditing-tls-secret
-  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
-  ##
-  selfSigned: false
-  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
-  ## e.g:
-  ## extraHosts:
-  ##   - name: %%COMPONENT_NAME%%.local
-  ##     path: /
-  ##
-  extraHosts: []
-  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
-  ## e.g:
-  ## extraPaths:
-  ## - path: /*
-  ##   backend:
-  ##     serviceName: ssl-redirect
-  ##     servicePort: use-annotation
-  ##
-  extraPaths: []
-  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## e.g:
-  ## extraTls:
-  ## - hosts:
-  ##     - %%COMPONENT_NAME%%.local
-  ##   secretName: %%COMPONENT_NAME%%.local-tls
-  ##
-  extraTls: []
-  ## @param ingress.secrets Custom TLS certificates as secrets
-  ## NOTE: 'key' and 'certificate' are expected in PEM format
-  ## NOTE: 'name' should line up with a 'secretName' set further up
-  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
-  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ## e.g:
-  ## secrets:
-  ##   - name: %%COMPONENT_NAME%%.local-tls
-  ##     key: |-
-  ##       -----BEGIN RSA PRIVATE KEY-----
-  ##       ...
-  ##       -----END RSA PRIVATE KEY-----
-  ##     certificate: |-
-  ##       -----BEGIN CERTIFICATE-----
-  ##       ...
-  ##       -----END CERTIFICATE-----
-  ##
-  secrets: []
- #ingress:
-  #enabled: true
-  #rateLimitAnnotation: false
-  #annotations: {}
-  #hosts:
-  #  - host: cat.test.io
-  #    paths:
-  #      - path: /
-  #        pathType: ImplementationSpecific
-  #tls: 
-  #  - secretName: catalogue-tls-secret
-  #    hosts:
-  #     - cat.test.io
-
-
 
 ## @section Init Container Parameters
 
