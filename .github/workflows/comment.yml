@@ -10,7 +10,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: startsWith(github.event.comment.body, '/test_') && github.event.issue.pull_request != null
     outputs:
-      RESULT: ${{ steps.com_chk.outputs.RESULT }}
       PERMISSIONS: ${{ steps.user_access.outputs.PERMISSIONS }}
     steps:
     - name: Check Comment
@@ -30,13 +29,13 @@ jobs:
           if [[ "$comment_body" == *"$i"* ]]; then
             # The comment matches one of the defined comments, so run the desired command
             echo "The comment matches \"$i\""
-            echo "RESULT=TRUE" >> $GITHUB_OUTPUT
+            echo "RESULT=TRUE" >> $GITHUB_ENV
             break
           fi
         done
         
     - name: check user access with mgs
-      if: ${{steps.com_chk.outputs.RESULT == 'TRUE' }}
+      if: ${{ env.RESULT == 'TRUE' }}
       id: user_access
       run: |      
         #!/bin/bash
@@ -58,17 +57,13 @@ jobs:
           curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -X POST -d "{\"body\":\"@${{ github.event.comment.user.login }} You are not authorized to trigger this workflow. Only users with write permission can trigger this workflow.\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
         fi
 
-  deploy:
+  deploy_rs:
     needs: check
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
-    if: ${{needs.check.outputs.PERMISSIONS =='granted'}}
+    if: ${{needs.check.outputs.PERMISSIONS =='granted'}} && ${{github.event.comment.body=='/test_rs'}}
     steps: 
-    - env:
-          OUTPUT1: ${{needs.check.outputs.RESULT}}
-          OUTPUT2: ${{needs.check.outputs.PERMISSIONS}}
-      run: echo "$RESULT $PERMISSIONS"
     - name: Get Pull Request context
       id: extract_pr
       run: |        
@@ -95,31 +90,24 @@ jobs:
           echo $GITHUB_REPOSITORY
           echo $GITHUB_WORKSPACE
           env
-    
-    - name: reusable workflow
-      uses: ${{ env.OWNER }}/${{ env.REPO }}/.github/workflows/test_common.yml@${{ env.REF }}
           
-   # - name: Install kubectl
-  #    uses: azure/setup-kubectl@v3
-   #   with:
-    #    version: 'v1.24.8'
-     # id: install
-      #
-   # - name: Configure kubectl
-    #  run: |
-    #    mkdir -p $HOME/.kube
-    #    echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
-    #  
-    #- name: Install Helm
-    #  uses: azure/setup-helm@v3
-    #  with:
-    #     token: ${{ env.GITHUB_TOKEN }}
-
-    - name: check reusable
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.24.8'
+      id: install
+      
+    - name: Configure kubectl
       run: |
-        helm list -n rs
-        kubectl testkube get test
-        pwd
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
+      
+    - name: Install Helm
+      uses: azure/setup-helm@v3
+      with:
+         token: ${{ env.GITHUB_TOKEN }}
+
+    
     - name: configure resource server
       run: |
         cp -r K8s-deployment/Charts/resource-server/example-secrets/* K8s-deployment/Charts/resource-server/
