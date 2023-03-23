@@ -97,7 +97,7 @@ jobs:
           env
     
     - name: reusable workflow
-      uses: ./.github/workflows/test_common.yml
+      uses: ${{ env.OWNER }}/${{ env.REPO }}/.github/workflows/test_common.yml@${{ env.REF }}
           
    # - name: Install kubectl
   #    uses: azure/setup-kubectl@v3
