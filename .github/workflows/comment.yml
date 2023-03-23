@@ -99,23 +99,27 @@ jobs:
     - name: reusable workflow
       uses: ./.github/workflows/test_reuseable.yml
           
-    - name: Install kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: 'v1.24.8'
-      id: install
-      
-    - name: Configure kubectl
+   # - name: Install kubectl
+  #    uses: azure/setup-kubectl@v3
+   #   with:
+    #    version: 'v1.24.8'
+     # id: install
+      #
+   # - name: Configure kubectl
+    #  run: |
+    #    mkdir -p $HOME/.kube
+    #    echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
+    #  
+    #- name: Install Helm
+    #  uses: azure/setup-helm@v3
+    #  with:
+    #     token: ${{ env.GITHUB_TOKEN }}
+
+    - name: check reusable
       run: |
-        mkdir -p $HOME/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
-      
-    - name: Install Helm
-      uses: azure/setup-helm@v3
-      with:
-         token: ${{ env.GITHUB_TOKEN }}
-
-
+        helm list -n rs
+        kubectl testkube get test
+        pwd
     - name: configure resource server
       run: |
         cp -r K8s-deployment/Charts/resource-server/example-secrets/* K8s-deployment/Charts/resource-server/
