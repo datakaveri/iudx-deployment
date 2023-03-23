@@ -6,6 +6,22 @@ on:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Get Pull Request context
+      id: extract_pr
+      run: |        
+        OWNER=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.repo.owner.login')
+        REPO=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.repo.name')
+        REF=$(curl -s -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.issue.number }}| jq -r '.head.ref')
+        echo "OWNER=${OWNER}" >> $GITHUB_ENV
+        echo "REPO=${REPO}" >> $GITHUB_ENV
+        echo "REF=${REF}" >> $GITHUB_ENV       
+        
+    - name: Checkout PR API
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ env.OWNER }}/${{ env.REPO }}
+        ref: ${{ env.REF }} 
+        
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
       with:
