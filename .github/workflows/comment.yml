@@ -10,8 +10,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: startsWith(github.event.comment.body, '/test_') && github.event.issue.pull_request != null
     outputs:
-      output1: ${{ steps.com_chk.outputs.RESULT }}
-      output2: ${{ steps.user_access.outputs.PERMISSIONS }}
+      RESULT: ${{ steps.com_chk.outputs.RESULT }}
+      PERMISSIONS: ${{ steps.user_access.outputs.PERMISSIONS }}
     steps:
     - name: Check Comment
       id: com_chk
@@ -36,7 +36,7 @@ jobs:
         done
         
     - name: check user access with mgs
-      if: ${{steps.com_chk.outputs.output1 == 'TRUE' }}
+      if: ${{steps.com_chk.outputs.RESULT == 'TRUE' }}
       id: user_access
       run: |      
         #!/bin/bash
@@ -65,9 +65,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     steps: 
     - env:
-          OUTPUT1: ${{needs.check.outputs.output1}}
-          OUTPUT2: ${{needs.check.outputs.output2}}
-      run: echo "$OUTPUT1 $OUTPUT2"
+          OUTPUT1: ${{needs.check.outputs.RESULT}}
+          OUTPUT2: ${{needs.check.outputs.PERMISSIONS}}
+      run: echo "$RESULT $PERMISSIONS"
     - name: Get Pull Request context
       id: extract_pr
       run: |        
