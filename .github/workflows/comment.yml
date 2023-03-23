@@ -36,7 +36,7 @@ jobs:
         done
         
     - name: check user access with mgs
-      if: ${{steps.com_chk.outputs.outpul}}
+      if: ${{steps.com_chk.outputs.output1}}
       id: user_access
       run: |      
         #!/bin/bash
