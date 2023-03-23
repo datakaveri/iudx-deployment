@@ -1,0 +1,29 @@
+name: On workflow call
+on:
+  workflow_call:
+  
+ jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.24.8'
+      id: install
+      
+    - name: Configure kubectl
+      run: |
+        mkdir -p $HOME/.kube
+        echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
+      
+    - name: Install Helm
+      uses: azure/setup-helm@v3
+      with:
+         token: ${{ env.GITHUB_TOKEN }}
+
+    - name: Install Testkube
+      run: |
+        wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add - && echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install -y testkube
+        kubectl testkube get test
+        pwd
