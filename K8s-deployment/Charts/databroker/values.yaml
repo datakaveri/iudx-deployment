@@ -426,10 +426,6 @@ configuration: |-
   disk_free_limit.relative = 1.0
   vm_memory_high_watermark_paging_ratio = 0.6
 
-  # Default users
-  default_user = admin
-  default_pass = admin
-
   # Logging
   log.console = true
   log.console.level = info
