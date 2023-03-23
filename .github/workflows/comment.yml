@@ -30,13 +30,13 @@ jobs:
           if [[ "$comment_body" == *"$i"* ]]; then
             # The comment matches one of the defined comments, so run the desired command
             echo "The comment matches \"$i\""
-            echo "COMMENT=${i}" >> $GITHUB_ENV
+            echo "COMMENT=${i}" >> $GITHUB_OUTPUT
             break
           fi
         done
         
     - name: check user access with mgs
-      if: ${{ env.COMMENT }}
+      if: ${{steps.com_chk.outputs.outpul}}
       id: user_access
       run: |      
         #!/bin/bash
