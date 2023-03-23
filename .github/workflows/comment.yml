@@ -10,7 +10,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: startsWith(github.event.comment.body, '/test_') && github.event.issue.pull_request != null
     outputs:
-      output1: ${{ steps.com_chk.outputs.COMMENT }}
+      output1: ${{ steps.com_chk.outputs.RESULT }}
       output2: ${{ steps.user_access.outputs.PERMISSIONS }}
     steps:
     - name: Check Comment
@@ -30,13 +30,13 @@ jobs:
           if [[ "$comment_body" == *"$i"* ]]; then
             # The comment matches one of the defined comments, so run the desired command
             echo "The comment matches \"$i\""
-            echo "COMMENT=${i}" >> $GITHUB_OUTPUT
+            echo "RESULT=TRUE" >> $GITHUB_OUTPUT
             break
           fi
         done
         
     - name: check user access with mgs
-      if: ${{steps.com_chk.outputs.output1}}
+      if: ${{steps.com_chk.outputs.output1 = TRUE }}
       id: user_access
       run: |      
         #!/bin/bash
@@ -96,7 +96,7 @@ jobs:
           env
     
     - name: reusable workflow
-      uses: ./.github/workflows/test_reuseable.yml
+      uses: ./.github/workflows/test_common.yml
           
    # - name: Install kubectl
   #    uses: azure/setup-kubectl@v3
