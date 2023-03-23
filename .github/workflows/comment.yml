@@ -62,7 +62,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
-    if: ${{needs.check.outputs.PERMISSIONS =='granted1'}}
+    if: |
+      needs.check.outputs.PERMISSIONS =='granted1' &&
+      (
+       github.event.comment.body =='/test_rs'     
+      )
     steps: 
     - name: Debug comment body
       run: echo "comment body ${{ github.event.comment.body }}"
