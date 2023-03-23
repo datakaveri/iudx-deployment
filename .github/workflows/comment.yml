@@ -1,16 +1,20 @@
-name: Test Resource Server
+name: Test API Server
 
 on:
   issue_comment:
     types: [created, edited]  
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     if: startsWith(github.event.comment.body, '/test_') && github.event.issue.pull_request != null
+    outputs:
+      output1: ${{ steps.com_chk.outputs.COMMENT }}
+      output2: ${{ steps.user_access.outputs.PERMISSIONS }}
     steps:
     - name: Check Comment
+      id: com_chk
       run: |
         #!/bin/bash
 
@@ -18,7 +22,7 @@ jobs:
         comments=("/test_rs" "/test_cat" "/test_fs" "/test_di" "/test_gis" )
 
         # Get the comment body from the event payload
-        comment_body=$(jq -r ".comment.body" "$GITHUB_EVENT_PATH")
+        comment_body=$(github.event.comment.body)
 
         # Check if the comment matches any of the defined comments
         for i in "${comments[@]}"
@@ -30,26 +34,10 @@ jobs:
             break
           fi
         done
-    - name: Check Comment
-      uses: actions/github-script@v4
-      with:
-        script: |
-          const comment = context.payload.comment.body;
-          const commentList = ["test_rs", "test2", "test3"];
-          const jobList = ["job1", "job2", "job3"];
-
-          for (let i = 0; i < commentList.length; i++) {
-            if (comment.startsWith('/' + commentList[i])) {
-                const jobName = jobList[i];
-                console.log('Triggering ' + jobName);
-                process.env.JOB_NAME = jobName;
-                break;
-              }
-            }
-    - name: Check Comment
-      run: |
-        echo "${{ env.JOB_NAME }}" 
+        
     - name: check user access with mgs
+      if: ${{ env.COMMENT }}
+      id: user_access
       run: |      
         #!/bin/bash
         # Get the permissions of the user who created the comment
@@ -58,15 +46,29 @@ jobs:
         # Check if the user has write permission
         if [ "$PERMISSIONS" == "write" ]; then
           echo "User has write permission"
+          echo "PERMISSIONS=granted" >> $GITHUB_OUTPUT
           
         elif  [ "$PERMISSIONS" == "admin" ]; then
           echo "User has admin permission"
+          echo "PERMISSIONS=granted" >> $GITHUB_OUTPUT
         else
           echo "User does not have write permission"
+          echo "PERMISSIONS=Not granted" >> $GITHUB_OUTPUT
           pr_number=$(jq -r ".issue.number" "$GITHUB_EVENT_PATH")
           curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -X POST -d "{\"body\":\"@${{ github.event.comment.user.login }} You are not authorized to trigger this workflow. Only users with write permission can trigger this workflow.\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
         fi
-      
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+    env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+    if: ${{}}
+    steps: 
+    - env:
+          OUTPUT1: ${{needs.job1.outputs.output1}}
+          OUTPUT2: ${{needs.job1.outputs.output2}}
+      run: echo "$OUTPUT1 $OUTPUT2"
     - name: Get Pull Request context
       id: extract_pr
       run: |        
@@ -94,7 +96,8 @@ jobs:
           echo $GITHUB_WORKSPACE
           env
     
-
+    - name: reusable workflow
+      uses: ./.github/workflows/test_reuseable.yml
           
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
