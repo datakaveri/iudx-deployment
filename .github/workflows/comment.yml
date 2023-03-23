@@ -63,6 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
+    if: ${{needs.check.outputs.PERMISSIONS =='granted'}}
     steps: 
     - env:
           OUTPUT1: ${{needs.check.outputs.RESULT}}
