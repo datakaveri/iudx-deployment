@@ -2,7 +2,7 @@ name: On workflow call
 on:
   workflow_call:
   
- jobs:
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
