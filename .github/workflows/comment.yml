@@ -22,7 +22,7 @@ jobs:
         comments=("/test_rs" "/test_cat" "/test_fs" "/test_di" "/test_gis" )
 
         # Get the comment body from the event payload
-        comment_body=$(github.event.comment.body)
+        comment_body=$(jq -r ".comment.body" "$GITHUB_EVENT_PATH")
 
         # Check if the comment matches any of the defined comments
         for i in "${comments[@]}"
