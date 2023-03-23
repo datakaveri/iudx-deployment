@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
-    if: ${{needs.check.outputs.PERMISSIONS =='granted'}} && github.event.comment.body=='/test_rs'
+    if: ${{needs.check.outputs.PERMISSIONS =='granted1'}} && github.event.comment.body=='/test_rs'
     steps: 
     - name: Get Pull Request context
       id: extract_pr
