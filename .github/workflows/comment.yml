@@ -127,9 +127,9 @@ jobs:
       run: |
         datetime=$(date +"%Y-%m-%d-%H-%M-%S")
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_rs.py" --command "--html=/share/test/reports/rs_report.html" --feature artifacts --content-type string
-        testkube create test --name "rs-test-${datetime}" --namespace testkube --file  rs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test rs-test-${datetime} --download-artifacts
-        echo "test_name=rs-test-${datetime}" >> $GITHUB_ENV 
+        testkube create test --name "rs-test-$datetime" --namespace testkube --file  rs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test rs-test-$datetime --download-artifacts
+        echo "test_name=rs-test-$datetime" >> $GITHUB_ENV 
         
     - name: Download Test reports
       run: |
@@ -218,9 +218,9 @@ jobs:
       run: |
         datetime=$(date +"%Y-%m-%d-%H-%M-%S")
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_cat.py" --command "--html=/share/test/reports/cat_report.html" --feature artifacts --content-type string
-        testkube create test --name "cat-test-$(datetime)" --namespace testkube --file  cat_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test cat-test-$(datetime) --download-artifacts
-        echo "test_name=cat-test-$(datetime)" >> $GITHUB_ENV 
+        testkube create test --name "cat-test-$datetime" --namespace testkube --file  cat_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test cat-test-$datetime --download-artifacts
+        echo "test_name=cat-test-$datetime" >> $GITHUB_ENV 
         
     - name: Download Test reports
       run: |
@@ -314,9 +314,9 @@ jobs:
       run: |
         datetime=$(date +"%Y-%m-%d-%H-%M-%S")
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_fs.py" --command "--html=/share/test/reports/fs_report.html" --feature artifacts --content-type string
-        testkube create test --name "fs-test-$(datetime)" --namespace testkube --file  fs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test fs-test-$(datetime) --download-artifacts
-        echo "test_name=fs-test-${datetime}" >> $GITHUB_ENV 
+        testkube create test --name "fs-test-$datetime" --namespace testkube --file  fs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test fs-test-$datetime --download-artifacts
+        echo "test_name=fs-test-$datetime" >> $GITHUB_ENV 
         
         
     - name: Download Test reports
@@ -408,9 +408,9 @@ jobs:
       run: |
         datetime=$(date +"%Y-%m-%d-%H-%M-%S")
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_di.py" --command "--html=/share/test/reports/di_report.html" --feature artifacts --content-type string
-        testkube create test --name "di-test-$(datetime)" --namespace testkube --file  di_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test di-test-$(datetime) --download-artifacts
-        echo "test_name=di-test-${datetime}" >> $GITHUB_ENV
+        testkube create test --name "di-test-$datetime" --namespace testkube --file  di_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test di-test-$datetime --download-artifacts
+        echo "test_name=di-test-$datetime" >> $GITHUB_ENV
         
     - name: Download Test reports
       run: |
@@ -504,9 +504,9 @@ jobs:
       run: |
         datetime=$(date +"%Y-%m-%d-%H-%M-%S")
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_gis.py" --command "--html=/share/test/reports/gis_report.html" --feature artifacts --content-type string
-        testkube create test --name "gis-test-$(datetime)" --namespace testkube --file  gis_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test gis-test-$(datetime) --download-artifacts
-        echo "test_name=gis-test-${datetime}" >> $GITHUB_ENV 
+        testkube create test --name "gis-test-$datetime" --namespace testkube --file  gis_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test gis-test-$datetime --download-artifacts
+        echo "test_name=gis-test-$datetime" >> $GITHUB_ENV 
         
     - name: Download Test reports
       run: |
