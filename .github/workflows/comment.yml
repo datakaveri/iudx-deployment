@@ -68,6 +68,8 @@ jobs:
        github.event.comment.body =='/test_rs'     
       )
     steps: 
+    - name: Checkout code
+      uses: actions/checkout@v2
     - uses: ./.github/workflows/test_reuseable.yml
       with:
         template: common
