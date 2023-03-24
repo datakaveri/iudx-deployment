@@ -68,10 +68,7 @@ jobs:
       (
        github.event.comment.body =='/test_rs'     
       )
-    steps:         
-    - name: Debug comment body
-      run: echo "comment body ${{ github.event.comment.body }}"
-
+    steps: 
     - name: Get Pull Request context
       id: extract_pr
       run: |        
@@ -88,16 +85,6 @@ jobs:
       with:
         repository: ${{ env.OWNER }}/${{ env.REPO }}
         ref: ${{ env.REF }}       
-        
-    - name: List Files
-      run: |
-          pwd
-          ls -a
-          ls .github/workflows
-          git branch
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-          env
           
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
@@ -137,20 +124,19 @@ jobs:
     - name: Install Testkube
       run: |
         wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add - && echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install -y testkube
-        kubectl testkube get test
-        pwd
         
     - name: Test Execute
       run: |
+        datetime=$(date +"%Y-%m-%d-%H-%M-%S")
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_rs.py" --command "--html=/share/test/reports/rs_report.html" --feature artifacts --content-type string
-        testkube create test --name "rs-test-$(date +'%Y-%m-%d_%H-%M-%S')" --namespace testkube --file  rs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test rs-test --download-artifacts
-        ls -a
+        testkube create test --name "rs-test-${datetime}" --namespace testkube --file  rs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test rs-test-${datetime} --download-artifacts
+        echo "test_name=rs-test-${datetime}" >> $GITHUB_ENV 
         
     - name: Download Test reports
       run: |
         sleep 2m
-        execution_output=$(tk get execution --test rs-test --output json)
+        execution_output=$(tk get execution --test ${{ env.test_name }} --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
         kubectl testkube download artifacts $result_id
         
@@ -176,10 +162,7 @@ jobs:
       (
        github.event.comment.body =='/test_cat'     
       )
-    steps: 
-    - name: Debug comment body
-      run: echo "comment body ${{ github.event.comment.body }}"
-
+    steps:
     - name: Get Pull Request context
       id: extract_pr
       run: |        
@@ -195,17 +178,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: ${{ env.OWNER }}/${{ env.REPO }}
-        ref: ${{ env.REF }}       
-        
-    - name: List Files
-      run: |
-          pwd
-          ls -a
-          ls .github/workflows
-          git branch
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-          env
+        ref: ${{ env.REF }}
           
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
@@ -226,39 +199,35 @@ jobs:
     
     - name: configure resource server
       run: |
-        cp -r K8s-deployment/Charts/resource-server/example-secrets/* K8s-deployment/Charts/resource-server/
-        echo "${{ secrets.RS_RESOURCE_VALUES }}" > K8s-deployment/Charts/resource-server/resource-values.yaml
-        echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}"  > K8s-deployment/Charts/resource-server/secrets/AWS_SECRET_ACCESS_KEY
-        echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}" > K8s-deployment/Charts/resource-server/secrets/AWS_ACCESS_KEY_ID
-        echo "${{ secrets.RS_CONFIG }}" | base64 --decode > K8s-deployment/Charts/resource-server/secrets/config.json
-        echo "${{ secrets.RS_TEST_CONFIG }}" | base64 --decode > rs_test_config.json
+        cp -r K8s-deployment/Charts/catalogue/example-secrets/* K8s-deployment/Charts/catalogue/
+        echo "${{ secrets.CAT_RESOURCE_VALUES }}" > K8s-deployment/Charts/catalogue/resource-values.yaml
+        echo "${{ secrets.CAT_CONFIG }}" | base64 --decode > K8s-deployment/Charts/catalogue/secrets/config.json
+        echo "${{ secrets.CAT_TEST_CONFIG }}" | base64 --decode > cat_test_config.json
         
     - name: deploy
       run: |
         cd K8s-deployment/Charts/resource-server/
         kubectl create ns cat-test
-        kubectl create configmap rs-env --from-env-file=./secrets/.rs.env -n cat-test
-        kubectl create secret generic rs-s3-env --from-file=./secrets/AWS_ACCESS_KEY_ID --from-file=./secrets/AWS_SECRET_ACCESS_KEY -n cat-test
-        kubectl create secret generic rs-config --from-file=./secrets/config.json -n cat-test
-        helm install resource-server "../resource-server" -f values.yaml -f resource-values.yaml -n cat-test
+        kubectl create configmap cat-env --from-env-file=./secrets/.cat.env -n cat-test
+        kubectl create secret generic cat-config --from-file=./secrets/config.json -n cat-test
+        helm install catalogue-server ../catalogue -f values.yaml -f resource-values.yaml -n cat-test
         
     - name: Install Testkube
       run: |
         wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add - && echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install -y testkube
-        kubectl testkube get test
-        pwd
         
     - name: Test Execute
       run: |
+        datetime=$(date +"%Y-%m-%d-%H-%M-%S")
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_cat.py" --command "--html=/share/test/reports/cat_report.html" --feature artifacts --content-type string
-        testkube create test --name "cat-test-$(date +'%Y-%m-%d_%H-%M-%S')" --namespace testkube --file  cat_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test cat-test --download-artifacts
-        ls -a
+        testkube create test --name "cat-test-$(datetime)" --namespace testkube --file  cat_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test cat-test-$(datetime) --download-artifacts
+        echo "test_name=cat-test-$(datetime)" >> $GITHUB_ENV 
         
     - name: Download Test reports
       run: |
         sleep 2m
-        execution_output=$(tk get execution --test cat-test --output json)
+        execution_output=$(tk get execution --test ${{ env.test_name }} --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
         kubectl testkube download artifacts $result_id
         
@@ -270,7 +239,7 @@ jobs:
         
     - name: Delete deployment
       run: |
-       kubectl delete ns rs-test 
+       kubectl delete ns cat-test 
        testkube  delete executor pytest-executor-gh
 
   deploy_fs:
@@ -284,9 +253,6 @@ jobs:
        github.event.comment.body =='/test_fs'     
       )
     steps: 
-    - name: Debug comment body
-      run: echo "comment body ${{ github.event.comment.body }}"
-
     - name: Get Pull Request context
       id: extract_pr
       run: |        
@@ -303,16 +269,6 @@ jobs:
       with:
         repository: ${{ env.OWNER }}/${{ env.REPO }}
         ref: ${{ env.REF }}       
-        
-    - name: List Files
-      run: |
-          pwd
-          ls -a
-          ls .github/workflows
-          git branch
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-          env
           
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
@@ -352,20 +308,20 @@ jobs:
     - name: Install Testkube
       run: |
         wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add - && echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install -y testkube
-        kubectl testkube get test
-        pwd
         
     - name: Test Execute
       run: |
+        datetime=$(date +"%Y-%m-%d-%H-%M-%S")
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_fs.py" --command "--html=/share/test/reports/fs_report.html" --feature artifacts --content-type string
-        testkube create test --name "fs-test-$(date +'%Y-%m-%d_%H-%M-%S')" --namespace testkube --file  fs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test fs-test --download-artifacts
-        ls -a
+        testkube create test --name "fs-test-$(datetime)" --namespace testkube --file  fs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test fs-test-$(datetime) --download-artifacts
+        echo "test_name=fs-test-${datetime}" >> $GITHUB_ENV 
+        
         
     - name: Download Test reports
       run: |
         sleep 2m
-        execution_output=$(tk get execution --test fs-test --output json)
+        execution_output=$(tk get execution --test ${{ env.test_name }} --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
         kubectl testkube download artifacts $result_id
         
@@ -391,9 +347,6 @@ jobs:
        github.event.comment.body =='/test_di'     
       )
     steps: 
-    - name: Debug comment body
-      run: echo "comment body ${{ github.event.comment.body }}"
-
     - name: Get Pull Request context
       id: extract_pr
       run: |        
@@ -409,17 +362,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: ${{ env.OWNER }}/${{ env.REPO }}
-        ref: ${{ env.REF }}       
-        
-    - name: List Files
-      run: |
-          pwd
-          ls -a
-          ls .github/workflows
-          git branch
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-          env
+        ref: ${{ env.REF }}  
           
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
@@ -459,20 +402,19 @@ jobs:
     - name: Install Testkube
       run: |
         wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add - && echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install -y testkube
-        kubectl testkube get test
-        pwd
         
     - name: Test Execute
       run: |
-        testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_rs.py" --command "--html=/share/test/reports/rs_report.html" --feature artifacts --content-type string
-        testkube create test --name "rs-test-$(date +'%Y-%m-%d_%H-%M-%S')" --namespace testkube --file  rs_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test rs-test --download-artifacts
-        ls -a
+        datetime=$(date +"%Y-%m-%d-%H-%M-%S")
+        testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_di.py" --command "--html=/share/test/reports/di_report.html" --feature artifacts --content-type string
+        testkube create test --name "di-test-$(datetime)" --namespace testkube --file  di_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test di-test-$(datetime) --download-artifacts
+        echo "test_name=di-test-${datetime}" >> $GITHUB_ENV
         
     - name: Download Test reports
       run: |
         sleep 2m
-        execution_output=$(tk get execution --test rs-test --output json)
+        execution_output=$(tk get execution --test ${{ env.test_name }} --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
         kubectl testkube download artifacts $result_id
         
@@ -498,8 +440,6 @@ jobs:
        github.event.comment.body =='/test_gis'     
       )
     steps: 
-    - name: Debug comment body
-      run: echo "comment body ${{ github.event.comment.body }}"
 
     - name: Get Pull Request context
       id: extract_pr
@@ -517,17 +457,7 @@ jobs:
       with:
         repository: ${{ env.OWNER }}/${{ env.REPO }}
         ref: ${{ env.REF }}       
-        
-    - name: List Files
-      run: |
-          pwd
-          ls -a
-          ls .github/workflows
-          git branch
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-          env
-          
+
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
       with:
@@ -571,15 +501,16 @@ jobs:
         
     - name: Test Execute
       run: |
+        datetime=$(date +"%Y-%m-%d-%H-%M-%S")
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.0.9 --command "pytest" --command "test_gis.py" --command "--html=/share/test/reports/gis_report.html" --feature artifacts --content-type string
-        testkube create test --name "gis-test-$(date +'%Y-%m-%d_%H-%M-%S')" --namespace testkube --file  gis_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        testkube run test rs-test --download-artifacts
-        ls -a
+        testkube create test --name "gis-test-$(datetime)" --namespace testkube --file  gis_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        testkube run test gis-test-$(datetime) --download-artifacts
+        echo "test_name=gis-test-${datetime}" >> $GITHUB_ENV 
         
     - name: Download Test reports
       run: |
         sleep 2m
-        execution_output=$(tk get execution --test gis-test --output json)
+        execution_output=$(tk get execution --test  ${{ env.test_name }} --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
         kubectl testkube download artifacts $result_id
         
