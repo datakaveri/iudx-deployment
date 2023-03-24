@@ -3,7 +3,7 @@ on:
   workflow_call:
   
 jobs:
-  build:
+  common:
     runs-on: ubuntu-latest
     steps:
     - name: Get Pull Request context
