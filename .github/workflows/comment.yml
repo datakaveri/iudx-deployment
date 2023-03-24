@@ -149,6 +149,7 @@ jobs:
       run: |
        kubectl delete ns rs-test 
        testkube  delete executor pytest-executor-gh
+       if: ${{ always() }}
     
     
   deploy_cat:
@@ -239,6 +240,8 @@ jobs:
       run: |
        kubectl delete ns cat-test 
        testkube  delete executor pytest-executor-gh
+      if: ${{ always() }}
+
 
   deploy_fs:
     needs: check
