@@ -68,6 +68,10 @@ jobs:
        github.event.comment.body =='/test_rs'     
       )
     steps: 
+    - uses: ./.github/workflows/test_reuseable.yml
+      with:
+        template: common
+        
     - name: Debug comment body
       run: echo "comment body ${{ github.event.comment.body }}"
 
