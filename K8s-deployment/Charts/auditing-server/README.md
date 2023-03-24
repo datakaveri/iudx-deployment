@@ -366,28 +366,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `processor.autoscaling.targetCPU`                 | Target CPU utilization percentage                                                                  | `80`                                                                                                                                                                                                                 |
 | `processor.autoscaling.targetMemory`              | Target Memory utilization percentage                                                               | `nil`                                                                                                                                 
 
-### Traffic Exposure Parameters
-
-| Name                                       | Description                                                                                                                      | Value                    |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                             | ApiServers ervice type                                                                                                           | `ClusterIP`              |
-| `service.ports`                            | ApiServer service port                                                                                                           | `80`                     |
-| `service.targetPorts`                      | ApiServer service TargetPorts port                                                                                               | `8080`                     |
-| `service.clusterIP`                        | ApiServer service Cluster IP                                                                                                     | `nil`                    |
-| `service.loadBalancerIP`                   | ApiServer service Load Balancer IP                                                                                               | `nil`                    |
-| `service.loadBalancerSourceRanges`         | service Load Balancer sources                                                                                                    | `[]`                     |
-| `service.externalTrafficPolicy`            | service external traffic policy                                                                                                  | `Cluster`                |
-| `service.annotations`                      | Additional custom annotations for service                                                                                        | `{}`                     |
-| `service.extraPorts`                       | Extra ports to expose in service (normally used with the `sidecars` value)                                                       | `[]`                     |
-| `serviceHeadless.type`                     | ApiServers serviceHeadless type                                                                                                  | `ClusterIP`              |
-| `serviceHeadless.ports`                    | ApiServer serviceHeadlessHeadlessport                                                                                            | `80`                     |
-| `serviceHeadless.targetPorts`              | ApiServer serviceHeadlessHeadlessTargetPorts port                                                                                | `80`                     |
-| `serviceHeadless.clusterIP`                | ApiServer serviceHeadlessHeadless Cluster IP                                                                                     | `None`                   |
-| `serviceHeadless.loadBalancerIP`           | ApiServer service Load Balancer IP                                                                                               | `nil`                    |
-| `serviceHeadless.loadBalancerSourceRanges` | serviceHeadless Load Balancer sources                                                                                            | `[]`                     |
-| `serviceHeadless.externalTrafficPolicy`    | serviceHeadless external traffic policy                                                                                          | `Cluster`                |
-| `serviceHeadless.annotations`              | Additional custom annotations for serviceHeadless                                                                                | `{}`                     |
-| `serviceHeadless.extraPorts`               | Extra ports to expose in serviceHeadless (normally used with the `sidecars` value)                                               | `[]`                     |
 
 
 ### Init Container Parameters
