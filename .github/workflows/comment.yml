@@ -206,7 +206,7 @@ jobs:
         
     - name: deploy
       run: |
-        cd K8s-deployment/Charts/resource-server/
+        cd K8s-deployment/Charts/catalogue/
         kubectl create ns cat-test
         kubectl create configmap cat-env --from-env-file=./secrets/.cat.env -n cat-test
         kubectl create secret generic cat-config --from-file=./secrets/config.json -n cat-test
