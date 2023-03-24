@@ -57,8 +57,6 @@ jobs:
           curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -X POST -d "{\"body\":\"@${{ github.event.comment.user.login }} You are not authorized to trigger this workflow. Only users with write permission can trigger this workflow.\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
         fi
         
-  deploy_common:
-    uses: ./.github/workflows/test_reuseable.yml
 
   deploy_rs:
     needs: check
