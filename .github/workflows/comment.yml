@@ -56,6 +56,9 @@ jobs:
           pr_number=$(jq -r ".issue.number" "$GITHUB_EVENT_PATH")
           curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -X POST -d "{\"body\":\"@${{ github.event.comment.user.login }} You are not authorized to trigger this workflow. Only users with write permission can trigger this workflow.\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
         fi
+        
+  deploy_common:
+    uses: ./.github/workflows/test_reuseable.yml
 
   deploy_rs:
     needs: check
@@ -67,18 +70,7 @@ jobs:
       (
        github.event.comment.body =='/test_rs'     
       )
-    steps: 
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: List Files
-      run: |
-          pwd
-          ls -a
-          ls .github/workflows
-    - uses: ./.github/workflows/test_reuseable.yml
-      with:
-        template: common
-        
+    steps:         
     - name: Debug comment body
       run: echo "comment body ${{ github.event.comment.body }}"
 
