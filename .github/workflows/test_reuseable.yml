@@ -6,6 +6,7 @@ jobs:
   common:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Get Pull Request context
       id: extract_pr
       run: |        
