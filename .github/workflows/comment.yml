@@ -136,7 +136,7 @@ jobs:
         sleep 2m
         execution_output=$(tk get execution --test ${{ env.test_name }} --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
-        status=$(echo $execution_output | jq -r '.results[0].status)
+        status=$(echo $execution_output | jq -r '.results[0].status')
         kubectl testkube download artifacts $result_id
         
     - name: Upload test reports
@@ -227,7 +227,7 @@ jobs:
         sleep 2m
         execution_output=$(tk get execution --test ${{ env.test_name }} --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
-        status=$(echo $execution_output | jq -r '.results[0].status)
+        status=$(echo $execution_output | jq -r '.results[0].status')
         kubectl testkube download artifacts $result_id
         
     - name: Upload test reports
