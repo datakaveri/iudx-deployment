@@ -11,5 +11,5 @@ Docker image for rmq init scripts
 
 ## Build Docker Image
 ```sh
-docker build -t ghcr.io/datakaveri/rabbitmq-init:1.0.1 -f init-scripts/Dockerfile init-scripts/
+docker build -t ghcr.io/datakaveri/rabbitmq-init:1.0.2 -f init-scripts/Dockerfile init-scripts/
 ```
