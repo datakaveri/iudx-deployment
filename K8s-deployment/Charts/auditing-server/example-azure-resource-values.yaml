@@ -1,0 +1,68 @@
+## databroker resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param databroker.resources.limits The resources limits for the databroker containers
+## @param databroker.resources.requests The requested resources for the databroker containers
+##
+databroker:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests:
+      cpu: 500m
+      memory: 600Mi
+
+
+## processor resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param processor.resources.limits The resources limits for the processor containers
+## @param processor.resources.requests The requested resources for the processor containers
+##
+processor:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 800m
+      memory: 750Mi
+    requests:
+      cpu: 600m
+      memory: 500Mi
+
+
+## metering resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param metering.resources.limits The resources limits for the metering containers
+  ## @param metering.resources.requests The requested resources for the metering containers
+  ##
+immudb:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 600m
+      memory: 75Mi
+    requests:
+      cpu: 400m
+      memory: 600Mi
+
+
+
+## postgres resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param postgres.resources.limits The resources limits for the postgres containers
+## @param postgres.resources.requests The requested resources for the postgres containers
+##
+postgres:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests:
+      cpu: 400m
+      memory: 600Mi
+
