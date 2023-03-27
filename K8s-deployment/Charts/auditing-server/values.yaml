@@ -269,8 +269,7 @@ processor:
   ## @param processor.nodeSelector Node labels for processor pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+  nodeSelector: {}
 
 
 
@@ -356,7 +355,7 @@ processor:
   ## @param processor.autoscaling.targetCPU Target CPU utilization percentage
   ## @param processor.autoscaling.targetMemory Target Memory utilization percentage
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 5
     targetCPU: 80
@@ -517,8 +516,7 @@ immudb:
   ## @param immudb.nodeSelector Node labels for immudb pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+  nodeSelector: {}
 
 
   ## @param immudb.tolerations Tolerations for immudb pods assignment
@@ -604,7 +602,7 @@ immudb:
   ## @param immudb.autoscaling.targetMemory Target Memory utilization percentage
 
   autoscaling:
-    enabled: false
+    enabled: true
     minReplicas: 1
     maxReplicas: 5
     targetCPU: 80

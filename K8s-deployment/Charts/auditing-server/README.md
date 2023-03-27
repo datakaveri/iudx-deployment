@@ -1,5 +1,3 @@
-
-
 ## Introduction
 
 Helm Chart for IUDX auditing-server Server Deployment
@@ -24,7 +22,6 @@ secrets/
 Define Appropriate values of resources -
 - CPU of all auditing-server verticles
 - RAM of all auditing-server verticles
-- cert-manager issuer
 
 in `resource-values.yaml` as shown in sample resource-values auditing for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
