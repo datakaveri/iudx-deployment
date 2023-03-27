@@ -42,6 +42,8 @@ services:
         target: /usr/share/app/secrets/passwords/rs-proxy-adapter-password
       - source: rs-proxy-password
         target: /usr/share/app/secrets/passwords/rs-proxy-password
+      - source: auditing-password
+        target: /usr/share/app/secrets/passwords/auditing-password
 
 
 
@@ -74,4 +76,5 @@ secrets:
     file: ./secrets/passwords/rs-proxy-adapter-password
   rs-proxy-password:
     file: ./secrets/passwords/rs-proxy-password
-
+  auditing-password:
+    file: ./secrets/passwords/auditing-password
