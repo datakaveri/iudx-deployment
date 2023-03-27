@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  auditing:
+    image: ghcr.io/datakaveri/auditing-server-depl:4.5.0-alpha-5d010dd
+    read_only: true
+    cap_drop:
+      - ALL
+    env_file:
+      - ./secrets/.auditing.env
+    command: bash -c "exec java $$AUDIT_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
+    logging:
+       driver: "json-file"
+       options:
+          max-file: "3"
+          max-size: "5m" 
+          tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    secrets:
+      - source: config
+        target: /usr/share/app/secrets/configs/config.json
+    networks: 
+      - overlay-net
+    volumes:
+      - type: tmpfs
+        target: /tmp/
+        read_only: false
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.auditing-node==true"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+secrets:
+  config:
+    file: ./secrets/config.json
