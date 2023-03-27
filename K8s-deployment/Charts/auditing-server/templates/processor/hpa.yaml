@@ -1,0 +1,40 @@
+{{- if .Values.processor.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auditing-processor 
+  labels:
+    app: auditing-processor 
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: auditing-processor 
+  minReplicas: {{ .Values.processor.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.processor.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.processor.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.processor.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.processor.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.processor.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}
