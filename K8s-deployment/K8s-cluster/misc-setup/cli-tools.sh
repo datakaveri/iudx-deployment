@@ -11,7 +11,7 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version --client
 
 # kubectl cli bash  auto-completion
-sudo kubectl completion bash > /etc/bash_completion.d/kubectl
+sudo bash -c "kubectl completion bash > /etc/bash_completion.d/kubectl"
 
 # helm install
 curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
@@ -21,4 +21,4 @@ sudo apt-get update
 sudo apt-get install helm
 
 # helm bash completion
-sudo helm completion bash > /etc/bash_completion.d/helm
+sudo bash -c "helm completion bash > /etc/bash_completion.d/helm"
