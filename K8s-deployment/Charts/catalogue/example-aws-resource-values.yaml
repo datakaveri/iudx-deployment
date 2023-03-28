@@ -189,3 +189,47 @@ profanityCheckSdk:
     enabled: false
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
+
+
+## mlayer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param mlayer.resources.limits The resources limits for the rating containers
+## @param mlayer.resources.requests The requested resources for the rating containers
+##
+
+
+mlayer:
+  enabled: true
+  resources:
+    limits:
+      cpu: 100m
+      memory: 0.4Gi
+    requests:
+      cpu: 50m
+      memory: 0.4Gi
+  autoscaling:
+    enabled: false
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
+
+
+## postgres resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param postgres.resources.limits The resources limits for the rating containers
+## @param postgres.resources.requests The requested resources for the rating containers
+##
+
+
+postgres:
+  enabled: true
+  resources:
+    limits:
+      cpu: 100m
+      memory: 0.4Gi
+    requests:
+      cpu: 50m
+      memory: 0.4Gi
+  autoscaling:
+    enabled: false
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3.medium
