@@ -1,15 +1,5 @@
 # RKE2 Rancher-HA Setup
 
-## Infrastructure naming convention
-- General pattern to follow- `resource-RegionCode-EnvironmentCode-ApplicationStackCode`
-	- For example a vpc in ap-south-1 for kubernetes production env of iudx would be - `vpc-ap-south-1-prod-k8s-iudx`
-- Refer [here](https://cjrequena.com/2020-06-05/aws-naming-conventions-en) for more details.
-
-## Tagging resources
-Mandatory tags for all resources:
-1. operations:Owner -> devops, analytics, ui, deployment
-2. EnvironmentID -> iudx++,prod, test, stage
-
 ## Setup Infra on AWS
 - Create VPC
 - Create Subnet in created VPC
@@ -60,11 +50,11 @@ Follow documentation [here](https://ranchermanager.docs.rancher.com/how-to-guide
 	- install from iudx-deployment repo.
 ### Installation
 
-- `helm repo add rancher-stable https://releases.rancher.com/server-charts/stable`
+- `helm repo add rancher-stable https://releases.rancher.com/server-charts/stable && helm repo update`
 - `kubectl create namespace cattle-system`
 - Install Rancher helm chart:
-	```
-	helm install rancher rancher-stable/rancher \
+  ```
+    helm install rancher rancher-stable/rancher \
     --namespace cattle-system \
     --set hostname=rke2-rancher.iudx.org.in \
     --set bootstrapPassword=admin \
@@ -75,3 +65,7 @@ Follow documentation [here](https://ranchermanager.docs.rancher.com/how-to-guide
   ```
 
 - For more information, refer documentation [here](https://ranchermanager.docs.rancher.com/pages-for-subheaders/install-upgrade-on-a-kubernetes-cluster)
+
+## Backup and Restore of Rancher
+1. Please refer [official docs](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/backup-restore-and-disaster-recovery/back-up-rancher) to backup rancher using Rancher Backup Operator
+2.  Please refer [official docs](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/backup-restore-and-disaster-recovery/restore-rancher) to restore rancher backup
