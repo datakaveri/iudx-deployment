@@ -1,5 +1,5 @@
 # Introduction
-K8s addons are essential K8s workloads which allow with K8s cluster enable deployment of Application K8s workload. In our case which enable IUDX K8s deployment. 
+K8s addons are essential K8s workloads which along with K8s cluster enable deployment of actual application K8s workload. In our case which enables IUDX K8s deployment. 
 
 * Currently, through Rancher following addons are installed
     * Network CNI (calico/canal)
