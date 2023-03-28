@@ -244,15 +244,15 @@ clustering:
 loadDefinition:
   ## @param loadDefinition.enabled Enable loading a RabbitMQ definitions file to configure RabbitMQ
   ##
-  enabled: true
+  enabled: false
   ## @param loadDefinition.file Name of the definitions file
   ##
-  file: "/app/rabbitmq-definitions.json"
+  file: ""
   ## @param loadDefinition.existingSecret Existing secret with the load definitions file
   ## Can be templated if needed, e.g:
   ## existingSecret: "{{ .Release.Name }}-load-definition"
   ##
-  existingSecret: "rabbitmq-definition-file"
+  existingSecret: ""
 
 ## @param command Override default container command (useful when using custom images)
 ##
@@ -425,13 +425,16 @@ configuration: |-
   management.ssl.keyfile = /opt/bitnami/rabbitmq/certs/server_key.pem
   disk_free_limit.relative = 1.0
   vm_memory_high_watermark_paging_ratio = 0.6
+
   # Logging
   log.console = true
   log.console.level = info
   log.file = false
+
   # Monitoring
   collect_statistics_interval = 10000
   prometheus.tcp.ip = 0.0.0.0
+ 
 
 ## @param extraConfiguration [string] Configuration file content: extra configuration to be appended to RabbitMQ configuration
 ## Use this instead of `configuration` to add more configuration

@@ -1,0 +1,40 @@
+{{- if .Values.immudb.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auditing-immudb 
+  labels:
+    app: auditing-immudb 
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: auditing-immudb 
+  minReplicas: {{ .Values.immudb.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.immudb.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.immudb.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.immudb.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.immudb.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.immudb.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

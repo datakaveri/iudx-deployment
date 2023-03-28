@@ -1,9 +1,10 @@
 #!/bin/sh
 
-es_nodes=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch:9200/_nodes | jq ._nodes.total | sed -r 's/\s+//g')
-es_shards=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch:9200/_cat/health | awk '{print $7}'| sed -r 's/\s+//g')
-jvm_maxheap_per_node=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch:9200/_cat/nodes?h=heap.max | awk 'NR==1')
-all_disk_usage=$(curl --silent -XGET http://$ES_USERNAME:$ES_PASSWORD@elasticsearch:9200/_cat/nodes?h=disk.used_percent)
+Encoded_PASS=$(printf %s "$ES_PASSWORD"|jq -sRr @uri)
+es_nodes=$(curl --silent -XGET http://$ES_USERNAME:$Encoded_PASS@elasticsearch:9200/_nodes | jq ._nodes.total | sed -r 's/\s+//g')
+es_shards=$(curl --silent -XGET http://$ES_USERNAME:$Encoded_PASS@elasticsearch:9200/_cat/health | awk '{print $7}'| sed -r 's/\s+//g')
+jvm_maxheap_per_node=$(curl --silent -XGET http://$ES_USERNAME:$Encoded_PASS@elasticsearch:9200/_cat/nodes?h=heap.max | awk 'NR==1')
+all_disk_usage=$(curl --silent -XGET http://$ES_USERNAME:$Encoded_PASS@elasticsearch:9200/_cat/nodes?h=disk.used_percent)
 
 heap_size=$(echo "$jvm_maxheap_per_node"| awk '{print substr($0,1,length($0)-2)}')
 heap_unit=$(echo "$jvm_maxheap_per_node" | awk '{print substr($0,length($0)-1,2)}')

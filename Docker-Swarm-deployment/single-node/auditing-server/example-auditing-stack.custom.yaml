@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  auditing:
+    ports: 
+      - target: 8080  # API server HTTP port
+        published: 8080
+        mode: host 
+      - target: 9000   # Metrics HTTP server port
+        published: 9000 
+        mode: host 

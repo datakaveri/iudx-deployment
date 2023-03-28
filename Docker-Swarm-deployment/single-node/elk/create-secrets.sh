@@ -7,5 +7,5 @@ echo -n  $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*+|:<>?' | head -c 16) > 
 echo -n  $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*+|:<>?' | head -c 16) > secrets/passwords/kibana-admin-password 
 echo -n  $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*+|:<>?' | head -c 16) > secrets/passwords/kibana-system-password 
 echo -n  $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*+|:<>?' | head -c 16) > secrets/passwords/logstash-internal-password 
-cp  ../databroker/secrets/passwords/rabbitmq-admin-passwd  secrets/passwords/logstash-rabbitmq-password 
+cp  ../databroker/secrets/passwords/logstash-password  secrets/passwords/logstash-rabbitmq-password 
 echo -n  $(cat /dev/urandom | tr -dc 'a-zA-Z0-9-!@#$%^&*+|:<>?' | head -c 16) > secrets/passwords/logstash-system-password

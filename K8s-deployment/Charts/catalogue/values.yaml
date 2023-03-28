@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/cat-prod
-  tag: 4.5.0-alpha-5cdd89c
+  tag: 4.5.0-alpha-9befef8
   pullSecrets:
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -113,6 +113,8 @@ podAnnotations:
 ## @section ApiServer Parameters
 
 apiServer:
+  ## @param apiServer.enabled Enable apiServer Verticle for deployment
+  enabled: true
 
   ## @param apiServer.replicaCount Number of ApiServer replicas to deploy
 
@@ -181,7 +183,9 @@ apiServer:
   ## @param apiServer.podSecurityContext.fsGroup Set ApiServer pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -190,9 +194,14 @@ apiServer:
   ## @param apiServer.containerSecurityContext.runAsNonRoot Set ApiServer containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param apiServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for ApiServer
   ##
@@ -291,11 +300,16 @@ apiServer:
     - name: cat-config
       secret:
         secretName: cat-config
+    - name: cat-tmp
+      emptyDir:
+        medium: Memory
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ApiServer container(s)
   ##
   extraVolumeMounts: 
     - name: cat-config
       mountPath: /usr/share/app/secrets/configs
+    - name: cat-tmp
+      mountPath: /tmp
   
   ## @param apiServer.sidecars Add additional sidecar containers to the ApiServer pod(s)
   ## e.g:
@@ -334,7 +348,8 @@ apiServer:
 
 ## @section Auditing Parameters
 auditing:
-
+  ## @param auditing.enabled Enable auditing Verticle for deployment
+  enabled: true
   ## @param auditing.replicaCount Number of Auditing replicas to deploy
 
   replicaCount: 1
@@ -400,7 +415,9 @@ auditing:
   ## @param auditing.podSecurityContext.fsGroup Set Auditing pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -409,9 +426,14 @@ auditing:
   ## @param auditing.containerSecurityContext.runAsNonRoot Set Auditing containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param auditing.existingConfigmap The name of an existing ConfigMap with your custom configuration for Auditing
   ##
@@ -510,11 +532,16 @@ auditing:
     - name: cat-config
       secret:
         secretName: cat-config
+    - name: cat-tmp
+      emptyDir:
+        medium: Memory        
   ## @param auditing.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Auditing container(s)
   ##
   extraVolumeMounts:
     - name: cat-config
       mountPath: /usr/share/app/secrets/configs
+    - name: cat-tmp
+      mountPath: /tmp
   
   ## @param auditing.sidecars Add additional sidecar containers to the Auditing pod(s)
   ## e.g:
@@ -553,7 +580,8 @@ auditing:
 
 ## @section Authenticator Parameters
 authenticator:
-
+  ## @param authenticator.enabled Enable authenticator Verticle for deployment
+  enabled: true
   ## @param authenticator.replicaCount Number of Authenticator replicas to deploy
 
   replicaCount: 1
@@ -619,7 +647,9 @@ authenticator:
   ## @param authenticator.podSecurityContext.fsGroup Set Authenticator pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -628,9 +658,14 @@ authenticator:
   ## @param authenticator.containerSecurityContext.runAsNonRoot Set Authenticator containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param authenticator.existingConfigmap The name of an existing ConfigMap with your custom configuration for Authenticator
   ##
@@ -730,13 +765,16 @@ authenticator:
     - name: cat-config
       secret:
         secretName: cat-config
-
+    - name: cat-tmp
+      emptyDir:
+        medium: Memory
   ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Authenticator container(s)
   ##
   extraVolumeMounts:
     - name: cat-config
       mountPath: /usr/share/app/secrets/configs
-
+    - name: cat-tmp
+      mountPath: /tmp
   ## @param authenticator.sidecars Add additional sidecar containers to the Authenticator pod(s)
   ## e.g:
   ## sidecars:
@@ -774,7 +812,8 @@ authenticator:
 
 ## @section Database Parameters
 database:
-
+  ## @param database.enabled Enable database Verticle for deployment
+  enabled: true
   ## @param database.replicaCount Number of Database replicas to deploy
 
   replicaCount: 1
@@ -841,7 +880,9 @@ database:
   ## @param database.podSecurityContext.fsGroup Set Database pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -850,9 +891,14 @@ database:
   ## @param database.containerSecurityContext.runAsNonRoot Set Database containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param database.existingConfigmap The name of an existing ConfigMap with your custom configuration for Database
   ##
@@ -951,14 +997,17 @@ database:
     - name: cat-config
       secret:
         secretName: cat-config
-
+    - name: cat-tmp
+      emptyDir:
+        medium: Memory
     
   ## @param database.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Database container(s)
   ##
   extraVolumeMounts: 
     - name: cat-config
       mountPath: /usr/share/app/secrets/configs
-  
+    - name: cat-tmp
+      mountPath: /tmp  
   ## @param database.sidecars Add additional sidecar containers to the Database pod(s)
   ## e.g:
   ## sidecars:
@@ -998,7 +1047,8 @@ database:
 ## @section Validator Parameters
 
 validator:
-
+  ## @param validator.enabled Enable validator Verticle for deployment
+  enabled: true
   ## @param validator.replicaCount Number of Validator replicas to deploy
 
   replicaCount: 1  
@@ -1064,7 +1114,9 @@ validator:
   ## @param validator.podSecurityContext.fsGroup Set Validator pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1073,9 +1125,14 @@ validator:
   ## @param validator.containerSecurityContext.runAsNonRoot Set Validator containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param validator.existingConfigmap The name of an existing ConfigMap with your custom configuration for Validator
   ##
@@ -1174,13 +1231,16 @@ validator:
     - name: cat-config
       secret:
         secretName: cat-config
-
+    - name: cat-tmp
+      emptyDir:
+        medium: Memory
   ## @param validator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Validator container(s)
   ##
   extraVolumeMounts: 
     - name: cat-config
       mountPath: /usr/share/app/secrets/configs
-  
+    - name: cat-tmp
+      mountPath: /tmp  
   ## @param validator.sidecars Add additional sidecar containers to the Validator pod(s)
   ## e.g:
   ## sidecars:
@@ -1219,7 +1279,8 @@ validator:
 ## @section geocoding Parameters
 
 geocoding:
-
+  ## @param geocoding.enabled Enable geocoding Verticle for deployment
+  enabled: true
   ## @param geocoding.replicaCount Number of geocoding replicas to deploy
 
   replicaCount: 1  
@@ -1285,7 +1346,9 @@ geocoding:
   ## @param geocoding.podSecurityContext.fsGroup Set geocoding pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1294,9 +1357,14 @@ geocoding:
   ## @param geocoding.containerSecurityContext.runAsNonRoot Set geocoding containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param geocoding.existingConfigmap The name of an existing ConfigMap with your custom configuration for geocoding
   ##
@@ -1395,13 +1463,16 @@ geocoding:
     - name: cat-config
       secret:
         secretName: cat-config
-
+    - name: cat-tmp
+      emptyDir:
+        medium: Memory
   ## @param geocoding.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the geocoding container(s)
   ##
   extraVolumeMounts: 
     - name: cat-config
       mountPath: /usr/share/app/secrets/configs
-  
+    - name: cat-tmp
+      mountPath: /tmp  
   ## @param geocoding.sidecars Add additional sidecar containers to the geocoding pod(s)
   ## e.g:
   ## sidecars:
@@ -1440,7 +1511,8 @@ geocoding:
 ## @section nlpSearch Parameters
 
 nlpSearch:
-
+  ## @param nlpSearch.enabled Enable nlpSearch Verticle for deployment
+  enabled: true
   ## @param nlpSearch.replicaCount Number of nlpSearch replicas to deploy
 
   replicaCount: 1  
@@ -1506,7 +1578,9 @@ nlpSearch:
   ## @param nlpSearch.podSecurityContext.fsGroup Set nlpSearch pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1515,9 +1589,14 @@ nlpSearch:
   ## @param nlpSearch.containerSecurityContext.runAsNonRoot Set nlpSearch containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param nlpSearch.existingConfigmap The name of an existing ConfigMap with your custom configuration for nlpSearch
   ##
@@ -1616,13 +1695,16 @@ nlpSearch:
     - name: cat-config
       secret:
         secretName: cat-config
-
+    - name: cat-tmp
+      emptyDir:
+        medium: Memory
   ## @param nlpSearch.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the nlpSearch container(s)
   ##
   extraVolumeMounts: 
     - name: cat-config
       mountPath: /usr/share/app/secrets/configs
-  
+    - name: cat-tmp
+      mountPath: /tmp  
   ## @param nlpSearch.sidecars Add additional sidecar containers to the nlpSearch pod(s)
   ## e.g:
   ## sidecars:
@@ -1659,7 +1741,8 @@ nlpSearch:
     targetMemory:
 ## @section Rating Parameters
 rating:
-
+  ## @param rating.enabled Enable rating Verticle for deployment
+  enabled: true
   ## @param rating.replicaCount Number of Rating replicas to deploy
 
   replicaCount: 1  
@@ -1725,7 +1808,9 @@ rating:
   ## @param rating.podSecurityContext.fsGroup Set Rating pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1734,9 +1819,14 @@ rating:
   ## @param rating.containerSecurityContext.runAsNonRoot Set Rating containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param rating.existingConfigmap The name of an existing ConfigMap with your custom configuration for Rating
   ##
@@ -1835,13 +1925,16 @@ rating:
     - name: cat-config
       secret:
         secretName: cat-config
-
+    - name: cat-tmp
+      emptyDir:
+        medium: Memory
   ## @param rating.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Rating container(s)
   ##
   extraVolumeMounts: 
     - name: cat-config
       mountPath: /usr/share/app/secrets/configs
-  
+    - name: cat-tmp
+      mountPath: /tmp  
   ## @param rating.sidecars Add additional sidecar containers to the Rating pod(s)
   ## e.g:
   ## sidecars:
@@ -1879,7 +1972,8 @@ rating:
 
 ## @section Databroker Parameters
 databroker:
-
+  ## @param databroker.enabled Enable databroker Verticle for deployment
+  enabled: true
   ## @param databroker.replicaCount Number of Databroker replicas to deploy
 
   replicaCount: 1  
@@ -1945,7 +2039,9 @@ databroker:
   ## @param databroker.podSecurityContext.fsGroup Set Databroker pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1954,9 +2050,14 @@ databroker:
   ## @param databroker.containerSecurityContext.runAsNonRoot Set Databroker containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param databroker.existingConfigmap The name of an existing ConfigMap with your custom configuration for Databroker
   ##
@@ -2055,13 +2156,16 @@ databroker:
     - name: cat-config
       secret:
         secretName: cat-config
-
+    - name: cat-tmp
+      emptyDir:
+        medium: Memory
   ## @param databroker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Databroker container(s)
   ##
   extraVolumeMounts: 
     - name: cat-config
       mountPath: /usr/share/app/secrets/configs
-  
+    - name: cat-tmp
+      mountPath: /tmp  
   ## @param databroker.sidecars Add additional sidecar containers to the Databroker pod(s)
   ## e.g:
   ## sidecars:
@@ -2099,7 +2203,8 @@ databroker:
 
 ## @section ProfanityCheckSdk Parameters
 profanityCheckSdk:
-
+  ## @param profanityCheckSdk.enabled Enable databroker Verticle for deployment
+  enabled: true
   image:
     registry: ghcr.io
     repository: datakaveri/profanity-check-sdk
@@ -2186,7 +2291,9 @@ profanityCheckSdk:
   ## @param profanityCheckSdk.podSecurityContext.fsGroup Set ProfanityCheckSdk pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -2195,9 +2302,14 @@ profanityCheckSdk:
   ## @param profanityCheckSdk.containerSecurityContext.runAsNonRoot Set ProfanityCheckSdk containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param profanityCheckSdk.existingConfigmap The name of an existing ConfigMap with your custom configuration for ProfanityCheckSdk
   ##
@@ -2306,7 +2418,7 @@ profanityCheckSdk:
     - name: profanity-check-config
       mountPath: /usr/share/app/config.json
       subPath: config.json
-  
+ 
   ## @param profanityCheckSdk.sidecars Add additional sidecar containers to the ProfanityCheckSdk pod(s)
   ## e.g:
   ## sidecars:

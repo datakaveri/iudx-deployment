@@ -1,0 +1,80 @@
+version: "3.9"
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  rmq-init-setup:
+    image: ghcr.io/datakaveri/rabbitmq-init:1.0.2
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment: 
+      - RMQ_HOST=tasks.rabbitmq:15672
+    networks:
+      - overlay-net
+    configs:
+      - source: rmq-init-config
+        target: /usr/share/app/init-config.json
+    secrets:
+      - source: admin-password
+        target: /usr/share/app/secrets/passwords/admin-password
+      - source: rs-password
+        target: /usr/share/app/secrets/passwords/rs-password
+      - source: lip-password
+        target: /usr/share/app/secrets/passwords/lip-password
+      - source: cat-password
+        target: /usr/share/app/secrets/passwords/cat-password
+      - source: profanity-cat-password
+        target: /usr/share/app/secrets/passwords/profanity-cat-password
+      - source: fs-password
+        target: /usr/share/app/secrets/passwords/fs-password
+      - source: gis-password
+        target: /usr/share/app/secrets/passwords/gis-password
+      - source: di-password
+        target: /usr/share/app/secrets/passwords/di-password
+      - source: logstash-password
+        target: /usr/share/app/secrets/passwords/logstash-password
+      - source: rs-proxy-adapter-password
+        target: /usr/share/app/secrets/passwords/rs-proxy-adapter-password
+      - source: rs-proxy-password
+        target: /usr/share/app/secrets/passwords/rs-proxy-password
+      - source: auditing-password
+        target: /usr/share/app/secrets/passwords/auditing-password
+
+
+
+
+
+
+configs:
+  rmq-init-config:
+    file: ./secrets/init-config.json
+secrets:
+  admin-password:
+    file: ./secrets/passwords/admin-password
+  rs-password:
+    file: ./secrets/passwords/rs-password
+  lip-password:
+    file: ./secrets/passwords/lip-password
+  cat-password:
+    file: ./secrets/passwords/cat-password
+  profanity-cat-password:
+    file: ./secrets/passwords/profanity-cat-password
+  fs-password:
+    file: ./secrets/passwords/fs-password
+  gis-password:
+    file: ./secrets/passwords/gis-password
+  di-password:
+    file: ./secrets/passwords/di-password 
+  logstash-password:
+    file: ./secrets/passwords/logstash-password
+  rs-proxy-adapter-password:
+    file: ./secrets/passwords/rs-proxy-adapter-password
+  rs-proxy-password:
+    file: ./secrets/passwords/rs-proxy-password
+  auditing-password:
+    file: ./secrets/passwords/auditing-password

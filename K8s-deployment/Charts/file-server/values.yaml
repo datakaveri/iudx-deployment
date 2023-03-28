@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/fs-depl
-  tag: 4.5.0-alpha-6647788
+  tag: 4.5.0-alpha-053a088
   pullSecrets: {} 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -196,6 +196,8 @@ apiServer:
   ##
   podSecurityContext:
     enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
     fsGroupChangePolicy: "OnRootMismatch"
   ## Configure Container Security Context
@@ -205,9 +207,14 @@ apiServer:
   ## @param apiServer.containerSecurityContext.runAsNonRoot Set ApiServer containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param apiServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for ApiServer
   ##
@@ -308,6 +315,9 @@ apiServer:
     - name: fs-config
       secret:
         secretName: fs-config
+    - name: fs-tmp
+      emptyDir:
+        medium: Memory
 
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ApiServer container(s)
   ##
@@ -316,6 +326,8 @@ apiServer:
       mountPath: /usr/share/app/secrets/configs
     - name: fs-data
       mountPath: /usr/share/app/storage/
+    - name: fs-tmp
+      mountPath: /tmp
   
   ## @param apiServer.sidecars Add additional sidecar containers to the ApiServer pod(s)
   ## e.g:
@@ -469,7 +481,9 @@ authenticator:
   ## @param authenticator.podSecurityContext.fsGroup Set Authenticator pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -478,9 +492,14 @@ authenticator:
   ## @param authenticator.containerSecurityContext.runAsNonRoot Set Authenticator containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param authenticator.existingConfigmap The name of an existing ConfigMap with your custom configuration for Authenticator
   ##
@@ -583,13 +602,17 @@ authenticator:
     - name: fs-config
       secret:
         secretName: fs-config
-
+    - name: fs-tmp
+      emptyDir:
+        medium: Memory
     
   ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Authenticator container(s)
   ##
   extraVolumeMounts:
     - name: fs-config
       mountPath: /usr/share/app/secrets/configs
+    - name: fs-tmp
+      mountPath: /tmp
 
   ## @param authenticator.sidecars Add additional sidecar containers to the Authenticator pod(s)
   ## e.g:
@@ -706,7 +729,9 @@ database:
   ## @param database.podSecurityContext.fsGroup Set Database pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -715,9 +740,14 @@ database:
   ## @param database.containerSecurityContext.runAsNonRoot Set Database containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param database.existingConfigmap The name of an existing ConfigMap with your custom configuration for Database
   ##
@@ -818,13 +848,17 @@ database:
     - name: fs-config
       secret:
         secretName: fs-config
-
+    - name: fs-tmp
+      emptyDir:
+        medium: Memory
     
   ## @param database.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Database container(s)
   ##
   extraVolumeMounts: 
     - name: fs-config
       mountPath: /usr/share/app/secrets/configs
+    - name: fs-tmp
+      mountPath: /tmp
   
   ## @param database.sidecars Add additional sidecar containers to the Database pod(s)
   ## e.g:
@@ -932,7 +966,9 @@ cache:
   ## @param cache.podSecurityContext.fsGroup Set cache pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -941,9 +977,14 @@ cache:
   ## @param cache.containerSecurityContext.runAsNonRoot Set cache containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param cache.existingConfigmap The name of an existing ConfigMap with your custom configuration for cache
   ##
@@ -1042,11 +1083,16 @@ cache:
     - name: fs-config
       secret:
         secretName: fs-config
+    - name: fs-tmp
+      emptyDir:
+        medium: Memory
   ## @param cache.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the cache container(s)
   ##
   extraVolumeMounts: 
     - name: fs-config
       mountPath: /usr/share/app/secrets/configs
+    - name: fs-tmp
+      mountPath: /tmp
   
   ## @param cache.sidecars Add additional sidecar containers to the cache pod(s)
   ## e.g:
@@ -1151,7 +1197,9 @@ postgres:
   ## @param postgres.podSecurityContext.fsGroup Set postgres pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1160,9 +1208,14 @@ postgres:
   ## @param postgres.containerSecurityContext.runAsNonRoot Set postgres containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param postgres.existingConfigmap The name of an existing ConfigMap with your custom configuration for postgres
   ##
@@ -1261,11 +1314,16 @@ postgres:
     - name: fs-config
       secret:
         secretName: fs-config
+    - name: fs-tmp
+      emptyDir:
+        medium: Memory
   ## @param postgres.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
   ##
   extraVolumeMounts: 
     - name: fs-config
       mountPath: /usr/share/app/secrets/configs
+    - name: fs-tmp
+      mountPath: /tmp
 
   ## @param postgres.sidecars Add additional sidecar containers to the postgres pod(s)
   ## e.g:
@@ -1374,7 +1432,9 @@ databroker:
   ## @param databroker.podSecurityContext.fsGroup Set databroker pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1383,9 +1443,14 @@ databroker:
   ## @param databroker.containerSecurityContext.runAsNonRoot Set databroker containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param databroker.existingConfigmap The name of an existing ConfigMap with your custom configuration for databroker
   ##
@@ -1484,11 +1549,16 @@ databroker:
     - name: fs-config
       secret:
         secretName: fs-config
+    - name: fs-tmp
+      emptyDir:
+        medium: Memory
   ## @param databroker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the databroker container(s)
   ##
   extraVolumeMounts: 
     - name: fs-config
       mountPath: /usr/share/app/secrets/configs
+    - name: fs-tmp
+      mountPath: /tmp
   
   ## @param databroker.sidecars Add additional sidecar containers to the databroker pod(s)
   ## e.g:
@@ -1607,7 +1677,9 @@ auditing:
   ## @param auditing.podSecurityContext.fsGroup Set Auditing pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1616,9 +1688,14 @@ auditing:
   ## @param auditing.containerSecurityContext.runAsNonRoot Set Auditing containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param auditing.existingConfigmap The name of an existing ConfigMap with your custom configuration for Auditing
   ##
@@ -1717,11 +1794,16 @@ auditing:
     - name: fs-config
       secret:
         secretName: fs-config
+    - name: fs-tmp
+      emptyDir:
+        medium: Memory
   ## @param auditing.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Auditing container(s)
   ##
   extraVolumeMounts:
     - name: fs-config
       mountPath: /usr/share/app/secrets/configs
+    - name: fs-tmp
+      mountPath: /tmp
   
   ## @param auditing.sidecars Add additional sidecar containers to the Auditing pod(s)
   ## e.g:

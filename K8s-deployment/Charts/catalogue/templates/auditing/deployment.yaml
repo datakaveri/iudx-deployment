@@ -1,3 +1,4 @@
+{{- if .Values.auditing.enabled -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -69,7 +70,7 @@ spec:
           image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.auditing.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- omit .Values.auditing.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -170,3 +171,4 @@ spec:
         {{- if .Values.auditing.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.auditing.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}

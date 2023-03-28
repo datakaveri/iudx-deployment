@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/gis-depl
-  tag: 4.5.0-alpha-545874a
+  tag: 4.5.0-alpha-fb1cdb9
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -189,7 +189,9 @@ apiServer:
   ## @param apiServer.podSecurityContext.fsGroup Set apiServer pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -198,9 +200,14 @@ apiServer:
   ## @param apiServer.containerSecurityContext.runAsNonRoot Set apiServer containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param apiServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for apiServer
   ##
@@ -300,11 +307,16 @@ apiServer:
     - name: gis-config
       secret:
         secretName: gis-config
+    - name: gis-tmp
+      emptyDir:
+        medium: Memory
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
   ##
   extraVolumeMounts: 
     - name: gis-config
       mountPath: /usr/share/app/secrets/configs
+    - name: gis-tmp
+      mountPath: /tmp
   
   ## @param apiServer.sidecars Add additional sidecar containers to the apiServer pod(s)
   ## e.g:
@@ -422,7 +434,9 @@ authenticator:
   ## @param authenticator.podSecurityContext.fsGroup Set authenticator pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -431,9 +445,14 @@ authenticator:
   ## @param authenticator.containerSecurityContext.runAsNonRoot Set authenticator containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param authenticator.existingConfigmap The name of an existing ConfigMap with your custom configuration for authenticator
   ##
@@ -532,13 +551,17 @@ authenticator:
     - name: gis-config
       secret:
         secretName: gis-config
-
+    - name: gis-tmp
+      emptyDir:
+        medium: Memory
     
   ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the authenticator container(s)
   ##
   extraVolumeMounts:
     - name: gis-config
       mountPath: /usr/share/app/secrets/configs
+    - name: gis-tmp
+      mountPath: /tmp
 
   ## @param authenticator.sidecars Add additional sidecar containers to the authenticator pod(s)
   ## e.g:
@@ -656,7 +679,9 @@ metering:
   ## @param metering.podSecurityContext.fsGroup Set metering pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -665,9 +690,14 @@ metering:
   ## @param metering.containerSecurityContext.runAsNonRoot Set metering containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param metering.existingConfigmap The name of an existing ConfigMap with your custom configuration for metering
   ##
@@ -766,12 +796,16 @@ metering:
     - name: gis-config
       secret:
         secretName: gis-config
-
+    - name: gis-tmp
+      emptyDir:
+        medium: Memory
   ## @param metering.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
   ##
   extraVolumeMounts: 
     - name: gis-config
       mountPath: /usr/share/app/secrets/configs
+    - name: gis-tmp
+      mountPath: /tmp
   
   ## @param metering.sidecars Add additional sidecar containers to the metering pod(s)
   ## e.g:
@@ -876,7 +910,9 @@ cache:
   ## @param cache.podSecurityContext.fsGroup Set cache pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -885,9 +921,14 @@ cache:
   ## @param cache.containerSecurityContext.runAsNonRoot Set cache containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param cache.existingConfigmap The name of an existing ConfigMap with your custom configuration for cache
   ##
@@ -986,11 +1027,16 @@ cache:
     - name: gis-config
       secret:
         secretName: gis-config
+    - name: gis-tmp
+      emptyDir:
+        medium: Memory
   ## @param cache.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the cache container(s)
   ##
   extraVolumeMounts: 
     - name: gis-config
       mountPath: /usr/share/app/secrets/configs
+    - name: gis-tmp
+      mountPath: /tmp
   
   ## @param cache.sidecars Add additional sidecar containers to the cache pod(s)
   ## e.g:
@@ -1095,7 +1141,9 @@ postgres:
   ## @param postgres.podSecurityContext.fsGroup Set postgres pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1104,9 +1152,14 @@ postgres:
   ## @param postgres.containerSecurityContext.runAsNonRoot Set postgres containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param postgres.existingConfigmap The name of an existing ConfigMap with your custom configuration for postgres
   ##
@@ -1205,11 +1258,16 @@ postgres:
     - name: gis-config
       secret:
         secretName: gis-config
+    - name: gis-tmp
+      emptyDir:
+        medium: Memory
   ## @param postgres.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
   ##
   extraVolumeMounts: 
     - name: gis-config
       mountPath: /usr/share/app/secrets/configs
+    - name: gis-tmp
+      mountPath: /tmp
 
   ## @param postgres.sidecars Add additional sidecar containers to the postgres pod(s)
   ## e.g:
@@ -1318,7 +1376,9 @@ databroker:
   ## @param databroker.podSecurityContext.fsGroup Set databroker pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1327,9 +1387,14 @@ databroker:
   ## @param databroker.containerSecurityContext.runAsNonRoot Set databroker containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param databroker.existingConfigmap The name of an existing ConfigMap with your custom configuration for databroker
   ##
@@ -1428,11 +1493,16 @@ databroker:
     - name: gis-config
       secret:
         secretName: gis-config
+    - name: gis-tmp
+      emptyDir:
+        medium: Memory
   ## @param databroker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the databroker container(s)
   ##
   extraVolumeMounts: 
     - name: gis-config
       mountPath: /usr/share/app/secrets/configs
+    - name: gis-tmp
+      mountPath: /tmp
   
   ## @param databroker.sidecars Add additional sidecar containers to the databroker pod(s)
   ## e.g:

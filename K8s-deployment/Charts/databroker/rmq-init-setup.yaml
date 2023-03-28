@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rmq-auto-conf
+  namespace: rabbitmq
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+      - name: job
+        image: ghcr.io/datakaveri/rabbitmq-init:1.0.2
+        env:
+          - name: RMQ_HOST
+            value: rabbitmq.rabbitmq.svc.cluster.local:15672
+        volumeMounts:
+          - name: rmq-passwords
+            mountPath: /usr/share/app/secrets/passwords
+          - name:  rmq-init-config
+            mountPath: /usr/share/app/init-config.json
+            subPath: init-config.json
+      restartPolicy: Never
+      volumes:
+        - name: rmq-passwords
+          secret: 
+            secretName: rmq-passwords
+        - name: rmq-init-config
+          configMap: 
+            name:  rmq-init-config
+            defaultMode: 0555
+
+            

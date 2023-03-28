@@ -1,0 +1,158 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: auditing-databroker
+  labels: 
+    app.kubernetes.io/component: databroker
+    app: auditing-databroker
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.databroker.replicaCount }}
+  {{- if .Values.databroker.updateStrategy }}
+  strategy: {{- toYaml .Values.databroker.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: auditing-databroker
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: auditing-databroker
+        app.kubernetes.io/component: databroker
+        {{- if .Values.databroker.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.databroker.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.databroker.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.databroker.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.databroker.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.databroker.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.databroker.priorityClassName }}
+      priorityClassName: {{ .Values.databroker.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.databroker.schedulerName }}
+      schedulerName: {{ .Values.databroker.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.databroker.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.databroker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.databroker.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.databroker.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: auditing-databroker
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.databroker.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.databroker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.databroker.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.databroker.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.databroker.args }}
+          args: [{{- range $index, $str := .Values.databroker.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.databroker.resources }}
+          resources: {{- toYaml .Values.databroker.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.databroker.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.databroker.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.databroker.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.databroker.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.databroker.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.databroker.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.databroker.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.databroker.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.databroker.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.databroker.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.databroker.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.databroker.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.databroker.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.databroker.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.databroker.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.databroker.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.databroker.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.databroker.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.databroker.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.databroker.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.databroker.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.databroker.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.databroker.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.databroker.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.databroker.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.databroker.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.databroker.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.databroker.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.databroker.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.databroker.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.databroker.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.databroker.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.databroker.podAffinityPreset "component" "databroker" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.databroker.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "databroker" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.databroker.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.databroker.nodeAffinityPreset.type "key" .Values.databroker.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.databroker.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.databroker.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}

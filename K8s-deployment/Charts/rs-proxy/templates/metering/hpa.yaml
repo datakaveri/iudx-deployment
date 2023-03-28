@@ -1,0 +1,40 @@
+{{- if and .Values.metering.enabled .Values.metering.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-proxy-metering
+  labels:
+    app: rs-proxy-metering
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: rs-proxy-metering
+  minReplicas: {{ .Values.metering.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.metering.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.metering.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.metering.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.metering.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.metering.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

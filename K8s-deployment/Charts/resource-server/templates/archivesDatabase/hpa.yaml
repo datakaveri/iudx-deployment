@@ -1,5 +1,5 @@
-{{- if .Values.archivesDatabase.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta2
+{{- if and .Values.archivesDatabase.enabled .Values.archivesDatabase.autoscaling.enabled }}
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: rs-archives-database

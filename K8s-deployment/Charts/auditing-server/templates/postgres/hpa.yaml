@@ -1,0 +1,40 @@
+{{- if .Values.postgres.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auditing-postgres
+  labels:
+    app: auditing-postgres
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: auditing-postgres
+  minReplicas: {{ .Values.postgres.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.postgres.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.postgres.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.postgres.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.postgres.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.postgres.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   gis:
-    image: ghcr.io/datakaveri/gis-depl:4.5.0-alpha-545874a
+    image: ghcr.io/datakaveri/gis-depl:4.5.0-alpha-fb1cdb9
     command: bash -c "exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
     cap_drop:
       - ALL

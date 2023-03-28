@@ -10,8 +10,9 @@ ingress:
 ## @param apiServer.resources.requests The requested resources for the apiServer containers
 ##
 apiServer:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
@@ -26,8 +27,9 @@ apiServer:
 ## @param archivesDatabase.resources.requests The requested resources for the archivesDatabase containers
 ##
 archivesDatabase:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
@@ -42,8 +44,9 @@ archivesDatabase:
 ## @param authenticator.resources.requests The requested resources for the authenticator containers
 ##
 authenticator:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 600m
@@ -58,8 +61,26 @@ authenticator:
 ## @param databroker.resources.requests The requested resources for the databroker containers
 ##
 databroker:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests: 
+      cpu: 400m
+      memory: 400Mi
+
+## encryption resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param encryption.resources.limits The resources limits for the encryption containers
+## @param encryption.resources.requests The requested resources for the encryption containers
+##
+encryption:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 500m
@@ -74,8 +95,9 @@ databroker:
 ## @param latestDatabase.resources.requests The requested resources for the latestDatabase containers
 ##
 latestDatabase:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
@@ -90,8 +112,9 @@ latestDatabase:
 ## @param metering.resources.requests The requested resources for the metering containers
 ##
 metering:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 700m
@@ -106,8 +129,9 @@ metering:
 ## @param postgres.resources.requests The requested resources for the postgres containers
 ##
 postgres:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 600m
@@ -122,8 +146,9 @@ postgres:
 ## @param cache.resources.requests The requested resources for the cache containers
 ##
 cache:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 400m
@@ -138,8 +163,9 @@ cache:
 ## @param async.resources.requests The requested resources for the async containers
 ##
 async:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m

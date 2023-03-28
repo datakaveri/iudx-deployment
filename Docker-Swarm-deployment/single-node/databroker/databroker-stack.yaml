@@ -9,39 +9,38 @@ networks:
 
 services:
   rabbitmq:
-    image: rabbitmq:3.10.5-management # using ubuntu based images as its officially supported
+    image: docker.io/bitnami/rabbitmq:3.11.10-debian-11-r4  # using ubuntu based images as its officially supported
     #setting the hostname, so that when same/new container restarts it uses the same directory to save i.e "/var/lib/rabbitmq/rabbit@hostname"
     hostname: rabbitmq
+    env_file:
+      - ./secrets/.rabbitmq.env 
    # volume stores metadata of queues, excahnges and also persistent queue messages
     volumes:
       - type: volume
         source: rabbitmq-volume
-        target: /var/lib/rabbitmq
+        target: /bitnami/rabbitmq/mnesia
 
     # uid and gid of 'rabbitmq' is 999 in ubuntu based, uid=100, gid-101 in alpine based
     secrets: 
       - source: rabbitmq-ca-cert.pem 
-        uid: '999' 
-        gid: '999' 
-        mode: 0600 #by default it will be 0444
+        uid: '1001' 
+        gid: '0' 
+        mode: 0400 #by default it will be 0444
       - source: rabbitmq-server-cert.pem 
-        uid: '999'
-        gid: '999'
-        mode: 0600
+        uid: '1001'
+        gid: '0'  
+        mode: 0400 #by default it will be 0444
       - source: rabbitmq-server-key.pem 
-        uid: '999' 
-        gid: '999'
-        mode: 0600
-      - source: rabbitmq-definitions.json #provision admin user, vhost
-        uid: '999' 
-        gid: '999'
-        mode: 0600 
+        uid: '1001'
+        gid: '0'  
+        mode: 0400 #by default it will be 0444
+
     configs:
     - source: rabbitmq-config
-      target: /etc/rabbitmq/rabbitmq.conf
+      target: /bitnami/rabbitmq/conf/custom.conf
     ports:
       - target: 15671    # https management port 
-        published: 28041 
+        published: 28041
         mode: host
       - target: 5671     # amqps port 
         published: 24567
@@ -62,44 +61,10 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-      
-  backup:
-    image: ghcr.io/datakaveri/rabbitmq-backup:1.0
-    hostname: backup
-    volumes:
-      - type: volume
-        source: rabbitmq-volume
-        target: /var/lib/rabbitmq
-        read_only: true 
-      - type: volume
-        source: backup-volume
-        target: /var/lib/backup
-    secrets:
-      - source: backup-ssh-privkey
-        target: /root/.ssh/id_rsa
-        mode: 0600 
-      - source: backup-ssh-pubkey
-        target: /root/.ssh/id_rsa.pub
-        mode: 0600 
-      - rabbitmq-admin-passwd
-
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - "node.labels.databroker_node==true"
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        window: 10s
-    env_file:
-        - ./secrets/.rabbitmq-backup.env
-
 
 
 volumes:
   rabbitmq-volume:
-  backup-volume:
 
 
 configs:
@@ -113,16 +78,5 @@ secrets:
     file: secrets/pki/rabbitmq-server-cert.pem
   rabbitmq-server-key.pem:
     file: secrets/pki/rabbitmq-server-key.pem
-  rabbitmq-definitions.json:
-    file: secrets/passwords/rabbitmq-definitions.json
-
-  backup-ssh-privkey: #remote machine backup's private key
-    file: secrets/pki/backup-ssh-privkey
-  backup-ssh-pubkey: #remote machine backup's public key
-    file: secrets/pki/backup-ssh-pubkey
   rabbitmq-admin-passwd: # rabbimq passwd of admin user
-    file: secrets/passwords/rabbitmq-admin-passwd
-
-      
-    
-    
+    file: secrets/passwords/admin-password

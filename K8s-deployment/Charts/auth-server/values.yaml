@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/aaa-depl
-  tag: 4.5.0-alpha-3bef618
+  tag: 4.5.0-alpha-c1dd70b
   pullSecrets: {}
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -182,7 +182,9 @@ apiServer:
   ## @param apiServer.podSecurityContext.fsGroup Set ApiServer pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -191,9 +193,14 @@ apiServer:
   ## @param apiServer.containerSecurityContext.runAsNonRoot Set ApiServer containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param apiServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for ApiServer
   ##
@@ -295,6 +302,9 @@ apiServer:
     - name: aaa-keystore
       secret:
         secretName: aaa-keystore
+    - name: aaa-tmp
+      emptyDir:
+        medium: Memory
   ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ApiServer container(s)
   ##
   extraVolumeMounts: 
@@ -302,6 +312,8 @@ apiServer:
       mountPath: /usr/share/app/secrets/configs
     - name: aaa-keystore
       mountPath: /usr/share/app/secrets/
+    - name: aaa-tmp
+      mountPath: /tmp
   
   ## @param apiServer.sidecars Add additional sidecar containers to the ApiServer pod(s)
   ## e.g:
@@ -407,7 +419,9 @@ auditing:
   ## @param auditing.podSecurityContext.fsGroup Set Auditing pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -416,9 +430,14 @@ auditing:
   ## @param auditing.containerSecurityContext.runAsNonRoot Set Auditing containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param auditing.existingConfigmap The name of an existing ConfigMap with your custom configuration for Auditing
   ##
@@ -517,11 +536,16 @@ auditing:
     - name: aaa-config
       secret:
         secretName: aaa-config
+    - name: aaa-tmp
+      emptyDir:
+        medium: Memory
   ## @param auditing.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Auditing container(s)
   ##
   extraVolumeMounts:
     - name: aaa-config 
       mountPath: /usr/share/app/secrets/configs
+    - name: aaa-tmp
+      mountPath: /tmp
   
   ## @param auditing.sidecars Add additional sidecar containers to the Auditing pod(s)
   ## e.g:
@@ -629,7 +653,9 @@ admin:
   ## @param admin.podSecurityContext.fsGroup Set admin pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -638,9 +664,14 @@ admin:
   ## @param admin.containerSecurityContext.runAsNonRoot Set admin containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param admin.existingConfigmap The name of an existing ConfigMap with your custom configuration for admin
   ##
@@ -739,11 +770,16 @@ admin:
     - name: aaa-config
       secret:
         secretName: aaa-config
+    - name: aaa-tmp
+      emptyDir:
+        medium: Memory
   ## @param admin.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the admin container(s)
   ##
   extraVolumeMounts: 
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
+    - name: aaa-tmp
+      mountPath: /tmp
   
   ## @param admin.sidecars Add additional sidecar containers to the admin pod(s)
   ## e.g:
@@ -849,7 +885,9 @@ registration:
   ## @param registration.podSecurityContext.fsGroup Set registration pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -858,9 +896,14 @@ registration:
   ## @param registration.containerSecurityContext.runAsNonRoot Set registration containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param registration.existingConfigmap The name of an existing ConfigMap with your custom configuration for registration
   ##
@@ -960,11 +1003,16 @@ registration:
     - name: aaa-config
       secret:
         secretName: aaa-config
+    - name: aaa-tmp
+      emptyDir:
+        medium: Memory
   ## @param registration.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the registration container(s)
   ##
   extraVolumeMounts:
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
+    - name: aaa-tmp
+      mountPath: /tmp
 
   ## @param registration.sidecars Add additional sidecar containers to the registration pod(s)
   ## e.g:
@@ -1070,7 +1118,9 @@ token:
   ## @param token.podSecurityContext.fsGroup Set token pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1079,9 +1129,14 @@ token:
   ## @param token.containerSecurityContext.runAsNonRoot Set token containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param token.existingConfigmap The name of an existing ConfigMap with your custom configuration for token
   ##
@@ -1183,6 +1238,9 @@ token:
     - name: aaa-keystore
       secret:
         secretName: aaa-keystore
+    - name: aaa-tmp
+      emptyDir:
+        medium: Memory
   ## @param token.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the token container(s)
   ##
   extraVolumeMounts: 
@@ -1190,6 +1248,8 @@ token:
       mountPath: /usr/share/app/secrets/configs
     - name: aaa-keystore
       mountPath: /usr/share/app/secrets/
+    - name: aaa-tmp
+      mountPath: /tmp
 
   ## @param token.sidecars Add additional sidecar containers to the token pod(s)
   ## e.g:
@@ -1296,7 +1356,9 @@ policy:
   ## @param policy.podSecurityContext.fsGroup Set policy pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1305,9 +1367,14 @@ policy:
   ## @param policy.containerSecurityContext.runAsNonRoot Set policy containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param policy.existingConfigmap The name of an existing ConfigMap with your custom configuration for policy
   ##
@@ -1405,11 +1472,16 @@ policy:
     - name: aaa-config
       secret:
         secretName: aaa-config
+    - name: aaa-tmp
+      emptyDir:
+        medium: Memory
   ## @param policy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the policy container(s)
   ##
   extraVolumeMounts: 
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
+    - name: aaa-tmp
+      mountPath: /tmp
   
   ## @param policy.sidecars Add additional sidecar containers to the policy pod(s)
   ## e.g:
@@ -1515,7 +1587,9 @@ apd:
   ## @param apd.podSecurityContext.fsGroup Set apd pod's Security Context fsGroup
   ##
   podSecurityContext:
-    enabled: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -1524,9 +1598,14 @@ apd:
   ## @param apd.containerSecurityContext.runAsNonRoot Set apd containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
-    enabled: false
-    runAsUser: 1001
+    enabled: true
     runAsNonRoot: true
+    runAsUser: 1001
+    allowPrivilegeEscalation: false
+    capabilities:
+        drop:
+          - ALL
+    readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param apd.existingConfigmap The name of an existing ConfigMap with your custom configuration for apd
   ##
@@ -1626,11 +1705,16 @@ apd:
     - name: aaa-config
       secret:
         secretName: aaa-config
+    - name: aaa-tmp
+      emptyDir:
+        medium: Memory
   ## @param apd.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apd container(s)
   ##
   extraVolumeMounts:
     - name: aaa-config
       mountPath: /usr/share/app/secrets/configs
+    - name: aaa-tmp
+      mountPath: /tmp
 
   ## @param apd.sidecars Add additional sidecar containers to the apd pod(s)
   ## e.g:
