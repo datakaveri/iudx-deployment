@@ -4,7 +4,7 @@ import time
 import os
 import json
 import datetime
-import redis
+import rejson
 
 username = 'admin' # RMQ username
 password = 'admin' # RNQ password
@@ -64,9 +64,9 @@ while count < 10:
     time.sleep(1)
 connection.close()
 
-r = redis.Redis(host='localhost',port=6381, decode_responses=True, password='password')
-x = r.json().get('iisc_ac_in_89a36273d77dac4cf38114fca1bbe64392547f86_rs_iudx_io_surat_itms_realtime_information_surat_itms_live_eta')
+r = rejson.Client(host='localhost',port=6381, decode_responses=True, password="password")
 
+x = r.jsonget('iisc_ac_in_89a36273d77dac4cf38114fca1bbe64392547f86_rs_iudx_io_surat_itms_realtime_information_surat_itms_live_eta')
 compar = []
 
 for key in x:
