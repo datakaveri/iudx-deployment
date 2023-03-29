@@ -13,13 +13,13 @@ apiServer:
   resources:
     limits:
       cpu: 800m
-      memory: 1.2Gi
+      memory: 750Mi
     requests: 
       cpu: 600m
-      memory: 1.2Gi
+      memoriy: 600Mi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 ## Auditing resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -30,14 +30,14 @@ auditing:
   enabled: true
   resources:
     limits:
-      cpu: 500m
-      memory: 750Mi
+      cpu: 400m
+      memory: 600Mi
     requests: 
-      cpu: 500m
-      memory: 700Mi
+      cpu: 300m
+      memory: 400Mi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 ## Authenticator resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -49,13 +49,13 @@ authenticator:
   resources:
     limits:
       cpu: 500m
-      memory: 800Mi
+      memory: 600Mi
     requests: 
       cpu: 300m
-      memory: 800Mi
+      memory: 400Mi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 ## Database resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -66,14 +66,14 @@ database:
   enabled: true
   resources:
     limits:
-      cpu: 800m
-      memory: 1.2Gi
-    requests: 
       cpu: 600m
-      memory: 1.2Gi
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 400Mi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 ## Validator resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -85,13 +85,13 @@ validator:
   resources:
     limits:
       cpu: 800m
-      memory: 1.2Gi
+      memory: 800Mi
     requests:
       cpu: 600m 
-      memory: 1.2Gi
+      memory: 600Mi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 ## geocoding resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -103,13 +103,13 @@ geocoding:
   resources:
     limits:
       cpu: 800m
-      memory: 1.2Gi
+      memory: 750Mi
     requests:
       cpu: 600m 
-      memory: 1.2Gi
+      memory: 600Mi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 ## nlpSearch resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -121,13 +121,13 @@ nlpSearch:
   resources:
     limits:
       cpu: 800m
-      memory: 1.2Gi
+      memory: 750Mi
     requests:
       cpu: 600m 
-      memory: 1.2Gi
+      memory: 600Mi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 ## rating resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param rating.resources.limits The resources limits for the rating containers
@@ -139,15 +139,13 @@ rating:
   enabled: true
   resources:
     limits:
-      cpu: 100m
-      memory: 0.4Gi
+      cpu: 500m
+      memory: 600Mi
     requests:
-      cpu: 50m
-      memory: 0.4Gi
-  autoscaling:
-    enabled: false
+      cpu: 400m
+      memory: 400Mi 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 ## databroker resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param databroker.resources.limits The resources limits for the rating containers
@@ -159,15 +157,13 @@ databroker:
   enabled: true
   resources:
     limits:
-      cpu: 100m
-      memory: 0.4Gi
+      cpu: 500m
+      memory: 600Mi
     requests:
-      cpu: 50m
-      memory: 0.4Gi
-  autoscaling:
-    enabled: false
+      cpu: 400m
+      memory: 400Mi
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 ## profanityCheckSdk resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -180,15 +176,13 @@ profanityCheckSdk:
   enabled: true
   resources:
     limits:
-      cpu: 100m
-      memory: 0.4Gi
+      cpu: 400m
+      memory: 0.6Gi
     requests:
-      cpu: 50m
+      cpu: 300m
       memory: 0.4Gi
-  autoscaling:
-    enabled: false
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 
 ## mlayer resource requests and limits
@@ -202,15 +196,13 @@ mlayer:
   enabled: true
   resources:
     limits:
-      cpu: 100m
-      memory: 0.4Gi
+      cpu: 400m
+      memory: 600Mi
     requests:
-      cpu: 50m
-      memory: 0.4Gi
-  autoscaling:
-    enabled: false
+      cpu: 300m
+      memory: 400Mi
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 
 ## postgres resource requests and limits
@@ -224,12 +216,10 @@ postgres:
   enabled: true
   resources:
     limits:
-      cpu: 100m
-      memory: 0.4Gi
+      cpu: 400m
+      memory: 600Mi
     requests:
-      cpu: 50m
-      memory: 0.4Gi
-  autoscaling:
-    enabled: false
+      cpu: 
+      memory: 400Mi
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
