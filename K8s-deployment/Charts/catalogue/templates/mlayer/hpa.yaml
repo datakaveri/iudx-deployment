@@ -1,0 +1,40 @@
+{{- if and .Values.mlayer.enabled .Values.mlayer.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cat-mlayer
+  labels:
+    app: cat-mlayer
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: cat-mlayer
+  minReplicas: {{ .Values.mlayer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.mlayer.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.mlayer.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.mlayer.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.mlayer.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.mlayer.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}
