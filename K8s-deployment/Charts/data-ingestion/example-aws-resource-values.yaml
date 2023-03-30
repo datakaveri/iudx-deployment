@@ -18,7 +18,7 @@ apiServer:
       memory: 1.2Gi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 ## authenticator resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -35,7 +35,7 @@ authenticator:
       memory: 500Mi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
 
 ## databroker resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -52,7 +52,7 @@ databroker:
       memory: 400Mi
 
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
     
 ## metering resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -69,4 +69,4 @@ metering:
       memory: 800Mi
       
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
