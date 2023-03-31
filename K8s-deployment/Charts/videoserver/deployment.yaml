@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: videoserver
+  namespace: videoserver
+  labels: 
+    app.kubernetes.io/component: videoserver
+    app: videoserver
+spec:
+  replicas: 2
+  selector:
+    matchLabels: 
+      app: videoserver
+  template:
+    metadata:
+      labels:
+        app: videoserver
+        app.kubernetes.io/component: videoserver
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_D2as_v4
+      containers:
+        - name: videoserver
+          image: ghcr.io/datakaveri/videoserver:v1
+          command: ["node build/src/app.js"]
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+

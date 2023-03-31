@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-rtmp
+  namespace: nginx-rtmp
+  labels: 
+    app.kubernetes.io/component: nginx-rtmp
+    app: nginx-rtmp
+spec:
+  replicas: 2
+  selector:
+    matchLabels: 
+      app: nginx-rtmp
+  template:
+    metadata:
+      labels:
+        app: nginx-rtmp
+        app.kubernetes.io/component: nginx-rtmp
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_D2as_v4
+      containers:
+        - name: nginx-rtmp
+          image: ghcr.io/datakaveri/nginx-rtmp:v1
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: certificates
+              mountPath: /certificates/privateECDSASHA256.pem
+              subPath: privateECDSASHA256.pem
+            - name: certificates
+              mountPath: /certificates/pubECDSASHA256.pem
+              subPath: pubECDSASHA256.pem
+      volumes:
+        - name: certificates
+          secret:
+            secretName: certificates

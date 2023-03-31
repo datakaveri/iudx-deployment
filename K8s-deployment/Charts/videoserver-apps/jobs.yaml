@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: videoserver-apps
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+      - name: job
+        image: ghcr.io/datakaveri/video-server-apps:v1
+        command: ["python3 create_topics.py"]
+        env:
+          - name: KAFKA_HOST
+            value: kafka 
+          - name: KAFKA_PORT
+            value: "19092"
+        volumeMounts:
+          - name: topics
+            mountPath: /usr/share/apps/scripts/topics.json
+            subPath: topics.json
+      restartPolicy: Never
+      volumes:
+        - name: topics
+          secret: 
+            secretName: topics
+
+            
