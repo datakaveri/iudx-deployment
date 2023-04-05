@@ -163,7 +163,7 @@ spec:
       nodeSelector:
         node-role.kubernetes.io/controlplane: "true"
       containers:
-        - image: k8s.gcr.io/autoscaling/cluster-autoscaler:v1.24.0
+        - image: registry.k8s.io/autoscaling/cluster-autoscaler:v1.24.0
           imagePullPolicy: Always
           name: cluster-autoscaler
           resources:
