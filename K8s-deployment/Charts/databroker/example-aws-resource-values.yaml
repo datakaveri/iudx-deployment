@@ -2,12 +2,12 @@ nodeSelector:
   node.kubernetes.io/instance-type: c5a.large
 resources:
   limits:
-    cpu: "1800m"
-    memory: "3.8Gi"
+    cpu: 1800m
+    memory: 3800Mi
   requests:
-    cpu: "1500m"
-    memory: "3Gi"
+    cpu: 1400m
+    memory: 3Gi
 persistence:
   storageClass: "ebs-csi-storage-class"
-  size: 10Gi
+  size: 30Gi
 
