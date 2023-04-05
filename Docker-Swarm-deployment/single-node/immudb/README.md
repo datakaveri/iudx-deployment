@@ -18,6 +18,7 @@ cp -r example-secrets/secrets .
 4. Secrets directory after generation of passwords:
 ```sh
 secrets/
+├── .config.env
 └── passwords
     ├── admin-password
     ├── auth-password
