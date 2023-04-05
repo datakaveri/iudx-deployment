@@ -4,15 +4,15 @@ singleBinary:
 
   resources:
     limits:
-      cpu: 1800m
-      memory: 3.8Gi
+      cpu: 1700m
+      memory: 3890Mi
     requests:
-      cpu: 1500m
-      memory: 3.5Gi
+      cpu: 1400m
+      memory: 3280Mi
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ## If you set enabled as "True", you need :
   ## - create a pv which above 10Gi and has same namespace with loki
   ## - keep storageClassName same with below setting
   persistence:
-    size: 200Gi
+    size: 250Gi
     storageClass: "ebs-csi-storage-class"

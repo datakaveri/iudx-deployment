@@ -1,13 +1,14 @@
 server:
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.large
   resources:
-    requests: 
-      memory: 3.4Gi
-      cpu: 1500m
-    limits: 
-      memory: 3.8Gi
-      cpu: 1800m
+    requests:
+      memory: 7168Mi
+      cpu: 1400m
+    limits:
+      memory: 7680Mi
+      cpu: 1700m
+
 
   persistentVolume:
     ## If true, Prometheus server will create/use a Persistent Volume Claim
@@ -37,7 +38,7 @@ server:
 
     ## Prometheus server data Persistent Volume size
     ##
-    size: 30Gi
+    size: 100Gi
 
     ## Prometheus server data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
@@ -64,7 +65,7 @@ nodeExporter:
   resources:
     limits: 
       memory: 128Mi
-      cpu: 200m
+      cpu: 150m
     requests: 
       memory: 50Mi
       cpu: 50m
@@ -78,12 +79,12 @@ kubeStateMetrics:
       operator: "Equal"
       value: "true"
   nodeSelector:
-    node-role.kubernetes.io/controlplane: "true"
+    node-role.kubernetes.io/control-plane: "true"
      
   resources:
     limits: 
-      memory: 300Mi
-      cpu: 200m
+      memory: 200Mi
+      cpu: 150m
     requests: 
       memory: 128Mi
-      cpu: 100m
+      cpu: 50m
