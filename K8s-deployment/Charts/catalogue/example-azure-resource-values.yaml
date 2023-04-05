@@ -16,7 +16,7 @@ apiServer:
       memory: 750Mi
     requests:
       cpu: 600m
-      memoriy: 600Mi
+      memory: 600Mi
 
   nodeSelector:
     node.kubernetes.io/instance-type: Standard_B2s
@@ -175,14 +175,14 @@ databroker:
 
 
 profanityCheckSdk:
-  enabled: true
+  enabled: false
   resources:
     limits:
-      cpu: 400m
-      memory: 0.6Gi
+      cpu: 500m
+      memory: 750Mi
     requests:
-      cpu: 300m
-      memory: 0.4Gi
+      cpu: 400m
+      memory: 600Mi
   nodeSelector:
     node.kubernetes.io/instance-type: Standard_B2s
 
@@ -219,10 +219,10 @@ postgres:
   enabled: true
   resources:
     limits:
-      cpu: 400m
+      cpu: 600m
       memory: 600Mi
     requests:
-      cpu:
+      cpu: 400m
       memory: 400Mi
   nodeSelector:
     node.kubernetes.io/instance-type: Standard_B2s
