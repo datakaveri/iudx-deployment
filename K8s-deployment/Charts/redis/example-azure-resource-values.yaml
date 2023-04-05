@@ -1,11 +1,11 @@
 redis:
   resources:
     limits:
-      cpu: 1600m
-      memory: 3.5Gi
+      cpu: 1000m
+      memory: 2560Mi
     requests:
-      cpu: 1400m
-      memory: 3.5Gi
+      cpu: 800m
+      memory: 2560Mi
   ## @param redis.nodeSelector Node labels for Redis&trade; pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
