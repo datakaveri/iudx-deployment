@@ -1,9 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  annotations:
-    prometheus.io/port: "9497"
-    prometheus.io/scrape: "true"
   labels: 
     app: immudb-audit
   name: immudb-audit
@@ -17,6 +14,10 @@ spec:
     metadata: 
       labels: 
         app: immudb-audit
+      annotations:
+        prometheus.io/port: "9477"
+        prometheus.io/scrape: "true"
+
     spec: 
       containers: 
         - name: immudb-audit
