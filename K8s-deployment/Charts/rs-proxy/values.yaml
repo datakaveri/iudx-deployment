@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/rs-proxy-depl
-  tag: 4.5.0-27ef2c8
+  tag: 5.0.0-alpha-9600fdd
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
