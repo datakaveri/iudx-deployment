@@ -16,10 +16,10 @@ apiServer:
   resources:
     limits:
       cpu: 1000m
-      memory: 1.2Gi
+      memory: 1200Mi
     requests: 
       cpu: 700m
-      memory: 1.2Gi
+      memory: 1200Mi
 
 ## archivesDatabase resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -83,11 +83,11 @@ encryption:
     node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
-      cpu: 500m
-      memory: 512Mi
+      cpu: 600m
+      memory: 900Mi
     requests: 
-      cpu: 400m
-      memory: 400Mi
+      cpu: 500m
+      memory: 700Mi
 
 ## latestDatabase resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -181,14 +181,19 @@ async:
     - name: async-dir
       persistentVolumeClaim:
         claimName: efs-pvc
+    - name: rs-tmp
+      emptyDir:
+        medium: Memory
   extraVolumeMounts: 
     - name: rs-config
       mountPath: /usr/share/app/secrets/configs
     - name: async-dir
       mountPath: "/usr/share/app/storage/temp-dir"
+    - name: rs-tmp
+      mountPath: /tmp
   persistentVolumeClaim:
     name: efs-pvc
     storageClassName: efs-storage-class
     resources:
       requests:
-        storage: 10Gi
+        storage: 50Gi

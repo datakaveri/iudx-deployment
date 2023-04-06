@@ -1,5 +1,5 @@
 ingress:
-  hostname: fs-hostname
+  hostname: fs-hostname 
   annotations: {
     cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
   }
@@ -11,14 +11,14 @@ ingress:
 ##
 apiServer:
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
-      memory: 1.2Gi
+      memory: 1200Mi
     requests: 
       cpu: 700m
-      memory: 1.2Gi
+      memory: 1200Mi
   persistence:
     storageClass: "ebs-csi-storage-class"
 
@@ -29,7 +29,7 @@ apiServer:
 ##
 authenticator:
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 600m
@@ -45,7 +45,7 @@ authenticator:
 ##
 databroker:
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 500m
@@ -62,7 +62,7 @@ databroker:
   ##
 database:
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 600m
@@ -79,7 +79,7 @@ database:
   ##
 auditing:
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 500m
@@ -94,7 +94,7 @@ auditing:
 ##
 postgres:
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m
@@ -110,7 +110,7 @@ postgres:
 ##
 cache:
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
       cpu: 1000m

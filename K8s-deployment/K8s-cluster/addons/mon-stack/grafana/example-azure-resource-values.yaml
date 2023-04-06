@@ -1,12 +1,12 @@
 nodeSelector:
     node.kubernetes.io/instance-type: Standard_B2s
-resources: 
-  limits: 
+resources:
+  limits:
     cpu: 600m
-    memory: 1.5Gi
+    memory: 1Gi
   requests:
     cpu: 300m
-    memory: 1Gi
+    memory: 500Mi
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
