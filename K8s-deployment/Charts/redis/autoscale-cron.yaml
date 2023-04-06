@@ -19,7 +19,7 @@ spec:
                value: "80"
              #CPU resource limit set for redis (millicores)   
              - name: redis_resource_limit
-               value: "1600"
+               value: "1000"
              - name: prometheus_url
                value: prometheus-server.mon-stack.svc.cluster.local
              - name: REDIS_PASSWORD

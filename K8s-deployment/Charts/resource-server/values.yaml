@@ -2188,7 +2188,7 @@ cache:
   ## @param cache.autoscaling.targetCPU Target CPU utilization percentage
   ## @param cache.autoscaling.targetMemory Target Memory utilization percentage
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 5
     targetCPU: 80
@@ -2375,35 +2375,15 @@ async:
   extraEnvVarsSecret: "rs-s3-env"
   ## @param async.extraVolumes Optionally specify extra list of additional volumes for the async pod(s)
   ##
-  extraVolumes:
-    - name: rs-config
-      secret:
-        secretName: rs-config
-    - name: async-dir
-      persistentVolumeClaim:
-        claimName: async-pvc
-    - name: rs-tmp
-      emptyDir:
-        medium: Memory
+  extraVolumes: []
   
   ## @param async.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the async container(s)
   ##
-  extraVolumeMounts: 
-    - name: rs-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: async-dir
-      mountPath: "/usr/share/app/storage/temp-dir"
-    - name: rs-tmp
-      mountPath: /tmp
+  extraVolumeMounts: []
 
   ## @param async.persistentVolumeClaim Optionally specify extra list of additional pvc for the async container(s)
   ##  
-  persistentVolumeClaim:
-    name: async-pvc
-    storageClassName: storage-class
-    resources:
-      requests:
-        storage: 10Gi
+  persistentVolumeClaim: {}
   
   ## @param async.sidecars Add additional sidecar containers to the async pod(s)
   ## e.g:

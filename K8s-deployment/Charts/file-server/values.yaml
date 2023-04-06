@@ -1122,7 +1122,7 @@ cache:
   ## @param cache.autoscaling.targetCPU Target CPU utilization percentage
   ## @param cache.autoscaling.targetMemory Target Memory utilization percentage
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 5
     targetCPU: 80

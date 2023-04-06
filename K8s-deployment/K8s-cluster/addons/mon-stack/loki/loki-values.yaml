@@ -82,7 +82,7 @@ loki:
       {{- include "loki.commonStorageConfig" . | nindent 4}}
     {{- end}}
 
-    {{- with .Values.loki.lmits_config }}
+    {{- with .Values.loki.limits_config }}
     limits_config:
       {{- tpl (. | toYaml) $ | nindent 4 }}
     {{- end }}
@@ -167,6 +167,7 @@ loki:
 
   # -- Limits config
   limits_config:
+    retention_period: 744h
     enforce_metric_name: false
     reject_old_samples: true
     reject_old_samples_max_age: 168h
@@ -546,14 +547,14 @@ monitoring:
   # It will create custom resources for GrafanaAgent, LogsInstance, and PodLogs to configure
   # scrape configs to scrape it's own logs with the labels expected by the included dashboards.
   selfMonitoring:
-    enabled: true
+    enabled: false
 
     # Grafana Agent configuration
     grafanaAgent:
       # -- Controls whether to install the Grafana Agent Operator and its CRDs.
       # Note that helm will not install CRDs if this flag is enabled during an upgrade.
       # In that case install the CRDs manually from https://github.com/grafana/agent/tree/main/production/operator/crds
-      installOperator: true
+      installOperator: false
       # -- Alternative namespace for Grafana Agent resources
       namespace: null
       # -- Grafana Agent annotations
