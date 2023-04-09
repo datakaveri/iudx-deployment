@@ -74,8 +74,13 @@ Define Appropriate values of resources -
 - PID limit 
 in `nginx-stack.resources.yaml`  for nginx as shown in sample resource-values file for [here](example-nginx-stack.resources.yaml)
 
-## Define domain names in configs
-For each nginx server configuration in conf/ (except for error.conf, default.conf file), substitute appropiate domain name next to ``server_name`` directive. 
+## Prepare nginx configs
+1. Make a copy of example-configs directory 
+```
+cp -r example-configs/conf .
+```
+
+2. For each nginx server configuration in conf/ (except for error.conf, default.conf file), substitute appropiate domain name next to ``server_name`` directive. 
 Example:- If resource server domain is ``rs.iudx.org.in`` , then susbitiute it in conf/rs.conf as follows :
 ```
         server_name         rs.iudx.org.in;
