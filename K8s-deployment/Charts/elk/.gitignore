@@ -1,6 +1,0 @@
-secrets
-.*.env
-**/elasticsearch/es-resource-values.yaml
-**/logstash/ls-resource-values.yaml
-**/kibana/kibana-resource-values.yaml
-!secrets/.gitkeep
