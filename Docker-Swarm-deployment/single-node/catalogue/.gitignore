@@ -1,4 +1,0 @@
-secrets/
-.*.env
-cat-stack.resources.yaml
-cat-stack.custom.yaml
