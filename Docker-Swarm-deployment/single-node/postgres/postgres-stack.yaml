@@ -35,7 +35,7 @@ services:
       - POSTGRESQL_TCP_KEEPALIVES_IDLE=120
       - POSTGRESQL_TCP_KEEPALIVES_INTERVAL=120
       - POSTGRESQL_TCP_KEEPALIVES_COUNT=3
-
+      - POSTGRESQL_MAX_CONNECTIONS=300
     deploy:
       replicas: 1
       placement:
