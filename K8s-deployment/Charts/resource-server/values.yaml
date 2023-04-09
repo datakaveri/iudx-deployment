@@ -1226,7 +1226,7 @@ encryption:
         secretName: rs-config
     - name: rs-tmp
       emptyDir:
-        medium: Memory
+        medium: ""
   ## @param encryption.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the encryption container(s)
   ##
   extraVolumeMounts: 
