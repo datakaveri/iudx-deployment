@@ -1,6 +1,0 @@
-secret*
-#*.py
-.*.env
-.env
-databroker-stack.custom.yaml
-databroker-stack.resources.yaml
