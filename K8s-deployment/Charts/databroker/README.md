@@ -27,6 +27,7 @@ for users, exchanges, queues, bindings and policies.
 secrets/
 ├── credentials
 │   ├── admin-password
+│   ├── auditing-password
 │   ├── cat-password
 │   ├── di-password
 │   ├── fs-password
@@ -35,7 +36,9 @@ secrets/
 │   ├── logstash-password
 │   ├── profanity-cat-password
 │   ├── rabbitmq-erlang-cookie
-│   └── rs-password
+│   ├── rs-password
+│   ├── rs-proxy-adapter-password
+│   └── rs-proxy-password
 ├── init-config.json
 └── pki
     ├── ca.crt
@@ -72,7 +75,8 @@ The script will create :
 1. create a namespace `rabbitmq`
 2. create required secrets
 3. deploy rabbitmq statefulset and services
-
+4. create required users, exchanges, queues,vhosts, binding & policies 
+  in rmq by rmq-init-setup
 #### Helpers
 ```sh
 # Pod status, IP, node, etc
