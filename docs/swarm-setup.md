@@ -34,6 +34,11 @@
     ```
 4. Create overlay network using the following command on any manager nodes:
     ```sh
-    docker network create --driver overlay  --attachable --subnet=<CIDR format subnet, default:-10.0.0.0/24> overlay-net
+    docker network create --driver overlay  --attachable --subnet=<CIDR format subnet, default:-10.0.1.0/24> overlay-net
     ```
    The "overlay-net" subnet CIDR must be different from underlaying private network subnet address range. 
+   
+## Note
+1. If swarm cluster is created on single node/local machine, then step 2 and 3 not needed.
+2. Make sure the subnet option (--subnet=10.0.1.0/24) does not conflict with cluster nodes
+   subnet networks.

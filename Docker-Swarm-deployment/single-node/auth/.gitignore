@@ -1,4 +1,0 @@
-secrets/
-.*.env
-auth-stack.resources.yaml
-auth-stack.custom.yaml

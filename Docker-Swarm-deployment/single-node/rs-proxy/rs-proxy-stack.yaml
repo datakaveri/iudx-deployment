@@ -17,9 +17,10 @@ services:
       - ./secrets/.rs-proxy.env
     read_only: true
     volumes:
-      - type: tmpfs
-        target: /tmp/
-        read_only: false  
+      - type: volume
+        target: /tmp
+        volume:
+          nocopy: false
     logging:
       driver: "json-file"
       options:
