@@ -27,6 +27,7 @@ for users, exchanges, queues, bindings and policies.
 secrets/
 ├── credentials
 │   ├── admin-password
+│   ├── auditing-password
 │   ├── cat-password
 │   ├── di-password
 │   ├── fs-password
@@ -35,7 +36,9 @@ secrets/
 │   ├── logstash-password
 │   ├── profanity-cat-password
 │   ├── rabbitmq-erlang-cookie
-│   └── rs-password
+│   ├── rs-password
+│   ├── rs-proxy-adapter-password
+│   └── rs-proxy-password
 ├── init-config.json
 └── pki
     ├── ca.crt
