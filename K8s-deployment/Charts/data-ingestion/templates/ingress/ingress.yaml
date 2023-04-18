@@ -19,7 +19,6 @@ metadata:
     {{- end }}
   {{- end }}      
     nginx.ingress.kubernetes.io/server-snippet: |
-      add_header Clear-Site-Data   "*" always;
       add_header Referrer-Policy   "no-referrer-when-downgrade" always;
       add_header X-Frame-Options   "deny" always;
       add_header X-XSS-Protection  "1; mode=block" always;

@@ -15,10 +15,10 @@ apiServer:
   resources:
     limits:
       cpu: 1000m
-      memory: 1.2Gi
+      memory: 1200Mi
     requests: 
       cpu: 700m
-      memory: 1.2Gi
+      memory: 1200Mi
   persistence:
     storageClass: "azuredisk-storage-class"
 

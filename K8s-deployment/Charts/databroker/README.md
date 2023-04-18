@@ -75,8 +75,8 @@ The script will create :
 1. create a namespace `rabbitmq`
 2. create required secrets
 3. deploy rabbitmq statefulset and services
-4. create required users, exchanges, queues,vhosts, binding & policies 
-  in rmq by rmq-init-setup
+4. create required users, exchanges, queues, binding, policies 
+in rmq by rmq-init-setup job
 #### Helpers
 ```sh
 # Pod status, IP, node, etc

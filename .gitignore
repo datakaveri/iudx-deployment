@@ -1,0 +1,26 @@
+secrets
+
+# Docker swarm 
+*.resources.yaml
+*.custom.yaml
+Docker-Swarm-deployment/single-node/nginx/conf/
+.env
+.*.env
+inventory*.yaml
+inventory*.yml
+ssh_keys/*
+experiment*.yaml
+.commands
+*.temp.yaml
+
+# K8s deployment
+
+resource-values.yaml
+external-client-service.yaml
+es-resource-values.yaml
+ls-resource-values.yaml
+kibana-resource-values.yaml
+credentials-velero
+*.tar.gz
+kubectl
+kubectl.sha256

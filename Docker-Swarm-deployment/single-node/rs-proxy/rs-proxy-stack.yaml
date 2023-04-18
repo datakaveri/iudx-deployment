@@ -7,7 +7,7 @@ networks:
 
 services:
   rs-proxy:
-    image: ghcr.io/datakaveri/rs-proxy-depl:4.5.0-27ef2c8
+    image: ghcr.io/datakaveri/rs-proxy-depl:4.5.0-0bbd26b
     networks:
       - overlay-net
     secrets:
@@ -17,9 +17,10 @@ services:
       - ./secrets/.rs-proxy.env
     read_only: true
     volumes:
-      - type: tmpfs
-        target: /tmp/
-        read_only: false  
+      - type: volume
+        target: /tmp
+        volume:
+          nocopy: false
     logging:
       driver: "json-file"
       options:

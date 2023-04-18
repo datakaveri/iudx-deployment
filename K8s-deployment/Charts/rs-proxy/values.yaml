@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/rs-proxy-depl
-  tag: 4.5.0-27ef2c8
+  tag: 4.5.0-0bbd26b
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1420,7 +1420,7 @@ cache:
   ## @param cache.autoscaling.targetCPU Target CPU utilization percentage
   ## @param cache.autoscaling.targetMemory Target Memory utilization percentage
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 5
     targetCPU: 80

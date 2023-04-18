@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/fs-depl
-  tag: 4.5.0-alpha-d52c02b
+  tag: 4.5.0-b52a0ac
   pullSecrets: {} 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1122,7 +1122,7 @@ cache:
   ## @param cache.autoscaling.targetCPU Target CPU utilization percentage
   ## @param cache.autoscaling.targetMemory Target Memory utilization percentage
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 5
     targetCPU: 80
