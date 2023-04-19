@@ -16,6 +16,7 @@ pipeline {
 
       }
     }
+  }
 
     stage('RS Kubescape Scan') {
       steps {
@@ -26,5 +27,4 @@ pipeline {
      }
     }
   }
-}
 
