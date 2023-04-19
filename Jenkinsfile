@@ -9,6 +9,7 @@ pipeline {
         }
       }
       steps {
+        sh 'ls -a'
         sh 'pwd'
         sh 'ls'
      }
