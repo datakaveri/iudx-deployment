@@ -5,20 +5,13 @@ pipeline {
     }
   }
 
-  stages {
-    stage('Checking change in files'){
+    stage('RS Kubescape Scan') {
       when {
         anyOf {
           changeset "K8s-deployment/**"
-          changeset "Jenkins"
+          changeset "Jenkinsfile"
         }
       }
-      steps {
-        echo "Checking for changes in files"
-      }
-    }
-  
-    stage('RS Kubescape Scan') {
       steps {
          sh 'helm template -f K8s-deployment/Charts/resource-server/values.yaml -f K8s-deployment/Charts/resource-server/example-azure-resource-values.yaml K8s-deployment/Charts/resource-server  > resource-server.yaml'
          sh 'kubescape scan resource-server.yaml --format pdf'
@@ -26,4 +19,4 @@ pipeline {
       }
     }
   }
-}
+
