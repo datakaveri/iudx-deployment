@@ -5,7 +5,7 @@ pipeline {
     }
   }
 
-    stage('Kubescape Scan') {
+    stages('Kubescape Scan') {
       when {
         anyOf {
           changeset "K8s-deployment/**"
