@@ -8,7 +8,7 @@ pipeline {
     stage('Kubescape Scan') {
       when {
         anyOf {
-          changeset "K8s-deployment/**"
+          changeset "K8s-deployment/***"
           changeset "Jenkinsfile"
         }
       }
