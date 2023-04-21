@@ -1,40 +1,54 @@
 ![IUDX](./docs/iudx.png)
 
 # iudx-deployment
-Installation and setup scripts for single and multi node (clustered) IUDX services.
+This repository gives installation and setup scripts to deploy IUDX platform. We provide and support two types of IUDX platform deployment : 
+1. [Docker Swarm based deployment](./Docker-Swarm-deployment/single-node/README.md)
+2. [K8s based deployment](./K8s-deployment/README.md)
 
-# Components
-
-The IUDX system will consist of the following services and servers:
-- API Server: Implements the Catalogue and Resource Server APIs (Vert.x HTTPs server)
-- Database server: An IUDX Server
-- Data broker Server: An IUDX Server
-- Authentication and Authorization Server: An IUDX Server
-- Database Service: Connects with the IUDX Database (A Vert.x Service)
-- Databroker Service: Connects with the IUDX Data broker (A Vert.x Service)
-- Subscription and Callback Service: Connects with the IUDX Database and Databroker (A Vert.x Service)
-- Validation Service: Validates the catalogue item (A Vert.x Service)
-- File Service: Connects with the IUDX Database, Databroker and File server (A Vert.x Service)
-- Authentication and Authorization Service: Connects with the IUDX Authentication Server (Vert.x Service)
-
-# Deployment Architecture
-
+IUDX platform consists of various IUDX built services and open source components. The overview IUDX platform with components is depicted in below figure.
 <p align="center">
 <img src="./docs/deployment_overview.png">
 </p>
+IUDX is data exchange platform facilitating seamless discovery, exchange of authorised data. Following is short explanation how various components interact in IUDX platform:
 
-Note: For simplicity, all the modules are not mentioned in the figure. 
+- Through IUDX Catalogue server users discovers different datasets available on the platform.
+- A user can register with one or more roles (consumer/provider,data ingester/delegate)  in IUDX AAA and keycloak. The keycloak is used to manage identities of users.
+ 
+- The user can get set/request policies at the AAA server, and get a token. IUDX AAA platform manages the policies, APDs through credentials/Policy Data store(Postgres)
 
-As a design choice on the architecture, keeping scalability for microservices in mind we chose the Service Mesh Architecture for Catalogue Server and Resource Server. In a service mesh architecture, each microservice is a well-defined module that can be containerized and discovered using service discovery. The orchestration of the services can be such that data-intensive modules are residing closer to the database which also helps in better response times, limits the bandwidth and reduces the cost. Also, it helps in scaling of a specific microservice at ease. 
+- Through this token, user can publish(input)/consume (output) data from any of the  IUDX access resource servers (resource server, rs-proxy, GIS server, Data ingestion server)
+ 
+- IUDX platform supports following input data flows
+  - A data ingester ( delegate ) can pull the data from the downstream source (ICCC) and push it to databroker (Rabbitmq) . Which then is consumed by Logstash, latest ingestion pipeline and is pushed to the Meta Data/Data Store (Elasticsearch) and Latest Data store (Redis).
+  - Also a data ingester can directly push data through HTTPS APIs exposed by Data Ingestion Server.
+
+- IUDX platform supports following output data flows
+  - Get data through standardised Resource access server APIs - spatial, temporal, complex, file, gis and async queries.
+  - Get live streaming data through Rabbitmq using resource server Subscription
+  - Get data from non IUDX resource server through resource-server proxy (rs-proxy). This is done through IUDX RS API query translation to non IUDX RS specific queries by set of adapters which reside close to non IUDX RS. The query and response is communicated to adapters and rs-proxy through databroker(Rabbitmq). 
+
+- IUDX platform is monitored through micrometer, prometheus for metrics and promtail, Loki for logs and Grafana for Visualisation 
+-  The alerting through SMTP server for emails or Telegram bot for telegram messages.
+- All HTTPS API requests are processed through API gateway.
+- The Rabbitmq specific communication i.e. streaming of data through AMQPS and HTTPS management interface is through streaming gateway
+- Hazlecase with Zookeeper is used as our cluster manager for all Vert.x based API servers.
+
+To know more on IUDX, refer following resources: 
+1. [What is IUDX?](https://youtu.be/uWdmHztFrqs) To get overview of IUDX platform and its main motivation
+2. [IUDX Architecture Overview for deep drive of IUDX architecture](https://www.youtube.com/watch?v=FeiZz0fJi5w)
+3. [IUDX Developer Section](https://iudx.org.in/developers/)
 
 
-# Features
+## Features
+- Service Mesh Architecture based Vert.x API servers.
+- Each microservice is a well-defined module that can be containerized and discovered using service discovery. 
+- Docker Swarm deployment enables easy, cost effective deployment of IUDX platform suitable for prototyping and PoC.
+- Kubernetes based deployment of IUDX platform gives scalable, highly available system through clustered deployment of each component. Its suitable for production grade deployment.
+- Both docker and K8s based deployment is cloud agnostic* and can be deployed on any cloud or on-prem. It 
+has been tested currently on AWS and Azure.
 
-- The system uses an overlay network and supports manual scaling using docker run.
-- Hazlecase with Zookeeper is used as our cluster manager.
-- Monitoring of the APIs, Services, Containers, Nodes are done using Micrometer, Promtail and Node exporter. 
-- Metrics are pushed to Loki, Prometheus and visualized using Grafana.
 
+\*Note: K8s deployment depends on certain cloud services - Load Balancer, Storage, Object Storage, K8s cluster autoscaling but since this is offered by major clouds. It can be integrated to these cloud providers.
 ## Contributing
 We follow Git Merge based workflow
 1. Fork this repo
