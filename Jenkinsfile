@@ -16,7 +16,7 @@ pipeline {
         sh 'kubescape scan resource-server.yaml --format pdf'
         publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'report.pdf', reportName: 'Kubescape Scan Report'])
       }
-    },
+    }
     stage('Kubescape Scan1') {
       when {
         anyOf {
