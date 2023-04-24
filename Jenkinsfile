@@ -67,7 +67,7 @@ pipeline {
     stage('Kubescape Scan for FS') {
       when {
         anyOf {
-          changeset "auth.txt"
+          changeset "fs.txt"
         }
       }
       steps {
