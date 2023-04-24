@@ -20,7 +20,7 @@ pipeline {
     stage('Kubescape Scan1') {
       when {
         anyOf {
-          changeset "a"
+          changeset "a.txt"
         }
       }
       steps {
