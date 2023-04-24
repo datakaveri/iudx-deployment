@@ -67,7 +67,7 @@ pipeline {
     stage('Kubescape Scan for FS') {
       when {
         anyOf {
-          changeset "fs.txt"
+          changeset "file.txt"
         }
       }
       steps {
