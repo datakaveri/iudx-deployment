@@ -1,0 +1,22 @@
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1;93m
+Controls: 36 (Failed: 8, Excluded: 0, Skipped: 0)
+[0m[1;93mFailed Resources by Severity: Critical — 0, High — 10, Medium — 52, Low — 20
+
+[0m+----------+-------------------------------------------------------+------------------+--------------------+---------------+--------------+
+| SEVERITY |                     CONTROL NAME                      | FAILED RESOURCES | EXCLUDED RESOURCES | ALL RESOURCES | % RISK-SCORE |
++----------+-------------------------------------------------------+------------------+--------------------+---------------+--------------+
+| [33;1mHigh[0m     | CIS-5.7.3 Apply Security Context to Your Pods and ... |        10        |         0          |      10       |     100%     |
+| [36;1mMedium[0m   | Ingress and Egress blocked                            |        10        |         0          |      10       |     100%     |
+| [36;1mMedium[0m   | CIS-5.1.4 Minimize Container Registries to only th... |        10        |         0          |      10       |     100%     |
+| [36;1mMedium[0m   | CIS-5.7.2 Ensure that the seccomp profile is set t... |        10        |         0          |      10       |     100%     |
+| [36;1mMedium[0m   | CIS-5.7.4 The default namespace should not be used    |        12        |         0          |      12       |     100%     |
+| [36;1mMedium[0m   | CIS-4.4.2 Consider external secret storage            |        10        |         0          |      10       |     100%     |
+| [37;1mLow[0m      | Configured readiness probe                            |        10        |         0          |      10       |     100%     |
+| [37;1mLow[0m      | Pods in default namespace                             |        10        |         0          |      10       |     100%     |
++----------+-------------------------------------------------------+------------------+--------------------+---------------+--------------+
+|          |                   RESOURCE SUMMARY                    |        12        |         0          |      12       |    20.97%    |
++----------+-------------------------------------------------------+------------------+--------------------+---------------+--------------+
+[1;93mFRAMEWORKS: ArmoBest (risk: 13.59), AllControls (risk: 10.76), NSA (risk: 7.59), DevOpsBest (risk: 14.63), cis-eks-t1.2.0 (risk: 63.71), cis-v1.23-t1.0.1 (risk: 65.12), MITRE (risk: 0.00)
+[0m
