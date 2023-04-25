@@ -107,7 +107,8 @@ pipeline {
                     publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'fs-report.pdf', reportName: 'Kubescape Scan Report for FS'])
                     publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'gis-report.pdf', reportName: 'Kubescape Scan Report for GIS'])
                     publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'di-report.pdf', reportName: 'Kubescape Scan Report for DI'])
-                }
+                    sh 'env'
+                 }
             }   
   }
 }
