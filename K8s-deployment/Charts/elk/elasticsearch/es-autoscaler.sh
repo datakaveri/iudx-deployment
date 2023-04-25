@@ -33,7 +33,7 @@ if [ $totalDataNodesRequired -gt $es_nodes ]
 then
     echo "Scale up es-data-node by  $(($totalDataNodesRequired - $es_nodes))"
     # total data nodes required - 3 master nodes to get total data-only nodes required and set scale
-    helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami && helm upgrade --reuse-values --set data.replicas=$(($totalDataNodesRequired - 3)) --version 19.2.4 elasticsearch bitnami/elasticsearch -n elastic
+    helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami && helm upgrade --reuse-values --set data.replicaCount=$(($totalDataNodesRequired - 3)) --version 19.2.4 elasticsearch bitnami/elasticsearch -n elastic
     exit 0
 else
     echo "No need to scale up"
