@@ -122,7 +122,7 @@ volumes:
 
 configs:
   elasticsearch-config:
-    file: elasticsearch/elasticsearch.yml
+    file: elasticsearch/elasticsearch.yaml
   logstash-pipelines:
     file: logstash/settings/pipelines.yaml
   logstash-settings:
