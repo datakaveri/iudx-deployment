@@ -17,12 +17,13 @@ pipeline {
         sh 'helm template -f K8s-deployment/Charts/resource-server/values.yaml -f K8s-deployment/Charts/resource-server/example-azure-resource-values.yaml K8s-deployment/Charts/resource-server  > resource-server.yaml'
         sh 'kubescape scan resource-server.yaml --format pdf --output rs-report.pdf'
       }
+    }
       post {
                 always {
                         publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'rs-report.pdf', reportName: 'Kubescape Scan Report for RS'])
                 }
             }
-    }
+    
 
 
 
