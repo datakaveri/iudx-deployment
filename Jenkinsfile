@@ -18,11 +18,15 @@ pipeline {
         sh 'kubescape scan resource-server.yaml --format pdf --output rs-report.pdf'
       }
     }
-      post {
-                always {
-                        publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'rs-report.pdf', reportName: 'Kubescape Scan Report for RS'])
+   post {
+        always {
+            stage('Publish Kubescape Scan Report for RS') {
+                steps {
+                    publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'rs-report.pdf', reportName: 'Kubescape Scan Report for RS'])
                 }
             }
+        }
+    }
     
 
 
