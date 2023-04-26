@@ -32,7 +32,7 @@ IUDX is a data exchange platform facilitating the seamless discovery, and exchan
 - All HTTPS API requests are processed through the API gateway.
 - The Rabbitmq specific communication i.e. streaming of data through AMQPS and HTTPS management interface is through the streaming gateway
 - Hazlecast with Zookeeper is used as the cluster manager for all Vert.x based API servers.
-- Successful API calls are audited in tamper proof database - immudb and in postgres through auditing server
+- Successful API calls are audited in tamper proof database - immudb and in postgres through an auditing server
 
 To know more about IUDX, refer following resources: 
 1. [What is IUDX?](https://youtu.be/uWdmHztFrqs) To get an overview of the IUDX platform and its main motivation
