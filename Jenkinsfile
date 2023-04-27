@@ -7,6 +7,13 @@ pipeline {
 
 
   stages {
+    stage('Trigger another job') {
+            steps {
+                build job: 'testjob', parameters: [
+                    string(name: 'test', value: 'hello')
+                ]
+            }
+        }
     stage('Kubescape Scan for RS') {
       when {
         anyOf {
