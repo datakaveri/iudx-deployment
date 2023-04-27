@@ -1,0 +1,1244 @@
+---
+# Source: resourceServer/templates/async/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: azurefile-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: azurefile-storage-class
+  resources:
+    requests:
+      storage: 10Gi
+---
+# Source: resourceServer/templates/apiServer/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-api-server
+  labels:
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: service
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app: rs-api-server
+---
+# Source: resourceServer/templates/apiServer/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-api-server
+  labels: 
+    app.kubernetes.io/component: apiServer
+    app: rs-api-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-api-server
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-api-server
+        app.kubernetes.io/component: apiServer
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-api-server
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.apiserver.ApiServerVerticle"]
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1.2Gi
+            requests:
+              cpu: 700m
+              memory: 1.2Gi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - emptyDir:
+            medium: Memory
+          name: rs-tmp
+---
+# Source: resourceServer/templates/archivesDatabase/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-archives-database
+  labels: 
+    app.kubernetes.io/component: archivesDatabase
+    app: rs-archives-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-archives-database
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-archives-database
+        app.kubernetes.io/component: archivesDatabase
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-archives-database
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.database.archives.DatabaseVerticle"]
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1.5Gi
+            requests:
+              cpu: 700m
+              memory: 1.5Gi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - emptyDir:
+            medium: Memory
+          name: rs-tmp
+---
+# Source: resourceServer/templates/async/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-async
+  labels: 
+    app.kubernetes.io/component: async
+    app: rs-async
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-async
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-async
+        app.kubernetes.io/component: async
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-async
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.database.async.AsyncVerticle"]
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 800m
+              memory: 800Mi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /usr/share/app/storage/temp-dir
+              name: async-dir
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+            - secretRef:
+                name: rs-s3-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - name: async-dir
+          persistentVolumeClaim:
+            claimName: efs-pvc
+        - emptyDir:
+            medium: Memory
+          name: rs-tmp
+---
+# Source: resourceServer/templates/authenticator/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-authenticator
+  labels: 
+    app.kubernetes.io/component: authenticator
+    app: rs-authenticator
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-authenticator
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-authenticator
+        app.kubernetes.io/component: authenticator
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-authenticator
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.authenticator.AuthenticationVerticle"]
+          resources:
+            limits:
+              cpu: 600m
+              memory: 750Mi
+            requests:
+              cpu: 500m
+              memory: 500Mi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - emptyDir:
+            medium: Memory
+          name: rs-tmp
+---
+# Source: resourceServer/templates/cache/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-cache
+  labels: 
+    app.kubernetes.io/component: cache
+    app: rs-cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-cache
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-cache
+        app.kubernetes.io/component: cache
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-cache
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.cache.CacheVerticle"]
+          resources:
+            limits:
+              cpu: 400m
+              memory: 750Mi
+            requests:
+              cpu: 200m
+              memory: 600Mi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - emptyDir:
+            medium: Memory
+          name: rs-tmp
+---
+# Source: resourceServer/templates/databroker/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-databroker
+  labels: 
+    app.kubernetes.io/component: databroker
+    app: rs-databroker
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-databroker
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-databroker
+        app.kubernetes.io/component: databroker
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-databroker
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.databroker.DataBrokerVerticle"]
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 400m
+              memory: 400Mi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - emptyDir:
+            medium: Memory
+          name: rs-tmp
+---
+# Source: resourceServer/templates/encryption/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-encryption
+  labels: 
+    app.kubernetes.io/component: encryption
+    app: rs-encryption
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-encryption
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-encryption
+        app.kubernetes.io/component: encryption
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-encryption
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.encryption.EncryptionVerticle"]
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 400m
+              memory: 400Mi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - emptyDir:
+            medium: ""
+          name: rs-tmp
+---
+# Source: resourceServer/templates/latestDatabase/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-latest-database
+  labels: 
+    app.kubernetes.io/component: latestDatabase
+    app: rs-latest-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-latest-database
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-latest-database
+        app.kubernetes.io/component: latestDatabase
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-latest-database
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.database.latest.LatestVerticle"]
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi
+            requests:
+              cpu: 800m
+              memory: 800Mi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - emptyDir:
+            medium: Memory
+          name: rs-tmp
+---
+# Source: resourceServer/templates/metering/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-metering
+  labels: 
+    app.kubernetes.io/component: metering
+    app: rs-metering
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-metering
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-metering
+        app.kubernetes.io/component: metering
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-metering
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.metering.MeteringVerticle"]
+          resources:
+            limits:
+              cpu: 700m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 800Mi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - emptyDir:
+            medium: Memory
+          name: rs-tmp
+---
+# Source: resourceServer/templates/postgres/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-postgres
+  labels: 
+    app.kubernetes.io/component: postgres
+    app: rs-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: rs-postgres
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: resourceServer
+        helm.sh/chart: resourceServer-0.1.24
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/managed-by: Helm
+        app: rs-postgres
+        app.kubernetes.io/component: postgres
+    spec:
+      nodeSelector:
+        node.kubernetes.io/instance-type: Standard_B2s
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      initContainers:
+      containers:
+        - name: rs-postgres
+          image: ghcr.io/datakaveri/rs-depl:5.0.0-alpha-67697d9
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+          command:
+            - /bin/bash
+          args: ["-c" ,"exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.database.postgres.PostgresVerticle"]
+          resources:
+            limits:
+              cpu: 600m
+              memory: 600Mi
+            requests:
+              cpu: 400m
+              memory: 400Mi
+          volumeMounts:
+            - mountPath: /usr/share/app/secrets/configs
+              name: rs-config
+            - mountPath: /tmp
+              name: rs-tmp
+          ports:
+            - name: hazelcast
+              containerPort: 5701
+              protocol: TCP
+            - name: prometheus
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+             httpGet:
+               path: /metrics
+               port: 9000
+             initialDelaySeconds: 60
+             periodSeconds: 60
+             timeoutSeconds: 10
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: rs-env
+      
+      affinity:
+      volumes:
+        - name: rs-config
+          secret:
+            secretName: rs-config
+        - emptyDir:
+            medium: Memory
+          name: rs-tmp
+---
+# Source: resourceServer/templates/apiServer/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-api-server
+  labels:
+    app: rs-api-server
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-api-server
+  minReplicas: 1
+  maxReplicas: 7
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+# Source: resourceServer/templates/archivesDatabase/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-archives-database
+  labels:
+    app: rs-archives-database
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-archives-database
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+# Source: resourceServer/templates/async/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-async
+  labels:
+    app: rs-async
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-async
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+# Source: resourceServer/templates/authenticator/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-authenticator
+  labels:
+    app: rs-authenticator
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-authenticator
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+# Source: resourceServer/templates/databroker/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-databroker
+  labels:
+    app: rs-databroker
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-databroker
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+# Source: resourceServer/templates/encryption/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-encryption
+  labels:
+    app: rs-encryption
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-encryption
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+# Source: resourceServer/templates/latestDatabase/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-latest-database
+  labels:
+    app: rs-latest-database
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-latest-database
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+# Source: resourceServer/templates/metering/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-metering
+  labels:
+    app: rs-metering
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-metering
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+# Source: resourceServer/templates/postgres/hpa.yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rs-postgres
+  labels:
+    app: rs-postgres
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rs-postgres
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+---
+# Source: resourceServer/templates/ingress/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: resource-server
+  labels:
+    app.kubernetes.io/name: resourceServer
+    helm.sh/chart: resourceServer-0.1.24
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: ingress
+  
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/app-root: /apis
+    nginx.ingress.kubernetes.io/global-rate-limit: "1000"
+    nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name
+    nginx.ingress.kubernetes.io/global-rate-limit-window: 1s
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      add_header Referrer-Policy   "no-referrer-when-downgrade" always;
+      add_header X-Frame-Options   "deny" always;
+      add_header X-XSS-Protection  "1; mode=block" always;
+      add_header X-Permitted-Cross-Domain-Policies  "none" always;
+      add_header Cross-Origin-Embedder-Policy "require-corp" always;
+      add_header Cross-Origin-Resource-Policy "cross-origin" always;
+spec:
+  rules:
+    - host: rs-hostname
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rs-api-server
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - rs-hostname
+      secretName: rs-tls-secret
