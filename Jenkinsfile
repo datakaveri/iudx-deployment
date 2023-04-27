@@ -9,9 +9,7 @@ pipeline {
   stages {
     stage('Trigger another job') {
             steps {
-                build job: 'testjob', parameters: [
-                    string(name: 'test', value: 'hello')
-                ]
+                build job: 'testjob', parameters: [string(name: 'ENV_VAR', value: 'my-value')]
             }
         }
     stage('Kubescape Scan for RS') {
