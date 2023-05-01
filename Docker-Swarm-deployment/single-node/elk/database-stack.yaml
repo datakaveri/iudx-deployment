@@ -98,7 +98,6 @@ services:
       - LOGSTASH_EXPOSE_API=yes
       - LOGSTASH_API_PORT_NUMBER=9600
       - LOGSTASH_DATA_DIR=/opt/bitnami/logstash/data
-      - LOGSTASH_HEAP_SIZE=500m
     logging:
       driver: "json-file"
       options:
