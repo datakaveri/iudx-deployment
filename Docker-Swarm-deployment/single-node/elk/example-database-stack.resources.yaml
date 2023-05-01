@@ -25,13 +25,15 @@ services:
         reservations:
           cpus: '0.3'   
           memory: 250M
+    environment:
+      - LOGSTASH_HEAP_SIZE=500m
 
 
 
 
   elasticsearch:
     environment:
-      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m --add-modules=jdk.net"
+      - ELASTICSEARCH_HEAP_SIZE=1024m
     deploy:
       resources:
         limits:
