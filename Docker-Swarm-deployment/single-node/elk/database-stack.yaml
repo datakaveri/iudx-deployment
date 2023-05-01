@@ -85,7 +85,13 @@ services:
     volumes:
       - type: volume
         source: logstash-volume
-        target: /usr/share/logstash/data
+        target: /opt/bitnami/logstash/data
+    environment:
+      - BITNAMI_DEBUG=false
+      - LOGSTASH_ENABLE_MULTIPLE_PIPELINES=yes
+      - LOGSTASH_EXPOSE_API=yes
+      - LOGSTASH_API_PORT_NUMBER=9600
+      - LOGSTASH_DATA_DIR=/opt/bitnami/logstash/data
     logging:
       driver: "json-file"
       options:
