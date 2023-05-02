@@ -7,6 +7,4 @@ cluster.name: elastic-cluster
 node.name: es
 discovery.type: single-node
 action.auto_create_index: +.*
-xpack.security.enabled: true
 xpack.security.audit.enabled: false
-xpack.security.transport.ssl.enabled: true
