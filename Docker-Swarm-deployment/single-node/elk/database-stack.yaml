@@ -19,6 +19,14 @@ services:
         window: 10s
     networks:
       - overlay-net
+    env_file:
+      - secrets/passwords/es-password.env
+      - secrets/passwords/snapshot-credentials.env
+    environment:
+      - ELASTICSEARCH_ENABLE_SECURITY=true
+      - ELASTICSEARCH_TLS_VERIFICATION_MODE=certificate
+      - ELASTICSEARCH_KEYSTORE_LOCATION=/opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12
+      - ELASTICSEARCH_TRUSTSTORE_LOCATION=/opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12
     configs:
       - source: elasticsearch-config
         target:  /usr/share/elasticsearch/config/elasticsearch.yml
