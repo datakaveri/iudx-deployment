@@ -23,9 +23,10 @@ services:
       - secrets/passwords/es-password.env
       - secrets/passwords/snapshot-credentials.env
     environment:
+      - ELASTICSEARCH_ENABLE_SECURITY=true
+      - ELASTICSEARCH_TLS_VERIFICATION_MODE=certificate
       - ELASTICSEARCH_KEYSTORE_LOCATION=/opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12
       - ELASTICSEARCH_TRUSTSTORE_LOCATION=/opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12
-      - ELASTICSEARCH_ENABLE_SECURITY=true
     configs:
       - source: elasticsearch-config
         target: /opt/bitnami/elasticsearch/config/my_elasticsearch.yml
