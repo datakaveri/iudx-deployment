@@ -108,8 +108,16 @@ pipeline {
                     publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'gis-report.pdf', reportName: 'Kubescape Scan Report for GIS'])
                     publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'di-report.pdf', reportName: 'Kubescape Scan Report for DI'])
                     sh 'echo $ghprbActualCommit'
+<<<<<<< HEAD
                     sh 'ls'
+=======
+                    sh 'echo $env'
+>>>>>>> ae336ca29af0bcb7e6e4a14639a2e57c6dc5b619
                  }
             }   
   }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> ae336ca29af0bcb7e6e4a14639a2e57c6dc5b619
