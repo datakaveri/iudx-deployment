@@ -38,7 +38,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     volumes:
       - type: volume
-        source: elastic-volume
+        source: elastic-update-volume
         target: /bitnami/elasticsearch/data
     secrets:
       - source: elastic.certificates
@@ -91,7 +91,7 @@ services:
       - ALL
     volumes:
       - type: volume
-        source: logstash-volume
+        source: logstash-update-volume
         target: /opt/bitnami/logstash/data
     environment:
       - BITNAMI_DEBUG=false
@@ -127,8 +127,8 @@ secrets:
     file: secrets/pki/elastic-certificates.p12
 
 volumes:
-  elastic-volume:
-  logstash-volume:
+  elastic-update-volume:
+  logstash-update-volume:
 
 configs:
   elasticsearch-config:
