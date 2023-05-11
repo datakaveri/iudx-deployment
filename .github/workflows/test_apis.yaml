@@ -52,6 +52,7 @@ jobs:
   test:
     needs: check
     runs-on: ubuntu-latest
+    # Check if the permission is been granted for test, only if user has write permission or admin
     if: needs.check.outputs.PERMISSIONS =='granted'
   
     steps: 
@@ -150,8 +151,11 @@ jobs:
         sleep 2m
         set -x
         datetime=$(date +"%Y-%m-%d-%H-%M-%S")
+        # Creating Testkube pytest executor
         testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.1.2 --command "pytest" --command "test_${{ needs.check.outputs.TESTNAME }}.py" --command "--html=/share/test/reports/report.html" --feature artifacts --content-type string
+        # Creating Test on Testkube using above executor
         testkube create test --name "${{ needs.check.outputs.TESTNAME }}-test-$datetime" --namespace testkube --file  ${{ needs.check.outputs.TESTNAME }}_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+        # Runing the test created above
         testkube run test ${{ needs.check.outputs.TESTNAME }}-test-$datetime --download-artifacts
         echo "test_name=${{ needs.check.outputs.TESTNAME }}-test-$datetime" >> $GITHUB_ENV 
         
@@ -163,6 +167,7 @@ jobs:
         execution_output=$(tk get execution --test ${{ env.test_name }} --output json)
         result_id=$(echo $execution_output | jq -r '.results[0].id')
         status=$(echo $execution_output | jq -r '.results[0].status')
+        # Checking status of test, if status is not passed, workflow will failed
         if [[ $status != passed]]; then
           echo "Status of Test: $status"
           exit 1
@@ -175,6 +180,7 @@ jobs:
         name: Test Reports
         path: artifacts/
         
+      # This step will run always to delete deployment
     - name: Delete deployment
       if: always()
       run: |
