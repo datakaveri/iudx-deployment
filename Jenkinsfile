@@ -11,8 +11,7 @@ pipeline {
               script{
                 echo "triggering another job"
                 echo "${params}"
-                echo "ghprb prams- ${ghprbParams}"
-                build job: 'triggeranotherjob', parameters: ghprbParams
+                build job: 'triggeranotherjob', parameters: params
               }
             }
         }
