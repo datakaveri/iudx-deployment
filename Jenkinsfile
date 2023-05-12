@@ -10,10 +10,7 @@ pipeline {
             steps {
               script{
                 echo "triggering another job"
-                def ghprbParams = params.collect{
-                  string(name: it.key, value: it.value)
-                }
-                build job: 'triggeranotherjob', parameters: ghprbParams
+                build job: 'triggeranotherjob', parameters: [string(name: 'ghprbActualCommit', value: '$ghprbActualCommit'), string(name: 'ghprbPullId', value: '$ghprbPullId')]
             }
         }
     stage('Kubescape Scan for RS') {
