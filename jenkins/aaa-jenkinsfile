@@ -1,0 +1,17 @@
+pipeline {
+        agent {
+    node {
+      label 'built-in'
+    }
+  }
+  stages {
+      stage('printing env'){
+          steps {
+              script{
+                echo "${ghprbActualCommit}"
+                sh 'ls'
+              }
+          }
+      }
+  }
+}
