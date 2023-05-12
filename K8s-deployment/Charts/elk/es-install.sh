@@ -12,7 +12,7 @@ kubectl create configmap elasticsearch-master-node-config --from-file=./elastics
 kubectl create configmap elastic-java-net-options --from-file=./elasticsearch/java-net.options -n elastic
 helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
 # brings up Elastic mcd and data-only nodes
-helm install -f elasticsearch/es-values.yml -f elasticsearch/es-resource-values.yaml -n elastic elasticsearch --version 19.2.4 $@  bitnami/elasticsearch  &&
+helm install -f elasticsearch/es-values.yml -f elasticsearch/es-resource-values.yaml -n elastic elasticsearch --version 19.6.0 $@  bitnami/elasticsearch  &&
 kubectl apply -f elasticsearch/account-generator.yml -n elastic
 
 ## elasticSearch data nodes autoscaler
