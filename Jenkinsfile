@@ -9,6 +9,7 @@ pipeline {
   stages {
     stage('Trigger another job') {
             steps {
+                echo "triggering another job"
                 build job: "triggeranotherjob/$ghprbActualCommit", parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit")]
             }
         }
