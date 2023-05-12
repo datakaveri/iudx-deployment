@@ -4,13 +4,17 @@ pipeline {
       label 'slave1'
     }
   }
-
-
+  
   stages {
+    def ghprb-params = params.collect{
+      string(name: "sha1", value: $sha1)
+      string(name: "ghprbActualCommit", value: $ghprbActualCommit)
+      string(name: "ghprbPullId", value: $ghprbPullId)
+    }
     stage('Trigger another job') {
             steps {
                 echo "triggering another job"
-                build job: 'triggeranotherjob', parameters: params
+                build job: 'triggeranotherjob', parameters: ghprb-params
             }
         }
     stage('Kubescape Scan for RS') {
