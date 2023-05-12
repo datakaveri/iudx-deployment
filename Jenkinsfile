@@ -11,6 +11,8 @@ pipeline {
         echo "triggering another job"
         build job: 'triggeranotherjob', parameters: [string(name: 'ghprbActualCommit', value: "${ghprbActualCommit}"), string(name: 'ghprbPullId', value: "${ghprbPullId}")]
       }
+    }
+    
     stage('Kubescape Scan for RS') {
       when {
         anyOf {
@@ -23,9 +25,6 @@ pipeline {
       }
     }
     
-
-
-
     stage('Kubescape Scan for Auth') {
       when {
         anyOf {
@@ -37,7 +36,6 @@ pipeline {
         sh 'kubescape scan auth-server.yaml --format pdf --output auth-report.pdf'
       }
     }
-
 
     stage('Kubescape Scan for CAT') {
       when {
@@ -51,7 +49,6 @@ pipeline {
       }
     }
 
-
     stage('Kubescape Scan for LIP') {
       when {
         anyOf {
@@ -63,7 +60,6 @@ pipeline {
         sh 'kubescape scan lip-server.yaml --format pdf --output lip-report.pdf'
       }
     }
-
 
     stage('Kubescape Scan for FS') {
       when {
@@ -77,7 +73,6 @@ pipeline {
       }
     }
 
-
     stage('Kubescape Scan for GIS') {
       when {
         anyOf {
@@ -90,7 +85,6 @@ pipeline {
       }
     }
 
-
     stage('Kubescape Scan for DI') {
       when {
         anyOf {
@@ -102,19 +96,20 @@ pipeline {
         sh 'kubescape scan di-server.yaml --format pdf --output di-report.pdf'
       }
     } 
+    
     stage('Publish Kubescape Scan Report') {
-                steps {
-                    publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'rs-report.pdf', reportName: 'Kubescape Scan Report for RS'])
-                    publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'auth-report.pdf', reportName: 'Kubescape Scan Report for AUTH'])
-                    publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'cat-report.pdf', reportName: 'Kubescape Scan Report for CAT'])
-                    publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'lip-report.pdf', reportName: 'Kubescape Scan Report for LIP'])
-                    publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'fs-report.pdf', reportName: 'Kubescape Scan Report for FS'])
-                    publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'gis-report.pdf', reportName: 'Kubescape Scan Report for GIS'])
-                    publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'di-report.pdf', reportName: 'Kubescape Scan Report for DI'])
-                    sh 'echo $ghprbActualCommit'
-                    sh 'cat cat.txt'
-                 }
-            }   
+      steps {
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'rs-report.pdf', reportName: 'Kubescape Scan Report for RS'])
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'auth-report.pdf', reportName: 'Kubescape Scan Report for AUTH'])
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'cat-report.pdf', reportName: 'Kubescape Scan Report for CAT'])
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'lip-report.pdf', reportName: 'Kubescape Scan Report for LIP'])
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'fs-report.pdf', reportName: 'Kubescape Scan Report for FS'])
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'gis-report.pdf', reportName: 'Kubescape Scan Report for GIS'])
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'di-report.pdf', reportName: 'Kubescape Scan Report for DI'])
+        sh 'echo $ghprbActualCommit'
+        sh 'cat cat.txt'
+      }
+    }   
   }
 }
 
