@@ -11,9 +11,9 @@ pipeline {
               script{
                 echo "triggering another job"
                 def ghprbParams = params.collect{
-                  string(name: "sha1", value: $sha1)
-                  string(name: "ghprbActualCommit", value: $ghprbActualCommit)
-                  string(name: "ghprbPullId", value: $ghprbPullId)
+                  string(name: "sha1", value: "${sha1}")
+                  string(name: "ghprbActualCommit", value: "${ghprbActualCommit}")
+                  string(name: "ghprbPullId", value: "${ghprbPullId}")
                 }
                 build job: 'triggeranotherjob', parameters: ghprbParams
               }
