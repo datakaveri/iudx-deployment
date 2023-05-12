@@ -6,11 +6,6 @@ pipeline {
   }
   
   stages {
-    def ghprbParams = params.collect{
-      string(name: "sha1", value: $sha1)
-      string(name: "ghprbActualCommit", value: $ghprbActualCommit)
-      string(name: "ghprbPullId", value: $ghprbPullId)
-    }
     stage('Trigger another job') {
             steps {
               script{
