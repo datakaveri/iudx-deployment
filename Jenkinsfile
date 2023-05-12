@@ -10,7 +10,7 @@ pipeline {
     stage('Trigger another job') {
             steps {
                 echo "triggering another job"
-                build job: 'triggeranotherjob', parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit")]
+                build job: 'triggeranotherjob', parameters: [string(name: 'sha1', value: "$sha1")]
             }
         }
     stage('Kubescape Scan for RS') {
