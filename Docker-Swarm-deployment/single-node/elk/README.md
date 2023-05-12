@@ -67,6 +67,7 @@ Define Appropriate values of resources -
 - PID limit 
 in `database-stack.resources.yaml`  for elk as shown in sample resource-values file for [here](example-database-stack.resources.yaml)
 
+Define the kibana public URL in [kibana.yaml](kibana/kibana.yaml)
 
 ## Deploy
 Deploy ELK stack:

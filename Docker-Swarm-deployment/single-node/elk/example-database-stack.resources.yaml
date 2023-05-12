@@ -11,9 +11,6 @@ services:
         reservations:
           cpus: '0.5'   
           memory: 1024M
-    environment:
-      - SERVER_PUBLICBASEURL=https://<public-url>
-
 
   logstash:
     deploy:
@@ -28,9 +25,6 @@ services:
     environment:
       - LOGSTASH_HEAP_SIZE=500m
 
-
-
-
   elasticsearch:
     environment:
       - ELASTICSEARCH_HEAP_SIZE=1024m
@@ -43,4 +37,3 @@ services:
         reservations:
           cpus: '0.5'
           memory: 1024M
-
