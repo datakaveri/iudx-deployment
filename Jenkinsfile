@@ -10,7 +10,7 @@ pipeline {
     stage('Trigger another job') {
             steps {
                 echo "triggering another job"
-                build job: 'triggeranotherjob', parameters: [string(name: 'ghprbPullId', value: "$ghprbPullId")]
+                build job: 'triggeranotherjob', parameters: params
             }
         }
     stage('Kubescape Scan for RS') {
