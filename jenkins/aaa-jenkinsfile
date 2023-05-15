@@ -10,6 +10,8 @@ pipeline {
               script{
                sh 'helm template -f K8s-deployment/Charts/auth-server/values.yaml -f K8s-deployment/Charts/auth-server/example-azure-resource-values.yaml K8s-deployment/Charts/auth-server  > auth-server.yaml'
                sh 'kubescape scan auth-server.yaml --format junit --output auth-report.xml'
+               ls
+               pwd
                xunit (
                 thresholds: [ skipped(failureThreshold: '1'), failed(failureThreshold: '0') ],
                 tools: [ JUnit(pattern: '/var/lib/jenkins/workspace/kubescape-auth/auth-report.xml') ]
