@@ -15,7 +15,6 @@ pipeline {
                xunit (
                 thresholds: [ skipped(failureThreshold: '1'), failed(failureThreshold: '0') ],
                 tools: [ JUnit(pattern: 'auth-report.xml') ]
-
               )              }
           }
       }
