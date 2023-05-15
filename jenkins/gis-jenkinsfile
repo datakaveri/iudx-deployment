@@ -1,0 +1,18 @@
+pipeline {
+        agent {
+    node {
+      label 'slave1'
+    }
+  }
+  stages {
+      stage('Kubescape Report for GIS'){
+          steps {
+              script{
+               sh 'helm template -f K8s-deployment/Charts/gis-interface/values.yaml -f K8s-deployment/Charts/gis-interface/example-azure-resource-values.yaml K8s-deployment/Charts/gis-interface  > gis-server.yaml'
+               sh 'kubescape scan gis-server.yaml --format pdf --output gis-report.pdf'
+               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-gis/', reportFiles: 'gis-report.pdf', reportName: 'Kubescape Scan Report for GIS'])
+              }
+          }
+      }
+  }
+}
