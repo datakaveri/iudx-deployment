@@ -5,7 +5,7 @@ pipeline {
     }
   }
   stages {
-      stage('printing env'){
+      stage('publishing report'){
           steps {
               script{
                sh 'helm template -f K8s-deployment/Charts/auth-server/values.yaml -f K8s-deployment/Charts/auth-server/example-azure-resource-values.yaml K8s-deployment/Charts/auth-server  > auth-server.yaml'
