@@ -16,7 +16,8 @@ jobs:
       run: |
         #!/bin/bash
         # Define the list of comments
-        comments=("/test_rs" "/test_cat" "/test_fs" "/test_di" "/test_gis" )
+        python3 --version
+        comments=("/test_rs" "/test_cat" "/test_fs" "/test_di" "/test_gis" "/test_lip")
         # Get the comment body from the event payload
         comment_body=$(jq -r ".comment.body" "$GITHUB_EVENT_PATH")
         # Check if the comment matches any of the defined comments
@@ -63,6 +64,7 @@ jobs:
         echo "OWNER=$(echo $output | jq -r '.head.repo.owner.login')" >> $GITHUB_ENV
         echo "REPO=$(echo $output | jq -r '.head.repo.name')" >> $GITHUB_ENV
         echo "REF=$(echo $output | jq -r '.head.ref')" >> $GITHUB_ENV
+
     - name: Checkout PR API
       uses: actions/checkout@v3
       with:
@@ -118,16 +120,28 @@ jobs:
             echo "${{ secrets.GIS_RESOURCE_VALUES }}" > K8s-deployment/Charts/gis-interface/resource-values.yaml
             echo "${{ secrets.GIS_CONFIG }}" | base64 --decode > K8s-deployment/Charts/gis-interface/secrets/config.json
             echo "${{ secrets.GIS_TEST_CONFIG }}" | base64 --decode > gis_test_config.json
+
         elif [[ "${{ needs.check.outputs.TESTNAME }}" == "di" ]]; then
             echo "TESTFOLDER=data-ingestion" >> $GITHUB_ENV
             cp -r K8s-deployment/Charts/data-ingestion/example-secrets/* K8s-deployment/Charts/data-ingestion/
             echo "${{ secrets.DI_RESOURCE_VALUES }}" > K8s-deployment/Charts/data-ingestion/resource-values.yaml
             echo "${{ secrets.DI_CONFIG }}" | base64 --decode > K8s-deployment/Charts/data-ingestion/secrets/config.json
             echo "${{ secrets.DI_TEST_CONFIG }}" | base64 --decode > di_test_config.json
+            
+        elif [[ "${{ needs.check.outputs.TESTNAME }}" == "lip" ]]; then
+            echo "TESTFOLDER=latest-ingestion-pipeline" >> $GITHUB_ENV
+            cp -r K8s-deployment/Charts/latest-ingestion-pipeline/example-secrets/* K8s-deployment/Charts/latest-ingestion-pipeline/
+            echo "${{ secrets.LIP_RESOURCE_VALUES }}" > K8s-deployment/Charts/latest-ingestion-pipeline/resource-values.yaml
+            echo "${{ secrets.LIP_CONFIG }}" | base64 --decode > K8s-deployment/Charts/latest-ingestion-pipeline/secrets/config.json
+            echo "${{ secrets.LIP_TEST_SCRIPT }}" | base64 --decode > test_lip.py
+            echo "${{ secrets.LIP_TEST_REQ }}"  > requirements.txt
+            pip3 install -r requirements.txt
+            pytest test_lip.py -k test_configuration
         else
             echo "Invalid input"
             exit 1
         fi
+
     - name: deploy
       run: |
         #!/bin/bash
@@ -142,24 +156,30 @@ jobs:
     
             
     - name: Install Testkube
+      if: ${{ needs.check.outputs.TESTNAME != 'lip' }}
       run: |
         wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add - && echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list && sudo apt-get update && sudo apt-get install -y testkube
         
-    - name: Test Execute
+    - name: Test
       run: |
         #!/bin/bash
-        sleep 2m
         set -x
-        datetime=$(date +"%Y-%m-%d-%H-%M-%S")
-        # Creating Testkube pytest executor
-        testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.1.2 --command "pytest" --command "test_${{ needs.check.outputs.TESTNAME }}.py" --command "--html=/share/test/reports/report.html" --feature artifacts --content-type string
-        # Creating Test on Testkube using above executor
-        testkube create test --name "${{ needs.check.outputs.TESTNAME }}-test-$datetime" --namespace testkube --file  ${{ needs.check.outputs.TESTNAME }}_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
-        # Runing the test created above
-        testkube run test ${{ needs.check.outputs.TESTNAME }}-test-$datetime --download-artifacts
-        echo "test_name=${{ needs.check.outputs.TESTNAME }}-test-$datetime" >> $GITHUB_ENV 
-        
+        sleep 2.5m
+        if [[ "${{ needs.check.outputs.TESTNAME }}" == "lip" ]]; then
+          pytest test_lip.py -k test_test --html=artifacts/report.html
+        else
+          datetime=$(date +"%Y-%m-%d-%H-%M-%S")
+          # Creating Testkube pytest executor
+          testkube create executor --name pytest-executor-gh --namespace testkube --types pytest-executor-gh1/test-gh-1 --executor-type container --image docker.io/pranav0/testkube-executor-pytest:1.1.2 --command "pytest" --command "test_${{ needs.check.outputs.TESTNAME }}.py" --command "--html=/share/test/reports/report.html" --feature artifacts --content-type string
+          # Creating Test on Testkube using above executor
+          testkube create test --name "${{ needs.check.outputs.TESTNAME }}-test-$datetime" --namespace testkube --file  ${{ needs.check.outputs.TESTNAME }}_test_config.json --type pytest-executor-gh1/test-gh-1 --artifact-storage-class-name azuredisk-storage-class --artifact-volume-mount-path /share --artifact-dir test/reports
+          # Runing the test created above
+          testkube run test ${{ needs.check.outputs.TESTNAME }}-test-$datetime --download-artifacts
+          echo "test_name=${{ needs.check.outputs.TESTNAME }}-test-$datetime" >> $GITHUB_ENV 
+        fi
+
     - name: Download Test reports 
+      if: ${{ needs.check.outputs.TESTNAME != 'lip' }}
       run: |
         #!/bin/bash
         set -x
@@ -184,7 +204,10 @@ jobs:
     - name: Delete deployment
       if: always()
       run: |
+       #!/bin/bash
        helm uninstall ${{ env.TESTFOLDER }} -n test-apis
        kubectl delete secret --all -n test-apis
        kubectl delete configmap --all -n test-apis
-       testkube  delete executor pytest-executor-gh
+       if: ${{ needs.check.outputs.TESTNAME != 'lip' }}
+         testkube  delete executor pytest-executor-gh
+       fi
