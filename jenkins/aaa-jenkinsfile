@@ -8,6 +8,7 @@ pipeline {
       stage('publishing report'){
           steps {
               script{
+               sh 'ls'
                sh 'helm template -f K8s-deployment/Charts/auth-server/values.yaml -f K8s-deployment/Charts/auth-server/example-azure-resource-values.yaml K8s-deployment/Charts/auth-server  > auth-server.yaml'
                sh 'kubescape scan auth-server.yaml --format pdf --output auth-report.pdf'
                publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/testing-kubescape/', reportFiles: 'auth-report.pdf', reportName: 'Kubescape Scan Report for AUTH'])
