@@ -8,7 +8,7 @@ networks:
 
 services:
   keycloak:
-    image: ghcr.io/datakaveri/keycloak:18.0.1-6
+    image: ghcr.io/datakaveri/keycloak:21.1.1-1
     cap_drop:
        - ALL
 
@@ -36,23 +36,20 @@ services:
         target: /opt/bitnami/keycloak/secrets/keycloak-admin-passwd
 
     environment:
-            - KEYCLOAK_DATABASE_HOST=postgres
-            - KEYCLOAK_DATABASE_NAME=iudx_keycloak
-            - KEYCLOAK_DATABASE_PORT=5432
-            - KEYCLOAK_DATABASE_USER=iudx_keycloak_user
-            - KEYCLOAK_ADMIN_USER=iudx_admin
-            - KC_HTTP_RELATIVE_PATH=/auth 
-            - KEYCLOAK_DATABASE_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-db-passwd
-            - KEYCLOAK_ADMIN_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-admin-passwd
-            - KEYCLOAK_PRODUCTION=TRUE # running in production mode, https://www.keycloak.org/server/configuration#_configuring_the_server_by_using_configuration_files
-            - KEYCLOAK_PROXY=edge # proxy edge mode, allow http comm between proxy and keycloak, https://www.keycloak.org/server/reverseproxy#_proxy_modes
-            - KEYCLOAK_LOG_OUTPUT=json # structured logs, easier to parse and do queries in grafana/loki
-
-
-
+      - KEYCLOAK_ADMIN=iudx_admin
+      - KEYCLOAK_ADMIN_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-admin-passwd
+      - KEYCLOAK_DATABASE_HOST=postgres
+      - KEYCLOAK_DATABASE_NAME=iudx_keycloak
+      - KEYCLOAK_DATABASE_PORT=5432
+      - KEYCLOAK_DATABASE_USER=iudx_keycloak_user
+      - KEYCLOAK_DATABASE_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-db-passwd
+      - KEYCLOAK_HTTP_RELATIVE_PATH=/auth 
+      - KEYCLOAK_PRODUCTION=TRUE # running in production mode, https://www.keycloak.org/server/configuration#_configuring_the_server_by_using_configuration_files
+      - KEYCLOAK_PROXY=edge # proxy edge mode, allow http comm between proxy and keycloak, https://www.keycloak.org/server/reverseproxy#_proxy_modes
+      - KEYCLOAK_LOG_OUTPUT=json # structured logs, easier to parse and do queries in grafana/loki
 
 secrets:
   keycloak-db-passwd:
     file: secrets/passwords/keycloak-db-passwd
   keycloak-admin-passwd:
-    file: secrets/passwords/keycloak-admin-passwd  
+    file: secrets/passwords/keycloak-admin-passwd
