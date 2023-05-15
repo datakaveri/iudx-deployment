@@ -9,9 +9,11 @@ pipeline {
           steps {
               script{
                sh 'helm template -f K8s-deployment/Charts/auth-server/values.yaml -f K8s-deployment/Charts/auth-server/example-azure-resource-values.yaml K8s-deployment/Charts/auth-server  > auth-server.yaml'
-               sh 'kubescape scan auth-server.yaml --format pdf --output auth-report.pdf'
-               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-auth/', reportFiles: 'auth-report.pdf', reportName: 'Kubescape Scan Report for AUTH'])
-              }
+               sh 'kubescape scan auth-server.yaml --format junit --output auth-report.xml'
+               xunit (
+                thresholds: [ skipped(failureThreshold: '1'), failed(failureThreshold: '0') ],
+                tools: [ JUnit(pattern: 'auth-report.xml') ]
+              )              }
           }
       }
   }
