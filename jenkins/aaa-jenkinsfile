@@ -12,7 +12,7 @@ pipeline {
                sh 'kubescape scan auth-server.yaml --format junit --output auth-report.xml'
                xunit (
                 thresholds: [ skipped(failureThreshold: '1'), failed(failureThreshold: '0') ],
-                tools: [ JUnit(pattern: 'auth-report.xml') ]
+                tools: [ JUnit(pattern: '/var/lib/jenkins/workspace/kubescape-auth/auth-report.xml') ]
               )              }
           }
       }
