@@ -9,8 +9,8 @@ pipeline {
           steps {
               script{
                sh 'helm template -f K8s-deployment/Charts/catalogue/values.yaml -f K8s-deployment/Charts/catalogue/example-azure-resource-values.yaml K8s-deployment/Charts/catalogue  > cat-server.yaml'
-               sh 'kubescape scan cat-server.yaml --format html --output cat-report.html'
-               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-cat/', reportFiles: 'cat-report.html', reportName: 'Kubescape Scan Report for CAT'])
+               sh 'kubescape scan cat-server.yaml --format pretty-printer --output cat-report.txt'
+               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-cat/', reportFiles: 'cat-report.txt', reportName: 'Kubescape Scan Report for CAT'])
               }
           }
       }
