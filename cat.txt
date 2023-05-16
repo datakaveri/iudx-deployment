@@ -1,1 +1,1 @@
-test catfdds
+dstest catfdds
