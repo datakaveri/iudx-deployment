@@ -1,0 +1,18 @@
+pipeline {
+        agent {
+    node {
+      label 'slave1'
+    }
+  }
+  stages {
+      stage('Kubescape Report for Auditing Server'){
+          steps {
+              script{
+               sh 'helm template -f K8s-deployment/Charts/auditing-server/values.yaml -f K8s-deployment/Charts/auditing-server/example-azure-resource-values.yaml K8s-deployment/Charts/auditing-server  > auditing-server.yaml'
+               sh 'kubescape scan -vv cat-server.yaml --format pretty-printer --output auditing-report'
+               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-auditing/', reportFiles: 'auditing-report.txt', reportName: 'Kubescape Scan Report for Auditing Server'])
+              }
+          }
+      }
+  }
+}
