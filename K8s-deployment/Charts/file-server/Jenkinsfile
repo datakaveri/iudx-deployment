@@ -1,0 +1,18 @@
+pipeline {
+        agent {
+    node {
+      label 'slave1'
+    }
+  }
+  stages {
+      stage('Kubescape Report for FS'){
+          steps {
+              script{
+                sh 'helm template -f K8s-deployment/Charts/file-server/values.yaml -f K8s-deployment/Charts/file-server/example-azure-resource-values.yaml K8s-deployment/Charts/file-server  > file-server.yaml'
+                sh 'kubescape scan -vv file-server.yaml --format pretty-printer --output fs-report'
+               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-fs/', reportFiles: 'fs-report.txt', reportName: 'Kubescape Scan Report for FS'])
+              }
+          }
+      }
+  }
+}
