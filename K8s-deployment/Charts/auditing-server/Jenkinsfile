@@ -9,7 +9,7 @@ pipeline {
           steps {
               script{
                sh 'helm template -f K8s-deployment/Charts/auditing-server/values.yaml -f K8s-deployment/Charts/auditing-server/example-azure-resource-values.yaml K8s-deployment/Charts/auditing-server  > auditing-server.yaml'
-               sh 'kubescape scan -t 25 -vv cat-server.yaml --format pretty-printer --output auditing-report'
+               sh 'kubescape scan -t 25 -vv auditing-server.yaml --format pretty-printer --output auditing-report'
               }
           }
           post {
