@@ -1,0 +1,15 @@
+{
+    "username": "<rmq user>", 
+    "password": "<rmq password>", 
+    "host": "<rmq host>", 
+    "port": "<rmq amq port>", 
+    "hport": "<rmq https port>",
+    "vhost": "Test-Lip",
+    "exchange": "lip-test",
+    "exchange_type": "direct",
+    "queue_name": "redis-latest",
+    "route": "lip-test",
+    "redis_host": "<redis hostname>",
+    "redis_port": "<redis Port>",
+    "redis_password": "<Redis Password>"
+}
