@@ -9,10 +9,16 @@ pipeline {
           steps {
               script{
                sh 'helm template -f K8s-deployment/Charts/gis-interface/values.yaml -f K8s-deployment/Charts/gis-interface/example-azure-resource-values.yaml K8s-deployment/Charts/gis-interface  > gis-server.yaml'
-               sh 'kubescape scan -vv gis-server.yaml --format pretty-printer --output gis-report'
-               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-gis/', reportFiles: 'gis-report', reportName: 'Kubescape Scan Report for GIS'])
+               sh 'kubescape scan -t 25 -vv gis-server.yaml --format pretty-printer --output gis-report'
               }
           }
+          post {
+                always {
+               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-gis/', reportFiles: 'gis-report', reportName: 'Kubescape Scan Report for GIS'])
+
+                }
+            }
       }
   }
 }
+
