@@ -9,12 +9,12 @@ pipeline {
           steps {
               script{
                sh 'helm template -f K8s-deployment/Charts/auth-server/values.yaml -f K8s-deployment/Charts/auth-server/example-azure-resource-values.yaml K8s-deployment/Charts/auth-server  > auth-server.yaml'
-               sh 'kubescape scan auth-server.yaml --format pretty-printer --output auth-report'
+               sh 'kubescape scan -vv -t 25 auth-server.yaml --format pretty-printer --output auth-report'
              }
           }
           post {
                 always {
-               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-auth/', reportFiles: 'auth-report.txt', reportName: 'Kubescape Scan Report for AAA'])
+               publishHTML([allowMissing: false, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-auth/', reportFiles: 'auth-report.txt', reportName: 'Kubescape Scan Report for AAA'])
 
                 }
             }

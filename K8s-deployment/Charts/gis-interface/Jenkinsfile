@@ -14,7 +14,7 @@ pipeline {
           }
           post {
                 always {
-               publishHTML([allowMissing: true, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-gis/', reportFiles: 'gis-report', reportName: 'Kubescape Scan Report for GIS'])
+               publishHTML([allowMissing: false, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-gis/', reportFiles: 'gis-report', reportName: 'Kubescape Scan Report for GIS'])
 
                 }
             }
