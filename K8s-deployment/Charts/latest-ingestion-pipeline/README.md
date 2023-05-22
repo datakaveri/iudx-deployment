@@ -4,6 +4,8 @@
 
 Helm Chart for IUDX latest-ingestion-pipeline Server Deployment
 
+[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fview%2FKubescape%2Fjob%2Fkubescape-lip%2F&label=Kubescape)](https://jenkins.iudx.io/job/kubescape-lip/lastBuild/)
+
 ## Create secret files
 
 Make a copy of sample secrets directory and add appropriate values to all files.
