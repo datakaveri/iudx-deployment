@@ -10,6 +10,7 @@ import os
 with open('config.json') as file:
     config_data = json.load(file)
     
+createVhost = config_data['createVhost']
 username = config_data['username'] # RMQ username
 password = config_data['password'] # RMQ password
 host = config_data['host'] # RMQ host
@@ -31,15 +32,16 @@ redis_password= config_data['redis_password']
 # Test configuration block
 def test_configuration():
     # Create Vhost named `$vhost`	
-    url = f'https://{host}:{hport}/api/vhosts/{vhost}'
-    response = requests.put(url, auth=(username, password))
+    if createVhost:
+        url = f'https://{host}:{hport}/api/vhosts/{vhost}'
+        response = requests.put(url, auth=(username, password))
 
     # rabbitmq amqp connection details
     connection = pika.BlockingConnection(
         pika.URLParameters(f'amqp://{username}:{password}@{host}:{port}/{vhost}'))
     channel = connection.channel()
 
-    # Declare an exchange named "lip-test"
+    # create an exchange named in var `exchange`
     channel.exchange_declare(exchange=exchange, exchange_type=exchange_type)
     channel.queue_declare(queue=queue_name)
 
@@ -94,11 +96,11 @@ def test_test():
     time.sleep(3)
     r = redis.Redis(host=redis_host, port=redis_port, decode_responses=True, password=redis_password)
     x = r.json().get('lip_test')
-    channel.queue_delete(queue=queue_name)
-    channel.exchange_delete(exchange='lip-test')
+    if createVhost:
+        channel.queue_delete(queue=queue_name)
+    channel.exchange_delete(exchange=exchange)
     r.close()
     connection.close()
-    response = requests.delete(url, auth=(username, password))
     assert x[list(x.keys())[1]]==json_obj
     
 

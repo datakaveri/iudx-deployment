@@ -1,0 +1,5 @@
+pika==1.2.0
+redis==4.5.4
+pytest
+requests
+pytest-html
