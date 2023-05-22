@@ -57,9 +57,9 @@ spec:
 
 ## Deploy the Cluster Autoscaler
    
-1. Add helm repo for cluster autoscaler 
+1. Update the cluster autoscaler helm repository
 ```sh
-helm repo add autoscaler https://kubernetes.github.io/autoscaler && helm repo update
+helm repo update autoscaler
 ```
 2. Define Appropriate values of resources -
   - CPU of requests and limits
