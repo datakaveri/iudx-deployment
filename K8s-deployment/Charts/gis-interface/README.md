@@ -2,7 +2,7 @@
 
 Helm Chart for IUDX GIS Interface Deployment
 
-[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fview%2FKubescape%2Fjob%2Fkubescape-gis%2F&label=Kubescape)](https://jenkins.iudx.io/view/Kubescape/job/kubescape-gis/Kubescape_20Scan_20Report_20for_20AAA/)
+[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fview%2FKubescape%2Fjob%2Fkubescape-gis%2F&label=Kubescape)](https://jenkins.iudx.io/view/Kubescape/job/kubescape-gis/Kubescape_20Scan_20Report_20for_20GIS/)
 
 ## Create secret files
 
