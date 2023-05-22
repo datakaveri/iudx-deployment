@@ -1,10 +1,8 @@
-
+[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fview%2FKubescape%2Fjob%2Fkubescape-cat%2F&label=Kubescape)](https://jenkins.iudx.io/view/Kubescape/job/kubescape-cat/Kubescape_20Scan_20Report_20for_20CAT/)
 
 ## Introduction
 
 Helm Chart for IUDX Catalogue Server Deployment
-
-[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fview%2FKubescape%2Fjob%2Fkubescape-cat%2F&label=Kubescape)](https://jenkins.iudx.io/view/Kubescape/job/kubescape-cat/Kubescape_20Scan_20Report_20for_20CAT/)
 
 ## Create secret files
 
