@@ -7,9 +7,9 @@ Define Appropiate resource values in ```resource-values.yaml``` as
 shown in sample resource-values file for [aws](example-aws-resource-values.yaml) and [azure](example-azure-resource-alues.yaml) deployment.
 
 ## Deploy
-1. Add the Jetstack Helm repository and Update
+1. Update the Jetstack Helm repository
 ```
-helm repo add jetstack https://charts.jetstack.io && helm repo update
+helm repo update jetstack
 ```
 2. Create cert-manager namespace
 ```

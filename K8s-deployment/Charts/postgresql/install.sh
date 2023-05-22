@@ -7,7 +7,7 @@ kubectl create secret generic pgpool-auth  --from-file=./secrets/passwords/usern
 kubectl create configmap init-scripts --from-file=./init-scripts/ -n postgres
 sleep 10
 # install postgres asynchronous cluster  
-helm repo add bitnami https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+helm repo update bitnami
 helm install -f psql-async-values.yaml -f resource-values.yaml psql --version 9.3.2 $@ bitnami/postgresql-ha -n postgres
 
 # helm delete and install  to postgres quorum synchronous replication cluster
