@@ -1,7 +1,7 @@
 ![IUDX](./docs/iudx.png)
 
 
-![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fview%2FKubescape%2Fjob%2Fkubescape%2F&label=kubescape)
+![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fview%2FKubescape%2Fjob%2Fkubescape%2F&label=kubescape)(https://jenkins.iudx.io/job/iudx%20kubescape%20(master)%20pipeline/lastBuild/)
 
 # iudx-deployment
 Installation and setup scripts for single and multi node (clustered) IUDX services.
