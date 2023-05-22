@@ -1,6 +1,6 @@
 ![IUDX](./docs/iudx.png)
 
-[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fview%2FKubescape%2Fjob%2Fkubescape%2F&label=Kubescape)](https://jenkins.iudx.io/job/kubescape/lastBuild/)
+
 
 # iudx-deployment
 This repository gives installation and setup scripts to deploy the IUDX platform. We provide and support two types of IUDX platform deployment : 
