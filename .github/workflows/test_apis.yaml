@@ -133,10 +133,9 @@ jobs:
             cp -r K8s-deployment/Charts/latest-ingestion-pipeline/example-secrets/* K8s-deployment/Charts/latest-ingestion-pipeline/
             echo "${{ secrets.LIP_RESOURCE_VALUES }}" > K8s-deployment/Charts/latest-ingestion-pipeline/resource-values.yaml
             echo "${{ secrets.LIP_CONFIG }}" | base64 --decode > K8s-deployment/Charts/latest-ingestion-pipeline/secrets/config.json
-            echo "${{ secrets.LIP_TEST_SCRIPT }}" | base64 --decode > test_lip.py
-            echo "${{ secrets.LIP_TEST_REQ }}"  > requirements.txt
-            pip3 install -r requirements.txt
-            pytest test_lip.py -k test_configuration
+            echo "${{ secrets.LIP_TEST_CONFIG }}" | base64 --decode > config.json
+            pip3 install -r Docker-Swarm-deployment/single-node/lip/tests/requirements.txt
+            pytest Docker-Swarm-deployment/single-node/lip/tests/test_lip.py -k test_configuration
         else
             echo "Invalid input"
             exit 1
