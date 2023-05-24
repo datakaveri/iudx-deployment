@@ -9,7 +9,7 @@ immudb:
       cpu: 1500m
       memory: 7Gi
   persistence:
-    storageClass: "azuredisk-storage-class"
+    storageClass: "azuredisk-csi-storage-class"
     size: 80Gi
   install:
     createUsers: true
