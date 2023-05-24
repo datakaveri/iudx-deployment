@@ -14,7 +14,7 @@ resources:
 persistence:
   type: pvc
   enabled: true
-  storageClassName: "azuredisk-storage-class"
+  storageClassName: "azuredisk-csi-storage-class"
   accessModes:
     - ReadWriteOnce
   size: 10Gi

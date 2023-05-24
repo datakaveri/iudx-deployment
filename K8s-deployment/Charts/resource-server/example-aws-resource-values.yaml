@@ -193,7 +193,7 @@ async:
       mountPath: /tmp
   persistentVolumeClaim:
     name: efs-pvc
-    storageClassName: efs-storage-class
+    storageClassName: efs-csi-storage-class
     resources:
       requests:
         storage: 50Gi

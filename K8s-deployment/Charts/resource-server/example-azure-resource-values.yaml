@@ -193,7 +193,7 @@ async:
       mountPath: /tmp
   persistentVolumeClaim:
     name: azurefile-pvc
-    storageClassName: azurefile-storage-class
+    storageClassName: azurefile-csi-storage-class
     resources:
       requests:
         storage: 10Gi

@@ -8,6 +8,6 @@ resources:
     cpu: 1400m
     memory: 3Gi
 persistence:
-  storageClass: "azuredisk-storage-class"
+  storageClass: "azuredisk-csi-storage-class"
   size: 30Gi
 
