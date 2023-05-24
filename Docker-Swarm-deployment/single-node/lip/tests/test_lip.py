@@ -14,20 +14,20 @@ createVhost = config_data['createVhost']
 username = config_data['username'] # RMQ username
 password = config_data['password'] # RMQ password
 host = config_data['host'] # RMQ host
-port = config_data['port']        # RMQ AMQP port
-hport= config_data['hport']         #RMQ https port
+port = config_data['amqpsPort']        # RMQ AMQP port
+hport= config_data['httpsPort']         #RMQ https port
 vhost= config_data['vhost']
 
 # RMQ Test Exchange and queue details
 exchange = config_data['exchange']  # RMQ exchange name 
-exchange_type = config_data['exchange_type'] 
-queue_name = config_data['queue_name']
+exchange_type = config_data['exchangeType'] 
+queue_name = config_data['queueName']
 route = config_data['route']  # RMQ routing key
 
 # Redis connection details
-redis_host= config_data['redis_host']
-redis_port= config_data['redis_port']
-redis_password= config_data['redis_password']
+redis_host= config_data['redisHost']
+redis_port= config_data['redisPort']
+redis_password= config_data['redisPassword']
 
 # Test configuration block
 def test_configuration():
@@ -35,27 +35,31 @@ def test_configuration():
     if createVhost:
         url = f'https://{host}:{hport}/api/vhosts/{vhost}'
         response = requests.put(url, auth=(username, password))
-
     # rabbitmq amqp connection details
     connection = pika.BlockingConnection(
-        pika.URLParameters(f'amqp://{username}:{password}@{host}:{port}/{vhost}'))
+        pika.URLParameters(f'amqps://{username}:{password}@{host}:{port}/{vhost}'))
     channel = connection.channel()
-
     # create an exchange named in var `exchange`
     channel.exchange_declare(exchange=exchange, exchange_type=exchange_type)
-    channel.queue_declare(queue=queue_name)
-
+    if createVhost :
+        channel.queue_declare(queue=queue_name)
     # Bind the exchange with the existing queue 'redis-latest'
     channel.queue_bind(exchange=exchange, queue=queue_name, routing_key=route)
     connection.close()
+    # Check whether binding is success with given queue name
+    exchange_bindings_url = f'https://{host}:{hport}/api/exchanges/{vhost}/{exchange}/bindings/source'
+    response = requests.get(exchange_bindings_url, auth=(username, password))
+    bindings = response.json()
+    assert bindings[0]['destination']==queue_name
 
-    assert response.status_code == 201 or 204
+    #assert queue_name in [binding.queue for binding in channel.queue_bindings(exchange=exchange)]
+    #assert response.status_code == 201 or 204
 
 # Test test block
 def test_test():
     url = f'https://{host}:{hport}/api/vhosts/{vhost}'
     connection = pika.BlockingConnection(
-        pika.URLParameters(f'amqp://{username}:{password}@{host}:{port}/{vhost}'))
+        pika.URLParameters(f'amqps://{username}:{password}@{host}:{port}/{vhost}'))
     channel = connection.channel()
 
     # sample itms data packet
