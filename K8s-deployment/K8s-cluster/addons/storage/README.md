@@ -10,11 +10,6 @@ Persistent volumes are provisioned dynamically using PVCs (Persistent Volume Cla
 PVC contains the details of amount storage required and what type of storageclass to use and other options.
 When PVC K8s resource object with storageclass is created, the storage is dynamically provisioned from cloud  and a control loop in control plane will watch for new PVCs and  bind PVs to PVCs.
 
-Two types of storageclass exist:
-1. in-tree K8s storage class - will be depereacted in favour of CSI volume by 1.21 k8s version and does not accept new features
-2. CSI volumes - 
-
-
 Refer following:
 1. https://kubernetes.io/docs/concepts/storage/persistent-volumes/ 
 2. https://kubernetes.io/docs/concepts/storage/storage-classes/#aws-ebs

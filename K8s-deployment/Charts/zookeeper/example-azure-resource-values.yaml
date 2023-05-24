@@ -30,7 +30,7 @@ persistence:
   enabled: true
   ## @param persistence.storageClass PVC Storage Class for ZooKeeper data volume
   ## if deploying in minikube, can use "standard"
-  storageClass: "azuredisk-storage-class"
+  storageClass: "azuredisk-csi-storage-class"
   ## @param persistence.accessModes PVC Access modes
   ##
   accessModes:
