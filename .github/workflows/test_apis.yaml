@@ -165,7 +165,7 @@ jobs:
         set -x
         sleep 2.5m
         if [[ "${{ needs.check.outputs.TESTNAME }}" == "lip" ]]; then
-          pytest test_lip.py -k test_test --html=artifacts/report.html
+          pytest  Docker-Swarm-deployment/single-node/lip/tests/test_lip.py -k test_test --html=artifacts/report.html
         else
           datetime=$(date +"%Y-%m-%d-%H-%M-%S")
           # Creating Testkube pytest executor
@@ -207,6 +207,6 @@ jobs:
        helm uninstall ${{ env.TESTFOLDER }} -n test-apis
        kubectl delete secret --all -n test-apis
        kubectl delete configmap --all -n test-apis
-       if: ${{ needs.check.outputs.TESTNAME != 'lip' }}
+       if ${{ needs.check.outputs.TESTNAME != 'lip' }}; then
          testkube  delete executor pytest-executor-gh
        fi
