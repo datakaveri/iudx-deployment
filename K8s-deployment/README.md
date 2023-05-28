@@ -74,3 +74,13 @@ From DAG, the components can be deployed as follows in 6 stages:
     5. Data Ingestion server
 6.  Stage 6
     1. Advance Monitoring Stack
+
+
+## How to deploy
+The whole IUDX system on kubernetes should be deployed and set-up in the following order-
+
+1. Install kubectl and helm cli using the [cli-tools.sh](./K8s-cluster/misc-setup/cli-tools.sh) script.
+2. Add all the required helm repositories using the [add-helm-repositories.sh](./add-helm-repositories.sh) script.
+3. Install [Rancher](./K8s-cluster/Rancher/) with appropriate architecture as per requirement and provision a K8s cluster.
+4. Install all the K8s [addons](./K8s-cluster/addons/) mentioned in the previous section. [Stage 0]
+5. Deploy all [IUDX core components](./Charts/) in the order described in the previous section. [Stage 1-6]

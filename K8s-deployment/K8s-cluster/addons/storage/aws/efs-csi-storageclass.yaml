@@ -1,7 +1,7 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: efs-storage-class
+  name: efs-csi-storage-class
 provisioner: efs.csi.aws.com
 mountOptions:
   - tls

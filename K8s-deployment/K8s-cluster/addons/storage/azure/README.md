@@ -1,9 +1,4 @@
 # Azure storage
-## Deployment with AzureDisk intree drivers
-For in-tree azuredisk drivers, ```kubernetes.io/azure-disk``` provisioner can be used in the [azuredisk-storage-class.yaml](./azuredisk-storage-class.yaml).
-1. Following command will deploy the storageclass
-``` kubectl apply -f azuredisk-storage-class.yaml```
-
 ## Deployment with AzureDisk csi drivers
 ### Prerequisite
 1. Create [`azure.json`](./azure.json) cloud config file and fill in all necessary fields, refer to [cloud provider config](https://kubernetes-sigs.github.io/cloud-provider-azure/install/configs/).
@@ -39,21 +34,14 @@ kubectl create -f azure-cloud-provider.yaml
 
 ### Create storage class
 
-1. Create storage class yaml file [`azuredisk-storage-class.yaml`](./azuredisk-storage-class.yaml) with provisioner as ```disk.csi.azure.com```
+1. Create storage class yaml file [`azuredisk-csi-storage-class.yaml`](./azuredisk-csi-storage-class.yaml) with provisioner as ```disk.csi.azure.com```
 2. Following command will deploy the storageclass
-``` kubectl apply -f azuredisk-storage-class.yaml```
-
-## Deployment with AzureFile in-tree
-For in-tree azurefile drivers, ```kubernetes.io/azure-file``` provisioner can be used in the [azurefile-intree-storage-class.yaml](./azurefile-intree-storage-class.yaml).
-1. Following command will deploy the storageclass
-``` kubectl apply -f azurefile-intree-storage-class.yaml```
+``` kubectl apply -f azuredisk-csi-storage-class.yaml```
 
 ## Deployment with AzureFile csi drivers
 ### Pre-requisite
 1. Minimum k8s version - 1.21+
 2. Installation of csi drivers through helm chart or with kubectl commands. ref: https://github.com/kubernetes-sigs/azurefile-csi-driver#install-driver-on-a-kubernetes-cluster
-
-
 
 ### Install driver on a Kubernetes cluster
 
@@ -91,10 +79,6 @@ kubectl create -f azure-cloud-provider.yaml
 1. Create storage class yaml file [`azurefile-csi-storage-class.yaml`](./azurefile-csi-storage-class.yaml) with provisioner as ```file.csi.azure.com```
 2. Following command will deploy the storageclass
 ``` kubectl apply -f azurefile-csi-storage-class.yaml```
-
-
-
-
 
 ## Links
 - https://github.com/kubernetes-sigs/azurefile-csi-driver
