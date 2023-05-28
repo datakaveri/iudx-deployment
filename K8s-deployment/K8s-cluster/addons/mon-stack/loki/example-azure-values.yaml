@@ -16,4 +16,4 @@ singleBinary:
   ## - keep storageClassName same with below setting
   persistence:
     size: 250Gi
-    storageClass: "azuredisk-storage-class"
+    storageClass: "azuredisk-csi-storage-class"

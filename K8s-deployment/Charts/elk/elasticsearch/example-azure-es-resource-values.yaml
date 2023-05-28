@@ -3,7 +3,7 @@ master:
   nodeSelector:
     beta.kubernetes.io/instance-type: Standard_B4ms
   persistence:
-    storageClass: "azuredisk-storage-class"
+    storageClass: "azuredisk-csi-storage-class"
     size: 120Gi
   resources:
     requests:
@@ -18,7 +18,7 @@ data:
   nodeSelector:
     beta.kubernetes.io/instance-type: Standard_B4ms
   persistence:
-    storageClass: "azuredisk-storage-class"
+    storageClass: "azuredisk-csi-storage-class"
     size: 120Gi
   resources:
     requests:

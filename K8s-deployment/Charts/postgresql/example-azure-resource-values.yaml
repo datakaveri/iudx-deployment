@@ -61,7 +61,7 @@ pgpool:
     node.kubernetes.io/instance-type: Standard_B2s
 
 persistence:
-  storageClass: "azuredisk-storage-class"
+  storageClass: "azuredisk-csi-storage-class"
   accessModes:
     - ReadWriteOnce
   size: 200Gi
