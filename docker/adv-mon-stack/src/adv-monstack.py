@@ -27,15 +27,19 @@ def request(request_method,Api_Token,Api_Url,info,files,name):
 
 
 def AMS(config,status_dict,time_dict,IST):
-        archive_file_id = ""
-        external_file_id = ''
         for info in config["Info"]:
+                files=""
+                if info["Test-Name"]=="Upload sample file link to a File Server":
+                        files=[
+                        ('file',('aa.txt',open('aa.txt','rb'),'text/plain'))
+                        ]
+
                 if info["Type"] == "private":
                         auth_token = token(config["clientID"],config["clientSecret"],info["Auth-Request-Body"],config["Auth-Server-Url"])
-                        req = request(info["Request-Method"],str(auth_token),info["Server-Url"],info["Request-Body"],"",info["Test-Name"]) 
+                        req = request(info["Request-Method"],str(auth_token),info["Server-Url"],info["Request-Body"],files,info["Test-Name"]) 
                         status_code = str(req.status_code)
                 elif info["Type"] == "array_check":
-                        req = request(info["Request-Method"],"",info["Server-Url"],info["Request-Body"],"",info["Test-Name"])
+                        req = request(info["Request-Method"],"",info["Server-Url"],info["Request-Body"],files,info["Test-Name"])
                         json_object = json.loads(req.text)
 
                          # If results array is empty, set status code to 204
@@ -45,7 +49,7 @@ def AMS(config,status_dict,time_dict,IST):
                                 status_code = str(req.status_code)
                                 
                 else :
-                        req = request(info["Request-Method"],"",info["Server-Url"],info["Request-Body"],"",info["Test-Name"])
+                        req = request(info["Request-Method"],"",info["Server-Url"],info["Request-Body"],files,info["Test-Name"])
                         status_code = str(req.status_code)
 
                 status_code_metric.labels(info["Server-Name"],info["Server-Url"],info["Test-Name"]).set(status_code)
