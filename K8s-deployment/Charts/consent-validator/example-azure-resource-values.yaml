@@ -1,0 +1,11 @@
+consentValidator:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_D2as_v4
+  resources:
+    limits:
+      cpu: 500m
+      memory: 0.6Gi
+    requests: 
+      cpu: 300m
+      memory: 0.4Gi
+  
