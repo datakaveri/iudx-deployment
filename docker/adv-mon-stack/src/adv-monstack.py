@@ -31,7 +31,7 @@ def AMS(config,status_dict,time_dict,IST):
                 files=""
                 if info["Test-Name"]=="Upload sample file link to a File Server":
                         files=[
-                        ('file',('aa.txt',open('aa.txt','rb'),'text/plain'))
+                        ('file',('aa.txt',open('src/aa.txt','rb'),'text/plain'))
                         ]
 
                 if info["Type"] == "private":
