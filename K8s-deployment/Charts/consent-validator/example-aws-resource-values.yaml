@@ -1,0 +1,11 @@
+consentValidator:
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.large
+  resources:
+    limits:
+      cpu: 1800m
+      memory: 7.5Gi
+    requests: 
+      cpu: 1500m
+      memory: 7Gi
+  
