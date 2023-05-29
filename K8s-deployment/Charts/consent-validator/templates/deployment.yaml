@@ -80,6 +80,10 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.consentValidator.sidecars "context" $) | nindent 8 }}
         {{- end }}
           ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+              protocol: TCP
+              
             - name: hazelcast
               containerPort: {{ .Values.containerPorts.hazelcast }}
               protocol: TCP

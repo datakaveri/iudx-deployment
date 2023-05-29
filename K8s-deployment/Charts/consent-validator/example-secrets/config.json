@@ -1,0 +1,44 @@
+{
+    "version": "1.0",
+    "postgresOptions": {
+        "databaseIP": "database.ip",
+        "databasePort": "5433",
+        "databaseName": "db-name",
+        "databaseSchema": "db-schema",
+        "databaseUserName": "db-user",
+        "databasePassword": "db-password",
+        "databasePoolSize": "25"
+    },
+    "jwsKeystoreOptions": {
+        "keystorePath": "configs/keystore.jks",
+        "keystorePassword": "secret"
+    },
+    "identityOptions": {
+        "identityServerEndpoint": "https://idserver.com/server.aspx",
+        "soapActionHeader": "https://idserver.com/get_users",
+        "soapUsername": "username",
+        "soapPassword": "password",
+        "responseOptions": {
+            "soapResponseElementName": "result_tag_name",
+            "flagKey": "flag",
+            "messageKey": "msg",
+            "dataKey": "data",
+            "dpNumberKey": "ppbNumber",
+            "dpNameKey": "farmerName",
+            "allDpsNotFoundMsg": "No Data Found"
+        }
+    },
+    "pdfRateLimitOptions": {
+        "rateLimitCount" : 5,
+        "rateLimitDuration" : "P1D"
+    },
+    "catalogueServer": "https://cat.iudx.io",
+    "catServerItemPath": "/iudx/cat/v1/item",
+    "authServerUrl": "https://devauth.iudx.io",
+    "authServerDomain": "devauth.iudx.io",
+    "consentManagerDomain": "consent-manager.example.com",
+    "webClientTimeoutMs": 4000,
+    "serverTimeoutMs": 5000,
+    "corsRegexString": "*",
+    "httpPort": 8443
+}
