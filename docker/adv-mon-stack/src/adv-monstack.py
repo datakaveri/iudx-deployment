@@ -6,7 +6,7 @@ import schedule
 from datetime import datetime
 import pytz
 
-
+# Functions for obtaining an access token for API
 def token(clientId,clientSecret,data,url):
 
         headers = CaseInsensitiveDict()
@@ -17,6 +17,7 @@ def token(clientId,clientSecret,data,url):
         json_object = json.loads(resp.text)
         return (json_object["results"]["accessToken"])
 
+# Functions for making requests to an API.
 def request(request_method,Api_Token,Api_Url,info,files,name):
 
         headers = CaseInsensitiveDict()
@@ -25,7 +26,7 @@ def request(request_method,Api_Token,Api_Url,info,files,name):
         resp = requests.request(request_method,Api_Url, headers=headers, data=info,files=files)
         return (resp)
 
-
+# Funtions to performs various API tests based on the provided configuration.
 def AMS(config,status_dict,time_dict,IST):
         for info in config["Info"]:
                 files=""
@@ -67,9 +68,11 @@ def AMS(config,status_dict,time_dict,IST):
 if __name__ == '__main__':
         prom.start_http_server(8089)
 
+#Load APIs configuration from a JSON file named "adv-mon-stack-conf.json".
 with open("adv-mon-stack-conf.json") as file:
     config = json.load(file)
 
+#Set up Prometheus metrics using the prometheus_client library
 status_dict = {}
 time_dict = {}
 
@@ -77,6 +80,7 @@ status_code_metric = prom.Gauge('http_status_code','http_status_code',["Serverna
 rtt_metric = prom.Gauge('api_rtt','api_rtt',["Servername","Url","Name"])
 api_req_time = prom.Gauge('api_req_time','api_req_time',["Servername","Url","Name"])
 IST = pytz.timezone('Asia/Kolkata')
+#Schedule the execution of the "AMS" function based on a specified time interval in the configuration.
 schedule.every(config["Time"]).minutes.do(AMS,config,status_dict,time_dict,IST)
 
 
