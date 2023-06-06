@@ -20,7 +20,7 @@ To generate the passwords:
 ```
 # secrets directory after generation of secret files
 secrets/
-├── config.env
+├── config.json
 └── passwords
     ├── admin-password
     ├── auth-password
