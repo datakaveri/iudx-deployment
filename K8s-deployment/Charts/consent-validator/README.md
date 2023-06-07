@@ -17,13 +17,14 @@ secrets/
 └── config.json
 └── keystore
 ```
-Configure the env file .config.env in secret/ appropriately
+Configure the env file .cv.env in secret/ appropriately
 ## Define Appropriate values of resources
 
 Define Appropriate values of resources -
 - CPU requests and limits
 - RAM requests and limits
 - Instance-type for nodeSelector
+- Hostname for cv
 
 in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
