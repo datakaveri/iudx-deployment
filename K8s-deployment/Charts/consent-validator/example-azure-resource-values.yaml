@@ -10,8 +10,8 @@ consentValidator:
   resources:
     limits:
       cpu: 500m
-      memory: 0.6Gi
+      memory: 600Mi
     requests: 
       cpu: 300m
-      memory: 0.4Gi
+      memory: 400Mi
   
