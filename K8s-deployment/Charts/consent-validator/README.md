@@ -17,7 +17,7 @@ secrets/
 └── config.json
 └── keystore
 ```
-Configure the env file .cv.env in secret/ appropriately
+Configure the env file `.cv.env` and `config.jso`n in secret/ appropriately
 ## Define Appropriate values of resources
 
 Define Appropriate values of resources -
