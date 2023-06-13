@@ -21,8 +21,7 @@ services:
         condition: on-failure
         delay: 5s
         window: 10s
-    cap_drop:
-      - ALL
+
     logging:
       driver: "json-file"
       options:
@@ -31,7 +30,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   prometheus:
-    image: prom/prometheus:v2.38.0
+    image: prom/prometheus:v2.44.0
     read_only: true
     volumes:
       - type: volume
@@ -68,7 +67,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
  
   loki:
-    image: grafana/loki:2.6.1
+    image: grafana/loki:2.8.2
     read_only: true
     #transfer of logs to loki over overlay
     volumes:
@@ -105,7 +104,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   grafana:
-    image: ghcr.io/datakaveri/grafana:9.1.1
+    image: ghcr.io/datakaveri/grafana:9.5.2
     read_only: true
     volumes:
       - type: volume
@@ -129,8 +128,10 @@ services:
         target: /usr/share/grafana-conf/provisioning/dashboards/config.yaml
       - source: grafana-datasources
         target: /usr/share/grafana-conf/provisioning/datasources/config.yaml
-      - source: grafana-notifiers
-        target: /usr/share/grafana-conf/provisioning/notifiers/config.yaml
+      # - source: grafana-notifiers
+      #   target: /usr/share/grafana-conf/provisioning/notifiers/config.yaml
+      - source: grafana-plugins
+        target: /usr/share/grafana-conf/provisioning/plugins/config.yaml
     deploy:
       replicas: 1
       placement:
@@ -152,7 +153,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   promtail:
-    image: grafana/promtail:2.6.1
+    image: grafana/promtail:2.8.2
     read_only: true
     entrypoint: /run.sh
     user: root
@@ -188,7 +189,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   blackbox:
-    image: prom/blackbox-exporter:v0.22.0
+    image: prom/blackbox-exporter:v0.24.0
     read_only: true
     deploy:
       placement:
@@ -213,7 +214,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.45.0
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
     read_only: true
     command: -logtostderr -docker_only
     volumes:
@@ -266,6 +267,8 @@ configs:
     file: grafana/conf/provisioning/datasources/config.yaml
   grafana-notifiers:
     file: grafana/conf/provisioning/notifiers/config.yaml
+  grafana-plugins:
+    file: grafana/conf/provisioning/plugins/config.yaml
   promtail-settings:
     file:  promtail/conf/promtail-config.yaml  
   promtail-script:
