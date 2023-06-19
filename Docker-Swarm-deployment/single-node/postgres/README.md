@@ -36,6 +36,21 @@ Deploy Postgres stack:
 ```sh
 docker stack deploy -c postgres-stack.yaml -c postgres-stack.resources.yaml postgres
 ```
+## Postgres Users creation
+1. Configure `init-script/db-user-creation-config.json` if any changes required
+2. Bring up the db generator stack(only on clean deployment),
+```sh
+docker stack deploy -c db-user-creation.yaml tmp
+```
+3. Monitor logs to ensure creation
+```sh
+docker service logs tmp_db_user_creation -f
+```
+4. Remove stack, once users are created
+```sh
+docker stack rm tmp
+```
+
 ## RS, auth scehma creation
 The rs and auth schema created using flyway tool. Follow below steps:
 1. Bind/publish/expose the psql port  5432 to host VM temporarily as described in 5th point in note

@@ -1,0 +1,55 @@
+version: "3.9"
+
+networks:
+  default:
+    external: true
+    name: overlay-net
+    driver: overlay
+
+services:
+    db-user-creation:
+      image: ghcr.io/datakaveri/postgres-init:1.0.0
+      read_only: true
+      configs:
+      - source: db-user-creation-config
+        target: /usr/share/app/config.json
+      secrets:
+      - source: postgres-auth-password
+        target: /opt/bitnami/postgresql/secrets/postgres-auth-password
+      - source: postgres-rs-password
+        target: /opt/bitnami/postgresql/secrets/postgres-rs-password
+      - source: postgres-keycloak-password
+        target: /opt/bitnami/postgresql/secrets/postgres-keycloak-password
+      - source: postgresql-password
+        target: /opt/bitnami/postgresql/secrets/postgresql-password
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: on-failure
+        placement:
+          constraints:
+            - "node.labels.postgres-db-node==true"
+      cap_drop:
+        - ALL
+      logging:
+        driver: "json-file"
+        options:
+          max-size: "5m"
+          max-file: "3"
+          tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+
+secrets:
+  postgresql-password:
+    file: secrets/passwords/postgresql-password
+  postgres-keycloak-password:
+    file: secrets/passwords/postgres-keycloak-password                                              
+  postgres-rs-password:
+    file: secrets/passwords/postgres-rs-password                            
+  postgres-auth-password:
+    file: secrets/passwords/postgres-auth-password
+
+
+configs:
+  db-user-creation-config:
+    file: init-scripts/db-user-creation-config.json
