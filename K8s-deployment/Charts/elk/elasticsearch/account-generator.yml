@@ -4,15 +4,12 @@ metadata:
   name: elk-auto-users
 spec:
   ttlSecondsAfterFinished: 100
+  backoffLimit: 4
   template:
     spec:
       containers:
-      - name: job
-        image: curlimages/curl:latest
-        command: ["/usr/bin/share/account-generator.sh"]
-        env:
-          - name: ELASTICSEARCH_HOST
-            value: http://elasticsearch:9200
+      - name: account-generator-job
+        image: ghcr.io/datakaveri/elastic-init:1.0.0
         volumeMounts:
           - name: elk-passwords
             mountPath: /usr/share/secrets/
@@ -25,7 +22,7 @@ spec:
         - name: elk-passwords
           secret: 
             secretName: elk-passwords
-        - name: account-generator
+        - name: account-generator-config
           configMap: 
             name: account-generator-config
             defaultMode: 0555
