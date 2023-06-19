@@ -1,21 +1,12 @@
 #!/bin/bash
 
-if [ $# -gt 0 ]; 
+if [[ $# -eq 0 || $1 == "--staging" ]];
 then
-    exec "$@"
-else
-    # Start acme cron in foreground
-    cron -f &
-
     # Execute cert generation script
-    ./generate-certs.sh
+    ./generate-certs.sh $@
 
     # Start nginx service 
-    ./docker-entrypoint.sh &
-
-    # Wait for next process to exit
-    wait -n
-
-    # Exit with status of process that exited first
-    exit $?
+    ./docker-entrypoint.sh nginx -g "daemon off;"
+else
+    exec "$@"
 fi
