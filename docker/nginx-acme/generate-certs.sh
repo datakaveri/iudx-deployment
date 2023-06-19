@@ -1,10 +1,14 @@
 #!/bin/bash
 
+acme.sh() {
+    /home/.acme.sh/acme.sh --config-home '/acme.sh' "$@"
+}
+
 # Path to the certs/ directory containing certificates 
 certs_directory="/etc/nginx/certs"
 
 # Path to the JSON config file containing hostnames for certificate generation
-config_file="/etc/acme.sh/config.json"
+config_file="/etc/acme.sh/acme-config.json"
 
 # Check if the directory exists
 if [ ! -d "$certs_directory" ];
@@ -83,12 +87,12 @@ if [ ! "${#difference[@]}" -eq 0 ];
 then 
     # Generate new certs
     echo -e "\n---Generating new certs---"
-    set -x
-    acme.sh --issue --standalone --staging $(printf " -d %s" "${difference[@]}")
+    acme.sh --issue --standalone $1 $(printf " -d %s" "${difference[@]}")
 
     # Install generated certs to nginx certs directory
     for hostname in "${difference[@]}"; 
     do
-    acme.sh --install-cert -d $hostname --key-file /nginx/certs/$hostname/key.pem --fullchain-file /nginx/certs/$hostname/cert.pem --reloadcmd 'service nginx force-reload'
+        mkdir /etc/nginx/certs/$hostname
+        acme.sh --install-cert -d $hostname --key-file /etc/nginx/certs/$hostname/key.pem --fullchain-file /etc/nginx/certs/$hostname/cert.pem --reloadcmd 'nginx -s reload'
     done
 fi
