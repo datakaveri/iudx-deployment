@@ -1,0 +1,82 @@
+{
+    "clustered": false,
+    "elastic_username": "elastic",
+    "elastic_password_path": "/run/secrets/elasticsearch-su-password",
+    "elasticsearch_host": "http://elasticsearch:9200",
+
+    "roles": [
+      {
+        "name": "logstash-role",
+        "privileges": ["create"],
+        "indices": ["*"],
+        "cluster": ["monitor"]
+      },
+      {
+        "name": "rs-role",
+        "privileges": ["read"],
+        "indices": ["*"],
+        "cluster": ["monitor"]
+      },
+      {
+        "name": "cat-role",
+        "privileges": ["create", "read", "delete"],
+        "indices": ["*"],
+        "cluster": ["monitor"]
+      },
+      {
+        "name": "fs-role",
+        "privileges": ["read", "write"],
+        "indices": ["*"],
+        "cluster": ["monitor"]
+      },
+      {
+        "name": "monitor-role",
+        "privileges": ["monitor"],
+        "indices": ["*"],
+        "cluster": ["monitor", "monitor_snapshot"]
+      }
+    ],
+  
+    "change_password_users": [
+      {
+        "username": "kibana_system",
+        "password_path": "/run/secrets/kibana-system-password"
+      },
+      {
+        "username": "logstash_system",
+        "password_path": "/run/secrets/logstash-system-password"
+      }
+    ],
+  
+    "remove_users": [],
+    
+    "users": [
+      {
+        "username": "kibana-admin",
+        "password_path": "/run/secrets/kibana-admin-password",
+        "roles": ["kibana_admin", "superuser"]
+      },
+      {
+        "username": "logstash-internal",
+        "password_path": "/run/secrets/logstash-internal-password",
+        "roles": ["logstash-role"]
+      },
+      {
+        "username": "rs-user",
+        "password_path": "/run/secrets/elasticsearch-rs-password",
+        "roles": ["rs-role"]
+      },
+      {
+        "username": "cat-user",
+        "password_path": "/run/secrets/elasticsearch-cat-password",
+        "roles": ["cat-role"]
+      },
+      
+      {
+        "username": "fs-user",
+        "password_path": "/run/secrets/elasticsearch-fs-password",
+        "roles": ["fs-role"]
+      }
+    ]
+  }
+  
