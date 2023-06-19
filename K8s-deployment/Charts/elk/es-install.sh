@@ -6,7 +6,7 @@ kubectl create namespace elastic
 kubectl create secret generic elastic-certificates --from-file=./secrets/pki/elastic-certificates.p12  -n elastic
 kubectl create secret generic elastic-credentials --from-file=elasticsearch-password=./secrets/passwords/elasticsearch-su-password --from-literal=username=elastic -n elastic
 kubectl create secret generic elk-passwords --from-file=./secrets/passwords -n elastic
-kubectl create configmap  account-generator-config --from-file=./elasticsearch/account-generator-config.json -n elastic
+kubectl create configmap  account-generator --from-file=./elasticsearch/account-generator.sh -n elastic
 kubectl create configmap elasticsearch-data-node-config --from-file=./elasticsearch/data-conf/my_elasticsearch.yml -n elastic
 kubectl create configmap elasticsearch-master-node-config --from-file=./elasticsearch/master-conf/my_elasticsearch.yml -n elastic
 kubectl create configmap elastic-java-net-options --from-file=./elasticsearch/java-net.options -n elastic
