@@ -16,14 +16,11 @@ Docker swarm stack for Elasticsearch-logstash-Kibana (ELK) Deployment.
 ```
 ./generate-keystore.sh
 ```
-4. Create S3 bucket and corresponding IAM user with programmatic access to only that bucket. Copy the access-key id and access-secret key to ``secrets/pki/s3-access-key`` and ``secrets/pki/s3-secret-key``
-5. Secrets directory after generation of secrets
+4. Secrets directory after generation of secrets
 
-## Required secrets
 ```sh
 secrets/
 ├── keystores
-│   ├── elasticsearch.keystore
 │   ├── kibana.keystore
 │   └── logstash.keystore
 ├── passwords
@@ -31,19 +28,30 @@ secrets/
 │   ├── elasticsearch-fs-password
 │   ├── elasticsearch-rs-password
 │   ├── elasticsearch-su-password
+│   ├── es-password.env
 │   ├── kibana-admin-password
 │   ├── kibana-admin-username
 │   ├── kibana-system-password
 │   ├── logstash-internal-password
 │   ├── logstash-rabbitmq-password
 │   ├── logstash-rabbitmq-username
-│   └── logstash-system-password
+│   ├── logstash-system-password
+│   └── snapshot-credentials.env
 └── pki
     ├── s3-access-key
     └── s3-secret-key
 ```
 
-Please see the example-secrets directory to get more idea, can use the 'secrets' in that directory by copying into root database directory  for demo or local testing purpose only! The kibana is tls secured through centralised nginx.
+5. Snapshot and Restore 
+For AWS-S3, define the `s3-access-key` and `s3-secret-key` in file `secrets/passwords/snapshot-credentials.env` as shown below
+```
+ELASTICSEARCH_KEYS=s3.client.default.access_key=<s3-access-key>,s3.client.default.secret_key=<s3-secret-key>
+```
+
+For Azure-Blob-Storage, define the `storage-account-name` and `storage-access-key` in `secrets/passwords/snapshot-credentials.env` as shown below
+```
+ELASTICSEARCH_KEYS=azure.client.default.account=<storage_account_name>,azure.client.default.key=<access-key> 
+```
 
 ## Assign node labels
 
@@ -86,5 +94,3 @@ docker stack rm tmp
 docker stack deploy -c database-stack.yaml -c database-stack.resources.yaml -c database-stack.custom.yaml database
 ```
 This is generally useful in local, dev/test environment.
-
-

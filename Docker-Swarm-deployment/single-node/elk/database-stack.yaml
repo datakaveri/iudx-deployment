@@ -7,7 +7,7 @@ networks:
 
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
+    image: docker.io/bitnami/elasticsearch:8.7.0-debian-11-r2
     deploy:
       replicas: 1
       placement:
@@ -19,9 +19,17 @@ services:
         window: 10s
     networks:
       - overlay-net
+    env_file:
+      - secrets/passwords/es-password.env
+      - secrets/passwords/snapshot-credentials.env
+    environment:
+      - ELASTICSEARCH_ENABLE_SECURITY=true
+      - ELASTICSEARCH_TLS_VERIFICATION_MODE=certificate
+      - ELASTICSEARCH_KEYSTORE_LOCATION=/opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12
+      - ELASTICSEARCH_TRUSTSTORE_LOCATION=/opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12
     configs:
       - source: elasticsearch-config
-        target:  /usr/share/elasticsearch/config/elasticsearch.yml
+        target: /opt/bitnami/elasticsearch/config/my_elasticsearch.yml
     logging:
       driver: "json-file"
       options:
@@ -30,17 +38,14 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     volumes:
       - type: volume
-        source: elastic-volume
-        target: /usr/share/elasticsearch/data
+        source: elastic-update-volume
+        target: /bitnami/elasticsearch/data
     secrets:
-      - source: elasticsearch.keystore
-        target: /usr/share/elasticsearch/config/elasticsearch.keystore
-        
       - source: elastic.certificates
-        target: /usr/share/elasticsearch/config/certs/elastic-certificates.p12 
+        target: /opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12 
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.3.3
+    image: docker.io/bitnami/kibana:8.7.0-debian-11-r0
     deploy:
       replicas: 1
       placement:
@@ -55,22 +60,24 @@ services:
     networks:
       - overlay-net
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - SERVER_PUBLICBASEURL=https://<public-url>
+      - KIBANA_ELASTICSEARCH_URL=http://elasticsearch:9200
+      - KIBANA_ELASTICSEARCH_PORT_NUMBER=9200
+      - KIBANA_PORT_NUMBER=5601
+      - KIBANA_ELASTICSEARCH_ENABLE_TLS=false
+      - KIBANA_ELASTICSEARCH_TLS_USE_PEM=false
+      - KIBANA_ELASTICSEARCH_TLS_VERIFICATION_MODE=none
     logging:
       driver: "json-file"
       options:
         max-size: "5m"
         max-file: "3"
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
-
     secrets:
       - source: kibana.keystore
-        target: /usr/share/kibana/data/kibana.keystore
+        target: /opt/bitnami/kibana/config/kibana.keystore
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:8.3.3
-
+    image: docker.io/bitnami/logstash:8.7.0-debian-11-r0
     deploy:
       replicas: 1
       placement:
@@ -84,31 +91,34 @@ services:
       - ALL
     volumes:
       - type: volume
-        source: logstash-volume
-        target: /usr/share/logstash/data
+        source: logstash-update-volume
+        target: /opt/bitnami/logstash/data
+    environment:
+      - BITNAMI_DEBUG=false
+      - LOGSTASH_ENABLE_MULTIPLE_PIPELINES=yes
+      - LOGSTASH_EXPOSE_API=yes
+      - LOGSTASH_API_PORT_NUMBER=9600
+      - LOGSTASH_DATA_DIR=/opt/bitnami/logstash/data
     logging:
       driver: "json-file"
       options:
         max-size: "5m"
         max-file: "3"
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
-
     networks:
       - overlay-net
     secrets:
       - source: logstash.keystore
-        target: /usr/share/logstash/config/logstash.keystore
+        target: /opt/bitnami/logstash/config/logstash.keystore
     configs:
       - source: logstash-pipelines
-        target: /usr/share/logstash/config/pipelines.yml
+        target: /bitnami/logstash/config/pipelines.yaml
       - source: logstash-settings
-        target: /usr/share/logstash/config/logstash.yml
+        target: /bitnami/logstash/config/logstash.yaml
       - source: logstash-resource-group-pipeline
-        target: /usr/share/logstash/pipeline/resource-group.cfg
+        target: /bitnami/logstash/pipeline/resource-group.conf
 
 secrets:
-  elasticsearch.keystore:
-    file: secrets/keystores/elasticsearch.keystore
   kibana.keystore:
     file: secrets/keystores/kibana.keystore
   logstash.keystore:
@@ -117,16 +127,15 @@ secrets:
     file: secrets/pki/elastic-certificates.p12
 
 volumes:
-  elastic-volume:
-  logstash-volume:
+  elastic-update-volume:
+  logstash-update-volume:
 
 configs:
   elasticsearch-config:
-    file: elasticsearch/elasticsearch.yml
+    file: elasticsearch/elasticsearch.yaml
   logstash-pipelines:
     file: logstash/settings/pipelines.yaml
   logstash-settings:
     file: logstash/settings/logstash.yaml
   logstash-resource-group-pipeline:
     file: logstash/pipeline/resource-group.cfg
-
