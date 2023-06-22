@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/consent-validator
-  tag: 1.0.0-alpha-4b0a2bf
+  tag: 1.0.0-alpha-f8c2ed9
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -125,7 +125,7 @@ consentValidator:
   ## @param consentValidator.livenessProbe.path Path for httpGet
   ##
   livenessProbe:
-    enabled: false
+    enabled: true
     path: /metrics
     initialDelaySeconds: 60
     periodSeconds: 60
