@@ -55,6 +55,8 @@ services:
         target: /etc/nginx/conf.d/grafana.conf
       - source: acme-conf
         target: /etc/acme.sh/acme-config.json
+      - source: root-doc
+        target: /etc/nginx/http/root-doc.html
 
     logging:
       driver: "json-file"
@@ -85,6 +87,8 @@ configs:
     file: conf/grafana.conf
   acme-conf:
     file: conf/acme-config.json
+  root-doc:
+    file: conf/root-doc.html
 
 volumes:
   acme-data:
