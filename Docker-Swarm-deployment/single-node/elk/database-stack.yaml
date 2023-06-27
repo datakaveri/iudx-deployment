@@ -93,6 +93,8 @@ services:
       - type: volume
         source: logstash-update-volume
         target: /opt/bitnami/logstash/data
+    env_file:
+        - ./secrets/.logstash.env
     environment:
       - BITNAMI_DEBUG=false
       - LOGSTASH_ENABLE_MULTIPLE_PIPELINES=yes

@@ -113,7 +113,7 @@ extraEnvVars:
 extraEnvVarsSecret: ""
 ## @param extraEnvVarsCM To add configmaps to environment
 ##
-extraEnvVarsCM: ""
+extraEnvVarsCM: "logstash-env"
 ## @param input [string] Input Plugins configuration
 ## ref: https://www.elastic.co/guide/en/logstash/current/input-plugins.html
 ##
