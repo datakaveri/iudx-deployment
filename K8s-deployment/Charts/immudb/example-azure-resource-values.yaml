@@ -1,6 +1,6 @@
 immudb:
   nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2ms
+    node.kubernetes.io/instance-type: Standard_D2as_v4
   resources:
     limits:
       cpu: 1800m
@@ -9,7 +9,7 @@ immudb:
       cpu: 1500m
       memory: 7Gi
   persistence:
-    storageClass: "azuredisk-storage-class"
+    storageClass: "azuredisk-csi-storage-class"
     size: 80Gi
   install:
     createUsers: true
