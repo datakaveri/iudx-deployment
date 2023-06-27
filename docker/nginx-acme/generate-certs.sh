@@ -85,13 +85,17 @@ fi
 
 if [ ! "${#difference[@]}" -eq 0 ];
 then 
+    #set default CA to letsencrypt
+    echo -e "\n---Setting default CA to LetsEncrypt---"
+    acme.sh  --set-default-ca  --server letsencrypt
+
     # Generate new certs
     echo -e "\n---Generating new certs---"
-    acme.sh --issue --standalone $1 $(printf " -d %s" "${difference[@]}")
 
-    # Install generated certs to nginx certs directory
     for hostname in "${difference[@]}"; 
     do
+        acme.sh --issue --standalone $1 $(printf " -d %s" "${hostname}")
+        # Install generated certs to nginx certs directory
         mkdir /etc/nginx/certs/$hostname
         acme.sh --install-cert -d $hostname --key-file /etc/nginx/certs/$hostname/key.pem --fullchain-file /etc/nginx/certs/$hostname/cert.pem --reloadcmd 'nginx -s reload'
     done
