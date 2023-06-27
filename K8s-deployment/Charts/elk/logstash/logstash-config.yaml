@@ -22,7 +22,7 @@ data:
         host => "rabbitmq.rabbitmq.svc.cluster.local"
         port => 5671
         ssl => true
-        vhost => "IUDX"
+        vhost => "${RABBITMQ_VHOST}"
         user => "${rabbitmq_username}"
         password => "${rabbitmq_password}"
         queue => "database"
@@ -45,6 +45,7 @@ data:
         manage_template => false
         user => "${elasticsearch_username}"
         password => "${elasticsearch_password}"
-        index => "%{[@metadata][rabbitmq_properties][exchange]}"
+        index => "${INDEX_PREFIX}__%{[@metadata][rabbitmq_properties][exchange]}"
       }
     }
+
