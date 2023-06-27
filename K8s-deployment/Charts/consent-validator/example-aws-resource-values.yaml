@@ -1,0 +1,16 @@
+ingress:
+  hostname: cv-hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+
+consentValidator:
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.medium
+  resources:
+    limits:
+      cpu: 500m
+      memory: 600Mi
+    requests: 
+      cpu: 300m
+      memory: 400Mi
