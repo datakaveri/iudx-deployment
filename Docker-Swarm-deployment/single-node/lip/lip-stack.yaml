@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   lip:
-    image: ghcr.io/datakaveri/lip-depl:4.5.0-8562630
+    image: ghcr.io/datakaveri/lip-depl:4.5.0-68ebc51
     read_only: true
     cap_drop:
       - ALL
