@@ -19,14 +19,14 @@ while True:
 
 # Login through default passowrd
 client = ImmudbClient("{0}:3322".format(config['immudb_host']))
-client.login("immudb","immudb")
+client.login(config['immudb_default_user'],config['immudb_default_user_password'])
 
 # Changing the admin passowrd
-f = open(config['admin_password'],"r")
-ADMIN_PASSWORD = f.read()
-
-client.changePassword("immudb",ADMIN_PASSWORD,"immudb")
-client.login("immudb",ADMIN_PASSWORD)
+if config['change_admin_password']:
+    f = open(config['admin_password'],"r")
+    ADMIN_PASSWORD = f.read()
+    client.changePassword(config['immudb_default_user'],ADMIN_PASSWORD,config['immudb_default_user_password'])
+    client.login(config['immudb_default_user'],ADMIN_PASSWORD)
 
 # Creating database, tables and updating index settings
 for database in config['database']:
