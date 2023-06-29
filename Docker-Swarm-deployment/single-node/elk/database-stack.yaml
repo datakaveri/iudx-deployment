@@ -72,6 +72,9 @@ services:
         max-size: "5m"
         max-file: "3"
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    configs:
+      - source: kibana-config
+        target: /bitnami/kibana/conf/kibana.yml
     secrets:
       - source: kibana.keystore
         target: /opt/bitnami/kibana/config/kibana.keystore
@@ -141,3 +144,5 @@ configs:
     file: logstash/settings/logstash.yaml
   logstash-resource-group-pipeline:
     file: logstash/pipeline/resource-group.cfg
+  kibana-config:
+    file: kibana/kibana.yaml
