@@ -108,6 +108,8 @@ RUN mkdir /etc/nginx/certs \
 RUN adduser --uid 1001 --disabled-password nginx-acme \
     && usermod -a -G crontab nginx-acme
 
+# Copy index html folder 
+COPY html/ /etc/nginx/http/html/
 #Switch to acme-cron user
 USER 1001
 
