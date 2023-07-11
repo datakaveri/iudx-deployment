@@ -1,0 +1,46 @@
+version: '3.9'
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  consent:
+    image: iudx/consent-dev:latest
+    env_file:
+      - ./secrets/.consent.env
+    secrets:
+      - source: config
+        target: /usr/share/app/configs/config.json
+      - source: keystore
+        target: /usr/share/app/configs/keystore.jks
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.consent-node==true"
+    cap_drop:
+      - ALL
+    volumes:
+      - type: tmpfs
+        target: /tmp/
+        read_only: false
+    logging:
+         driver: "json-file"
+         options:
+             max-file: "5"
+             max-size: "100m"
+    command: bash -c "exec java  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c configs/config.json"
+
+secrets:
+  config:
+    file: ./secrets/config.json
+  keystore:
+    file: ./secrets/keystore.jks
+
