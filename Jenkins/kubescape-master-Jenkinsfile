@@ -1,0 +1,145 @@
+pipeline {
+  agent {
+    node {
+      label 'built-in'
+    }
+  }
+
+
+  stages {
+    // Stage for Kubescape Scan for Resource Server
+    stage('Kubescape Scan for RS') {
+      when {
+        anyOf {
+          // Trigger the stage if any changes are detected in the specified files or Jenkinsfile
+          changeset "K8s-deployment/Charts/resource-server/templates/*"
+          changeset "K8s-deployment/Charts/resource-server/values.yaml"
+          changeset "Jenkins/RS-Jenkinsfile"
+        }
+      }
+      steps {
+                // Build the kubescape-rs job with the commit and pull request ID as parameters
+                build job: 'kubescape-rs', parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit"), string(name: 'ghprbPullId', value: "$ghprbPullId")]
+
+      }
+    }
+    
+
+
+    // Stage for Kubescape Scan for Auth Server
+    stage('Kubescape Scan for Auth') {
+      when {
+        anyOf {
+          // Trigger the stage if any changes are detected in the specified files or Jenkinsfile
+          changeset "K8s-deployment/Charts/auth-server/templates/*"
+          changeset "K8s-deployment/Charts/auth-server/values.yaml"
+          changeset "Jenkins/Auth-Jenkinsfile"
+        }
+      }
+      steps {
+                // Build the kubescape-auth job with the commit and pull request ID as parameters
+                build job: 'kubescape-auth', parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit"), string(name: 'ghprbPullId', value: "$ghprbPullId")]
+
+      }
+    }
+
+    // Stage for Kubescape Scan for CAT Server
+    stage('Kubescape Scan for CAT') {
+      when {
+        anyOf {
+          // Trigger the stage if any changes are detected in the specified files or Jenkinsfile
+          changeset "K8s-deployment/Charts/catalogue/templates/*"
+          changeset "K8s-deployment/Charts/catalogue/values.yaml"
+          changeset "Jenkins/Cat-Jenkinsfile"        }
+      }
+      steps {
+                // Build the kubescape-cat job with the commit and pull request ID as parameters
+                build job: 'kubescape-cat', parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit"), string(name: 'ghprbPullId', value: "$ghprbPullId")]
+      }
+    }
+
+    // Stage for Kubescape Scan for LIP Server
+    stage('Kubescape Scan for LIP') {
+      when {
+        anyOf {
+          // Trigger the stage if any changes are detected in the specified files or Jenkinsfile
+          changeset "K8s-deployment/Charts/latest-ingestion-pipeline/templates/*"
+          changeset "K8s-deployment/Charts/latest-ingestion-pipeline/values.yaml" 
+          changeset "Jenkins/LIP-Jenkinsfile"       }
+      }
+      steps {
+                // Build the kubescape-lip job with the commit and pull request ID as parameters
+                build job: 'kubescape-lip', parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit"), string(name: 'ghprbPullId', value: "$ghprbPullId")]
+      }
+    }
+
+    // Stage for Kubescape Scan for FS Server
+    stage('Kubescape Scan for FS') {
+      when {
+        anyOf {
+          // Trigger the stage if any changes are detected in the specified files or Jenkinsfile
+          changeset "K8s-deployment/Charts/file-server/templates/*"
+          changeset "K8s-deployment/Charts/file-server/values.yaml"    
+          changeset "Jenkins/FS-Jenkinsfile"    }
+      }
+      steps {
+                // Build the kubescape-fs job with the commit and pull request ID as parameters
+                build job: 'kubescape-fs', parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit"), string(name: 'ghprbPullId', value: "$ghprbPullId")]
+
+      }
+    }
+
+    // Stage for Kubescape Scan for GIS Server
+    stage('Kubescape Scan for GIS') {
+      when {
+        anyOf {
+          // Trigger the stage if any changes are detected in the specified files or Jenkinsfile
+          changeset "K8s-deployment/Charts/gis-interface/templates/*"
+          changeset "K8s-deployment/Charts/gis-interface/values.yaml"
+          changeset "Jenkins/GIS-Jenkinsfile"        }
+      }
+      steps {
+                // Build the kubescape-gis job with the commit and pull request ID as parameters
+                build job: 'kubescape-gis', parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit"), string(name: 'ghprbPullId', value: "$ghprbPullId")]
+
+      }
+    }
+
+    // Stage for Kubescape Scan for DI Server
+    stage('Kubescape Scan for DI') {
+      when {
+        anyOf {
+          // Trigger the stage if any changes are detected in the specified files or Jenkinsfile
+          changeset "K8s-deployment/Charts/data-ingestion/templates/*"
+          changeset "K8s-deployment/Charts/data-ingestion/values.yaml"     
+          changeset "Jenkins/DI-Jenkinsfile"   }
+      }
+      steps {
+                // Build the kubescape-di job with the commit and pull request ID as parameters
+                build job: 'kubescape-di', parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit"), string(name: 'ghprbPullId', value: "$ghprbPullId")]
+
+      }
+    }
+    // Stage for Kubescape Scan for Auditing Server
+    stage('Kubescape Scan for Auditing Server') {
+      when {
+        anyOf {
+          // Trigger the stage if any changes are detected in the specified files or Jenkinsfile
+          changeset "K8s-deployment/Charts/auditing-server/templates/*"
+          changeset "K8s-deployment/Charts/auditing-server/values.yaml"  
+          changeset "Jenkins/Auditing-Jenkinsfile"      }
+      }
+      steps {
+                // Build the kubescape-auditing job with the commit and pull request ID as parameters
+                build job: 'kubescape-auditing', parameters: [string(name: 'ghprbActualCommit', value: "$ghprbActualCommit"), string(name: 'ghprbPullId', value: "$ghprbPullId")]
+
+      }
+    }   
+  }
+}
+
+
+
+
+
+
