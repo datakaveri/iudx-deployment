@@ -6,13 +6,13 @@ services:
         - ALL
       environment:
         - REDIS_PASSWORD_FILE=/run/secrets/admin-password
-      command: /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so
+      command: bash -c "cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf; /opt/bitnami/scripts/redis/entrypoint.sh /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so"
       read_only: true
       volumes:
         - type: volume
           source: redis-persistence
           target: /bitnami/redis/data
-#Anonymous volume, https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes-for-services-swarms-and-stack-files 
+        #Anonymous volume, https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes-for-services-swarms-and-stack-files 
         - type: volume
           target: /opt/bitnami/
           volume:
@@ -20,7 +20,7 @@ services:
           read_only: false
       configs: 
         - source: redis-conf
-          target: /opt/bitnami/redis/mounted-etc/overrides.conf
+          target: /opt/bitnami/redis/etc/redis-default.conf
       networks:
         - overlay-net
       secrets:
