@@ -6,7 +6,7 @@ services:
         - ALL
       environment:
         - REDIS_PASSWORD_FILE=/run/secrets/admin-password
-      command: bash -c "cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf; /opt/bitnami/scripts/redis/entrypoint.sh /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so"
+      command: bash -c "/opt/bitnami/scripts/redis/entrypoint.sh /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so"
       read_only: true
       volumes:
         - type: volume
@@ -20,7 +20,7 @@ services:
           read_only: false
       configs: 
         - source: redis-conf
-          target: /opt/bitnami/redis/etc/redis-default.conf
+          target: /opt/bitnami/redis/mounted-etc/overrides.conf
       networks:
         - overlay-net
       secrets:
