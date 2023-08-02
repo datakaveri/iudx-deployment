@@ -9,12 +9,16 @@ Docker swarm stack for IUDX Consent-Validation Deployment
  cp -r example-secrets/secrets .
 ```
 2. Substitute appropriate values using commands whatever mentioned in config files. Configure the secrets/.consent.env file with appropriate values 
-3. Secrets directory after generation of secret files
-```sh
+3. Generate a keystore  for JWT signing using following command:
+    ```sh
+    keytool -genkeypair -keystore secrets/keystore.jks -storetype jks -storepass  <keystore-password> -keyalg EC -alias ES256 -keypass <keystore-password>  -sigalg SHA256withECDSA -dname "CN=,OU=,O=,L=,ST=,C=" -validity 360 -deststoretype pkcs12
+    ```sh
+4. Secrets directory after generation of secret files
 secrets/
 ├── config.json
 └── .consent.env
-```
+└── keystore.jks 
+
 
 ## Assign node labels
  
