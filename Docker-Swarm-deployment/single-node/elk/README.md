@@ -16,32 +16,37 @@ Docker swarm stack for Elasticsearch-logstash-Kibana (ELK) Deployment.
 ```
 ./generate-keystore.sh
 ```
-4. Provide the appropriate values for env in `secrets/.logstash.env`
+4. Generate certs 
+```
+./generate-certs.sh
+```
+5. Provide the appropriate values for env in `secrets/.logstash.env`
 
-5. Secrets directory after generation of secrets
+6. Secrets directory after generation of secrets
 ```sh
 secrets/
-├── .logstash.env
 ├── keystores
-│   ├── kibana.keystore
-│   └── logstash.keystore
+│   ├── kibana.keystore
+│   └── logstash.keystore
 ├── passwords
-│   ├── elasticsearch-cat-password
-│   ├── elasticsearch-fs-password
-│   ├── elasticsearch-rs-password
-│   ├── elasticsearch-su-password
-│   ├── es-password.env
-│   ├── kibana-admin-password
-│   ├── kibana-admin-username
-│   ├── kibana-system-password
-│   ├── logstash-internal-password
-│   ├── logstash-rabbitmq-password
-│   ├── logstash-rabbitmq-username
-│   ├── logstash-system-password
-│   └── snapshot-credentials.env
+│   ├── elasticsearch-cat-password
+│   ├── elasticsearch-fs-password
+│   ├── elasticsearch-rs-password
+│   ├── elasticsearch-su-password
+│   ├── es-password.env
+│   ├── kibana-admin-password
+│   ├── kibana-admin-username
+│   ├── kibana-system-password
+│   ├── logstash-internal-password
+│   ├── logstash-rabbitmq-password
+│   ├── logstash-rabbitmq-username
+│   ├── logstash-system-password
+│   └── snapshot-credentials.env
 └── pki
-    ├── s3-access-key
-    └── s3-secret-key
+	├── elastic-certificates.p12
+	├── elastic-stack-ca.p12
+	├── s3-access-key
+	└── s3-secret-key
 ```
 
 5. Snapshot and Restore 
@@ -54,7 +59,7 @@ For Azure-Blob-Storage, define the `storage-account-name` and `storage-access-ke
 ```
 ELASTICSEARCH_KEYS=azure.client.default.account=<storage_account_name>,azure.client.default.key=<access-key> 
 ```
-
+6. Deifine approriate domain for kibana in kibana/kibana.yaml
 ## Assign node labels
 
 ```sh
