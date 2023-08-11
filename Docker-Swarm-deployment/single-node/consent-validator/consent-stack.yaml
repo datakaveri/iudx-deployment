@@ -13,9 +13,9 @@ services:
     read_only: true
     secrets:
       - source: config
-        target: /usr/share/app/configs/config.json
+        target: /usr/share/app/secrets/configs/config.json
       - source: keystore
-        target: /usr/share/app/configs/keystore.jks
+        target: /usr/share/app/secrets/keystore.jks
     networks:
       - overlay-net
     deploy:
@@ -37,7 +37,7 @@ services:
          options:
              max-file: "5"
              max-size: "10m"
-    command: bash -c "exec java  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c configs/config.json"
+    command: bash -c "exec java  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
 
 secrets:
   config:
