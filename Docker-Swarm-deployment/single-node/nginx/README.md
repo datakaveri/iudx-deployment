@@ -3,21 +3,15 @@
 * Its modeled similar to K8s nginx ingress and routing to different IUDX servers is based on hostname. 
 * Each IUDX server proxy is implemented in seperate nginx virtual server.
 * [acme.sh](https://github.com/acmesh-official/acme.sh#an-acme-shell-script-acmesh) is bundled with nginx which handles automated generation and renewal of letsencrypt certificates for all configured domains using https01 challenge.
+
+## Create secret files
+1. Make a copy of sample secrets directory. This contains self signed certficiates
+```console
+ cp -r example-secrets/secrets .
+```
+
 ## Project structure
 ```sh
-.
-├── example-configs
-│   └── conf
-│       ├── default.conf
-│       ├── error.conf
-│       ├── grafana.conf
-│       ├── keycloak.conf
-│       ├── kibana.conf
-│       ├── nginx.conf
-│       └── cos.conf
-├── example-nginx-stack.resources.yaml
-├── nginx-stack.yaml
-└── README.md
 ```
 
 # Install
@@ -43,10 +37,14 @@ in `nginx-stack.resources.yaml`  for nginx as shown in sample resource-values fi
 cp -r example-configs/conf .
 ```
 
-2. For each nginx server configuration in conf/ (except for error.conf, default.conf file), substitute appropiate domain name next to ``server_name`` directive. 
+2. For each nginx server configuration in conf/ that would be used (some of the config might not be used for particular deployment, in that case no need to do any changes for those configs and also no changes  for error.conf, default.conf file), substitute appropiate domain name next to ``server_name`` directive and path of certificates (by default points to self signed certificates)
 Example:- If cos domain is ``cos-domain.iudx.org`` , then susbitiute it in conf/cos.conf as follows :
 ```
-        server_name         cos.iudx.org;
+        server_name         cos-domain.iudx.org;
+
+        ssl_certificate     /etc/nginx/certs/cos-domain.iudx.org/cert.pem;
+        ssl_certificate_key /etc/nginx/certs/cos-domain.iudx.org/key.pem;
+
 ```
 
 3. For each domain that needs a certificate generated, add domain names in [conf/acme-config.json] (./example-configs/conf/acme-config.json)
@@ -59,7 +57,8 @@ Example:-
     ]
 }
 ```
-
+### Note
+1. If this needs to be tried local machine, you can use self signed certificates (default-ssl) and not generate certficates through acme by putting empty array for hostnames in acme-config.json.
 ## Deploy
 Deploy nginx stack:
 ```sh
