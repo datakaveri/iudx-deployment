@@ -38,6 +38,11 @@ services:
       - target: 80
         published: 80
         mode: host
+    secrets:
+      - source: cert
+        target: /etc/nginx/certs/default-ssl/cert.pem
+      - source: key
+        target: /etc/nginx/certs/default-ssl/key.pem 
     configs:
       - source: nginx-conf
         target: /etc/nginx/nginx.conf
@@ -55,6 +60,20 @@ services:
         target: /etc/nginx/conf.d/grafana.conf
       - source: acme-conf
         target: /etc/acme.sh/acme-config.json
+      - source: rs-conf
+        target: /etc/nginx/conf.d/rs.conf
+      - source: cat-conf
+        target: /etc/nginx/conf.d/cat.conf
+      - source: auth-conf
+        target: /etc/nginx/conf.d/auth.conf
+      - source: fs-conf
+        target: /etc/nginx/conf.d/fs.conf
+      - source: rs-proxy-conf
+        target: /etc/nginx/conf.d/rs-proxy.conf
+      - source: di-conf
+        target: /etc/nginx/conf.d/di.conf
+      - source: gis-conf
+        target: /etc/nginx/conf.d/dis.conf
 
     logging:
       driver: "json-file"
@@ -85,6 +104,25 @@ configs:
     file: conf/grafana.conf
   acme-conf:
     file: conf/acme-config.json
+  fs-conf:
+    file: conf/fs.conf
+  rs-conf:
+    file: conf/rs.conf
+  gis-conf:
+    file: conf/gis.conf
+  rs-proxy-conf:
+    file: conf/rs-proxy.conf
+  auth-conf:
+    file: conf/auth.conf
+  di-conf:
+    file: conf/di.conf
+  cat-conf:
+    file: conf/cat.conf
+secrets:
+  cert:
+    file: secrets/pki/fullchain.pem
+  key:
+    file: secrets/pki/privkey.pem
 
 volumes:
   acme-data:
