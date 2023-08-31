@@ -73,7 +73,10 @@ services:
       - source: di-conf
         target: /etc/nginx/conf.d/di.conf
       - source: gis-conf
-        target: /etc/nginx/conf.d/dis.conf
+        target: /etc/nginx/conf.d/gis.conf
+      - source: onboarding-conf
+        target: /etc/nginx/conf.d/onboarding.conf
+
 
     logging:
       driver: "json-file"
@@ -118,6 +121,9 @@ configs:
     file: conf/di.conf
   cat-conf:
     file: conf/cat.conf
+  onboarding-conf:
+    file: conf/onboarding.conf
+
 secrets:
   cert:
     file: secrets/pki/fullchain.pem
