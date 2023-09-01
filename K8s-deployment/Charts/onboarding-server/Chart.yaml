@@ -1,6 +1,6 @@
 apiVersion: v2
-name: auditingServer
-description: A Helm chart for Auditing Server
+name: onboardingServer
+description: A Helm chart for Onboarding Server
 
 # A chart can be either an 'application' or a 'library' chart.
 #
