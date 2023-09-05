@@ -7,9 +7,12 @@ networks:
 
 services:
   acl-apd:
-    image: ghcr.io/datakaveri/acl-apd-depl:5.0.0
+    image: iudx/acl-apd-depl:latest
     env_file:
       - ./secrets/.apd.env
+    read_only: true
+    cap_drop:
+      - ALL
     volumes:
       - type: tmpfs
         target: /tmp/
