@@ -28,18 +28,23 @@ if config['change_admin_password']:
     client.changePassword(config['immudb_default_user'],ADMIN_PASSWORD,config['immudb_default_user_password'])
     client.login(config['immudb_default_user'],ADMIN_PASSWORD)
 
-# Creating database, tables and updating index settings
-for database in config['database']:
-    client.createDatabase(database['database_name'])
-    client.useDatabase(database['database_name'])
-    client.sqlExec("CREATE TABLE {0};".format(database['table']))
-    client.sqlExec("CREATE INDEX ON {0};".format(database['indexing_on']))
-    client.updateDatabaseV2("{0}".format(database['database_name']), datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings( flushThreshold=database['flush_threshold'], syncThreshold=database['sync_threshold'], cleanupPercentage=database['cleanup_percentage']),))
+
+# Creating database and use the same for tables
+client.createDatabase(config['database'])
+client.useDatabase(config['database'])
+
+
+# Creating tables and updating index settings
+for info in config['tables']:
+    client.sqlExec("CREATE TABLE {0};".format(info['table']))
+    client.sqlExec("CREATE INDEX ON {0};".format(info['indexing_on']))
+    client.updateDatabaseV2("{0}".format(config['database']), datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings( flushThreshold=info['flush_threshold'], syncThreshold=info['sync_threshold'], cleanupPercentage=info['cleanup_percentage']),))
     print(client.listTables())
 
 # Creating user
 for users in config['users']:
     f = open(users['password'],"r")
     PASSWORD = f.read()
-    client.createUser( users['username'],PASSWORD,immudb.constants.PERMISSION_RW,users['database_name'])
+    permission = getattr(immudb.constants, f'PERMISSION_{users["permissions"]}')
+    client.createUser( users['username'],PASSWORD, permission ,users['database_name'])
 
