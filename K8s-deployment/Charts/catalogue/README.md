@@ -6,10 +6,17 @@ Helm Chart for IUDX Catalogue Server Deployment
 
 ## Create secret files
 
-Make a copy of sample secrets directory and add appropriate values to all files.
+1. Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
  cp -r example-secrets/secrets .
+```
+2. Substitute appropriate values using commands whatever mentioned in config files. Configure the secrets/.cat.env file with appropriate values in the place holders “<>”.
+3. Following config options are only need to be configured if its deployed as UAC catalogue, or else it can
+   be left as is :
+```
+      "keycloakServerHost": "https://{{keycloak-domain}}/auth/realms/demo",
+      "certsEndpoint": "/protocol/openid-connect/certs"
 ```
 
 ```
