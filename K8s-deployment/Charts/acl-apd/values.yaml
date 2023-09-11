@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/acl-apd-depl
-  tag: 5.0.0-alpha-074c1cc
+  tag: 5.0.0-alpha-66870e9
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

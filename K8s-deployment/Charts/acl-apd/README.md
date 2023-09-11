@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------- | ------------------------------------------ | -------------------- |
 | `image.registry`            | image registry                             | `ghcr.io`            |
 | `image.repository`          | image repository                           | `datakaveri/acl-apd-depl` |
-| `image.tag`                 | image tag (immutable tags are recommended) | `5.0.0-alpha-074c1cc`        |
+| `image.tag`                 | image tag (immutable tags are recommended) | `5.0.0-alpha-66870e9`        |
 | `image.pullPolicy`          | image pull policy                          | `IfNotPresent`       |
 | `image.pullSecrets`         | image pull secrets                         | `{}`                 |
 | `image.debug`               | Enable image debug mode                    | `false`              |
