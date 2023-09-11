@@ -31,15 +31,16 @@ if config['change_admin_password']:
 
 # Creating database and use the same for tables
 client.createDatabase(config['database'])
+print("Created Database: {0}".format(config['database']))
 client.useDatabase(config['database'])
+client.updateDatabaseV2("{0}".format(config['database']), datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings( flushThreshold=config['flush_threshold'], syncThreshold=config['sync_threshold'], cleanupPercentage=config['cleanup_percentage']),))
 
 
 # Creating tables and updating index settings
 for info in config['tables']:
     client.sqlExec("CREATE TABLE {0};".format(info['table']))
     client.sqlExec("CREATE INDEX ON {0};".format(info['indexing_on']))
-    client.updateDatabaseV2("{0}".format(config['database']), datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings( flushThreshold=info['flush_threshold'], syncThreshold=info['sync_threshold'], cleanupPercentage=info['cleanup_percentage']),))
-    print(client.listTables())
+print("Created Tables: ",client.listTables())
 
 # Creating user
 for users in config['users']:
@@ -47,4 +48,6 @@ for users in config['users']:
     PASSWORD = f.read()
     permission = getattr(immudb.constants, f'PERMISSION_{users["permissions"]}')
     client.createUser( users['username'],PASSWORD, permission ,users['database_name'])
+    print("Created User: {0}".format(users['username']))
+
 
