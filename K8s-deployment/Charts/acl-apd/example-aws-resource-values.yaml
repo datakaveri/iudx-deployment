@@ -1,0 +1,91 @@
+ingress:
+  hostname: acl-apd-hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+
+## apiServer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param apiServer.resources.limits The resources limits for the apiServer containers
+## @param apiServer.resources.requests The requested resources for the apiServer containers
+##
+apiServer:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.medium
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi
+
+## policy resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param policy.resources.limits The resources limits for the policy containers
+## @param policy.resources.requests The requested resources for the policy containers
+##
+policy:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.medium
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi
+
+## notification resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param notification.resources.limits The resources limits for the notification containers
+## @param notification.resources.requests The requested resources for the notification containers
+##
+notification:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.medium
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi
+
+## authentication resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param authentication.resources.limits The resources limits for the authentication containers
+## @param authentication.resources.requests The requested resources for the authentication containers
+##
+authenticator:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.medium
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi
+
+
+## auditing resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param auditing.resources.limits The resources limits for the auditing containers
+## @param auditing.resources.requests The requested resources for the auditing containers
+##
+auditing:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.medium
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi
