@@ -60,7 +60,7 @@ notification:
 ## @param authentication.resources.limits The resources limits for the authentication containers
 ## @param authentication.resources.requests The requested resources for the authentication containers
 ##
-authentication:
+authenticator:
   enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3a.medium
