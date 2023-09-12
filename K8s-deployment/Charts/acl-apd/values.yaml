@@ -207,7 +207,7 @@ apiServer:
   ## @param apiServer.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json"]
+  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json -m iudx.apd.acl.server.apiserver.ApiServerVerticle"]
   ## @param apiServer.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -441,7 +441,7 @@ policy:
   command: ["/bin/bash"]
   ## @param policy.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json"]
+  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json -m iudx.apd.acl.server.policy.PolicyVerticle"]
   ## @param policy.hostAliases policy pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -673,7 +673,7 @@ auditing:
   command: ["/bin/bash"]
   ## @param auditing.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json"]
+  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json -m iudx.apd.acl.server.auditing.AuditingVerticle"]
   ## @param auditing.hostAliases ApiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -907,7 +907,7 @@ notification:
   command: ["/bin/bash"]
   ## @param notification.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json"]
+  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json -m iudx.apd.acl.server.notification.NotificationVerticle"]
   ## @param notification.hostAliases notification pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1140,7 +1140,7 @@ authenticator:
   command: ["/bin/bash"]
   ## @param authenticator.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json"]
+  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$(hostname) -c secrets/configs/config.json -m iudx.apd.acl.server.authentication.AuthenticationVerticle"]
   ## @param authenticator.hostAliases Authenticator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
