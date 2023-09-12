@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  acl-apd:
+    deploy:
+      resources:
+        limits:
+          pids: 512
+          cpus: '0.25'
+          memory: 500M
+        reservations:
+          cpus: '0.1'   
+          memory: 250M

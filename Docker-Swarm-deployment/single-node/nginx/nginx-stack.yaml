@@ -76,6 +76,8 @@ services:
         target: /etc/nginx/conf.d/gis.conf
       - source: onboarding-conf
         target: /etc/nginx/conf.d/onboarding.conf
+      - source: acl-apd-conf
+        target: /etc/nginx/conf.d/acl-apd.conf
 
 
     logging:
@@ -123,6 +125,8 @@ configs:
     file: conf/cat.conf
   onboarding-conf:
     file: conf/onboarding.conf
+  acl-apd-conf:
+    file: conf/acl-apd.conf
 
 secrets:
   cert:
