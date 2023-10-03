@@ -1,0 +1,40 @@
+{{- if and .Values.ingestion.enabled .Values.ingestion.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: onboarding-ingestion
+  labels:
+    app: onboarding-ingestion
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: onboarding-ingestion
+  minReplicas: {{ .Values.ingestion.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.ingestion.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.ingestion.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.ingestion.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.ingestion.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.ingestion.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}
