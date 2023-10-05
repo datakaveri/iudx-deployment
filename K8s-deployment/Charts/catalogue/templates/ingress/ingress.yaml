@@ -25,6 +25,9 @@ metadata:
       add_header X-Permitted-Cross-Domain-Policies  "none" always;
       add_header Cross-Origin-Embedder-Policy "require-corp" always;
       add_header Cross-Origin-Resource-Policy "cross-origin" always;
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      internal;
+      rewrite ^ $original_uri break;
 spec:
   rules:
     {{- if .Values.ingress.hostname }}
@@ -50,8 +53,9 @@ spec:
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
-  tls:
-    - hosts:
-      - {{ .Values.ingress.hostname }}
-      secretName: {{ .Values.ingress.tls.secretName }}
+#  As cos tls certficates covered in auth ingress
+  # tls:
+  #   - hosts:
+  #     - {{ .Values.ingress.hostname }}
+  #     secretName: {{ .Values.ingress.tls.secretName }}
 {{- end }}
