@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/onboarding-server-depl
-  tag: 5.0.0-alpha-857a3b6
+  tag: 5.0.0-alpha-844fe20
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -909,7 +909,7 @@ resourceServer:
   ## @param resourceServer.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.onboarding.server.resourceServer.resourceServerVerticle"]
+  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.onboarding.server.resourceserver.ResourceServerVerticle"]
   ## @param resourceServer.hostAliases resourceServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1141,7 +1141,7 @@ ingestion:
   ## @param ingestion.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.onboarding.server.ingestion.ingestionVerticle"]
+  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.onboarding.server.ingestion.IngestionVerticle"]
   ## @param ingestion.hostAliases ingestion pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

@@ -2,10 +2,10 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: onboarding-resourceServer
+  name: onboarding-resource-server
   labels: 
     app.kubernetes.io/component: resourceServer
-    app: onboarding-resourceServer
+    app: onboarding-resource-server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,14 +19,14 @@ spec:
   {{- end }}
   selector:
     matchLabels: 
-      app: onboarding-resourceServer
+      app: onboarding-resource-server
   template:
     metadata:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app: onboarding-resourceServer
+        app: onboarding-resource-server
         app.kubernetes.io/component: resourceServer
         {{- if .Values.resourceServer.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.resourceServer.podLabels "context" $) | nindent 8 }}
@@ -66,8 +66,8 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.resourceServer.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: onboarding-resourceServer
-          image: {{ template "resourceServer.image" . }}
+        - name: onboarding-resource-server
+          image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.resourceServer.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.resourceServer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -146,9 +146,9 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.resourceServer.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
       {{- if .Values.serviceAccount.create }}    
-      serviceAccountName: {{ template "resourceServer.serviceAccountName" . }}
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
       {{- end }}
-      {{- include "resourceServer.imagePullSecrets" . | nindent 6 }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
       
       {{- if .Values.resourceServer.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.resourceServer.hostAliases "context" $) | nindent 8 }}
