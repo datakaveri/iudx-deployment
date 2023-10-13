@@ -67,7 +67,7 @@ spec:
         {{- end }}
       containers:
         - name: onboarding-ingestion
-          image: {{ template "ingestion.image" . }}
+          image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.ingestion.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.ingestion.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -146,9 +146,9 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
       {{- if .Values.serviceAccount.create }}    
-      serviceAccountName: {{ template "ingestion.serviceAccountName" . }}
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
       {{- end }}
-      {{- include "ingestion.imagePullSecrets" . | nindent 6 }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
       
       {{- if .Values.ingestion.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.hostAliases "context" $) | nindent 8 }}
