@@ -2,6 +2,9 @@
 
 if [[ $# -eq 0 || $1 == "--staging" ]];
 then
+    # Start cron service
+    cron
+    
     # Execute cert generation script
     ./generate-certs.sh $@
 
