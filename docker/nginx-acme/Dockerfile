@@ -110,14 +110,17 @@ RUN adduser --uid 1001 --disabled-password nginx-acme \
 
 # Copy index html folder 
 COPY html/ /etc/nginx/http/html/
-#Switch to acme-cron user
-USER 1001
 
 WORKDIR /home/.acme.sh/
 COPY ./acme-cron .
-#Register the cron job to nginx-acme user
-RUN crontab acme-cron
 
+#Register the cron job to nginx-acme user and give permission to use cron service
+RUN crontab -u nginx-acme acme-cron \
+    && chmod u+s /usr/sbin/cron \
+    && touch /var/log/cron.log
+
+#Switch to acme-cron use
+USER 1001
 WORKDIR /
 
 COPY ./entrypoint-wrapper.sh .
