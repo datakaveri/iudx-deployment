@@ -52,6 +52,11 @@ Following script will create :
 3. create corresponding K8s secrets from the secret files
 4. deploy all catalogue-server verticles 
 
+### To create ingress redirect to cos cat and UI url:
+```console
+kubectl apply -f redirect-ingress.yaml -f redirect-authsso-ingress.yaml -f redirect-cat-ui-ingress.yaml -f redirect-consumer-ingress.yaml -f redirect-provider-ingress.yaml -f cat-cos-ingress.yaml -n cat
+```
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `catalogue` deployment:

@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: redirect-catalogue-ui
+  namespace: cat
+  labels:
+    app.kubernetes.io/name: catalogue-ui
+    app.kubernetes.io/instance: catalogue-server
+    app.kubernetes.io/component: ingress
+
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      add_header Clear-Site-Data   "*" always;
+      add_header Referrer-Policy   "no-referrer-when-downgrade" always;
+      add_header X-Frame-Options   "deny" always;
+      add_header X-XSS-Protection  "1; mode=block" always;
+      add_header X-Permitted-Cross-Domain-Policies  "none" always;
+      add_header Cross-Origin-Embedder-Policy "require-corp" always;
+      add_header Cross-Origin-Resource-Policy "cross-origin" always;
+    nginx.ingress.kubernetes.io/permanent-redirect: https://catalogue.cos.iudx.org.in$request_uri
+
+spec:
+  rules:
+    - host: catalogue.iudx.org.in
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: cat-api-server
+                port:
+                  name: http
+  tls:
+    - hosts:
+      - catalogue.iudx.org.in
+      secretName: redirect-cat-ui-tls-secret
