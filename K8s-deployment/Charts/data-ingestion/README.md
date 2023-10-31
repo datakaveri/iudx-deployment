@@ -45,6 +45,10 @@ Following script will create :
 3. create corresponding K8s secrets from the secret files
 4. deploy all data-ingestion-server verticles 
 
+### To create ingress redirect to cos url:
+```console
+kubectl apply -f redirect-ingress.yaml -n di
+```
 
 ## Uninstalling the Chart
 
