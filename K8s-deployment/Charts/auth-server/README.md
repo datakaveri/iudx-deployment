@@ -46,6 +46,11 @@ Following script will create :
 3. create corresponding K8s secrets from the secret files
 4. deploy all aaa-server verticles 
 
+### To create ingress redirect to cos url:
+```console
+kubectl apply -f redirect-ingress.yaml -n aaa
+```
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `auth-server` deployment:

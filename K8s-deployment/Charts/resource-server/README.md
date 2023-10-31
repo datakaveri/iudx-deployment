@@ -48,6 +48,11 @@ Following script will create :
 3. create corresponding K8s secrets from the secret files
 4. deploy all resource-server verticles 
 
+### To create ingress redirect to cos url:
+```console
+kubectl apply -f redirect-ingress.yaml -n rs
+```
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `resource-server` deployment:
