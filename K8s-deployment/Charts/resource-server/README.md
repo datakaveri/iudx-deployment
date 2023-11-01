@@ -50,7 +50,7 @@ Following script will create :
 
 ### To create ingress redirect to cos url:
 ```console
-kubectl apply -f redirect-ingress.yaml -n rs
+kubectl apply -f ../../misc/redirect-rs-ingress.yaml -n rs
 ```
 
 ## Uninstalling the Chart

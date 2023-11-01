@@ -54,7 +54,7 @@ Following script will create :
 
 ### To create ingress redirect to cos cat and UI url:
 ```console
-kubectl apply -f redirect-ingress.yaml -f redirect-authsso-ingress.yaml -f redirect-cat-ui-ingress.yaml -f redirect-consumer-ingress.yaml -f redirect-provider-ingress.yaml -f cat-cos-ingress.yaml -n cat
+kubectl apply -f ../../misc/redirect-cat-api-ingress.yaml -f ../../misc/redirect-authsso-ingress.yaml -f ../../misc/redirect-cat-ui-ingress.yaml -f ../../misc/redirect-consumer-ingress.yaml -f ../../misc/redirect-provider-ingress.yaml -f ../../misc/cat-cos-ingress.yaml -n cat
 ```
 
 ## Uninstalling the Chart
