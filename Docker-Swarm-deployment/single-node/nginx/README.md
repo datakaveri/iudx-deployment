@@ -37,7 +37,7 @@ in `nginx-stack.resources.yaml`  for nginx as shown in sample resource-values fi
 cp -r example-configs/conf .
 ```
 
-2. For each nginx server configuration in conf/ that would be used (some of the config might not be used for particular deployment, in that case no need to do any changes for those configs and also no changes  for error.conf, default.conf file), substitute appropiate domain name next to ``server_name`` directive and path of certificates (by default points to self signed certificates)
+2. For each nginx server configuration in conf/ that would be used (some of the config might not be used for particular deployment, in that case no need to do any changes for those configs and also no changes  for error.conf, default.conf file), substitute appropriate domain name next to ``server_name`` directive and path of certificates (by default points to self signed certificates)
 Example:- If cos domain is ``cos-domain.iudx.org`` , then susbitiute it in conf/cos.conf as follows :
 ```
         server_name         cos-domain.iudx.org;
@@ -47,7 +47,7 @@ Example:- If cos domain is ``cos-domain.iudx.org`` , then susbitiute it in conf/
 
 ```
 
-3. For each domain that needs a certificate generated, add domain names in [conf/acme-config.json] (./example-configs/conf/acme-config.json)
+3. For each domain that needs a certificate generated, add domain names in [conf/acme-config.json](./example-configs/conf/acme-config.json)
 Example:-
 ```json
 {
