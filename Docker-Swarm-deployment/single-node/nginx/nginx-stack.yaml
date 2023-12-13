@@ -62,10 +62,6 @@ services:
         target: /etc/acme.sh/acme-config.json
       - source: rs-conf
         target: /etc/nginx/conf.d/rs.conf
-      - source: cat-conf
-        target: /etc/nginx/conf.d/cat.conf
-      - source: auth-conf
-        target: /etc/nginx/conf.d/auth.conf
       - source: fs-conf
         target: /etc/nginx/conf.d/fs.conf
       - source: rs-proxy-conf
@@ -117,12 +113,8 @@ configs:
     file: conf/gis.conf
   rs-proxy-conf:
     file: conf/rs-proxy.conf
-  auth-conf:
-    file: conf/auth.conf
   di-conf:
     file: conf/di.conf
-  cat-conf:
-    file: conf/cat.conf
   onboarding-conf:
     file: conf/onboarding.conf
   acl-apd-conf:
