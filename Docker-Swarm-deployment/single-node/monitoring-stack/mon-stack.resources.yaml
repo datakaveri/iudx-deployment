@@ -1,0 +1,65 @@
+version: "3.9"
+services:
+  grafana:
+    deploy:
+      resources:
+        limits:
+          pids: 1024
+          cpus: '0.30'
+          memory: 500M
+        reservations:
+          cpus: '0.20'
+          memory: 300M  
+
+  prometheus:
+    deploy:
+      resources:
+        limits:
+          pids: 4096
+          cpus: '1.75'
+          memory: 4096M
+        reservations:
+          cpus: '0.30'
+          memory: 700M
+
+  promtail:
+    deploy:
+      resources:
+        limits:
+          pids: 512
+          cpus: '0.20'
+          memory: 500M
+        reservations:
+          cpus: '0.10'
+          memory: 300M
+  loki:
+    deploy:
+      resources:
+        limits:
+          pids: 4096
+          cpus: '0.5'
+          memory: 1024M
+        reservations:
+          cpus: '0.30'
+          memory: 700M
+
+  blackbox:
+    deploy:
+      resources:
+        limits:
+          pids: 512
+          cpus: '0.20'
+          memory: 200M
+        reservations:
+          cpus: '0.10'
+          memory: 100M
+
+  cadvisor:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 256M
+        reservations:
+          cpus: '0.20'
+          memory: 128M
