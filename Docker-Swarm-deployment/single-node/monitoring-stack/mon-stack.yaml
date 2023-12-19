@@ -104,7 +104,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   grafana:
-    image: grafana/grafana:10.2.2
+    image: ghcr.io/datakaveri/grafana:10.2.2
     read_only: true
     volumes:
       - type: volume
