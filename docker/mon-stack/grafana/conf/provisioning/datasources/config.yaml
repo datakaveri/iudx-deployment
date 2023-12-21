@@ -1,0 +1,15 @@
+apiVersion: 1
+deleteDatasources:
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: "http://tasks.prometheus:9090"
+  - name: Loki
+    type: loki
+    access: proxy
+    url: "http://tasks.loki:3100/"
+  - name: Prometheus-Loki
+    type: prometheus
+    access: proxy
+    url: "http://tasks.loki:3100/loki"
