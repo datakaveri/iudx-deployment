@@ -44,6 +44,6 @@ in `grafana/resource-values.yaml`, `loki/resource-values.yaml`, `prometheus/reso
 ``` 
 ./install.sh 
 ```
-This installs the whole mon-stack - prometheus, grafana, loki and promtail.
+This installs the entire  mon-stack - prometheus, grafana, loki and promtail.
 
 
