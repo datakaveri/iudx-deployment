@@ -1,6 +1,6 @@
 # Introduction
 Docker swarm stack for Rabbitmq Deployment.
-# Rabbitmq Installation
+# Steps For Rabbitmq Installation
 ## Create secret files
 1. Make a copy of sample secrets directory.
 ```console
