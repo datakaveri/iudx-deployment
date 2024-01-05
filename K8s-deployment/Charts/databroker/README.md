@@ -142,6 +142,6 @@ It's necessary to set the `auth.password` and `auth.erlangCookie` parameters whe
 ```bash
 $ helm upgrade my-release my-repo/rabbitmq --set auth.password=[PASSWORD] --set auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
-## References
+### References
 
 - [Bitnami Rabbitmq Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq)

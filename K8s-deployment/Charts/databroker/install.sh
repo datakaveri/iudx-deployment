@@ -6,7 +6,7 @@ kubectl create secret generic rabbitmq-erlang-cookie --from-file=./secrets/crede
 kubectl create secret generic rmq-passwords --from-file=./secrets/credentials -n rabbitmq
 kubectl create secret generic rabbitmq-admin-password --from-file=rabbitmq-password=./secrets/credentials/admin-password -n rabbitmq
 kubectl create configmap rmq-init-config --from-file=./secrets/init-config.json -n rabbitmq
-kubectl apply -f external-client-service.yaml -n rabbitmq
+kubectl apply -f minikube-service.yaml -n rabbitmq
 helm repo update bitnami
-helm install rabbitmq bitnami/rabbitmq -f values.yaml -f resource-values.yaml -n rabbitmq --version 11.10.2
+helm install rabbitmq bitnami/rabbitmq -f minikube-values.yaml -f minikube-resources.yaml -n rabbitmq --version 12.6.1
 kubectl apply -f rmq-init-setup.yaml 
