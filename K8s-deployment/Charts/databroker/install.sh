@@ -1,5 +1,5 @@
 #! /bin/bash
-
+# Script commands
 kubectl create ns rabbitmq
 kubectl create secret generic certs --from-file=./secrets/pki/ca.crt --from-file=./secrets/pki/tls.crt --from-file=./secrets/pki/tls.key -n rabbitmq
 kubectl create secret generic rabbitmq-erlang-cookie --from-file=./secrets/credentials/rabbitmq-erlang-cookie -n rabbitmq

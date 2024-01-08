@@ -1,6 +1,6 @@
 # RabbitMQ cluster in k8s as a StatefulSet
 
-## Create secret files
+# Create secret files
 
 1. Make a copy of sample secrets directory and add appropriate values to all files.
 
