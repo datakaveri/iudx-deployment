@@ -8,5 +8,5 @@ kubectl create secret generic rabbitmq-admin-password --from-file=rabbitmq-passw
 kubectl create configmap rmq-init-config --from-file=./secrets/init-config.json -n rabbitmq
 kubectl apply -f minikube-service.yaml -n rabbitmq
 helm repo update bitnami
-helm install rabbitmq bitnami/rabbitmq -f minikube-values.yaml -f minikube-resources.yaml -n rabbitmq --version 12.6.1
+helm install rabbitmq bitnami/rabbitmq -f minikube-values.yaml -f minikube-resources.yaml -n rabbitmq --version 12.6.2
 kubectl apply -f rmq-init-setup.yaml 
