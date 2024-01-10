@@ -36,7 +36,14 @@
     </#if>
 </head>
 
+
 <body class="${properties.kcBodyClass!}">
+    <div class="header">
+        <a href="https://catalogue.iudx.org.in/"><img
+            src="https://iudx.org.in/wp-content/uploads/2021/12/IUDX_logo_white.png"
+            alt=""
+        /></a>
+	</div>
 <div class="${properties.kcLoginClass!}">
     <div id="kc-header" class="${properties.kcHeaderClass!}">
         <div id="kc-header-wrapper"
