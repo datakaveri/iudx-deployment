@@ -15,7 +15,7 @@ secrets/
 ```
 ## Assign node labels
  The redis container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart and able to mount the same local docker volume.
-```sh
+```Sh
 docker node update --label-add redis-node=true <node_name>
 ```
 ## Define Appropriate values of resources
@@ -44,6 +44,6 @@ docker stack deploy -c redis-rejson-stack.yaml -c redis-rejson-stack.resources.y
 | default          | secrets/passwords/admin-password     |     Superuser                                            |  Used by Resource and Latest ingestion pipeline |
 
 
-# ToDO
+## ToDO
 1. Improve RBAC in redis using [ACL list](https://redis.io/topics/acl), its stalled now due to following reasons:
 - The vertx redis client is yet to support that new [functionality](https://github.com/vert-x3/vertx-redis-client/pull/316)
