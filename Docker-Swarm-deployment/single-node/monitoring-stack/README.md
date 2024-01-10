@@ -17,7 +17,11 @@ cp -r example-secrets/secrets .
 ```
 ./create-secrets.sh
 ```
- 3. Config Telegrambot for grafana's alerts is detailed [here](https://gist.github.com/abhilashvenkatesh/50478502ccd257a28d2c441ac51a8d65). Then appropiately define the environment file  secrets/grafana-env-secret. The template is defined as follow:
+3.Make sure metrics targets directory on node where prometheus is deployed(should  be created by ansible script from provisioning node exporter , if not create it,  needs to be created with every restartas its tmp directory)
+```
+mkdir /tmp/metrics-targets
+```
+4. Config Telegrambot for grafana's alerts is detailed [here](https://gist.github.com/abhilashvenkatesh/50478502ccd257a28d2c441ac51a8d65). Then appropiately define the environment file  secrets/grafana-env-secret. The template is defined as follow:
  Please do not include comments and substitute appropiate correct values in the placeholders ``<placholder>``.
 ```
 GF_SERVER_ROOT_URL=https://<grafana-domain-name>/
@@ -25,13 +29,13 @@ GF_SERVER_DOMAIN=<grafana-domain-name>
 TELEGRAM_CHAT_ID=<telegram-chat-id>
 TELEGRAM_BOT_TOKEN=<telegram-chat-token>
 ```
-4. Configure servers to be monitored for certificate expiry, server up status, as targets in  blackbox-targets.yml. See below for an example.
+5. Configure servers to be monitored for certificate expiry, server up status, as targets in  blackbox-targets.yml. See below for an example.
 ```sh
 - targets:
     - https://rs.io.test/apis
     - https://catalogue.io.test/
 ```
-5. secrets directory after generation of secrets
+6. secrets directory after generation of secrets
 ```
 secrets/
 ├── configs
