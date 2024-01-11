@@ -7,7 +7,7 @@ networks:
 
 services:
   dmp-apd:
-    image: ghcr.io/datakaveri/dmp-apd-depl:5.0.0-alpha-92f87e8
+    image: ghcr.io/datakaveri/dmp-apd-server-depl:1.0.0-alpha-8d09ca1
     env_file:
       - ./secrets/.apd.env
     read_only: true
@@ -30,7 +30,7 @@ services:
         max_attempts: 5
       placement:
         constraints:
-          - "node.labels.dmp-apd-node==true"
+          - "node.labels.marketplace-node==true"
     logging:
       driver: "json-file"
       options:

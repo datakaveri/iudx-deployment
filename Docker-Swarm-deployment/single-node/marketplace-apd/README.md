@@ -18,7 +18,7 @@ secrets/
 ## Assign node labels
  The apd-server container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart.
 ```sh
-docker node update --label-add dmp-apd-node=true <node_name>
+docker node update --label-add marketplace-node=true <node_name>
 ```
 ## Define Appropriate values of resources
 
@@ -31,12 +31,12 @@ in `dmp-apd-stack.resources.yaml` as shown in sample resource-values file for [h
 ## Deploy
 Deploy APD server stack:
 ```sh
-docker stack deploy -c dmp-apd-stack.yaml -c dmp-apd-stack.resources.yaml dmp-apd
+docker stack deploy -c marketplace-apd-stack.yaml -c dmp-apd-stack.resources.yaml dmp-apd
 ```
 The apis documentation will be available at https://<dmp-apd-server-domain-name>/apis
 # NOTE
 1. The upstream code for dmp-apd server is available at [here](https://github.com/datakaveri/iudx-data-marketplace-apd.git).
 2. If you need to expose the HTTP ports or have custom stack configuration( see [here](example-dmp-apd-server-stack.custom.yaml) for example configuration of 'dmp-apd-stack.custom.yaml' file)  and bring up like as follows.
 ```sh
-docker stack deploy -c dmp-apd-stack.yaml -c dmp-apd-stack.resources.yaml -c dmp-apd-stack.custom.yaml dmp-apd
+docker stack deploy -c marketplace-apd-stack.yaml -c dmp-apd-stack.resources.yaml -c dmp-apd-stack.custom.yaml dmp-apd
 ```
