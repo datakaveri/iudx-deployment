@@ -5,7 +5,7 @@ kubectl create secret generic redis-passwords --from-file=./secrets/redis-passwo
 sleep 10
 # install redis cluster  
 helm repo update bitnami
-helm install -f values.yaml -f resource-values.yaml redis  --version 8.0.0 $@ bitnami/redis-cluster -n redis
+helm install -f minikube-values.yaml -f minikube-resources.yaml redis  --version 9.1.5 $@ bitnami/redis-cluster -n redis
 
 sleep 50
 #redis-autoscaler

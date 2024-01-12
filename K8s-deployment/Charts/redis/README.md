@@ -40,7 +40,7 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 ```
  - This will create namespace, redis password as k8s secret, redis, redis autoscaler 
 
-## Notes:
+### Notes:
 ### Rebalance the shards through redis-cli 
 
 ```
