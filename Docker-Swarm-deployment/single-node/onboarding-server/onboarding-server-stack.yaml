@@ -7,7 +7,7 @@ networks:
 
 services:
   onboarding-server:
-    image: ghcr.io/datakaveri/onboarding-server-depl:5.0.0-alpha-addd306
+    image: ghcr.io/datakaveri/onboarding-server-depl:1.0.0-73d255b
     env_file:
       - ./secrets/.onboarding.env
     volumes:
