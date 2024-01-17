@@ -8,7 +8,7 @@ networks:
 
 services:
   postgres:
-    image: bitnami/postgresql:14.4.0
+    image: bitnami/postgresql:16.1.0
     volumes:
       - type: volume
         source: postgres-db-volume
