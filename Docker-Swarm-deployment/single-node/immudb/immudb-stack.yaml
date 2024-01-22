@@ -37,6 +37,10 @@ services:
       - type: tmpfs
         target: /tmp/
         read_only: false
+
+      - type: tmpfs
+        target: /root/
+        read_only: false
       networks:
         - overlay-net
       env_file:
