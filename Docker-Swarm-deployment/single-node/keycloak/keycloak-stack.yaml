@@ -8,7 +8,7 @@ networks:
 
 services:
   keycloak:
-    image: ghcr.io/datakaveri/keycloak:23.0.4-debian-11-r1
+    image: ghcr.io/datakaveri/keycloak:23.0.4-debian-11-r1-t-1
     cap_drop:
        - ALL
 
