@@ -11,12 +11,12 @@ kubectl create secret generic blackbox-targets  --from-file=./secrets/blackbox-t
 
 helm repo update prometheus-community kube-state-metric grafana
 
-helm install --version=25.8.2 -n mon-stack prometheus -f prometheus/minikube-prometheus-values.yaml -f prometheus/minikube-prometheus-resources.yaml  prometheus-community/prometheus
+helm install --version=25.8.2 -n mon-stack prometheus -f prometheus/prometheus-values.yaml -f prometheus/prometheus-resources.yaml  prometheus-community/prometheus
 sleep 20
-helm install --version=2.11.20 -n mon-stack -f loki/minikube-loki-values.yaml -f loki/minikube-loki-resources.yaml loki  bitnami/grafana-loki
+helm install --version=2.11.20 -n mon-stack -f loki/loki-values.yaml -f loki/loki-resources.yaml loki  bitnami/grafana-loki
 sleep 20
-helm install --version=9.6.6 -f grafana/minikube-grafana-values.yaml -f grafana/minikube-grafana-resources.yaml  grafana -n mon-stack   bitnami/grafana
+helm install --version=9.6.6 -f grafana/grafana-values.yaml -f grafana/grafana-resources.yaml  grafana -n mon-stack   bitnami/grafana
 sleep 20
-helm install --version=6.15.3 -f promtail/promtail-values.yaml -f promtail/minikube-promtail-resources.yaml -n mon-stack promtail grafana/promtail
+helm install --version=6.15.3 -f promtail/promtail-values.yaml -f promtail/promtail-resources.yaml -n mon-stack promtail grafana/promtail
 sleep 20
-helm install --version=8.6.1 -f blackbox/minikube-blackbox-values.yaml -f blackbox/minikube-blackbox-resources.yaml -n mon-stack blackbox prometheus-community/prometheus-blackbox-exporter
+helm install --version=8.6.1 -f blackbox/blackbox-values.yaml -f blackbox/blackbox-resources.yaml -n mon-stack blackbox prometheus-community/prometheus-blackbox-exporter
