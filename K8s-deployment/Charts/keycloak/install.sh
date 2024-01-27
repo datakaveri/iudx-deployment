@@ -6,4 +6,4 @@ kubectl create secret generic keycloak-db-password --from-file=./secrets/db-pass
 sleep 10
 # install keycloak cluster 
 helm repo update bitnami
-helm install -f values.yaml -f resource-values.yaml keycloak  --version 16.1.1 $@ bitnami/keycloak -n keycloak
+helm install -f values.yaml -f resources.yaml keycloak  --version 16.1.1 $@ bitnami/keycloak -n keycloak
