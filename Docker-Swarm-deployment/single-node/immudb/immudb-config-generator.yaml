@@ -23,8 +23,6 @@ services:
             - "node.labels.immudb-node==true"
       cap_drop:
         - ALL
-      env_file:
-        - ./secrets/.config.env
       logging:
         driver: "json-file"
         options:
