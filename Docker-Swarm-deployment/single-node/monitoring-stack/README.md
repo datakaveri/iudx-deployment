@@ -17,7 +17,8 @@ cp -r example-secrets/secrets .
 ```
 ./create-secrets.sh
 ```
-3.Make sure metrics targets directory on node where prometheus is deployed(should  be created by ansible script from provisioning node exporter , if not create it,  needs to be created with every restartas its tmp directory)
+3. Make sure `/tmp/metrics-targets` directory is created on the node where Prometheus is being deployed.
+It needs to be recreated with every node restart as it is a temporary directory.
 ```
 mkdir /tmp/metrics-targets
 ```
