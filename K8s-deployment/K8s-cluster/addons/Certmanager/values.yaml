@@ -178,9 +178,9 @@ securityContext:
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 containerSecurityContext:
   allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
+  # capabilities:
+  #   drop:
+  #   - ALL
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
 
@@ -214,8 +214,7 @@ podLabels: {}
 #     - "1.1.1.1"
 #     - "8.8.8.8"
 
-nodeSelector:
-  kubernetes.io/os: linux
+nodeSelector: []
 
 ingressShim: {}
   # defaultIssuerName: ""
@@ -343,9 +342,9 @@ webhook:
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   containerSecurityContext:
     allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
+    # capabilities:
+    #   drop:
+    #   - ALL
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
 
@@ -395,8 +394,7 @@ webhook:
     successThreshold: 1
     timeoutSeconds: 1
 
-  nodeSelector:
-    kubernetes.io/os: linux
+  nodeSelector: []
 
   affinity: {}
 
@@ -533,9 +531,9 @@ cainjector:
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   containerSecurityContext:
     allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
+    # capabilities:
+    #   drop:
+    #   - ALL
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
 
@@ -557,8 +555,7 @@ cainjector:
     #   cpu: 10m
     #   memory: 32Mi
 
-  nodeSelector:
-    kubernetes.io/os: linux
+  nodeSelector: []
 
   affinity: {}
 
@@ -643,9 +640,9 @@ startupapicheck:
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   containerSecurityContext:
     allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-      - ALL
+    # capabilities:
+    #   drop:
+    #   - ALL
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
 
@@ -673,8 +670,7 @@ startupapicheck:
     #   cpu: 10m
     #   memory: 32Mi
 
-  nodeSelector:
-    kubernetes.io/os: linux
+  nodeSelector: []
 
   affinity: {}
 
