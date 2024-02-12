@@ -20,12 +20,13 @@ metadata:
       add_header X-Permitted-Cross-Domain-Policies  "none" always;
       add_header Cross-Origin-Embedder-Policy "require-corp" always;
       add_header Cross-Origin-Resource-Policy "cross-origin" always;
-    nginx.ingress.kubernetes.io/permanent-redirect: https://catalogue.cos.iudx.org.in/consumer
+    nginx.ingress.kubernetes.io/permanent-redirect: https://dataexplorer.ts.adex.org.in/aiu
     nginx.ingress.kubernetes.io/permanent-redirect-code: '308'
 
+
 spec:
-  rules: 
-    - host: consumer.iudx.org.in 
+  rules:
+    - host: aiu.adex.org.in
       http:
         paths:
           - path: /
@@ -37,5 +38,5 @@ spec:
                   name: http
   tls:
     - hosts:
-      - consumer.iudx.org.in
+      - aiu.adex.org.in
       secretName: redirect-cat-consumer-ui-tls-secret

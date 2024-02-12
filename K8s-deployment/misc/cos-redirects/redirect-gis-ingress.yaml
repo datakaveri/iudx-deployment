@@ -29,6 +29,7 @@ metadata:
       add_header Cross-Origin-Embedder-Policy "require-corp" always;
       add_header Cross-Origin-Resource-Policy "cross-origin" always;
     nginx.ingress.kubernetes.io/permanent-redirect: https://gis.cos.iudx.org.in$request_uri
+    nginx.ingress.kubernetes.io/permanent-redirect-code: '308'
 
 spec:
   rules:
