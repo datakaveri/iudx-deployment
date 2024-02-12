@@ -20,11 +20,12 @@ metadata:
       add_header X-Permitted-Cross-Domain-Policies  "none" always;
       add_header Cross-Origin-Embedder-Policy "require-corp" always;
       add_header Cross-Origin-Resource-Policy "cross-origin" always;
-    nginx.ingress.kubernetes.io/permanent-redirect: https://catalogue.cos.iudx.org.in/provider
+    nginx.ingress.kubernetes.io/permanent-redirect: https://dataexplorer.ts.adex.org.in/provider
+    nginx.ingress.kubernetes.io/permanent-redirect-code: '308'
 
 spec:
-  rules: 
-    - host: publisher.iudx.org.in 
+  rules:
+    - host: aip.adex.org.in
       http:
         paths:
           - path: /
@@ -36,5 +37,5 @@ spec:
                   name: http
   tls:
     - hosts:
-      - publisher.iudx.org.in
+      - aip.adex.org.in
       secretName: redirect-cat-publisher-ui-tls-secret

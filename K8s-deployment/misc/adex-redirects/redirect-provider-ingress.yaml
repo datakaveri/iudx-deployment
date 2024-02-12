@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: redirect-catalogue-consumer-ui
+  name: redirect-catalogue-provider-ui
   namespace: cat
   labels:
     app.kubernetes.io/name: catalogue-ui
@@ -20,12 +20,12 @@ metadata:
       add_header X-Permitted-Cross-Domain-Policies  "none" always;
       add_header Cross-Origin-Embedder-Policy "require-corp" always;
       add_header Cross-Origin-Resource-Policy "cross-origin" always;
-    nginx.ingress.kubernetes.io/permanent-redirect: https://catalogue.cos.iudx.org.in/consumer
+    nginx.ingress.kubernetes.io/permanent-redirect: https://dataexplorer.ts.adex.org.in/aip
     nginx.ingress.kubernetes.io/permanent-redirect-code: '308'
 
 spec:
   rules: 
-    - host: consumer.iudx.org.in 
+    - host: aip.iudx.org.in 
       http:
         paths:
           - path: /
@@ -37,5 +37,5 @@ spec:
                   name: http
   tls:
     - hosts:
-      - consumer.iudx.org.in
-      secretName: redirect-cat-consumer-ui-tls-secret
+      - aip.iudx.org.in
+      secretName: redirect-cat-publisher-ui-tls-secret
