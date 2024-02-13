@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: redirect-resource-server
-  namespace: rs
+  namespace: adex-rs
   labels:
     app.kubernetes.io/name: resourceServer
     app.kubernetes.io/instance: resource-server

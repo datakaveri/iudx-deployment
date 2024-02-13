@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: old-auth-server-url
-  namespace: aaa
+  namespace: adex-aaa
   labels:
     app.kubernetes.io/name: authServer
     helm.sh/chart: authServer-0.1.13

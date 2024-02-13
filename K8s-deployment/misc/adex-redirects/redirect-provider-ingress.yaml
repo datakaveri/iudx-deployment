@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: redirect-catalogue-provider-ui
-  namespace: cat
+  namespace: adex-cat
   labels:
     app.kubernetes.io/name: catalogue-ui
     app.kubernetes.io/instance: catalogue-server
@@ -24,8 +24,8 @@ metadata:
     nginx.ingress.kubernetes.io/permanent-redirect-code: '308'
 
 spec:
-  rules: 
-    - host: aip.iudx.org.in 
+  rules:
+    - host: aip.adex.org.in
       http:
         paths:
           - path: /
@@ -37,5 +37,5 @@ spec:
                   name: http
   tls:
     - hosts:
-      - aip.iudx.org.in
+      - aip.adex.org.in
       secretName: redirect-cat-publisher-ui-tls-secret
