@@ -118,7 +118,7 @@ image:
 auth:
   ## @param auth.adminUser Keycloak administrator user
   ##
-  adminUser: iudx-admin
+  adminUser: "iudx-admin"
   ## @param auth.adminPassword Keycloak administrator password for the new user
   ##
   adminPassword: ""
@@ -253,7 +253,9 @@ args: []
 ##   - name: FOO
 ##     value: "bar"
 ##
-extraEnvVars: []
+extraEnvVars:
+  - name: JAVA_OPTS
+    value: "-server -Xms1024m -Xmx1024m -XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=512m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true  --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED"
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
 extraEnvVarsCM: ""
@@ -276,7 +278,7 @@ revisionHistoryLimitCount: 10
 containerPorts:
   http: 8080
   https: 8443
-  infinispan: 7800
+  ## infinispan: 7800
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
 extraContainerPorts: []
@@ -331,9 +333,9 @@ resources:
 livenessProbe:
   enabled: true
   initialDelaySeconds: 300
-  periodSeconds: 5
+  periodSeconds: 1
   timeoutSeconds: 5
-  failureThreshold: 10
+  failureThreshold: 3
   successThreshold: 1
 ## @param readinessProbe.enabled Enable readinessProbe on Keycloak containers
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -344,10 +346,10 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 120
-  periodSeconds: 5
-  timeoutSeconds: 5
-  failureThreshold: 10
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 3
   successThreshold: 1
 ## When enabling this, make sure to set initialDelaySeconds to 0 for livenessProbe and readinessProbe
 ## @param startupProbe.enabled Enable startupProbe on Keycloak containers
@@ -593,7 +595,16 @@ ingress:
   ##   kubernetes.io/ingress.class: nginx
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
-  annotations: {}
+  annotations:
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "4"
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
+    nginx.ingress.kubernetes.io/global-rate-limit: "300"
+    nginx.ingress.kubernetes.io/global-rate-limit-window: "1s"
+    nginx.ingress.kubernetes.io/global-rate-limit-key: "$server_name"
   ## @param ingress.labels Additional labels for the Ingress resource.
   ## e.g:
   ## labels:
@@ -759,7 +770,7 @@ autoscaling:
   enabled: true
   minReplicas: 2
   maxReplicas: 5
-  targetCPU: "80"
+  targetCPU: 80
   targetMemory: ""
 
 ## @section Metrics parameters
@@ -1054,7 +1065,7 @@ keycloakConfigCli:
 ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
 ##
 postgresql:
-  enabled: true
+  enabled: false
   auth:
     postgresPassword: ""
     username: bn_keycloak
