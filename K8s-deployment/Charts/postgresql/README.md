@@ -42,13 +42,19 @@ in `resource-values.yaml` as shown in sample resource-values file for [`aws`](./
 ```
 ./install.sh
 ```
-
 Following script will create :
 1. create a namespace postgres
 2. create corresponding K8s secrets from  secrets directory
 3. create required configmaps
 4. Initialize asynchronous postgres replication cluster with initdb scripts 
 5. Upgrade the cluster with synchrounous replication
+
+## Postgres Users creation
+1. Configure `init-script/db-user-creation-config.json` if any changes required
+2. Bring up the db generator stack(only on clean deployment),
+```sh
+kubectl apply -f db-user-creation-job.yaml
+```
 
 ## RS, auth scehma creation
 The rs and auth schema created using flyway using following steps:
