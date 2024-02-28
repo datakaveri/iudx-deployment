@@ -6,7 +6,7 @@
   gather_facts: yes
   tasks:
   - name: node exporter installation status
-    shell: service node_exporter status
+    shell: service node_exporter.service status
     register: node_exporter_status
     ignore_errors: yes
 
