@@ -70,8 +70,6 @@ services:
         target: /etc/nginx/conf.d/di.conf
       - source: gis-conf
         target: /etc/nginx/conf.d/gis.conf
-      - source: onboarding-conf
-        target: /etc/nginx/conf.d/onboarding.conf
       - source: acl-apd-conf
         target: /etc/nginx/conf.d/acl-apd.conf
 
@@ -115,8 +113,6 @@ configs:
     file: conf/rs-proxy.conf
   di-conf:
     file: conf/di.conf
-  onboarding-conf:
-    file: conf/onboarding.conf
   acl-apd-conf:
     file: conf/acl-apd.conf
 
