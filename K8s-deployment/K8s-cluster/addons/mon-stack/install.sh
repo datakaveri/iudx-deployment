@@ -17,6 +17,6 @@ helm install --version=2.11.20 -n mon-stack -f loki/loki-values.yaml -f loki/lok
 sleep 20
 helm install --version=9.6.6 -f grafana/grafana-values.yaml -f grafana/grafana-resources.yaml  grafana -n mon-stack   bitnami/grafana
 sleep 20
-helm install --version=6.15.3 -f promtail/promtail-values.yaml -f promtail/promtail-resources.yaml -n mon-stack promtail grafana/promtail
+helm install --version=6.15.5 -f promtail/promtail-values.yaml -f promtail/promtail-resources.yaml -n mon-stack promtail grafana/promtail
 sleep 20
 helm install --version=8.6.1 -f blackbox/blackbox-values.yaml -f blackbox/blackbox-resources.yaml -n mon-stack blackbox prometheus-community/prometheus-blackbox-exporter

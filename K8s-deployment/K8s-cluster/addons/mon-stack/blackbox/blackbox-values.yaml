@@ -113,13 +113,13 @@ securityContext:
 
 livenessProbe:
   httpGet:
-    path: /-/healthy
+    path: /health
     port: http
   failureThreshold: 3
 
 readinessProbe:
   httpGet:
-    path: /-/healthy
+    path: /health
     port: http
 
 nodeSelector: {}
