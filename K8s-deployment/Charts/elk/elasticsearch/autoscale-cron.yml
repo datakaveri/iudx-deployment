@@ -9,7 +9,7 @@ spec:
       template:
         spec:
           nodeSelector:
-            beta.kubernetes.io/instance-type: Standard_D2as_v4
+            beta.kubernetes.io/instance-type: t3a.large
           serviceAccount: es-autoscaler
           containers:
           - name: es-autoscaler
