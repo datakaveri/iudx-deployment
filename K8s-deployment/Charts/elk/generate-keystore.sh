@@ -15,6 +15,6 @@ docker run \
     -u 1000:0 \
     -v $(pwd)/keystore-generators/logstash.sh:/opt/bitnami/logstash/bin/run.sh \
     -v $(pwd)/secrets:/opt/bitnami/logstash/secrets \
-    docker.io/bitnami/logstash:v8.12.1-debian-11-r17 ./bin/run.sh
+    docker.io/bitnami/logstash:8.12.1-debian-11-r17 ./bin/run.sh
 
 #sudo chown -R 1000:0 secrets/keystores
