@@ -101,62 +101,6 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location /iudx/cat/v1/search {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/count {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/geo {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/list {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/relsearch {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/relationship {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/instance {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /consumer/ratings {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location  /iudx/cat/v1/internal/ui/geoquery {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-
-      location  /iudx/cat/v1/internal/ui/providers {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location  /iudx/cat/v1/internal/ui/popularDatasets {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
       location  /iudx/cat/v1/internal/ui/instance {
         if ($request_method != GET) {
           set $target_destination '/onb';
@@ -177,15 +121,11 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location  /iudx/cat/v1/internal/ui/dataset {
+      location  /iudx/cat/v1 {
         set $target_destination '/cat';
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location  /iudx/cat/v1/nlpsearch {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
       }
       location /auth/v1 {
         set $target_destination '/auth';
