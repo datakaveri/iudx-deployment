@@ -605,9 +605,9 @@ controller:
     - name: error-conf
       mountPath: /etc/nginx/conf.d
     - name: iudx-cos-root
-      mountPath: /usr/local/nginx/iudx-html
+      mountPath: /usr/local/nginx/html/iudx-html
     - name: ugix-cos-root
-      mountPath: /usr/local/nginx/ugix-html
+      mountPath: /usr/local/nginx/html/ugix-html
 
   #  - name: copy-portal-skins
   #   mountPath: /var/lib/lemonldap-ng/portal/skins
