@@ -57,9 +57,9 @@ metadata:
                                         global_throttle = { namespace = "", limit = 0, window_size = 0, key = { }, ignored_cidrs = { } },
                                 })
                         }
-
-      try_files /index.html  =404;
-
+      {{- if .Values.ingress.tryFiles }}
+      try_files {{ .Values.ingress.tryFiles }} =404;
+      {{- end }}
       }
       location /auth/apis/spec {
         set $target_destination '/auth';
@@ -101,6 +101,16 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
+      location /iudx/cat/v1/instance {
+        if ($request_method != GET) {
+          set $target_destination '/onb';
+        }
+        if ($request_method = GET) {
+          set $target_destination '/cat';
+        }
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
       location  /iudx/cat/v1/internal/ui/instance {
         if ($request_method != GET) {
           set $target_destination '/onb';
@@ -125,7 +135,6 @@ metadata:
         set $target_destination '/cat';
         set $original_uri $uri;
         rewrite ^ $target_destination last;
-      }
       }
       location /auth/v1 {
         set $target_destination '/auth';
