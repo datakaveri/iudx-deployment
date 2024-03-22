@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cat-summary-cron
+spec:
+  schedule: "30 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cat-summary
+            image: ghcr.io/datakaveri/cat-summary-script:1.0.0-alpha
+            volumeMounts:
+            - name: cat-summary-config
+              mountPath: /app/src
+          volumes:
+          - name: cat-summary-config
+            secret:
+              secretName: cat-summary-config
+          restartPolicy: OnFailure
