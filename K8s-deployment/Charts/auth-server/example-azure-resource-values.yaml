@@ -1,4 +1,5 @@
 ingress:
+  tryFiles: "/iudx-html/index.html" # use /ugix-html/index.html for ugix cos root page
   hostname: auth-hostname
   annotations: {
     cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
