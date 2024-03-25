@@ -133,6 +133,11 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
+      location  /consumer/ratings {
+        set $target_destination '/cat';
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
       location /auth/v1 {
         set $target_destination '/auth';
         set $original_uri $uri;
