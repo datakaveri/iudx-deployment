@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body style="background-color: #f3f3f3;">
-    <nav style="background-color: #042f5b !important" class="navbar navbar-expand-lg navbar-light bg-light">
-        <img _ngcontent-lej-c55="" src="IUDX_logo_white.png" class="logo d-none d-sm-block" style="border-radius: 17px;width: 7.2rem;">
+    <nav style="background-color: #0a9 !important" class="navbar navbar-expand-lg navbar-light bg-light">
+        <img _ngcontent-lej-c55="" src="https://adex.org.in/wp-content/uploads/2022/12/adex-logo.png" class="logo d-none d-sm-block" style="border-radius: 17px;width: 7.2rem;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -76,60 +76,9 @@
               </a>
             </div>
 
-             <!--  GIS Server -->
-             <div class="col-lg-4 mt-3 ms-lg-4 p-0">
-              <a href="https://gis.iudx.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
-                <div class="col-12">
-                  <h5 class="title pt-lg-3 text-center">GIS Server</h5>
-                  <hr class="mb-lg-2">
-                </div>
-                <div class="col-4">
-                  <img class="img-top px-0 py-3 mt-lg-2" src="gis.svg" alt="Card image cap" style="width: 57%;">
-                </div>
-                <div class="col-8">
-                  <p class="description pt-lg-4" style="font-size: 12px; text-align: justify;">The GIS interface is a resource server which defines the interactions between the consumers interested in GIS data and the upstream GIS Servers. It allows data admins to publish gis related info as per the Data Exchange(DX) . It enables Consumers of datasources to search and query for data using HTTPs APIs.</p>
-                </div>
-              </a>
-            </div>
-
-            <!--  Data Ingestion server -->
-            <div class="col-lg-4 mt-3 ms-lg-4">
-              <a href="https://push.iudx.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
-                <div class="col-12">
-                  <h5 class="title pt-lg-3 text-center">Data Ingestion server</h5>
-                  <hr class="mb-lg-2">
-                </div>
-                <div class="col-4">
-                  <img class="img-top px-0 py-3 mt-lg-2" src="resource.svg" alt="Card image cap" style="width: 57%;">
-                </div>
-                <div class="col-8">
-                  <p class="description pt-lg-4" style="font-size: 12px; text-align: justify;">The Data Ingestion Server is the DXs'(Data Exchange) "Firewall" which allows publication of data. It enables Providers and Delegate of datasources to publish data as per the DX(Data Exchange) data descriptor. For publication, it allows users to use HTTP protocol over TLS (HTTPs).</p>
-                </div>
-              </a>
-            </div>
-
-            <!-- File Server -->
-            <div class="col-lg-4 mt-3 ms-lg-4">
-              <a href="https://file.iudx.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
-                <div class="col-12">
-                  <h5 class="title pt-lg-3 text-center">File server</h5>
-                  <hr class="mb-lg-2">
-                </div>
-                <div class="col-4">
-                  <img class="img-top px-0 pt-3 mt-lg-2" src="file.svg" alt="Card image cap" style="width: 57%;">
-                </div>
-                <div class="col-8">
-                  <p class="description pt-lg-4 m-0" style="font-size: 12px; text-align: justify;">The File Server is DX(Data Exchange) File store which allows upload, download and discovery of Files. For Upload it allows uploading Files with group id or resource item id, it also allow user to attach additional</p>
-                </div>
-                <div class="col-12">
-                  <p class="description m-0" style="font-size: 12px; text-align: justify;"> metadata fields to the uploaded file. For Discovery it allows temporal queries to search files data within time ranges, geo parameters.It also allows user to list file metadata using resource group id or resourfce item id.</p>
-                </div>
-              </a>
-            </div>
-
             <!-- Resource Server -->
             <div class="col-lg-4 mt-3 ms-lg-4 p-0">
-              <a href="https://rs.iudx.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
+              <a href="https://rs.ts.adex.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
                 <div class="col-12">
                   <h5 class="title pt-lg-3 text-center">Resource server</h5>
                   <hr class="mb-lg-2">
@@ -142,6 +91,25 @@
                 </div>
                 <div class="col-12">
                   <p class="description" style="font-size: 12px; text-align: justify;">streaming protocol over TLS. It enables Providers of datasources to publish data as per the DX(Data exchange) data descriptor. It enables Consumers of datasources to search and query for data using HTTPs APIs.</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Resource Server Proxy -->
+            <div class="col-lg-4 mt-3 ms-lg-4 p-0">
+              <a href="https://gateway.ts.adex.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
+                <div class="col-12">
+                  <h5 class="title pt-lg-3 text-center">Resource Server Proxy</h5>
+                  <hr class="mb-lg-2">
+                </div>
+                <div class="col-4">
+                  <img class="img-top px-0 pt-3 mt-lg-2" src="resource.svg" alt="Card image cap" style="width: 57%;">
+                </div>
+                <div class="col-8">
+                  <p class="description pt-lg-4 m-0" style="font-size: 12px; text-align: justify;">The Resource Proxy Server is DXs'(Data Exchange) data discovery portal. The consumers can access data from the resource server proxy using HTTPs. It supports Complex (Temporal + Attribute), Temporal (Before, during, After) and Attribute searches. </p>
+                </div>
+                <div class="col-12">
+                  <p class="description" style="font-size: 12px; text-align: justify;"> It integrates with authorization server (token introspection) to serve private data as per the access control policies set by the provider It secures data access over TLS</p>
                 </div>
               </a>
             </div>
