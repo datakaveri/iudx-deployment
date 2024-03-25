@@ -1,16 +1,16 @@
 controller:
   resources:
     limits:
-      cpu: 1800m
-      memory: 3.5Gi
+      cpu: 100m
+      memory: 0.1Gi
     requests:
-      cpu: 1200m
-      memory: 3Gi
+      cpu: 100m
+      memory: 0.1Gi
 
   ## @param nodeSelector Node labels for pod assignment
  ### ref: https://kubernetes.io/docs/user-guide/node-selection/
   nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
+    node.kubernetes.io/instance-type: t3a.large
   # AWS network load-balancer provisioning in-front of ingress controller as service
   service:
     enabled: true

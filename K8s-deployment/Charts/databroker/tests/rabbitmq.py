@@ -1,3 +1,4 @@
+import urllib.parse
 import pika
 import sys
 import time
@@ -5,10 +6,11 @@ import ssl
 import os
 import json
 import datetime
-username = ''
-password = ''
-host = ''
-port = 
+username = 'admin'
+password = 'qmjs@XW-Y<#vr5#c4jslyI^run?P@s'
+host = 'staging.databroker.iudx.io'
+encoded_password=urllib.parse.quote(password)
+port = '24567'
 vhost='IUDX'
 #vhost = '/'
 #if len(sys.argv) < 2 else sys.argv[1]
@@ -26,7 +28,7 @@ credentials = pika.PlainCredentials(username,password)
 # cp = pika.ConnectionParameters(f'{host}',f'{port}','/',credentials=credentials)
 
 connection = pika.BlockingConnection(
-    pika.URLParameters(f'amqps://{username}:{password}@{host}:{port}/{vhost}'))
+    pika.URLParameters(f'amqps://{username}:{encoded_password}@{host}:{port}/{vhost}'))
     # cp)
 
 channel = connection.channel()
