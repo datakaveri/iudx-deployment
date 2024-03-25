@@ -5,7 +5,7 @@ from pytz import timezone
 import json
 import configparser
 # This files help to periodic update Mlayer summary apis
-with open("./config.json","r+") as file:
+with open("./config/config.json","r+") as file:
     config = json.load(file)
     user = config.get("username")
     password = config.get("password")
