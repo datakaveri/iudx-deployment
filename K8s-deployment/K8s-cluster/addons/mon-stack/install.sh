@@ -9,9 +9,9 @@ kubectl create secret generic grafana-env-secret   --from-env-file=secrets/grafa
 kubectl create secret generic grafana-credentials   --from-file=./secrets/admin-user --from-file=./secrets/admin-password -n mon-stack
 kubectl create secret generic blackbox-targets  --from-file=./secrets/blackbox-targets.yaml -n mon-stack
 
-helm repo update prometheus-community kube-state-metric grafana
+helm repo update prometheus-community kube-state-metrics grafana
 
-helm install --version=15.12.2 -n mon-stack prometheus -f prometheus/prometheus-values.yaml -f prometheus/resource-values.yaml prometheus-community/prometheus
+helm install --version=25.8.2 -n mon-stack prometheus -f prometheus/prometheus-values.yaml -f prometheus/resource-values.yaml prometheus-community/prometheus
 sleep 20
 helm install --version=3.0.6 -n mon-stack -f loki/loki-values.yaml -f loki/resource-values.yaml loki  grafana/loki
 sleep 20
