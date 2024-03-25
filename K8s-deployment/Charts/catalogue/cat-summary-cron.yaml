@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: cat-summary-cron
@@ -11,9 +11,10 @@ spec:
           containers:
           - name: cat-summary
             image: ghcr.io/datakaveri/cat-summary-script:1.0.0-alpha
+            imagePullPolicy: IfNotPresent
             volumeMounts:
             - name: cat-summary-config
-              mountPath: /app/src
+              mountPath: /app/src/config
           volumes:
           - name: cat-summary-config
             secret:
