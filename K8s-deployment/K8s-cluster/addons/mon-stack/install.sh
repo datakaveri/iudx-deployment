@@ -13,7 +13,7 @@ helm repo update prometheus-community kube-state-metrics grafana
 
 helm install --version=25.8.2 -n mon-stack prometheus -f prometheus/prometheus-values.yaml -f prometheus/resource-values.yaml prometheus-community/prometheus
 sleep 20
-helm install --version=3.0.6 -n mon-stack -f loki/loki-values.yaml -f loki/resource-values.yaml loki  grafana/loki
+helm install --version=5.42.0 -n mon-stack -f loki/loki-values.yaml -f loki/resource-values.yaml loki  grafana/loki
 sleep 20
 helm install --version=6.38.3 -f grafana/grafana-values.yaml -f grafana/resource-values.yaml  grafana -n mon-stack   grafana/grafana
 sleep 20
