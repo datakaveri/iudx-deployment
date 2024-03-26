@@ -1037,10 +1037,10 @@ server:
   ##
   tcpSocketProbeEnabled: false
   probeScheme: HTTP
-  readinessProbeInitialDelay: 30
+  readinessProbeInitialDelay: 60
   readinessProbePeriodSeconds: 5
   readinessProbeTimeout: 4
-  readinessProbeFailureThreshold: 3
+  readinessProbeFailureThreshold: 5
   readinessProbeSuccessThreshold: 1
   livenessProbeInitialDelay: 30
   livenessProbePeriodSeconds: 15
