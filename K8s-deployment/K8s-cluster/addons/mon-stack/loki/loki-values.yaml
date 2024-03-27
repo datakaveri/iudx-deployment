@@ -268,78 +268,78 @@ loki:
   # -- Check https://grafana.com/docs/loki/latest/configuration/#common_config for more info on how to provide a common configuration
   commonConfig:
     path_prefix: /var/loki
-    replication_factor: 3
+    replication_factor: 1
     compactor_address: '{{ include "loki.compactorAddress" . }}'
   # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
   storage:
-    bucketNames:
-      chunks: chunks
-      ruler: ruler
-      admin: admin
-    type: s3
-    s3:
-      s3: null
-      endpoint: null
-      region: null
-      secretAccessKey: null
-      accessKeyId: null
-      signatureVersion: null
-      s3ForcePathStyle: false
-      insecure: false
-      http_config: {}
-      # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
-      backoff_config: {}
-    gcs:
-      chunkBufferSize: 0
-      requestTimeout: "0s"
-      enableHttp2: true
-    azure:
-      accountName: null
-      accountKey: null
-      connectionString: null
-      useManagedIdentity: false
-      useFederatedToken: false
-      userAssignedId: null
-      requestTimeout: null
-      endpointSuffix: null
-    swift:
-      auth_version: null
-      auth_url: null
-      internal: null
-      username: null
-      user_domain_name: null
-      user_domain_id: null
-      user_id: null
-      password: null
-      domain_id: null
-      domain_name: null
-      project_id: null
-      project_name: null
-      project_domain_id: null
-      project_domain_name: null
-      region_name: null
-      container_name: null
-      max_retries: null
-      connect_timeout: null
-      request_timeout: null
+    # bucketNames:
+    #   chunks: chunks
+    #   ruler: ruler
+    #   admin: admin
+    # type: s3
+    # s3:
+    #   s3: null
+    #   endpoint: null
+    #   region: null
+    #   secretAccessKey: null
+    #   accessKeyId: null
+    #   signatureVersion: null
+    #   s3ForcePathStyle: false
+    #   insecure: false
+    #   http_config: {}
+    #   # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
+    #   backoff_config: {}
+    # gcs:
+    #   chunkBufferSize: 0
+    #   requestTimeout: "0s"
+    #   enableHttp2: true
+    # azure:
+    #   accountName: null
+    #   accountKey: null
+    #   connectionString: null
+    #   useManagedIdentity: false
+    #   useFederatedToken: false
+    #   userAssignedId: null
+    #   requestTimeout: null
+    #   endpointSuffix: null
+    # swift:
+    #   auth_version: null
+    #   auth_url: null
+    #   internal: null
+    #   username: null
+    #   user_domain_name: null
+    #   user_domain_id: null
+    #   user_id: null
+    #   password: null
+    #   domain_id: null
+    #   domain_name: null
+    #   project_id: null
+    #   project_name: null
+    #   project_domain_id: null
+    #   project_domain_name: null
+    #   region_name: null
+    #   container_name: null
+    #   max_retries: null
+    #   connect_timeout: null
+    #   request_timeout: null
     filesystem:
       chunks_directory: /var/loki/chunks
       rules_directory: /var/loki/rules
   # -- Configure memcached as an external cache for chunk and results cache. Disabled by default
   # must enable and specify a host for each cache you would like to use.
-  memcached:
-    chunk_cache:
-      enabled: false
-      host: ""
-      service: "memcached-client"
-      batch_size: 256
-      parallelism: 10
-    results_cache:
-      enabled: false
-      host: ""
-      service: "memcached-client"
-      timeout: "500ms"
-      default_validity: "12h"
+  # memcached:
+  #   chunk_cache:
+  #     enabled: false
+  #     host: ""
+  #     service: "memcached-client"
+  #     batch_size: 256
+  #     parallelism: 10
+  #   results_cache:
+  #     enabled: false
+  #     host: ""
+  #     service: "memcached-client"
+  #     timeout: "500ms"
+  #     default_validity: "12h"
   # -- Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
   schemaConfig: {}
   # -- Check https://grafana.com/docs/loki/latest/configuration/#ruler for more info on configuring ruler
@@ -1134,7 +1134,7 @@ backend:
 # Configuration for the single binary node(s)
 singleBinary:
   # -- Number of replicas for the single binary
-  replicas: 2
+  replicas: 1
   autoscaling:
     # -- Enable autoscaling
     enabled: false
