@@ -61,7 +61,7 @@ server:
     ##
     subPath: ""
 
-nodeExporter:
+prometheus-node-exporter:
   resources:
     limits: 
       memory: 128Mi
@@ -69,7 +69,7 @@ nodeExporter:
     requests: 
       memory: 50Mi
       cpu: 50m
-kubeStateMetrics:
+kube-state-metrics:
   tolerations:
     - key: node-role.kubernetes.io/control-plane
       operator: Exists
