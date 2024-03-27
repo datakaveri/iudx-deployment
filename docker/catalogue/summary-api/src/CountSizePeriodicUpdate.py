@@ -5,7 +5,7 @@ from pytz import timezone
 import json
 import configparser
 # This files help to periodic update Mlayer summary apis
-with open("./config/cat-summary-config.json","r+") as file:
+with open("config.json") as file:
     config = json.load(file)
     user = config.get("username")
     password = config.get("password")
@@ -49,7 +49,7 @@ with open("./config/cat-summary-config.json","r+") as file:
         # Execute a SELECT query
         if excluded_ids:
             excluded_ids_str = ",".join(f"'{str(id)}'" for id in excluded_ids)
-            where_clause = f" resourceid NOT IN ({excluded_ids_str})"
+            where_clause = f" userid NOT IN ({excluded_ids_str})"
             and_addition = " AND "
             where_addition = " where "
         else:
