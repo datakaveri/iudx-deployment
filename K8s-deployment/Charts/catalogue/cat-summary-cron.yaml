@@ -13,7 +13,7 @@ spec:
             image: ghcr.io/datakaveri/cat-summary-script:1.0.0-alpha
             volumeMounts:
             - name: cat-summary-config
-              mountPath: /app/src/config
+              mountPath: /app/config/cat-summary-config.json
           volumes:
           - name: cat-summary-config
             secret:
