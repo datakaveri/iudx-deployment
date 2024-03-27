@@ -19,6 +19,3 @@ COPY src src
 RUN adduser --disabled-password --no-create-home --uid 1001 cat-summary-api
 USER cat-summary-api
 CMD ["python","src/CountSizePeriodicUpdate.py"]
-
-
-
