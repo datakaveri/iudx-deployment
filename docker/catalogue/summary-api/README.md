@@ -29,7 +29,7 @@ The script reads its configuration from a JSON file named `config.json`. This fi
 ## Usage
 
 ```sh
-docker build -t ghcr.io/datakaveri/cat-summary-script:1.0.0-alpha-$(git rev-parse --short=5 HEAD)  .
+docker build -t ghcr.io/datakaveri/cat-summary-script:1.0.0  .
 ```
 
 The script will connect to the PostgreSQL database, calculate the API usage statistics, and update the summary table. If there are any errors during this process, they will be printed to the console.
