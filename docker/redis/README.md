@@ -4,7 +4,7 @@ Docker image for redis with rejson
 ## Build Docker Image
 This builds custom docker image on top of [bitnami docker redis](https://github.com/bitnami/containers/tree/main/bitnami/redis) to include [rejson](https://redis.io/docs/stack/json/) module.
 ```sh
-docker build -t ghcr.io/datakaveri/redis-rejson:7.0.2-2.0.9 -f redis-rejson/Dockerfile  redis-rejson/ 
+docker build -t ghcr.io/datakaveri/redis-rejson:7.2.4-2.6.8 -f redis-rejson/Dockerfile  redis-rejson/ 
 ```
 
 # Redis autoscaler
