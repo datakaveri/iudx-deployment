@@ -1,7 +1,7 @@
 version: '3.9'
 services:
     redis-rejson:
-      image: ghcr.io/datakaveri/redis-rejson:7.0.2-2.0.9
+      image: ghcr.io/datakaveri/redis-rejson:7.2.4-2.6.8
       cap_drop:
         - ALL
       environment:
@@ -54,4 +54,3 @@ configs:
 secrets:
   admin-password:
     file: secrets/passwords/admin-password
-
