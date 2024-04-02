@@ -270,11 +270,11 @@ loki:
     compactor_address: '{{ include "loki.compactorAddress" . }}'
   # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
   storage:
+    type: filesystem
     # bucketNames:
     #   chunks: chunks
     #   ruler: ruler
     #   admin: admin
-    # type: s3
     # s3:
     #   s3: null
     #   endpoint: null
