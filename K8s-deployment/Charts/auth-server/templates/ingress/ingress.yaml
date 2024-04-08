@@ -88,7 +88,7 @@ metadata:
         set $original_uri '/apis';
         rewrite ^ $target_destination last;
       }
-      location /iudx/cat/v1/item {
+      location /{{ .Values.ingress.basePathDx }}/cat/v1/item {
         if ($request_method != GET) {
           set $target_destination '/onb';
         }
@@ -98,7 +98,7 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location /iudx/cat/v1/instance {
+      location /{{ .Values.ingress.basePathDx }}/cat/v1/instance {
         if ($request_method != GET) {
           set $target_destination '/onb';
         }
@@ -108,7 +108,7 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location  /iudx/cat/v1/internal/ui/instance {
+      location  /{{ .Values.ingress.basePathDx }}/cat/v1/internal/ui/instance {
         if ($request_method != GET) {
           set $target_destination '/onb';
         }
@@ -118,7 +118,7 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location  /iudx/cat/v1/internal/ui/domain {
+      location  /{{ .Values.ingress.basePathDx }}/cat/v1/internal/ui/domain {
         if ($request_method != GET) {
           set $target_destination '/onb';
         }
@@ -128,7 +128,7 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location  /iudx/cat/v1 {
+      location  /{{ .Values.ingress.basePathDx }}/cat/v1 {
         set $target_destination '/cat';
         set $original_uri $uri;
         rewrite ^ $target_destination last;
