@@ -31,9 +31,11 @@ Application at backup/backup-app backs up Rabbitmq definitions files to another 
 Secrets directory after generation of secrets
 ```sh
 secrets/
+├── .rabbitmq.env
 ├── init-config.json
 ├── passwords
 │   ├── admin-password
+│   ├── auditing-password
 │   ├── cat-password
 │   ├── di-password
 │   ├── fs-password
@@ -41,10 +43,10 @@ secrets/
 │   ├── lip-password
 │   ├── logstash-password
 │   ├── profanity-cat-password
-│   └── rs-password
+│   ├── rs-password
+│   ├── rs-proxy-adapter-password
+│   └── rs-proxy-password
 └── pki
-    ├── backup-ssh-privkey
-    ├── backup-ssh-pubkey
     ├── rabbitmq-ca-cert.pem
     ├── rabbitmq-server-cert.pem
     └── rabbitmq-server-key.pem
