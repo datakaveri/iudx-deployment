@@ -18,4 +18,4 @@ sleep 150
 
 helm delete -n postgres  psql && sleep 50
 
-helm install -f psql-async-values.yaml -f psql-sync-values.yaml -f resource-values.yaml -n  postgres psql  bitnami/postgresql-ha --version=9.3.2 $@ --set postgresql.password=$POSTGRES_PASSWORD  --set postgresql.repmgrPassword=$REPMGR_PASSWORD --set pgpool.adminPassword=$POOL_ADMIN_PASSWORD
+helm install -f psql-async-values.yaml -f psql-sync-values.yaml -f resource-values.yaml -n  postgres psql  bitnami/postgresql-ha --version=13.0.1 $@ --set postgresql.password=$POSTGRES_PASSWORD  --set postgresql.repmgrPassword=$REPMGR_PASSWORD --set pgpool.adminPassword=$POOL_ADMIN_PASSWORD
