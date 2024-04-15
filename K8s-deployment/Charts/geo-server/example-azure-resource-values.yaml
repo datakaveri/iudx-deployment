@@ -1,0 +1,10 @@
+geoserver:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
+    requests:
+      cpu: 600m
+      memory: 600Mi

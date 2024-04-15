@@ -1,0 +1,177 @@
+{{- if .Values.geoserver.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: geoserver
+  labels: 
+    app.kubernetes.io/component: geoserver
+    app: geoserver
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.geoserver.replicaCount }}
+  {{- if .Values.geoserver.updateStrategy }}
+  strategy: {{- toYaml .Values.geoserver.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: geoserver
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: geoserver
+        app.kubernetes.io/component: geoserver
+        {{- if .Values.geoserver.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.geoserver.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.geoserver.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.geoserver.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.geoserver.priorityClassName }}
+      priorityClassName: {{ .Values.geoserver.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.geoserver.schedulerName }}
+      schedulerName: {{ .Values.geoserver.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.geoserver.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.geoserver.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "geoserver.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command: {}
+          
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: foo
+              mountPath: bar
+        {{- end }}
+        {{- if .Values.geoserver.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: geoserver
+          image: {{ template "geoserver.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.geoserver.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.geoserver.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.geoserver.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.geoserver.args }}
+          args: [{{- range $index, $str := .Values.geoserver.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.geoserver.resources }}
+          resources: {{- toYaml .Values.geoserver.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.geoserver.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.geoserver.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.geoserver.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+              protocol: TCP
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.geoserver.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.geoserver.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.geoserver.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.geoserver.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.geoserver.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.geoserver.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.geoserver.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.geoserver.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.geoserver.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.geoserver.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.geoserver.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.geoserver.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.geoserver.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.geoserver.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.geoserver.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.geoserver.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.geoserver.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.geoserver.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "geoserver.serviceAccountName" . }}
+      {{- end }}
+      {{- include "geoserver.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.geoserver.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.geoserver.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.geoserver.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.geoserver.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.geoserver.podAffinityPreset "component" "geoserver" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.geoserver.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "geoserver" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.geoserver.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.geoserver.nodeAffinityPreset.type "key" .Values.geoserver.nodeAffinityPreset.key "values" .Values.geoserver.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.geoserver.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.geoserver.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
