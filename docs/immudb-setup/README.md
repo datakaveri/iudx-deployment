@@ -47,4 +47,7 @@ use iudxrsorg
 
 # to get list of commands with
 > --help
+
+# to quit
+> quit
 ```
