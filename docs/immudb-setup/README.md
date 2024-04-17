@@ -10,7 +10,7 @@ Link to immuclient : https://docs.immudb.io/master/connecting/clitools.html#immu
 ## Steps to setup Immudb
 
 1. Download latest immuclient from GitHub releases
-with respect to corresponding the operating system, architecture.
+with respect to the corresponding operating system, architecture
 Please find the link to the immuclient binaries  : [here](https://docs.immudb.io/master/)
 2. Execute the following command to make the binary executable
 ```
