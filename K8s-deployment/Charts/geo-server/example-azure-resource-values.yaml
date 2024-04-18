@@ -1,3 +1,9 @@
+ingress:
+  hostname: geoserver-hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+
 geoserver:
   nodeSelector:
     node.kubernetes.io/instance-type: Standard_B2s
