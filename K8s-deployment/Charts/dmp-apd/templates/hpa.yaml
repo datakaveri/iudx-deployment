@@ -1,10 +1,10 @@
-{{- if and .Values.dmpApd.enabled .Values.dmpApd.autoscaling.enabled }}
+{{- if and .Values.dmpapd.enabled .Values.dmpapd.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: dmpApd
+  name: dmpapd
   labels:
-    app: dmpApd
+    app: dmpapd
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: dmpApd
-  minReplicas: {{ .Values.dmpApd.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.dmpApd.autoscaling.maxReplicas }}
+    name: dmpapd
+  minReplicas: {{ .Values.dmpapd.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.dmpapd.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.dmpApd.autoscaling.targetCPU }}
+    {{- if .Values.dmpapd.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.dmpApd.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.dmpapd.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.dmpApd.autoscaling.targetMemory }}
+    {{- if .Values.dmpapd.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.dmpApd.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.dmpapd.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}

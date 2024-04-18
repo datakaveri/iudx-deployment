@@ -1,11 +1,11 @@
-{{- if .Values.dmpApd.enabled -}}
+{{- if .Values.dmpapd.enabled -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: dmpApd
+  name: dmpapd
   labels: 
-    app.kubernetes.io/component: dmpApd
-    app: dmpApd
+    app.kubernetes.io/component: dmpapd
+    app: dmpapd
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -13,44 +13,44 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.dmpApd.replicaCount }}
-  {{- if .Values.dmpApd.updateStrategy }}
-  strategy: {{- toYaml .Values.dmpApd.updateStrategy | nindent 4 }}
+  replicas: {{ .Values.dmpapd.replicaCount }}
+  {{- if .Values.dmpapd.updateStrategy }}
+  strategy: {{- toYaml .Values.dmpapd.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: 
-      app: dmpApd
+      app: dmpapd
   template:
     metadata:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app: dmpApd
-        app.kubernetes.io/component: dmpApd
-        {{- if .Values.dmpApd.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.podLabels "context" $) | nindent 8 }}
+        app: dmpapd
+        app.kubernetes.io/component: dmpapd
+        {{- if .Values.dmpapd.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      {{- if .Values.dmpApd.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.dmpApd.nodeSelector "context" $) | nindent 8 }}
+      {{- if .Values.dmpapd.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.dmpapd.nodeSelector "context" $) | nindent 8 }}
       {{- end }}      
-      {{- if .Values.dmpApd.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.tolerations "context" .) | nindent 8 }}
+      {{- if .Values.dmpapd.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.dmpApd.priorityClassName }}
-      priorityClassName: {{ .Values.dmpApd.priorityClassName | quote }}
+      {{- if .Values.dmpapd.priorityClassName }}
+      priorityClassName: {{ .Values.dmpapd.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.dmpApd.schedulerName }}
-      schedulerName: {{ .Values.dmpApd.schedulerName | quote }}
+      {{- if .Values.dmpapd.schedulerName }}
+      schedulerName: {{ .Values.dmpapd.schedulerName | quote }}
       {{- end }}
-      {{- if .Values.dmpApd.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dmpApd.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.dmpapd.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.dmpapd.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}
         - name: volume-permissions
-          image: {{ include "dmpApd.volumePermissions.image" . }}
+          image: {{ include "dmpapd.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           command: {}
           
@@ -62,37 +62,37 @@ spec:
             - name: foo
               mountPath: bar
         {{- end }}
-        {{- if .Values.dmpApd.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.initContainers "context" $) | nindent 8 }}
+        {{- if .Values.dmpapd.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: dmpApd
-          image: {{ template "dmpApd.image" . }}
+        - name: dmpapd
+          image: {{ template "dmpapd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.dmpApd.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dmpApd.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.dmpapd.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.dmpapd.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.dmpApd.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.command "context" $) | nindent 12 }}
+          {{- else if .Values.dmpapd.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.dmpApd.args }}
-          args: [{{- range $index, $str := .Values.dmpApd.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- else if .Values.dmpapd.args }}
+          args: [{{- range $index, $str := .Values.dmpapd.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
           {{- end }}
           
           
-          {{- if .Values.dmpApd.resources }}
-          resources: {{- toYaml .Values.dmpApd.resources | nindent 12 }}
+          {{- if .Values.dmpapd.resources }}
+          resources: {{- toYaml .Values.dmpapd.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.dmpApd.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- if .Values.dmpapd.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-        {{- if .Values.dmpApd.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.dmpApd.sidecars "context" $) | nindent 8 }}
+        {{- if .Values.dmpapd.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.dmpapd.sidecars "context" $) | nindent 8 }}
         {{- end }}
           ports:
             - name: http
@@ -105,31 +105,31 @@ spec:
               containerPort: {{ .Values.containerPorts.prometheus }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.dmpApd.livenessProbe.enabled }}
+          {{- if .Values.dmpapd.livenessProbe.enabled }}
           livenessProbe:
              httpGet:
-               path: {{ .Values.dmpApd.livenessProbe.path }}
+               path: {{ .Values.dmpapd.livenessProbe.path }}
                port: 9000
-             initialDelaySeconds: {{ .Values.dmpApd.livenessProbe.initialDelaySeconds }}
-             periodSeconds: {{ .Values.dmpApd.livenessProbe.periodSeconds }}
-             timeoutSeconds: {{ .Values.dmpApd.livenessProbe.timeoutSeconds }}
+             initialDelaySeconds: {{ .Values.dmpapd.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.dmpapd.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.dmpapd.livenessProbe.timeoutSeconds }}
           
-          {{- else if .Values.dmpApd.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dmpapd.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.dmpApd.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dmpApd.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.dmpApd.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.customReadinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.dmpapd.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dmpapd.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.dmpapd.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.dmpApd.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dmpApd.startupProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.dmpApd.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.customStartupProbe "context" $) | nindent 12 }}
+          {{- if .Values.dmpapd.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dmpapd.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.dmpapd.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
-          {{- if .Values.dmpApd.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.lifecycleHooks "context" $) | nindent 12 }}
+          {{- if .Values.dmpapd.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: MY_POD_IP
@@ -137,41 +137,41 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
           envFrom:
-            {{- if .Values.dmpApd.extraEnvVarsCM }}
+            {{- if .Values.dmpapd.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.dmpApd.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dmpapd.extraEnvVarsCM "context" $) }}
             {{- end }}
-            {{- if .Values.dmpApd.extraEnvVarsSecret }}
+            {{- if .Values.dmpapd.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.dmpApd.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dmpapd.extraEnvVarsSecret "context" $) }}
             {{- end }}
-            {{- if .Values.dmpApd.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.extraEnvVars "context" $) | nindent 12 }}
+            {{- if .Values.dmpapd.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
       {{- if .Values.serviceAccount.create }}    
-      serviceAccountName: {{ template "dmpApd.serviceAccountName" . }}
+      serviceAccountName: {{ template "dmpapd.serviceAccountName" . }}
       {{- end }}
-      {{- include "dmpApd.imagePullSecrets" . | nindent 6 }}
+      {{- include "dmpapd.imagePullSecrets" . | nindent 6 }}
       
-      {{- if .Values.dmpApd.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.hostAliases "context" $) | nindent 8 }}
+      {{- if .Values.dmpapd.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.dmpApd.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.dmpApd.affinity "context" $) | nindent 8 }}
+      {{- if .Values.dmpapd.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.dmpapd.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        {{- if .Values.dmpApd.podAffinityPreset}}
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dmpApd.podAffinityPreset "component" "dmpApd" "context" $) | nindent 10 }}
+        {{- if .Values.dmpapd.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dmpapd.podAffinityPreset "component" "dmpapd" "context" $) | nindent 10 }}
         {{- end}}
-        {{- if .Values.dmpApd.podAntiAffinityPreset }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "dmpApd" "context" $) | nindent 10 }}
+        {{- if .Values.dmpapd.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "dmpapd" "context" $) | nindent 10 }}
         {{- end}}
-        {{- if .Values.dmpApd.nodeAffinityPreset.type }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dmpApd.nodeAffinityPreset.type "key" .Values.dmpApd.nodeAffinityPreset.key "values" .Values.dmpApd.nodeAffinityPreset.values) | nindent 10 }}
+        {{- if .Values.dmpapd.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dmpapd.nodeAffinityPreset.type "key" .Values.dmpapd.nodeAffinityPreset.key "values" .Values.dmpapd.nodeAffinityPreset.values) | nindent 10 }}
         {{- end }}
       {{- end }}
       volumes:
-        {{- if .Values.dmpApd.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.dmpApd.extraVolumes "context" $) | nindent 8 }}
+        {{- if .Values.dmpapd.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dmpapd.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- end }}
