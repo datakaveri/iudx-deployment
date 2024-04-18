@@ -1,5 +1,5 @@
 ingress:
-  hostname: dmpApd-hostname
+  hostname: dmpapd-hostname
   annotations: {
     cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
   }
@@ -8,7 +8,7 @@ ingress:
 ## @param apiServer.resources.limits The resources limits for the ApiServer containers
 ## @param apiServer.resources.requests The requested resources for the ApiServer containers
 ##
-dmpApd:
+dmpapd:
   enabled: true
   resources:
     limits:
