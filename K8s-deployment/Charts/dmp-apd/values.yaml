@@ -98,7 +98,7 @@ image:
 
   ##
 containerPorts:
-  http: 80
+  http: 8080
   #https: 443
   hazelcast: 5701
   prometheus: 9000
