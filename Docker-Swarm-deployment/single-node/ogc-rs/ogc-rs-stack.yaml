@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  file-server:
+  ogc-rs:
     image: ghcr.io/datakaveri/geoserver-dev:1.0.0-alpha-96bb4be
     command: bash -c "exec java $$OGCRS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
     cap_drop:
