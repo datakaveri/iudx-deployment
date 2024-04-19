@@ -1,7 +1,7 @@
 version: '3.9'
 services:
     immudb:
-      image: codenotary/immudb:1.4.1
+      image: codenotary/immudb:1.9DOM.2
       read_only: true
       volumes:
         - immudb-data:/var/lib/immudb
@@ -30,12 +30,16 @@ services:
 
 
     immudb-audit:
-      image: codenotary/immuclient:1.4.1
+      image: codenotary/immuclient:1.9DOM.2
       command: audit-mode
       read_only: true
       volumes:
       - type: tmpfs
         target: /tmp/
+        read_only: false
+
+      - type: tmpfs
+        target: /root/
         read_only: false
       networks:
         - overlay-net
