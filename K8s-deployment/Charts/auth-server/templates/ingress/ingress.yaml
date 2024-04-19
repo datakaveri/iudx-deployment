@@ -143,6 +143,11 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
+      location /stac {
+        set $target_destination '/cat';
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
 spec:
   rules:
     {{- if .Values.ingress.hostname }}
