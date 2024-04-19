@@ -604,6 +604,12 @@ controller:
   extraVolumeMounts:
     - name: error-conf
       mountPath: /etc/nginx/conf.d
+    - name: iudx-cos-root
+      mountPath: /usr/local/nginx/html/iudx-html
+    - name: ugix-cos-root
+      mountPath: /usr/local/nginx/html/ugix-html
+    - name: adex-cos-root
+      mountPath: /usr/local/nginx/html/adex-html
 
   #  - name: copy-portal-skins
   #   mountPath: /var/lib/lemonldap-ng/portal/skins
@@ -613,6 +619,15 @@ controller:
     - name: error-conf
       configMap:
         name: error-conf
+    - name: iudx-cos-root
+      configMap:
+        name: iudx-cos-root 
+    - name: ugix-cos-root
+      configMap:
+        name: ugix-cos-root
+    - name: adex-cos-root
+      configMap:
+        name: adex-cos-root
 
   #  - name: copy-portal-skins
   #    emptyDir: {}
