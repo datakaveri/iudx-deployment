@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of links</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body style="background-color: #f3f3f3;">
+    <nav style="background-color: #042f5b !important" class="navbar navbar-expand-lg navbar-light bg-light">
+        <img _ngcontent-lej-c55="" src="IUDX_logo_white.png" class="logo d-none d-sm-block" style="border-radius: 17px;width: 7.2rem;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </nav>
+
+      <div style="padding: 0 30px">
+        <div class="row">
+            <div class="col-12 mt-5" style="position: relative; top:-100px; color: #fff;">
+                <h2 class="text-center"> API Server Documentation Endpoints</h2>
+            </div>
+
+            <div class="col-12" style="position: relative; top: -60px;">
+              <div class="row">
+
+            <!-- Auth Server -->
+            <div class="col-lg-4 mt-0">
+              <a class="row" href="/auth/apis" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
+                <div class="col-12">
+                  <h5 class="title pt-lg-3 text-center">Authorization Server</h5>
+                  <hr class="mb-lg-2">
+                </div>
+
+                <div class="col-4">
+                  <img class="img-top px-0 py-0" src="auth.svg" alt="Card image cap" >
+                </div>
+                <div class="col-8">
+                  <p class="description pt-lg-3" style="font-size: 12px; text-align: justify;">These APIs are used by users -providers and consumers to give and get  authorized access to data using tokens, policy etc. These APIs requires valid token or client details for authentication.</p>
+                </div>
+                <div class="col-6 text-right pb-lg-3">
+                  <!-- <a  class="btn btn-primary border-0" style="background-color: #042f5b; font-size: 14px;">Check out Authorization APIs</a> -->
+                </div>
+              </a>
+            </div>
+
+            <!-- Catalogue Server -->
+            <div class="col-lg-4 mt-0 ms-lg-4">
+              <a href="/cat/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
+                <div class="col-12">
+                  <h5 class="title pt-lg-3 text-center">Catalogue Server</h5>
+                  <hr class="mb-lg-2">
+                </div>
+                <div class="col-4">
+                  <img class="img-top px-0 pb-3" src="catalogue.svg" alt="Card image cap" style="width: 80%;">
+                </div>
+                <div class="col-8">
+                  <p class="description pt-lg-2" style="font-size: 12px; text-align: justify;">The Catalogue is DXs' (Data Exchange) dataset discovery portal and metadata store.For search and discovery, it allows users search through text and geo-based queries</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- On boarding Server -->
+            <div class="col-lg-4 mt-0 ms-lg-4">
+              <a href="/onboarding/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
+                <div class="col-12">
+                  <h5 class="title pt-lg-3 text-center">Onboarding Server</h5>
+                  <hr class="mb-lg-2">
+                </div>
+
+                <div class="col-4">
+                  <img class="img-top px-0 py-3 mt-lg-0" src="resource.svg" alt="Card image cap" style="width: 57%;">
+                </div>
+                <div class="col-8">
+                  <p class="description pt-lg-1" style="font-size: 12px; text-align: justify;">The Onboarding is DXs' (Data Exchange) metadata onboarding portal. It enables Providers of datasources to describe them with DX based annotations to make discovery and consumption of data both automatable and semantically describable.</p>
+                </div>
+              </a>
+            </div>
+
+             <!--  GIS Server -->
+             <div class="col-lg-4 mt-3 ms-lg-4 p-0">
+              <a href="https://gis.iudx.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
+                <div class="col-12">
+                  <h5 class="title pt-lg-3 text-center">GIS Server</h5>
+                  <hr class="mb-lg-2">
+                </div>
+                <div class="col-4">
+                  <img class="img-top px-0 py-3 mt-lg-2" src="gis.svg" alt="Card image cap" style="width: 57%;">
+                </div>
+                <div class="col-8">
+                  <p class="description pt-lg-4" style="font-size: 12px; text-align: justify;">The GIS interface is a resource server which defines the interactions between the consumers interested in GIS data and the upstream GIS Servers. It allows data admins to publish gis related info as per the Data Exchange(DX) . It enables Consumers of datasources to search and query for data using HTTPs APIs.</p>
+                </div>
+              </a>
+            </div>
+
+            <!--  Data Ingestion server -->
+            <div class="col-lg-4 mt-3 ms-lg-4">
+              <a href="https://push.iudx.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
+                <div class="col-12">
+                  <h5 class="title pt-lg-3 text-center">Data Ingestion server</h5>
+                  <hr class="mb-lg-2">
+                </div>
+                <div class="col-4">
+                  <img class="img-top px-0 py-3 mt-lg-2" src="resource.svg" alt="Card image cap" style="width: 57%;">
+                </div>
+                <div class="col-8">
+                  <p class="description pt-lg-4" style="font-size: 12px; text-align: justify;">The Data Ingestion Server is the DXs'(Data Exchange) "Firewall" which allows publication of data. It enables Providers and Delegate of datasources to publish data as per the DX(Data Exchange) data descriptor. For publication, it allows users to use HTTP protocol over TLS (HTTPs).</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- File Server -->
+            <div class="col-lg-4 mt-3 ms-lg-4">
+              <a href="https://file.iudx.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
+                <div class="col-12">
+                  <h5 class="title pt-lg-3 text-center">File server</h5>
+                  <hr class="mb-lg-2">
+                </div>
+                <div class="col-4">
+                  <img class="img-top px-0 pt-3 mt-lg-2" src="file.svg" alt="Card image cap" style="width: 57%;">
+                </div>
+                <div class="col-8">
+                  <p class="description pt-lg-4 m-0" style="font-size: 12px; text-align: justify;">The File Server is DX(Data Exchange) File store which allows upload, download and discovery of Files. For Upload it allows uploading Files with group id or resource item id, it also allow user to attach additional</p>
+                </div>
+                <div class="col-12">
+                  <p class="description m-0" style="font-size: 12px; text-align: justify;"> metadata fields to the uploaded file. For Discovery it allows temporal queries to search files data within time ranges, geo parameters.It also allows user to list file metadata using resource group id or resourfce item id.</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- Resource Server -->
+            <div class="col-lg-4 mt-3 ms-lg-4 p-0">
+              <a href="https://rs.iudx.org.in/apis" class="row m-0" style="color:black; text-decoration: none; box-shadow: 2px 1px 10px gray; border-radius: 10px; background-color: #fff;">
+                <div class="col-12">
+                  <h5 class="title pt-lg-3 text-center">Resource server</h5>
+                  <hr class="mb-lg-2">
+                </div>
+                <div class="col-4">
+                  <img class="img-top px-0 pt-3 mt-lg-2" src="resource.svg" alt="Card image cap" style="width: 57%;">
+                </div>
+                <div class="col-8">
+                  <p class="description pt-lg-4 m-0" style="font-size: 12px; text-align: justify;">The Resource Server is DXs'(Data exchange) data store which allows publication, subscription and discovery of data. For search and discovery, it allows users to search through temporal, geo-based and attribute queries. For publication and subscription, it allows users to use AMQP </p>
+                </div>
+                <div class="col-12">
+                  <p class="description" style="font-size: 12px; text-align: justify;">streaming protocol over TLS. It enables Providers of datasources to publish data as per the DX(Data exchange) data descriptor. It enables Consumers of datasources to search and query for data using HTTPs APIs.</p>
+                </div>
+              </a>
+            </div>
+
+          </div>
+        </div>      </div>
+
+      <footer class="text-center position-fixed" style="right: 50%; bottom: 0;">  © 2024 by IUDX</footer>
+</body>
+</html>

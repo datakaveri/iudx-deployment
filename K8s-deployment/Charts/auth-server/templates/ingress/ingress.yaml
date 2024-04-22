@@ -40,9 +40,8 @@ metadata:
                                         use_port_in_redirects = false,                                                                                                                                             
                                         global_throttle = { namespace = "", limit = 0, window_size = 0, key = { }, ignored_cidrs = { } },                                                                          
                                 })                                                                                                                                                                                 
-                        }                                                                                                          
-      try_files $uri =404;                      
-                              
+                        }
+      try_files {{ .Values.ingress.tryFilesBaseDir }}/$uri =404;
       }
       location /apis {
 
@@ -57,9 +56,7 @@ metadata:
                                         global_throttle = { namespace = "", limit = 0, window_size = 0, key = { }, ignored_cidrs = { } },
                                 })
                         }
-
-      try_files /index.html  =404;
-
+      try_files {{ .Values.ingress.tryFilesBaseDir }}/index.html =404;
       }
       location /auth/apis/spec {
         set $target_destination '/auth';
@@ -91,7 +88,7 @@ metadata:
         set $original_uri '/apis';
         rewrite ^ $target_destination last;
       }
-      location /iudx/cat/v1/item {
+      location /{{ .Values.ingress.basePathDx }}/cat/v1/item {
         if ($request_method != GET) {
           set $target_destination '/onb';
         }
@@ -101,63 +98,7 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location /iudx/cat/v1/search {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/count {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/geo {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/list {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/relsearch {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/relationship {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /iudx/cat/v1/instance {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location /consumer/ratings {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location  /iudx/cat/v1/internal/ui/geoquery {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-
-      location  /iudx/cat/v1/internal/ui/providers {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location  /iudx/cat/v1/internal/ui/popularDatasets {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location  /iudx/cat/v1/internal/ui/instance {
+      location /{{ .Values.ingress.basePathDx }}/cat/v1/instance {
         if ($request_method != GET) {
           set $target_destination '/onb';
         }
@@ -167,7 +108,7 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location  /iudx/cat/v1/internal/ui/domain {
+      location  /{{ .Values.ingress.basePathDx }}/cat/v1/internal/ui/instance {
         if ($request_method != GET) {
           set $target_destination '/onb';
         }
@@ -177,18 +118,33 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location  /iudx/cat/v1/internal/ui/dataset {
+      location  /{{ .Values.ingress.basePathDx }}/cat/v1/internal/ui/domain {
+        if ($request_method != GET) {
+          set $target_destination '/onb';
+        }
+        if ($request_method = GET) {
+          set $target_destination '/cat';
+        }
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
+      location  /{{ .Values.ingress.basePathDx }}/cat/v1 {
         set $target_destination '/cat';
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location  /iudx/cat/v1/nlpsearch {
+      location  /consumer/ratings {
         set $target_destination '/cat';
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
       location /auth/v1 {
         set $target_destination '/auth';
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
+      location /stac {
+        set $target_destination '/cat';
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
