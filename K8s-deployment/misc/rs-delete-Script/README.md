@@ -1,6 +1,8 @@
 # Introduction
 K8s deployment for rs delete script.
 
+# Image Creation and Script
+For Script and Image creation, refer the in Resource Server, [here](https://github.com/datakaveri/iudx-resource-server/tree/master/scripts) 
 
 # Installation of refresh script
 ## Create secret files
