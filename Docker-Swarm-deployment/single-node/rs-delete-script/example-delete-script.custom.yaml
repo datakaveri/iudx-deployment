@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  delete-script:
+    ports: 
+      - target: 8080  # API server HTTP port
+        published: 8080
+        mode: host 
+
