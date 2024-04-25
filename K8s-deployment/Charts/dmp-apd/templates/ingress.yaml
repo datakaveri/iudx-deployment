@@ -54,8 +54,8 @@ spec:
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
 #  As cos tls certficates covered in auth ingress
-  # tls:
-  #   - hosts:
-  #     - {{ .Values.ingress.hostname }}
-  #     secretName: {{ .Values.ingress.tls.secretName }}
+  tls:
+    - hosts:
+      - {{ .Values.ingress.hostname }}
+      secretName: {{ .Values.ingress.tls.secretName }}
 {{- end }}
