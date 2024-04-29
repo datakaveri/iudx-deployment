@@ -421,7 +421,8 @@ ingress:
     nginx.ingress.kubernetes.io/global-rate-limit-window: 1s,
     nginx.ingress.kubernetes.io/limit-burst-multiplier: "1",
     nginx.ingress.kubernetes.io/limit-connections: "100",
-    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "100",
+    nginx.ingress.kubernetes.io/app-root: /apis
   }
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
