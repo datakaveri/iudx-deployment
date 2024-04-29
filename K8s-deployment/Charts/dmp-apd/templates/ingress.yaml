@@ -25,9 +25,6 @@ metadata:
       add_header X-Permitted-Cross-Domain-Policies  "none" always;
       add_header Cross-Origin-Embedder-Policy "require-corp" always;
       add_header Cross-Origin-Resource-Policy "cross-origin" always;
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      internal;
-      rewrite ^ $original_uri break;
 spec:
   rules:
     {{- if .Values.ingress.hostname }}
