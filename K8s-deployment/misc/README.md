@@ -33,4 +33,9 @@ Simply use the `kubectl` command as you normally would. When deleting namespaces
 $ kubectl delete namespace my-namespace
 You are trying to delete a namespace. Do you want to proceed? (yes/no): yes
 namespace "my-namespace" deleted
+```
 
+```bash
+$ kubectl delete ns --all
+You are trying to delete all namespaces. Please type 'delete all namespace' to confirm:
+```
