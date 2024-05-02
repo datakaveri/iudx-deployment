@@ -9,7 +9,7 @@ networks:
 
 services:
   rabbitmq:
-    image: docker.io/bitnami/rabbitmq:3.11.10-debian-11-r4  # using ubuntu based images as its officially supported
+    image: docker.io/bitnami/rabbitmq:3.12.12-debian-11-r0  # using ubuntu based images as its officially supported
     #setting the hostname, so that when same/new container restarts it uses the same directory to save i.e "/var/lib/rabbitmq/rabbit@hostname"
     hostname: rabbitmq
     env_file:
@@ -78,5 +78,3 @@ secrets:
     file: secrets/pki/rabbitmq-server-cert.pem
   rabbitmq-server-key.pem:
     file: secrets/pki/rabbitmq-server-key.pem
-  rabbitmq-admin-passwd: # rabbimq passwd of admin user
-    file: secrets/passwords/admin-password

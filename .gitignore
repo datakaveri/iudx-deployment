@@ -24,3 +24,4 @@ credentials-velero
 *.tar.gz
 kubectl
 kubectl.sha256
+.idea/
