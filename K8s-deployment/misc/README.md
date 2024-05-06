@@ -9,10 +9,9 @@ This repository contains a custom shell function for the `kubectl` command. The 
 The custom `kubectl()` function behaves as follows:
 
 - When the user attempts to delete a namespace (`delete namespace` or `delete ns`), it prompts for confirmation before proceeding.
-- If the deletion command includes the `--all` flag, it requires the user to explicitly type "delete all namespace" to confirm.
 - If the user confirms the deletion, the function executes the `kubectl` command with the provided arguments.
 - If the user chooses not to proceed with the deletion, it cancels the operation.
-
+- If the deletion command includes the --all flag, it informs the user that deleting all namespaces is not allowed and cancels the operation.
 ## Installation
 
 To use this custom `kubectl()` function, follow these steps:
@@ -37,5 +36,5 @@ namespace "my-namespace" deleted
 
 ```
 $ kubectl delete ns --all
-You are trying to delete all namespaces. Please type 'delete all namespace' to confirm:
+Deleting all namespaces is not allowed. Operation cancelled.
 ```
