@@ -11,4 +11,4 @@ This script performs operation of restarting all API servers in a sequence enume
     `./K8s-API-Servers-restart.sh config.json`
 
 **_NOTE:_**
- Make sure the list of endpoints and namespaces are mapped correctly before running script.
+ Make sure the list of endpoints and namespaces in **config.json** file are mapped correctly before running script.
