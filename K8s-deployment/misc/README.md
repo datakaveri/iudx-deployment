@@ -16,10 +16,18 @@ The custom `kubectl()` function behaves as follows:
 
 To use this custom `kubectl()` function, follow these steps:
 
-1. Copy the provided function code.
-2. Open your shell configuration file (e.g., `.bashrc`, `.bash_profile`, `.zshrc`).
-3. Paste the function code at the end of the file.
-4. Save the file and reload your shell configuration (`source ~/.bashrc` or `source ~/.zshrc`).
+1. Create a new file and copy the provided function into that file `k8s-ns-del-prevention.sh`.
+2. Ensure the file has execute permissions: `chmod +x k8s-ns-del-prevention.sh`.
+3. Add the path of that file to your shell configuration file (e.g., `.bashrc`, `.bash_profile`).
+   
+   ```
+   source ~/k8s-ns-del-prevention.sh
+   ```
+4. Save the file and reload your shell configuration using the below command:
+   
+   ```
+   . ./.bashrc
+   ```
 5. Now, whenever you use the `kubectl` command to delete a namespace, the custom function will intercept the command and prompt for confirmation.
 
 ## Usage
