@@ -1,0 +1,30 @@
+{
+        "endpoints": [
+                " ",
+                " ",
+                "https://staging.cos.iudx.io/auth/apis", 
+                "https://staging.acl-apd.iudx.io/apis",
+                "https://taging.cos.iudx.io/cat/apis",
+                "https://staging.cos.iudx.io/onboarding/apis",
+                "https://rs.staging.cos.iudx.io/apis",
+                "https://file.staging.cos.iudx.io/apis", 
+                "https://gis.staging.cos.iudx.io/apis",  
+                "https://push.staging.cos.iudx.io/apis", 
+                "https://geoserver.staging.cos.iudx.io", 
+                "https://staging.dmp-apd.iudx.io/apis"
+        ],
+        "namespaces": [
+                "lip",
+                "auditing" ,
+                "aaa",
+                "acl-apd",
+                "cat",
+                "onboarding",
+                "rs",
+                "fs",
+                "gis",
+                "di",
+                "ugix-geoserver",
+                "dmp-apd"
+        ]
+}
