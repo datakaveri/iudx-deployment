@@ -38,6 +38,7 @@ client.updateDatabaseV2("{0}".format(config['database']), datatypesv2.DatabaseSe
 
 # Creating tables and updating index settings
 for info in config['tables']:
+    print(info['table'])
     client.sqlExec("CREATE TABLE {0};".format(info['table']))
     client.sqlExec("CREATE INDEX ON {0};".format(info['indexing_on']))
 print("Created Tables: ",client.listTables())
@@ -49,5 +50,3 @@ for users in config['users']:
     permission = getattr(immudb.constants, f'PERMISSION_{users["permissions"]}')
     client.createUser( users['username'],PASSWORD, permission ,users['database_name'])
     print("Created User: {0}".format(users['username']))
-
-
