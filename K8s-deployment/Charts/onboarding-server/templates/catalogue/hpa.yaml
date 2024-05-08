@@ -1,0 +1,40 @@
+{{- if and .Values.catalogue.enabled .Values.catalogue.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: onboarding-catalogue
+  labels:
+    app: onboarding-catalogue
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: onboarding-catalogue
+  minReplicas: {{ .Values.catalogue.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.catalogue.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.catalogue.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.catalogue.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.catalogue.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.catalogue.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

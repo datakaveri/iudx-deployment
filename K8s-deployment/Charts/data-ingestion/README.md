@@ -1,4 +1,4 @@
-
+[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fjob%2Fkubescape-di%2F&label=Kubescape)](https://jenkins.iudx.io/job/kubescape-di/lastBuild/Kubescape_20Scan_20Report_20for_20DI/)
 
 ## Introduction
 
@@ -45,6 +45,10 @@ Following script will create :
 3. create corresponding K8s secrets from the secret files
 4. deploy all data-ingestion-server verticles 
 
+### To create ingress redirect to cos url:
+```console
+kubectl apply -f ../../misc/redirect-di-ingress.yaml -n di
+```
 
 ## Uninstalling the Chart
 

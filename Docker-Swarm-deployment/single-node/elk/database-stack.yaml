@@ -7,7 +7,7 @@ networks:
 
 services:
   elasticsearch:
-    image: docker.io/bitnami/elasticsearch:8.7.0-debian-11-r2
+    image: docker.io/bitnami/elasticsearch:8.12.1-debian-11-r17
     deploy:
       replicas: 1
       placement:
@@ -27,6 +27,7 @@ services:
       - ELASTICSEARCH_TLS_VERIFICATION_MODE=certificate
       - ELASTICSEARCH_KEYSTORE_LOCATION=/opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12
       - ELASTICSEARCH_TRUSTSTORE_LOCATION=/opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12
+      - ELASTICSEARCH_ENABLE_REST_TLS=false
     configs:
       - source: elasticsearch-config
         target: /opt/bitnami/elasticsearch/config/my_elasticsearch.yml
@@ -45,7 +46,7 @@ services:
         target: /opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12 
 
   kibana:
-    image: docker.io/bitnami/kibana:8.7.0-debian-11-r0
+    image: docker.io/bitnami/kibana:8.12.1-debian-11-r17
     deploy:
       replicas: 1
       placement:
@@ -80,7 +81,7 @@ services:
         target: /opt/bitnami/kibana/config/kibana.keystore
 
   logstash:
-    image: docker.io/bitnami/logstash:8.7.0-debian-11-r0
+    image: docker.io/bitnami/logstash:8.12.1-debian-11-r17
     deploy:
       replicas: 1
       placement:
@@ -96,6 +97,8 @@ services:
       - type: volume
         source: logstash-update-volume
         target: /opt/bitnami/logstash/data
+    env_file:
+        - ./secrets/.logstash.env
     environment:
       - BITNAMI_DEBUG=false
       - LOGSTASH_ENABLE_MULTIPLE_PIPELINES=yes

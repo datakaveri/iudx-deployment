@@ -1,0 +1,26 @@
+pipeline {
+        agent {
+    node {
+      label 'slave1'  // Specifies the Jenkins agent (slave1) where the pipeline will run
+    }
+  }
+  stages {
+      stage('Kubescape Report for FS'){
+          steps {
+              script{
+                // Generate the Kubernetes manifest file for the FS Server using Helm
+                sh 'helm template -f K8s-deployment/Charts/file-server/values.yaml -f K8s-deployment/Charts/file-server/example-azure-resource-values.yaml K8s-deployment/Charts/file-server  > file-server.yaml'
+                // Run Kubescape scan on the generated Kubernetes manifest file
+                sh 'kubescape scan -t 25 -vv file-server.yaml --format pretty-printer --output fs-report'
+              }
+          }
+          post {
+                always {
+               // Publish the Kubescape scan report as HTML
+               publishHTML([allowMissing: false, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-fs/', reportFiles: 'fs-report.txt', reportName: 'Kubescape Scan Report for FS'])
+
+                }
+            }
+      }
+  }
+}

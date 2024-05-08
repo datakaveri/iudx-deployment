@@ -1,0 +1,26 @@
+pipeline {
+        agent {
+    node {
+      label 'slave1'  // Specifies the Jenkins agent (slave1) where the pipeline will run
+    }
+  }
+  stages {
+      stage('publishing report'){
+          steps {
+              script{
+                // Generate the Kubernetes manifest file for the Auth Server using Helm
+               sh 'helm template -f K8s-deployment/Charts/auth-server/values.yaml -f K8s-deployment/Charts/auth-server/example-azure-resource-values.yaml K8s-deployment/Charts/auth-server  > auth-server.yaml'
+               // Run Kubescape scan on the generated Kubernetes manifest file
+               sh 'kubescape scan -vv -t 25 auth-server.yaml --format pretty-printer --output auth-report'
+             }
+          }
+          post {
+                always {
+               // Publish the Kubescape scan report as HTML
+               publishHTML([allowMissing: false, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-auth/', reportFiles: 'auth-report.txt', reportName: 'Kubescape Scan Report for AAA'])
+
+                }
+            }
+      }
+  }
+}

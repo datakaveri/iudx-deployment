@@ -3,77 +3,51 @@ import os
 from immudb import ImmudbClient
 import immudb.datatypesv2 as datatypesv2
 import urllib.request
-Host=os.environ['IMMUDB_HOST']
+import json
 
-IUDX_AUTH_FLUSH_THRESHOLD=int(os.environ['IUDX_AUTH_FLUSH_THRESHOLD'])
-IUDX_AUTH_SYNC_THRESHOLD=int(os.environ['IUDX_AUTH_SYNC_THRESHOLD'])
-IUDX_AUTH_CLEANUP_PERCENTAGE=float(os.environ['IUDX_AUTH_CLEANUP_PERCENTAGE'])
+#Loading Configuration file
+with open("config.json") as file:
+    config = json.load(file)
 
-IUDX_CAT_FLUSH_THRESHOLD=int(os.environ['IUDX_CAT_FLUSH_THRESHOLD'])
-IUDX_CAT_SYNC_THRESHOLD=int(os.environ['IUDX_CAT_SYNC_THRESHOLD'])
-IUDX_CAT_CLEANUP_PERCENTAGE=float(os.environ['IUDX_CAT_CLEANUP_PERCENTAGE'])
-
-IUDX_RS_FLUSH_THRESHOLD=int(os.environ['IUDX_RS_FLUSH_THRESHOLD'])
-IUDX_RS_SYNC_THRESHOLD=int(os.environ['IUDX_RS_SYNC_THRESHOLD'])
-IUDX_RS_CLEANUP_PERCENTAGE=float(os.environ['IUDX_RS_CLEANUP_PERCENTAGE'])
-
-f = open("/run/secrets/password/admin-password","r")
-ADMIN_PASSWORD = f.read()
-
-f = open("/run/secrets/password/auth-password","r")
-IUDX_AUTH_PASSWORD = f.read()
-
-f = open("/run/secrets/password/cat-password","r")
-IUDX_CAT_PASSWORD = f.read()
-
-f = open("/run/secrets/password/rs-password","r")
-IUDX_RS_PASSWORD = f.read()
-
+# Checking connection using http, wether immudb is up
 while True:
     try:
-        if urllib.request.urlopen("http://{0}:8080".format(Host)).getcode() == 200:
+        if urllib.request.urlopen("http://{0}:8080".format(config['immudb_host'])).getcode() == 200:
             break
     except:
         continue
 
-client = ImmudbClient("{0}:3322".format(Host))
-client.login("immudb","immudb")
+# Login through default passowrd
+client = ImmudbClient("{0}:3322".format(config['immudb_host']))
+client.login(config['immudb_default_user'],config['immudb_default_user_password'])
 
-client.changePassword("immudb",ADMIN_PASSWORD,"immudb")
-client.login("immudb",ADMIN_PASSWORD)
-
-client.createDatabase("iudxauth")
-client.createDatabase("iudxcat")
-client.createDatabase("iudxrsorg")
-
-client.createUser("iudx_auth",IUDX_AUTH_PASSWORD,immudb.constants.PERMISSION_RW,"iudxauth")
-client.createUser("iudx_cat",IUDX_CAT_PASSWORD,immudb.constants.PERMISSION_RW,"iudxcat")
-client.createUser("iudx_rs",IUDX_RS_PASSWORD,immudb.constants.PERMISSION_RW,"iudxrsorg")
-
-client.useDatabase("iudxcat")
-client.sqlExec("CREATE TABLE auditingtable(id VARCHAR[128] NOT NULL, userRole VARCHAR[64] NOT NULL,userID VARCHAR[128] NOT NULL,iid VARCHAR[250] NOT NULL,api VARCHAR[128] NOT NULL,method VARCHAR[32] NOT NULL,time INTEGER NOT NULL,iudxID VARCHAR[256] NOT NULL,PRIMARY KEY id);")
-client.sqlExec("CREATE INDEX ON auditingtable(userID, iudxID, time, api);")
-client.updateDatabaseV2(b"iudxcat", datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings( flushThreshold=IUDX_CAT_FLUSH_THRESHOLD, syncThreshold=IUDX_CAT_SYNC_THRESHOLD, cleanupPercentage=IUDX_CAT_CLEANUP_PERCENTAGE),))
-
-client.useDatabase("iudxauth")
-client.sqlExec("CREATE TABLE table_auditing(id VARCHAR[128] NOT NULL, body VARCHAR NOT NULL,userid VARCHAR[128] NOT NULL,endpoint VARCHAR[128] NOT NULL,method VARCHAR[32] NOT NULL,time INTEGER NOT NULL,PRIMARY KEY id);")
-client.sqlExec("CREATE INDEX ON table_auditing(userid, endpoint, time);")
-client.updateDatabaseV2(b"iudxauth", datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings( flushThreshold=IUDX_AUTH_FLUSH_THRESHOLD, syncThreshold=IUDX_AUTH_SYNC_THRESHOLD,cleanupPercentage=IUDX_AUTH_CLEANUP_PERCENTAGE),))
+# Changing the admin passowrd
+if config['change_admin_password']:
+    f = open(config['admin_password'],"r")
+    ADMIN_PASSWORD = f.read()
+    client.changePassword(config['immudb_default_user'],ADMIN_PASSWORD,config['immudb_default_user_password'])
+    client.login(config['immudb_default_user'],ADMIN_PASSWORD)
 
 
-client.useDatabase("iudxrsorg")
-client.sqlExec("CREATE TABLE rsaudit (id VARCHAR[128] NOT NULL,api VARCHAR[128] NOT NULL,userid VARCHAR[128] NOT NULL,epochtime INTEGER NOT NULL,resourceid VARCHAR[256] NOT NULL,isotime VARCHAR[64] NOT NULL,providerid VARCHAR[128] NOT NULL,size INTEGER, PRIMARY KEY id);")
-client.sqlExec("CREATE INDEX ON rsaudit(userid, epochtime, providerid, resourceid);")
-client.updateDatabaseV2(b"iudxrsorg", datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings(flushThreshold=IUDX_RS_FLUSH_THRESHOLD, syncThreshold=IUDX_RS_SYNC_THRESHOLD, cleanupPercentage=IUDX_RS_CLEANUP_PERCENTAGE),))
+# Creating database and use the same for tables
+client.createDatabase(config['database'])
+print("Created Database: {0}".format(config['database']))
+client.useDatabase(config['database'])
+client.updateDatabaseV2("{0}".format(config['database']), datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings( flushThreshold=config['flush_threshold'], syncThreshold=config['sync_threshold'], cleanupPercentage=config['cleanup_percentage']),))
 
-print(client.listUsers())
-print(client.databaseList())
 
-client.useDatabase("iudxcat")
-print(client.listTables())
+# Creating tables and updating index settings
+for info in config['tables']:
+    client.sqlExec("CREATE TABLE {0};".format(info['table']))
+    client.sqlExec("CREATE INDEX ON {0};".format(info['indexing_on']))
+print("Created Tables: ",client.listTables())
 
-client.useDatabase("iudxauth")
-print(client.listTables())
+# Creating user
+for users in config['users']:
+    f = open(users['password'],"r")
+    PASSWORD = f.read()
+    permission = getattr(immudb.constants, f'PERMISSION_{users["permissions"]}')
+    client.createUser( users['username'],PASSWORD, permission ,users['database_name'])
+    print("Created User: {0}".format(users['username']))
 
-client.useDatabase("iudxrsorg")
-print(client.listTables())
+

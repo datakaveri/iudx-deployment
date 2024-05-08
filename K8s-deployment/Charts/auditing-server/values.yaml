@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/auditing-server-depl
-  tag: 1.5.0-alpha-e34b3b5
+  tag: 5.0.0-d332b94
   pullSecrets: {} 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -945,7 +945,7 @@ databroker:
   command: ["/bin/bash"]
   ## @param databroker.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.auditing.server.rabbitmq.RabbitMQVerticle"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.auditing.server.rabbitmq.RabbitMqVerticle"]
   ## @param databroker.hostAliases apiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

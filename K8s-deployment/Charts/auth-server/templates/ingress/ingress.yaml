@@ -18,6 +18,136 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      internal;
+      rewrite ^ $original_uri break;
+
+    nginx.ingress.kubernetes.io/server-snippet: |
+      add_header Referrer-Policy   "no-referrer-when-downgrade" always;
+      add_header X-Frame-Options   "deny" always;
+      add_header X-XSS-Protection  "1; mode=block" always;
+      add_header X-Permitted-Cross-Domain-Policies  "none" always;
+      add_header Cross-Origin-Embedder-Policy "require-corp" always;
+      add_header Cross-Origin-Resource-Policy "cross-origin" always;
+      # location block for serving of static image files 
+      location ~* \.(png|svg)$ {
+                        # for http to https redirect                                                                                                                                                                                           
+                        rewrite_by_lua_block {                                                                                                                                                                     
+                                lua_ingress.rewrite({                                                                                                                                                              
+                                        force_ssl_redirect = false,                                                                                                   ssl_redirect = true,                                                                                                                                                      
+                                        force_no_ssl_redirect = false,                                                                                                                                             
+                                        preserve_trailing_slash = false,                                                                                                                                           
+                                        use_port_in_redirects = false,                                                                                                                                             
+                                        global_throttle = { namespace = "", limit = 0, window_size = 0, key = { }, ignored_cidrs = { } },                                                                          
+                                })                                                                                                                                                                                 
+                        }
+      try_files {{ .Values.ingress.tryFilesBaseDir }}/$uri =404;
+      }
+      location /apis {
+
+                      # for http to https redirect                                                                                                                                                                                          
+                        rewrite_by_lua_block {
+                                lua_ingress.rewrite({
+                                        force_ssl_redirect = false,
+                                        ssl_redirect = true,
+                                        force_no_ssl_redirect = false,
+                                        preserve_trailing_slash = false,
+                                        use_port_in_redirects = false,
+                                        global_throttle = { namespace = "", limit = 0, window_size = 0, key = { }, ignored_cidrs = { } },
+                                })
+                        }
+      try_files {{ .Values.ingress.tryFilesBaseDir }}/index.html =404;
+      }
+      location /auth/apis/spec {
+        set $target_destination '/auth';
+        set $original_uri '/apis/spec';
+        rewrite ^ $target_destination last;
+      }
+      location /cat/apis/spec {
+        set $target_destination '/cat';
+        set $original_uri '/apis/spec';
+        rewrite ^ $target_destination last;
+      }
+      location /onboarding/apis/spec {
+        set $target_destination '/onb';
+        set $original_uri '/apis/spec';
+        rewrite ^ $target_destination last;
+      }
+      location /auth/apis {
+        set $target_destination '/auth';
+        set $original_uri '/apis';
+        rewrite ^ $target_destination last;
+      }
+      location /cat/apis {
+        set $target_destination '/cat';
+        set $original_uri '/apis';
+        rewrite ^ $target_destination last;
+      }
+      location /onboarding/apis {
+        set $target_destination '/onb';
+        set $original_uri '/apis';
+        rewrite ^ $target_destination last;
+      }
+      location /{{ .Values.ingress.basePathDx }}/cat/v1/item {
+        if ($request_method != GET) {
+          set $target_destination '/onb';
+        }
+        if ($request_method = GET) {
+          set $target_destination '/cat';
+        }
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
+      location /{{ .Values.ingress.basePathDx }}/cat/v1/instance {
+        if ($request_method != GET) {
+          set $target_destination '/onb';
+        }
+        if ($request_method = GET) {
+          set $target_destination '/cat';
+        }
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
+      location  /{{ .Values.ingress.basePathDx }}/cat/v1/internal/ui/instance {
+        if ($request_method != GET) {
+          set $target_destination '/onb';
+        }
+        if ($request_method = GET) {
+          set $target_destination '/cat';
+        }
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
+      location  /{{ .Values.ingress.basePathDx }}/cat/v1/internal/ui/domain {
+        if ($request_method != GET) {
+          set $target_destination '/onb';
+        }
+        if ($request_method = GET) {
+          set $target_destination '/cat';
+        }
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
+      location  /{{ .Values.ingress.basePathDx }}/cat/v1 {
+        set $target_destination '/cat';
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
+      location  /consumer/ratings {
+        set $target_destination '/cat';
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
+      location /auth/v1 {
+        set $target_destination '/auth';
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
+      location /stac {
+        set $target_destination '/cat';
+        set $original_uri $uri;
+        rewrite ^ $target_destination last;
+      }
 spec:
   rules:
     {{- if .Values.ingress.hostname }}

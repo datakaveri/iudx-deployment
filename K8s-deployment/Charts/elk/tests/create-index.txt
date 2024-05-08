@@ -1,4 +1,4 @@
-PUT test-itms
+PUT iudx__test-itms
 {
    "settings": {
     "number_of_replicas": 1,

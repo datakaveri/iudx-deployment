@@ -1,0 +1,41 @@
+version: '3.9'
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  onboarding-server:
+    image: ghcr.io/datakaveri/onboarding-server-depl:1.0.0-73d255b
+    env_file:
+      - ./secrets/.onboarding.env
+    volumes:
+      - type: tmpfs
+        target: /tmp/
+        read_only: false
+    secrets:
+      - source: config
+        target: /usr/share/app/configs/config.json
+    restart: on-failure
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.onboarding-server-node==true"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    command: bash -c "exec java  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c configs/config.json"
+
+secrets:
+  config:
+    file: ./secrets/config.json

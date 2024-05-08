@@ -1,19 +1,19 @@
 version: '3.9'
 services:
     immudb-config-generator:
-      image: ghcr.io/datakaveri/immudb-config-generator:1.4.0-1
+      image: ghcr.io/datakaveri/immudb-config-generator:1.4.0-4
       read_only: true
       networks:
         - overlay-net
       secrets:
        - source: admin-password
          target: /run/secrets/password/admin-password
-       - source: cat-password
-         target: /run/secrets/password/cat-password
-       - source: auth-password
-         target: /run/secrets/password/auth-password
+       - source: auditing-password
+         target: /run/secrets/password/auditing-password
        - source: rs-password
          target: /run/secrets/password/rs-password
+       - source: config
+         target: /usr/share/app/config.json
       deploy:
         replicas: 1
         restart_policy:
@@ -23,8 +23,6 @@ services:
             - "node.labels.immudb-node==true"
       cap_drop:
         - ALL
-      env_file:
-        - ./secrets/.config.env
       logging:
         driver: "json-file"
         options:
@@ -43,8 +41,8 @@ secrets:
     file: secrets/passwords/admin-password
   rs-password:
     file: secrets/passwords/rs-password
-  auth-password:
-    file: secrets/passwords/auth-password
-  cat-password: 
-    file: secrets/passwords/cat-password
+  auditing-password:
+    file: secrets/passwords/auditing-password
+  config:
+    file: secrets/config.json
 
