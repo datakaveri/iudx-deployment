@@ -414,7 +414,7 @@ immudb:
     hookImage:
       registry: ghcr.io
       repository: datakaveri/immudb-config-generator
-      tag: 1.4.0-4
+      tag: 1.4.0-5
     ## @param immudb.install.hookEnvFile Hooks env File to pass on.
     hookConfig: "hook-config"
 
