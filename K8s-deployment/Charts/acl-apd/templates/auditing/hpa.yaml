@@ -1,0 +1,40 @@
+{{- if and .Values.auditing.enabled .Values.auditing.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: apd-auditing
+  labels:
+    app: apd-auditing
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: apd-auditing
+  minReplicas: {{ .Values.auditing.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.auditing.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.auditing.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.auditing.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.auditing.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.auditing.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

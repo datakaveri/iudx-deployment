@@ -1,0 +1,48 @@
+version: '3.9'
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  consent:
+    image: ghcr.io/datakaveri/consent-validator:1.5.0-e3c3aec
+    env_file:
+      - ./secrets/.consent.env
+    read_only: true
+    secrets:
+      - source: config
+        target: /usr/share/app/secrets/configs/config.json
+      - source: keystore
+        target: /usr/share/app/secrets/keystore.jks
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.consent-node==true"
+    cap_drop:
+      - ALL
+    volumes:
+      - type: tmpfs
+        target: /tmp/
+        read_only: false
+    logging:
+         driver: "json-file"
+         options:
+             max-file: "5"
+             max-size: "10m"
+             tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    command: bash -c "exec java  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
+
+secrets:
+  config:
+    file: ./secrets/config.json
+  keystore:
+    file: ./secrets/keystore.jks
+

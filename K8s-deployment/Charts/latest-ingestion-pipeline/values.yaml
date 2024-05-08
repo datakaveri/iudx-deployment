@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/lip-depl
-  tag: 5.0.0-alpha-7fff17a
+  tag: 5.0.0-9adc1d8
   pullSecrets: {}
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -441,7 +441,7 @@ rabbitmq:
   command: ["/bin/bash"]
   ## @param rabbitmq.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.ingestion.pipeline.rabbitmq.RabbitMQVerticle"]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.ingestion.pipeline.rabbitmq.RabbitMqVerticle"]
   ## @param rabbitmq.hostAliases redis pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

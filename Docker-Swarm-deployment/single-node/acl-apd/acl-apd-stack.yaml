@@ -1,0 +1,44 @@
+version: '3.9'
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  acl-apd:
+    image: ghcr.io/datakaveri/acl-apd-depl:1.0.0-66c8df1
+    env_file:
+      - ./secrets/.apd.env
+    read_only: true
+    cap_drop:
+      - ALL
+    volumes:
+      - type: tmpfs
+        target: /tmp/
+        read_only: false
+    secrets:
+      - source: config
+        target: /usr/share/app/secrets/configs/config.json
+    restart: on-failure
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.acl-apd-node==true"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    command:  bash -c "exec java $$FS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
+
+secrets:
+  config:
+    file: ./secrets/config.json

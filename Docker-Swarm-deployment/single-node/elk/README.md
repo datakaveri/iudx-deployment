@@ -16,10 +16,12 @@ Docker swarm stack for Elasticsearch-logstash-Kibana (ELK) Deployment.
 ```
 ./generate-keystore.sh
 ```
-4. Secrets directory after generation of secrets
+4. Provide the appropriate values for env in `secrets/.logstash.env`
 
+5. Secrets directory after generation of secrets
 ```sh
 secrets/
+├── .logstash.env
 ├── keystores
 │   ├── kibana.keystore
 │   └── logstash.keystore

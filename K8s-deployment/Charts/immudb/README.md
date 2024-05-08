@@ -3,7 +3,7 @@
 Helm Chart for IUDX immudb Server Deployment
 
 ## Docker image 
-``ghcr.io/datakaveri/immudb-config-generator:1.4.0`` custom docker image containing the python script to do initial setup of immudb like create users, tables required for the api-servers. The files are present at ``../../../Docker-Swarm-deployment/single-node/immudb/docker/immudb-config-generator``
+``ghcr.io/datakaveri/immudb-config-generator:1.4.0-2`` custom docker image containing the python script to do initial setup of immudb like create users, tables required for the api-servers. The files are present at ``../../../docker/immudb``
 
 ## Generating secrets
 
@@ -20,14 +20,14 @@ To generate the passwords:
 ```
 # secrets directory after generation of secret files
 secrets/
-├── .config.env
+├── config.json
 └── passwords
     ├── admin-password
     ├── auth-password
     ├── cat-password
     └── rs-password
 ```
-Configure the env file .config.env in secret/ appropriately
+Configure the config file config.json in secret/ appropriately
 ## Define Appropriate values of resources
 
 Define Appropriate values of resources -
@@ -208,8 +208,8 @@ kubectl delete pvc data-immudb-0 -n immudb
 | `immudb.install.secretName`                    | Secrets for hook to connect immudb                                                                                                                  | `hook-secret`                        |
 | `immudb.install.hookImage.registry`            | hookImage registry                                                                                                                                  | `ghcr.io`                            |
 | `immudb.install.hookImage.repository`          | hookImage repository                                                                                                                                | `datakaveri/immudb-config-generator` |
-| `immudb.install.hookImage.tag`                 | hookImage tag (immutable tags are recommended)                                                                                                      | `1.4.0`                            |
-| `immudb.install.hookEnvFile`                       | Hooks env File to pass on.                                                                                                                               | `nil`                                |
+| `immudb.install.hookImage.tag`                 | hookImage tag (immutable tags are recommended)                                                                                                      | `1.4.0-3`                            |
+| `immudb.install.hookConfig`                       | Hooks config File to pass on.                                                                                                                               | `hook-config`                                |
 
 
 ### Traffic Exposure Parameters

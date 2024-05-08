@@ -1,3 +1,5 @@
+[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fjob%2Fkubescape-gis%2F&label=Kubescape)](https://jenkins.iudx.io/job/kubescape-gis/lastBuild/Kubescape_20Scan_20Report_20for_20GIS/)
+
 ## Introduction
 
 Helm Chart for IUDX GIS Interface Deployment
@@ -43,6 +45,10 @@ Following script will create :
 3. create corresponding K8s secrets from the secret files
 4. deploy all gis-interface verticles 
 
+### To create ingress redirect to cos url:
+```console
+kubectl apply -f ../../misc/redirect-gis-ingress.yaml -n gis
+```
 
 ## Uninstalling the Chart
 

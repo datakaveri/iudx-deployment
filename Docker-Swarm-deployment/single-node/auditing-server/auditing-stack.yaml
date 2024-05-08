@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   auditing:
-    image: ghcr.io/datakaveri/auditing-server-depl:1.5.0-alpha-e34b3b5
+    image: ghcr.io/datakaveri/auditing-server-depl:5.0.0-d332b94
     read_only: true
     cap_drop:
       - ALL

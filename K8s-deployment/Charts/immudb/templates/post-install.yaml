@@ -13,16 +13,21 @@ spec:
     volumeMounts:
     - name: hook-secret
       mountPath: /run/secrets/password
-    envFrom:
-    {{- if .Values.immudb.install.hookEnvFile }}
-    - configMapRef:
-        name: {{ include "common.tplvalues.render" (dict "value" .Values.immudb.install.hookEnvFile "context" $) }}
-    {{- end }}
+    - name: hook-config
+      mountPath: /usr/share/app/config.json
+      subPath: config.json
+    
+    
 
   volumes:
   - name: hook-secret
     secret:
       secretName: {{ .Values.immudb.install.secretName}}
+  - name: hook-config
+    secret:
+      secretName: {{ .Values.immudb.install.hookConfig}}
+
+      
   restartPolicy: OnFailure
 
 {{- end }}

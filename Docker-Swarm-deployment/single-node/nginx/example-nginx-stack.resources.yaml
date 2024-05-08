@@ -1,12 +1,12 @@
 version: '3.9'
 services:
-  nginx:
+  nginx-acme:
     deploy:
       resources:
         limits:
           pids: 8192
           cpus: '2.0'
-          memory: 2Gi
+          memory: 2G
         reservations:
           cpus: '0.5'   
-          memory: 512Mi
+          memory: 512M

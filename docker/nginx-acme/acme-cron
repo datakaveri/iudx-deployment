@@ -1,0 +1,1 @@
+30 0 * * * "/home/.acme.sh"/acme.sh --cron --home "/home/.acme.sh" --config-home "/acme.sh" > /proc/1/fd/1 2>/proc/1/fd/2 
