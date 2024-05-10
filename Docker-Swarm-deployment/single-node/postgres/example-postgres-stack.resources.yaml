@@ -5,7 +5,7 @@ services:
       resources:
         limits: 
           cpus: '0.50'
-          memory: 4Gi
+          memory: 4G
         reservations:
           cpus: '0.20'
-          memory: 300Mi
+          memory: 300M
