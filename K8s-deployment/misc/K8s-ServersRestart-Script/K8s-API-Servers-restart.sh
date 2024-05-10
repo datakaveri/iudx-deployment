@@ -29,13 +29,11 @@ do
                     echo -e "\033[32m ------------------------------------------------------\033[0m"
                     echo 
                     ((i++))
-                    rm -rf endpoint.txt
                     continue
                   else 
                     echo -e "\033[31m⚠⚠⚠\033[0m" Please recheck endpoint "\033[31m$endpoint\033[0m" address!
                     echo -e "\033[31m⚠⚠⚠\033[0m"  Terminating script!
                     echo
-                    rm -rf endpoint.txt
                     break
                  fi
 
