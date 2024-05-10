@@ -1,10 +1,10 @@
 resources:
   limits:
-    cpu: 50m
-    memory: 0.1Mi
+    cpu: 400m
+    memory: 500Mi
   requests:
-    cpu: 50m
-    memory: 0.1Mi
+    cpu: 200m
+    memory: 200Mi
 ## @param nodeSelector Node labels for pod assignment
 ### ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector:
