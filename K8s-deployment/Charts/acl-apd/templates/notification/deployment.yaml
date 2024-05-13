@@ -1,0 +1,174 @@
+{{- if .Values.notification.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: apd-notification
+  labels: 
+    app.kubernetes.io/component: notification
+    app: apd-notification
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.notification.replicaCount }}
+  {{- if .Values.notification.updateStrategy }}
+  strategy: {{- toYaml .Values.notification.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: apd-notification
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: apd-notification
+        app.kubernetes.io/component: notification
+        {{- if .Values.notification.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.notification.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.notification.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.notification.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.notification.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.notification.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notification.priorityClassName }}
+      priorityClassName: {{ .Values.notification.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.notification.schedulerName }}
+      schedulerName: {{ .Values.notification.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.notification.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.notification.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "catalogue.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command: {}
+          
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: foo
+              mountPath: bar
+        {{- end }}
+        {{- if .Values.notification.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.notification.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: apd-notification
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.notification.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.notification.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.notification.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.notification.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.notification.args }}
+          args: [{{- range $index, $str := .Values.notification.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.notification.resources }}
+          resources: {{- toYaml .Values.notification.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.notification.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.notification.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.notification.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.notification.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.notification.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.notification.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.notification.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.notification.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.notification.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.notification.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notification.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.notification.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notification.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.notification.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notification.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.notification.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.notification.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.notification.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notification.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.notification.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.notification.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.notification.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.notification.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.notification.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.notification.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.notification.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.notification.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.notification.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.notification.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.notification.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.notification.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.notification.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notification.podAffinityPreset "component" "notification" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.notification.podAntiAffinityPreset}}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notification.podAntiAffinityPreset "component" "notification" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.notification.nodeAffinityPreset.type}}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.notification.nodeAffinityPreset.type "key" .Values.notification.nodeAffinityPreset.key "values" .Values.notification.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.notification.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.notification.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

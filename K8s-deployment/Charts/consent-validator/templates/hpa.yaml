@@ -1,0 +1,40 @@
+{{- if .Values.consentValidator.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: consent-validator
+  labels:
+    app: consent-validator
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: consent-validator
+  minReplicas: {{ .Values.consentValidator.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.consentValidator.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.consentValidator.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.consentValidator.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.consentValidator.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.consentValidator.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

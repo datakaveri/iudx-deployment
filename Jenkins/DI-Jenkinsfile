@@ -1,0 +1,26 @@
+pipeline {
+        agent {
+    node {
+      label 'slave1'  // Specifies the Jenkins agent (slave1) where the pipeline will run
+    }
+  }
+  stages {
+      stage('Kubescape Report for DI'){
+          steps {
+              script{
+                 // Generate the Kubernetes manifest file for the DI Server using Helm
+                sh 'helm template -f K8s-deployment/Charts/data-ingestion/values.yaml -f K8s-deployment/Charts/data-ingestion/example-azure-resource-values.yaml K8s-deployment/Charts/data-ingestion  > di-server.yaml'
+                // Run Kubescape scan on the generated Kubernetes manifest file
+                sh 'kubescape scan -t 25 -vv di-server.yaml --format pretty-printter --output di-report'
+              }
+          }
+          post {
+                always {
+               // Publish the Kubescape scan report as HTML
+               publishHTML([allowMissing: false, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-di/', reportFiles: 'di-report.txt', reportName: 'Kubescape Scan Report for DI'])
+
+                }
+            }
+      }
+  }
+}

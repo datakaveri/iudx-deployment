@@ -1,0 +1,40 @@
+{{- if and .Values.authenticator.enabled .Values.authenticator.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: apd-authenticator
+  labels:
+    app: apd-authenticator
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: apd-authenticator
+  minReplicas: {{ .Values.authenticator.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.authenticator.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.authenticator.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.authenticator.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.authenticator.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.authenticator.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

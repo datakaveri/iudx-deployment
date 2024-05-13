@@ -19,27 +19,35 @@ while True:
 
 # Login through default passowrd
 client = ImmudbClient("{0}:3322".format(config['immudb_host']))
-client.login("immudb","immudb")
+client.login(config['immudb_default_user'],config['immudb_default_user_password'])
 
 # Changing the admin passowrd
-f = open(config['admin_password'],"r")
-ADMIN_PASSWORD = f.read()
+if config['change_admin_password']:
+    f = open(config['admin_password'],"r")
+    ADMIN_PASSWORD = f.read()
+    client.changePassword(config['immudb_default_user'],ADMIN_PASSWORD,config['immudb_default_user_password'])
+    client.login(config['immudb_default_user'],ADMIN_PASSWORD)
 
-client.changePassword("immudb",ADMIN_PASSWORD,"immudb")
-client.login("immudb",ADMIN_PASSWORD)
 
-# Creating database, tables and updating index settings
-for database in config['database']:
-    client.createDatabase(database['database_name'])
-    client.useDatabase(database['database_name'])
-    client.sqlExec("CREATE TABLE {0};".format(database['table']))
-    client.sqlExec("CREATE INDEX ON {0};".format(database['indexing_on']))
-    client.updateDatabaseV2("{0}".format(database['database_name']), datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings( flushThreshold=database['flush_threshold'], syncThreshold=database['sync_threshold'], cleanupPercentage=database['cleanup_percentage']),))
-    print(client.listTables())
+# Creating database and use the same for tables
+client.createDatabase(config['database'])
+print("Created Database: {0}".format(config['database']))
+client.useDatabase(config['database'])
+client.updateDatabaseV2("{0}".format(config['database']), datatypesv2.DatabaseSettingsV2(indexSettings=datatypesv2.IndexSettings( flushThreshold=config['flush_threshold'], syncThreshold=config['sync_threshold'], cleanupPercentage=config['cleanup_percentage']),))
+
+
+# Creating tables and updating index settings
+for info in config['tables']:
+    client.sqlExec("CREATE TABLE {0};".format(info['table']))
+    client.sqlExec("CREATE INDEX ON {0};".format(info['indexing_on']))
+print("Created Tables: ",client.listTables())
 
 # Creating user
 for users in config['users']:
     f = open(users['password'],"r")
     PASSWORD = f.read()
-    client.createUser( users['username'],PASSWORD,immudb.constants.PERMISSION_RW,users['database_name'])
+    permission = getattr(immudb.constants, f'PERMISSION_{users["permissions"]}')
+    client.createUser( users['username'],PASSWORD, permission ,users['database_name'])
+    print("Created User: {0}".format(users['username']))
+
 

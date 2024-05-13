@@ -1,18 +1,18 @@
 version: '3.9'
 services:
     redis-rejson:
-      image: ghcr.io/datakaveri/redis-rejson:7.0.2-2.0.9
+      image: ghcr.io/datakaveri/redis-rejson:7.2.4-2.6.8
       cap_drop:
         - ALL
       environment:
         - REDIS_PASSWORD_FILE=/run/secrets/admin-password
-      command: /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so
+      command: bash -c "/opt/bitnami/scripts/redis/entrypoint.sh /opt/bitnami/scripts/redis/run.sh --loadmodule /usr/local/lib/rejson.so"
       read_only: true
       volumes:
         - type: volume
           source: redis-persistence
           target: /bitnami/redis/data
-#Anonymous volume, https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes-for-services-swarms-and-stack-files 
+        #Anonymous volume, https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes-for-services-swarms-and-stack-files 
         - type: volume
           target: /opt/bitnami/
           volume:
@@ -54,4 +54,3 @@ configs:
 secrets:
   admin-password:
     file: secrets/passwords/admin-password
-

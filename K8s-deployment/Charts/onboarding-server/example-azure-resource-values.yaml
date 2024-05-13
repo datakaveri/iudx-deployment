@@ -1,0 +1,89 @@
+ingress:
+  hostname: onboarding-hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+## apiServer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param apiServer.resources.limits The resources limits for the apiServer containers
+## @param apiServer.resources.requests The requested resources for the apiServer containers
+##
+apiServer:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi
+
+## catalogue resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param catalogue.resources.limits The resources limits for the catalogue containers
+## @param catalogue.resources.requests The requested resources for the catalogue containers
+##
+catalogue:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi
+
+## token resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param token.resources.limits The resources limits for the token containers
+## @param token.resources.requests The requested resources for the token containers
+##
+token:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi
+
+## resourceServer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param resourceServer.resources.limits The resources limits for the resourceServer containers
+## @param resourceServer.resources.requests The requested resources for the resourceServer containers
+##
+resourceServer:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi
+
+## ingestion resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param ingestion.resources.limits The resources limits for the ingestion containers
+## @param ingestion.resources.requests The requested resources for the ingestion containers
+##
+ingestion:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 600m
+      memory: 750Mi
+    requests: 
+      cpu: 400m
+      memory: 600Mi

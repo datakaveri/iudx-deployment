@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   file-server:
-    image: ghcr.io/datakaveri/fs-depl:5.0.0-alpha-b7ecce0
+    image: ghcr.io/datakaveri/fs-depl:5.0.0-43db6ce
     command: bash -c "exec java $$FS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$(hostname) -c secrets/configs/config.json"
     cap_drop:
       - ALL

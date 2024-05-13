@@ -13,8 +13,11 @@ To generate the passwords:
 ./create-secrets.sh
 ```
 ```
+Provide the appropriate values for env in `secrets/.logstash.env`
+
 # secrets directory after generation of secret files
 secrets/
+├── .logstash.env
 ├── passwords/
 │   ├── elasticsearch-cat-password
 │   ├── elasticsearch-cat-username

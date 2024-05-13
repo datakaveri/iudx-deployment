@@ -1,0 +1,40 @@
+{{- if and .Values.notification.enabled .Values.notification.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: apd-notification
+  labels:
+    app: apd-notification
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: apd-notification
+  minReplicas: {{ .Values.notification.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.notification.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.notification.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.notification.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.notification.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.notification.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

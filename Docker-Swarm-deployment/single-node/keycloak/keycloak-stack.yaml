@@ -8,7 +8,7 @@ networks:
 
 services:
   keycloak:
-    image: ghcr.io/datakaveri/keycloak:21.1.1-1
+    image: ghcr.io/datakaveri/keycloak:23.0.4-1
     cap_drop:
        - ALL
 
@@ -36,6 +36,7 @@ services:
         target: /opt/bitnami/keycloak/secrets/keycloak-admin-passwd
 
     environment:
+      - KEYCLOAK_HTTP_PORT=8080
       - KEYCLOAK_ADMIN=iudx_admin
       - KEYCLOAK_ADMIN_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-admin-passwd
       - KEYCLOAK_DATABASE_HOST=postgres

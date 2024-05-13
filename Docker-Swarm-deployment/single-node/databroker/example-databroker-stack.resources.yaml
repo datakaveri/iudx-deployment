@@ -6,7 +6,7 @@ services:
         limits:
           pids: 8192
           cpus: '2.0'
-          memory: 4Gi
+          memory: 4G
         reservations:
           cpus: '0.5'   
-          memory: 512Mi
+          memory: 512M

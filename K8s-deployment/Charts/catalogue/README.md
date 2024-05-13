@@ -1,4 +1,4 @@
-
+[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fjob%2Fkubescape-cat%2F&label=Kubescape)](https://jenkins.iudx.io/job/kubescape-cat/lastBuild/Kubescape_20Scan_20Report_20for_20CAT/)
 
 ## Introduction
 
@@ -6,10 +6,17 @@ Helm Chart for IUDX Catalogue Server Deployment
 
 ## Create secret files
 
-Make a copy of sample secrets directory and add appropriate values to all files.
+1. Make a copy of sample secrets directory and add appropriate values to all files.
 
 ```console
  cp -r example-secrets/secrets .
+```
+2. Substitute appropriate values using commands whatever mentioned in config files. Configure the secrets/.cat.env file with appropriate values in the place holders “<>”.
+3. Following config options are only need to be configured if its deployed as UAC catalogue, or else it can
+   be left as is :
+```
+      "keycloakServerHost": "https://{{keycloak-domain}}/auth/realms/demo",
+      "certsEndpoint": "/protocol/openid-connect/certs"
 ```
 
 ```
@@ -44,6 +51,11 @@ Following script will create :
 2. create required configmaps
 3. create corresponding K8s secrets from the secret files
 4. deploy all catalogue-server verticles 
+
+### To create ingress redirect to cos cat and UI url:
+```console
+kubectl apply -f ../../misc/redirect-cat-api-ingress.yaml -f ../../misc/redirect-authsso-ingress.yaml -f ../../misc/redirect-cat-ui-ingress.yaml -f ../../misc/redirect-consumer-ingress.yaml -f ../../misc/redirect-provider-ingress.yaml -f ../../misc/cat-cos-ingress.yaml -n cat
+```
 
 ## Uninstalling the Chart
 
