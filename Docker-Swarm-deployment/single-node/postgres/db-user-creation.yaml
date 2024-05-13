@@ -22,6 +22,11 @@ services:
         target: /opt/bitnami/postgresql/secrets/postgres-keycloak-password
       - source: postgresql-password
         target: /opt/bitnami/postgresql/secrets/postgresql-password
+      - source: postgres-acl-apd-password
+        target: /opt/bitnami/postgresql/secrets/postgres-acl-apd-password
+      - source: postgres-dmp-apd-password
+        target: /opt/bitnami/postgresql/secrets/postgres-dmp-apd-password
+
       deploy:
         replicas: 1
         restart_policy:
@@ -48,6 +53,10 @@ secrets:
     file: secrets/passwords/postgres-rs-password                            
   postgres-auth-password:
     file: secrets/passwords/postgres-auth-password
+  postgres-acl-apd-password:
+    file: secrets/passwords/postgres-acl-apd-password
+  postgres-dmp-apd-password:
+    file: secrets/passwords/postgres-dmp-apd-password
 
 
 configs:
