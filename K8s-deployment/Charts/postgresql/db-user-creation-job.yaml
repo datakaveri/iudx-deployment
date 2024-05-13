@@ -12,7 +12,7 @@ spec:
           volumeMounts:
             - name: db-user-creation-config
               mountPath: /usr/share/app/config.json
-              subPath: config.json
+              subPath: db-user-creation-config.json
             - name: psql-passwords
               mountPath: /opt/bitnami/postgresql/secrets/
               readOnly: true

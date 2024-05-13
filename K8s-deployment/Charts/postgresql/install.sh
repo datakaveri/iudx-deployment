@@ -1,7 +1,7 @@
 #!/bin/bash
 
 kubectl create namespace postgres
-kubectl create secret generic psql-passwords --from-file=password=./secrets/passwords/postgresql-password --from-file=./secrets/passwords/postgresql-password --from-file=./secrets/passwords/repmgr-password --from-file=./secrets/passwords/postgres-auth-password --from-file=./secrets/passwords/postgres-rs-password --from-file=./secrets/passwords/postgres-keycloak-password -n postgres  
+kubectl create secret generic psql-passwords --from-file=password=./secrets/passwords/postgresql-password --from-file=./secrets/passwords/postgresql-password --from-file=./secrets/passwords/repmgr-password --from-file=./secrets/passwords/postgres-auth-password --from-file=./secrets/passwords/postgres-rs-password --from-file=./secrets/passwords/postgres-keycloak-password --from-file=./secrets/passwords/postgres-dmp-apd-password --from-file=./secrets/passwords/postgres-acl-apd-password -n postgres  
 kubectl create secret generic pgpool-auth  --from-file=./secrets/passwords/usernames --from-file=./secrets/passwords/passwords  -n postgres
 
 #kubectl create configmap init-scripts --from-file=./init-scripts/ -n postgres
