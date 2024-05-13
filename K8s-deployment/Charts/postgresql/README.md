@@ -51,7 +51,14 @@ Following script will create :
 
 ## Postgres Users creation
 1. Configure `init-script/db-user-creation-config.json` if any changes required
-2. Bring up the db generator stack(only on clean deployment),
+2. For Multi-tenancy, replace the prefix names of database and user with appropriate names. Below examples
+```sh
+"username": "<appropriate_prefix>_keycloak_user"
+"database": "<appropriate_prefix>_keycloak",
+```
+For all users.
+
+3. Bring up the db generator stack(only on clean deployment),
 ```sh
 kubectl apply -f db-user-creation-job.yaml
 ```

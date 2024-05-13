@@ -38,15 +38,22 @@ docker stack deploy -c postgres-stack.yaml -c postgres-stack.resources.yaml post
 ```
 ## Postgres Users creation
 1. Configure `init-script/db-user-creation-config.json` if any changes required
-2. Bring up the db generator stack(only on clean deployment),
+2. For Multi-tenancy, replace the prefix names of database and user with appropriate names. Below examples
+```sh
+"username": "<appropriate_prefix>_keycloak_user"
+"database": "<appropriate_prefix>_keycloak",
+```
+For all users.
+
+3. Bring up the db generator stack(only on clean deployment),
 ```sh
 docker stack deploy -c db-user-creation.yaml tmp
 ```
-3. Monitor logs to ensure creation
+4. Monitor logs to ensure creation
 ```sh
 docker service logs tmp_db_user_creation -f
 ```
-4. Remove stack, once users are created
+5. Remove stack, once users are created
 ```sh
 docker stack rm tmp
 ```
