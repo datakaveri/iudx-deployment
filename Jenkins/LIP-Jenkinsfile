@@ -1,0 +1,26 @@
+pipeline {
+        agent {
+    node {
+      label 'slave1'  // Specifies the Jenkins agent (slave1) where the pipeline will run
+    }
+  }
+  stages {
+      stage('Kubescape Report for LIP'){
+          steps {
+              script{
+                // Generate the Kubernetes manifest file for the LIP Server using Helm
+                sh 'helm template -f K8s-deployment/Charts/latest-ingestion-pipeline/values.yaml -f K8s-deployment/Charts/latest-ingestion-pipeline/example-azure-resource-values.yaml K8s-deployment/Charts/latest-ingestion-pipeline  > lip-server.yaml'
+                // Run Kubescape scan on the generated Kubernetes manifest file
+                sh 'kubescape scan -t 25 -vv lip-server.yaml --format pretty-printer --output lip-report'
+              }
+          }
+          post {
+                always {
+               // Publish the Kubescape scan report as HTML
+               publishHTML([allowMissing: false, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-lip/', reportFiles: 'lip-report.txt', reportName: 'Kubescape Scan Report for LIP'])
+
+                }
+            }
+      }
+  }
+}

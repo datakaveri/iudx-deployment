@@ -1,0 +1,27 @@
+pipeline {
+        agent {
+    node {
+      label 'slave1'  // Specifies the Jenkins agent (slave1) where the pipeline will run
+    }
+  }
+  stages {
+      stage('Kubescape Report for GIS'){
+          steps {
+              script{
+               // Generate the Kubernetes manifest file for the GIS Server using Helm
+               sh 'helm template -f K8s-deployment/Charts/gis-interface/values.yaml -f K8s-deployment/Charts/gis-interface/example-azure-resource-values.yaml K8s-deployment/Charts/gis-interface  > gis-server.yaml'
+               // Run Kubescape scan on the generated Kubernetes manifest file
+               sh 'kubescape scan -t 25 -vv gis-server.yaml --format pretty-printer --output gis-report'
+              }
+          }
+          post {
+                always {
+               // Publish the Kubescape scan report as HTML
+               publishHTML([allowMissing: false, alwaysLinkToLastBuild:  true, keepAll: true, reportDir: '/var/lib/jenkins/workspace/kubescape-gis/', reportFiles: 'gis-report.txt', reportName: 'Kubescape Scan Report for GIS'])
+
+                }
+            }
+      }
+  }
+}
+

@@ -7,8 +7,14 @@ Docker swarm stack for Catalogue api server deployment.
 ```console
  cp -r example-secrets/ .
 ```
-2. Substitute appropriate values using commands whatever mentioned in config files. Configure the secrets/.cat.env file with appropriate values in the place holders “<>”
-3. Secrets directory after generation of secret files
+2. Substitute appropriate values using commands whatever mentioned in config files. Configure the secrets/.cat.env file with appropriate values in the place holders “<>”.
+3. Following config options are only need to be configured if its deployed as UAC catalogue, or else it can 
+   be left as is :
+```
+      "keycloakServerHost": "https://{{keycloak-domain}}/auth/realms/demo",
+      "certsEndpoint": "/protocol/openid-connect/certs"
+``` 
+4. Secrets directory after generation of secret files
 ```sh
 secrets/
 ├── .cat.env

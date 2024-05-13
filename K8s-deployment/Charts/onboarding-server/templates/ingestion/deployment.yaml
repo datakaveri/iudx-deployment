@@ -1,0 +1,174 @@
+{{- if .Values.ingestion.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: onboarding-ingestion
+  labels: 
+    app.kubernetes.io/component: ingestion
+    app: onboarding-ingestion
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.ingestion.replicaCount }}
+  {{- if .Values.ingestion.updateStrategy }}
+  strategy: {{- toYaml .Values.ingestion.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: onboarding-ingestion
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: onboarding-ingestion
+        app.kubernetes.io/component: ingestion
+        {{- if .Values.ingestion.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.ingestion.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.ingestion.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.ingestion.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingestion.priorityClassName }}
+      priorityClassName: {{ .Values.ingestion.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.ingestion.schedulerName }}
+      schedulerName: {{ .Values.ingestion.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.ingestion.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.ingestion.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "catalogue.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command: {}
+          
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: foo
+              mountPath: bar
+        {{- end }}
+        {{- if .Values.ingestion.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: onboarding-ingestion
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.ingestion.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.ingestion.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.ingestion.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.ingestion.args }}
+          args: [{{- range $index, $str := .Values.ingestion.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.ingestion.resources }}
+          resources: {{- toYaml .Values.ingestion.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.ingestion.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.ingestion.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.ingestion.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.ingestion.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.ingestion.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.ingestion.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.ingestion.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.ingestion.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.ingestion.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ingestion.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingestion.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.ingestion.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ingestion.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingestion.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.ingestion.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.ingestion.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.ingestion.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.ingestion.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.ingestion.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.ingestion.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.ingestion.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.ingestion.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingestion.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.ingestion.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.ingestion.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingestion.podAffinityPreset "component" "ingestion" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.ingestion.podAntiAffinityPreset}}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingestion.podAntiAffinityPreset "component" "ingestion" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.ingestion.nodeAffinityPreset.type}}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.ingestion.nodeAffinityPreset.type "key" .Values.ingestion.nodeAffinityPreset.key "values" .Values.ingestion.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.ingestion.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingestion.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

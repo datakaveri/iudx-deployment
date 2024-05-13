@@ -15,7 +15,7 @@ This code perform the following tasks:
 
 ## Build Docker Image
 ```sh
-docker build -t ghcr.io/datakaveri/immudb-config-generator:1.4.0-2 .
+docker build -t ghcr.io/datakaveri/immudb-config-generator:1.4.0-3 .
 ```
 
 

@@ -208,7 +208,7 @@ kubectl delete pvc data-immudb-0 -n immudb
 | `immudb.install.secretName`                    | Secrets for hook to connect immudb                                                                                                                  | `hook-secret`                        |
 | `immudb.install.hookImage.registry`            | hookImage registry                                                                                                                                  | `ghcr.io`                            |
 | `immudb.install.hookImage.repository`          | hookImage repository                                                                                                                                | `datakaveri/immudb-config-generator` |
-| `immudb.install.hookImage.tag`                 | hookImage tag (immutable tags are recommended)                                                                                                      | `1.4.0-2`                            |
+| `immudb.install.hookImage.tag`                 | hookImage tag (immutable tags are recommended)                                                                                                      | `1.4.0-3`                            |
 | `immudb.install.hookConfig`                       | Hooks config File to pass on.                                                                                                                               | `hook-config`                                |
 
 

@@ -1,9 +1,8 @@
-
+[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fjob%2Fkubescape-auth%2F&label=Kubescape)](https://jenkins.iudx.io/job/kubescape-auth/lastBuild/Kubescape_20Scan_20Report_20for_20AAA/)
 
 ## Introduction
 
 Helm Chart for IUDX auth-server Deployment
-
 
 ## Create secret files
 
@@ -46,6 +45,11 @@ Following script will create :
 2. create required configmaps
 3. create corresponding K8s secrets from the secret files
 4. deploy all aaa-server verticles 
+
+### To create ingress redirect to cos url:
+```console
+kubectl apply -f ../../misc/old-aaa-ingress.yaml -n aaa
+```
 
 ## Uninstalling the Chart
 

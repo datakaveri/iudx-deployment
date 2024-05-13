@@ -1,8 +1,9 @@
-
+[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fjob%2Fkubescape-rs%2F&label=Kubescape)](https://jenkins.iudx.io/job/kubescape-rs/lastBuild/Kubescape_20Scan_20Report_20for_20RS/)
 
 ## Introduction
 
 Helm Chart for IUDX Resource Server Deployment
+
 
 ## Create secret files
 
@@ -46,6 +47,11 @@ Following script will create :
 2. create required configmaps
 3. create corresponding K8s secrets from the secret files
 4. deploy all resource-server verticles 
+
+### To create ingress redirect to cos url:
+```console
+kubectl apply -f ../../misc/redirect-rs-ingress.yaml -n rs
+```
 
 ## Uninstalling the Chart
 
