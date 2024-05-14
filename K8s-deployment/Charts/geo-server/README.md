@@ -1,4 +1,3 @@
-[![Kubescape Status](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.iudx.io%2Fjob%2Fkubescape-cat%2F&label=Kubescape)](https://jenkins.iudx.io/job/kubescape-cat/lastBuild/Kubescape_20Scan_20Report_20for_20CAT/)
 
 ## Introduction
 
