@@ -1,7 +1,7 @@
 {
         "endpoints": [
-                " ",
-                " ",
+                "",
+                "",
                 "https://staging.cos.iudx.io/auth/apis", 
                 "https://staging.acl-apd.iudx.io/apis",
                 "https://staging.cos.iudx.io/cat/apis",
