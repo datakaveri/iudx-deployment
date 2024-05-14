@@ -18,6 +18,7 @@ do
          #assigns each endpoint address to endpoint var to check zero or non-zero status 
          endpoint=$(cat $1 | jq -r .endpoints[$i])
          if [ -z $endpoint ];then
+                  sleep 20
                   ((i++))
                   continue
                  
