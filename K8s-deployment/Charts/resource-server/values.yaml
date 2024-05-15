@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/rs-depl
-  tag: 5.0.0-6c98c5c
+  tag: 5.5.0-39e3451
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

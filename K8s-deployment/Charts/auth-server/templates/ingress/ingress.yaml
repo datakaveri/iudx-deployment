@@ -177,12 +177,7 @@ metadata:
         set $original_uri $uri;
         rewrite ^ $target_destination last;
       }
-      location  /iudx/cat/v1/internal/ui/dataset {
-        set $target_destination '/cat';
-        set $original_uri $uri;
-        rewrite ^ $target_destination last;
-      }
-      location  /iudx/cat/v1/nlpsearch {
+      location  /iudx/cat/v1 {
         set $target_destination '/cat';
         set $original_uri $uri;
         rewrite ^ $target_destination last;

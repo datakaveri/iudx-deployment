@@ -1,11 +1,11 @@
 resources:
   limits:
-    cpu: 200m
-    memory: 256Mi
+    cpu: 400m
+    memory: 500Mi
   requests:
     cpu: 200m
-    memory: 128Mi
+    memory: 200Mi
 ## @param nodeSelector Node labels for pod assignment
 ### ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector:
-  node.kubernetes.io/instance-type: t3.medium
+  node.kubernetes.io/instance-type: t3a.large
