@@ -71,7 +71,7 @@ diagnosticMode:
 image:
   registry: codenotary
   repository: immudb
-  tag: 1.4.1
+  tag: 1.9DOM.2
   pullSecrets: {} 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -361,7 +361,8 @@ immudb:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "storage-class-name"
+    # storageClass: "storage-class-name"
+    storageClass: "standard"
     ## @param immudb.persistence.existingClaim Existing Persistent Volume Claim
     ## If persistence is enable, and this value is defined,
     ## then accept the value as an existing Persistent Volume Claim to which
@@ -385,7 +386,7 @@ immudb:
       - ReadWriteOnce
     ## @param immudb.persistence.size Persistent Volume Size
     ##
-    size: 20Gi
+    size: 5Gi
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param immudb.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
   ## @param immudb.autoscaling.minReplicas Minimum number of Apache replicas
