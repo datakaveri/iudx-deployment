@@ -1,0 +1,35 @@
+{
+    "postgres_host": "postgres",
+    "postgres_username": "postgres",
+    "postgres_password_file": "/opt/bitnami/postgresql/secrets/postgresql-password",
+    "users": [      
+      {
+        "username": "iudx_rs_user",
+        "database": "iudx_rs",
+        "password_file": "/opt/bitnami/postgresql/secrets/postgres-rs-password"
+      },
+      {
+        "username": "iudx_keycloak_user",
+        "database": "iudx_keycloak",
+        "password_file": "/opt/bitnami/postgresql/secrets/postgres-keycloak-password",
+        "custom": [
+            "ALTER DATABASE iudx_keycloak OWNER TO iudx_keycloak_user;"
+            ]
+      },
+      {
+        "username": "iudx_auth_user",
+        "password_file": "/opt/bitnami/postgresql/secrets/postgres-auth-password"
+      },
+      {
+        "username": "iudx_acl_apd_user",
+        "database": "iudx_acl_apd",
+        "password_file": "/opt/bitnami/postgresql/secrets/postgres-acl-apd-password"
+      },
+      {
+        "username": "iudx_dmp_apd_user",
+        "database": "iudx_dmp_apd",
+        "password_file": "/opt/bitnami/postgresql/secrets/postgres-dmp-apd-password"
+      }
+    ]
+  }
+  
