@@ -46,8 +46,10 @@ Example:- If cos domain is ``cos-domain.iudx.org`` , then substitute it in conf/
         ssl_certificate_key /etc/nginx/certs/cos-domain.iudx.org/key.pem;
 
 ```
+3. For the cos root page to be served from the cos URL /apis endpoint, the correct dx html resources dir needs to be configured in [conf/cos.conf](./example-configs/conf/cos.conf).
+`iudx-html`, `adex-html`, and `ugix-html` can be used for respective dx.
 
-3. For each domain that needs a certificate generated, add domain names in [conf/acme-config.json](./example-configs/conf/acme-config.json)
+4. For each domain that needs a certificate generated, add domain names in [conf/acme-config.json](./example-configs/conf/acme-config.json)
 Example:-
 ```json
 {
