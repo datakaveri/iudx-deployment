@@ -42,8 +42,10 @@ services:
         target: /usr/share/app/secrets/passwords/rs-proxy-adapter-password
       - source: rs-proxy-password
         target: /usr/share/app/secrets/passwords/rs-proxy-password
-      - source: auditing-password
-        target: /usr/share/app/secrets/passwords/auditing-password
+      - source: dmp-apd-password
+        target: /usr/share/app/secrets/passwords/dmp-apd-password
+      - source: acl-apd-password
+        target: /usr/share/app/secrets/passwords/acl-apd-password
 
 
 
@@ -78,3 +80,7 @@ secrets:
     file: ./secrets/passwords/rs-proxy-password
   auditing-password:
     file: ./secrets/passwords/auditing-password
+  dmp-apd-password:
+    file: ./secrets/passwords/dmp-apd-password
+  acl-apd-password:
+    file: ./secrets/passwords/acl-apd-password
