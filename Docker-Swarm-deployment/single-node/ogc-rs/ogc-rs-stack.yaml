@@ -10,11 +10,6 @@ services:
     env_file:
       - ./secrets/.ogc-rs.env
     volumes:
-      - type: volume
-        source: ogc-rs-volume
-        target: /usr/share/app/storage
-        volume:
-          nocopy: false
       - type: tmpfs
         target: /tmp/
         read_only: false
@@ -43,7 +38,4 @@ networks:
 secrets:
   config:
     file: ./secrets/config.json
-
-volumes:
-  ogc-rs-volume:
 
