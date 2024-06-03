@@ -2,7 +2,7 @@
 Docker swarm stack for IUDX rs-server Deployment
 
 ## Pre-requisites
-Deploy [Delete-script](../rs-delete-script/) before resource-server
+Deploy [Delete-script](../rs-delete-subs-script/) before resource-server
 
 # Installation of Resource server
 ## Create secret files
