@@ -1,0 +1,40 @@
+{{- if and .Values.geoserver.enabled .Values.geoserver.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: geoserver
+  labels:
+    app: geoserver
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: geoserver
+  minReplicas: {{ .Values.geoserver.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.geoserver.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.geoserver.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.geoserver.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.geoserver.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.geoserver.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}
