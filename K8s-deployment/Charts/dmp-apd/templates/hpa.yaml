@@ -1,0 +1,40 @@
+{{- if and .Values.dmpapd.enabled .Values.dmpapd.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: dmpapd
+  labels:
+    app: dmpapd
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: dmpapd
+  minReplicas: {{ .Values.dmpapd.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.dmpapd.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.dmpapd.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.dmpapd.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.dmpapd.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.dmpapd.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,23 @@
+ingress:
+  hostname: dmpapd-hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+## ApiServer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param apiServer.resources.limits The resources limits for the ApiServer containers
+## @param apiServer.resources.requests The requested resources for the ApiServer containers
+##
+dmpapd:
+  enabled: true
+  resources:
+    limits:
+      cpu: 800m
+      memory: 750Mi
+    requests:
+      cpu: 600m
+      memory: 600Mi
+
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+
