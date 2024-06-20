@@ -1,0 +1,16 @@
+{
+    "createVhost" : true or false, if vhost is required to create,
+    "username": "<rmq user>", 
+    "password": "<rmq password>", 
+    "host": "<rmq host>", 
+    "amqpsPort": "<rmq amq port>", 
+    "httpsPort": "<rmq https port,>",
+    "vhost": "Test-Lip",
+    "exchange": "lip-test",
+    "exchangeType": "direct",
+    "queueName": "redis-latest",
+    "route": "lip-test",
+    "redisHost": "<redis hostname>",
+    "redisPort": "<redis Port>",
+    "redisPassword": "<Redis Password>"
+}
