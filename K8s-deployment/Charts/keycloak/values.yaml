@@ -94,7 +94,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/keycloak
-  tag: 23.0.4-debian-11-r1-t-1
+  tag: 23.0.4-iausdx-themes-1.1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
