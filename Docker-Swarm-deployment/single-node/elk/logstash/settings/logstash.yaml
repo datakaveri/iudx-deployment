@@ -2,3 +2,5 @@ node:
   name: "node_logstash"
 log:
   format: json
+
+path.data: /bitnami/logstash/data
