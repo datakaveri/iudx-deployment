@@ -1,0 +1,445 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap");
+
+.login-pf body {
+  /* background: url("../img/keycloak-bg.png") no-repeat center center fixed;
+    background-size: cover;
+    height: 100%; */
+  background: #fff;
+  background-size: cover;
+  height: auto;
+}
+.card-pf {
+  box-shadow: none;
+}
+#custom-card-pf {
+  border: none;
+  padding: 0;
+  margin: 0 auto;
+}
+
+#kc-form-444 {
+  padding: 0 35px 0 35px;
+  margin-top: 25px;
+}
+
+.custom-button-group {
+  float: right;
+}
+
+.custom-forgot-password a,
+.custom-button-group a {
+  color: #0a9;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+}
+
+.login-pf a:hover {
+  color: #0a9 !important;
+}
+
+.custom-forgot-password a:hover,
+.custom-button-group a:hover {
+  text-decoration: none;
+}
+
+.custom-forgot-password a:hover {
+  text-decoration: none;
+}
+
+.form-col {
+  display: flex;
+  justify-content: space-between;
+}
+
+#form-col-full {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.custom-pf-c-form-control {
+  font-size: 16px;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 20px 12px;
+  margin: 0;
+  width: 100%;
+  box-shadow: inset 0 0 0 1px #ccc;
+
+  &:focus {
+    appearance: none;
+    outline: none;
+    box-shadow: inset 0 0 0 2px #0b457f;
+  }
+}
+
+/* #form-group-1,#form-group-2,#form-group-3,#form-group-4,#form-group-5{
+    width: 100%;
+} */
+
+.custom-pf-c-form-control::placeholder {
+  color: #6c6c6c;
+}
+
+.custom-pf-c-button.custom-pf-m-primary {
+  width: 100%;
+  height: auto;
+  float: left;
+  transition: 0.5s linear;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: 13px 0px;
+  text-align: center;
+  background: #0a9;
+  color: #fff;
+  text-transform: capitalize;
+  font-weight: 500;
+  border-radius: 5px;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
+
+.custom-pf-c-button.custom-pf-m-primary:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+  border-bottom: 4px solid transparent;
+  border-left: 4px solid transparent;
+  box-sizing: border-box;
+  transform: translateX(100%);
+}
+
+.custom-pf-c-button.custom-pf-m-primary:after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  border-top: 4px solid transparent;
+  border-right: 4px solid transparent;
+  box-sizing: border-box;
+  transform: translateX(-100%);
+}
+
+.custom-pf-c-button.custom-pf-m-primary:hover {
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.5);
+  background-color: #fff;
+  color: #0a9;
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+
+.custom-pf-c-button.custom-pf-m-primary:hover:before {
+  border-color: #0a9;
+  height: 100%;
+  transform: translateX(0);
+  transition: 0.3s transform linear, 0.3s height linear 0.3s;
+}
+
+.custom-pf-c-button.custom-pf-m-primary:hover:after {
+  border-color: #0a9;
+  height: 100%;
+  transform: translateX(0);
+  transition: 0.3s transform linear, 0.3s height linear 0.5s;
+}
+
+.logo-header-text {
+  color: #0a9;
+}
+
+button {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: transparent;
+}
+
+h1#kc-page-title {
+  margin-top: 25px;
+  padding-bottom: 20px;
+  font-family: "Space Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 48px;
+}
+
+#kc-header-wrapper {
+  font-family: "Helvetica", "sans-serif";
+  display: none;
+}
+
+#custom-logo-wrapper {
+  background-size: contain;
+  width: 95px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  transform: translatey(25%);
+}
+
+.custom-pf-c-form__label {
+  z-index: 1;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+  color: #042f5b;
+}
+#kc-form-options {
+  padding: 0 !important;
+}
+.custom-pf-c-form__label-text {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.col-xs-12.col-sm-12.col-md-12.col-lg-12 {
+  padding: 0 !important;
+}
+
+.custom-pf-c-form__label-text::after {
+  content: " *";
+  color: #ff0000;
+}
+
+#kc-info-wrapper {
+  background-color: transparent;
+  font-size: 14px;
+  padding: 15px !important;
+}
+
+textarea:focus,
+input:focus,
+input:hover {
+  outline: none !important;
+  box-shadow: inset 0 0 0 1px !important;
+}
+
+#kc-registration span {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+  font-size: 14px;
+}
+
+#kc-info-wrapper a {
+  color: #0a9;
+  outline: none;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+  font-size: 14px;
+}
+
+#kc-info-wrapper a:hover {
+  text-decoration: none;
+  color: #0088ce;
+}
+
+.login-pf-page .login-pf-signup {
+  text-align: left;
+}
+
+.custom-label-wrapper,
+.custom-input-wrapper {
+  font-size: 16px;
+  border: 0;
+  border-radius: 10px;
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  &:focus {
+    appearance: none;
+    outline: none;
+    box-shadow: inset 0 0 0 2px #0b457f;
+  }
+}
+
+.custom-form-group {
+  width: 47.5%;
+  margin-bottom: 20px;
+}
+/* #kc-form-buttons{
+  padding: 0 15px;
+} */
+.custom-login-text,
+.custom-login-helper-text {
+  font-size: 14px;
+  padding-top: 15px;
+}
+
+.custom-login-text {
+  color: #0b457f;
+  margin-left: 5px;
+  font-weight: 600;
+}
+
+.custom-login-helper-text {
+  text-align: center;
+}
+
+#kc-register-form {
+  padding: 0 10px 30px 10px;
+  margin-top: 25px;
+}
+
+.custom-header {
+  display: flex;
+  justify-content: left;
+}
+
+#kc-info {
+  margin: 0;
+}
+
+/* Password Reset */
+
+#kc-reset-password-form {
+  margin-top: 25px;
+  padding: 0 35px;
+}
+
+/* Update Password */
+
+#custom-kc-passwd-update-form {
+  padding: 0 30px;
+  margin-top: 20px;
+}
+
+.pw-update-form-group {
+  margin-bottom: 20px;
+}
+
+.label-wrapper {
+  padding: 0;
+}
+
+#custom-kc-form-buttons {
+  margin: 10px 0;
+}
+
+/* Page expired */
+
+#custom-instruction1 {
+  padding: 10px 30px;
+}
+
+@media (max-width: 767px) {
+  #custom-card-pf {
+    position: relative;
+    transform: none;
+    left: 0;
+    right: 0;
+    width: auto;
+    border-radius: 0;
+    height: 100vh;
+  }
+
+  .login-pf-page {
+    padding-top: 3rem;
+  }
+
+  .login-pf body {
+    padding-bottom: 0;
+  }
+
+  #kc-header {
+    margin: 0;
+  }
+
+  .custom-pf-c-button.custom-pf-m-primary {
+    font-size: 16px;
+  }
+}
+
+#instruction-one {
+  color: "#ddd";
+  text-align: center;
+  margin-top: 20px;
+  padding: 0 30px;
+}
+
+#instruction-two {
+  color: "#ddd";
+}
+
+.login-div {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-btn {
+  padding: 0 18px 30px 18px;
+}
+
+.header {
+  background-color: #fff;
+  height: 60px;
+}
+
+.logo {
+  padding-left: 20px;
+}
+
+.logo-container {
+  padding-left: 50px;
+}
+.logo-image {
+  width: 15%;
+}
+
+ul li {
+  margin: 0 1rem;
+  width: 11rem;
+  text-align: center;
+}
+
+ul li a {
+  text-decoration: none !important;
+  color: #1f2937 !important;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+  font-size: 16px;
+}
+
+li.active {
+  background-color: #e5e7eb !important;
+  border-radius: 40px;
+}
+.row {
+  margin: 0px;
+}
+
+.images-row {
+  margin: 0px;
+  div {
+    height: 40vh;
+
+    .video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
