@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  cat-summary:
+    image: ghcr.io/datakaveri/cat-summary-script:1.0.0
+    networks: 
+      - overlay-net
+    deploy:
+      mode: replicated-job
+      placement:
+        constraints:
+          - "node.labels.cat-node==true"
+    secrets:
+      - source: cat-summary-config
+        target: /app/config.json
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+secrets:
+  cat-summary-config:
+    file: ./secrets/cat-summary-config.json
