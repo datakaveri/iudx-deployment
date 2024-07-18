@@ -56,3 +56,8 @@ Deploy Profanity Check Sdk:
 docker stack deploy -c profanity-check-sdk.yaml  profanity-check 
 ```
 
+## Deploy Cat summary 
+
+```sh 
+docker stack deploy -c  cat-summary-stack.yaml cat_summary
+```
