@@ -105,3 +105,21 @@ cache:
     requests: 
       cpu: 200m
       memory: 600Mi
+
+## consentlog resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param consentlog.resources.limits The resources limits for the consentlog containers
+## @param consentlog.resources.requests The requested resources for the consentlog containers
+##
+consentlog:
+  enabled: true
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 300m
+      memory: 500Mi
+    requests: 
+      cpu: 200m
+      memory: 400Mi
+
