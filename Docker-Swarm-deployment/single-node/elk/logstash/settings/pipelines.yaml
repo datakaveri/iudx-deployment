@@ -1,4 +1,4 @@
 - pipeline.id: resource-group
-  path.config: "/bitnami/logstash/pipeline/resource-group.cfg"
+  path.config: "/bitnami/logstash/pipeline/resource-group.conf"
   queue.type: persisted
   queue.max_bytes: 75mb

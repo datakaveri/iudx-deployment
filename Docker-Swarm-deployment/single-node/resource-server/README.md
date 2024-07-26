@@ -1,6 +1,9 @@
 # Introduction
 Docker swarm stack for IUDX rs-server Deployment
 
+## Pre-requisites
+Deploy [Delete-script](../rs-delete-subs-script/) before resource-server
+
 # Installation of Resource server
 ## Create secret files
 1. Make a copy of sample secrets directory.

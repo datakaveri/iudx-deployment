@@ -13,6 +13,9 @@ services:
     volumes:
       - acme-data:/acme.sh
       - certs:/etc/nginx/certs
+      - ./conf/iudx-html:/usr/local/nginx/html/iudx-html
+      - ./conf/adex-html:/usr/local/nginx/html/adex-html
+      - ./conf/ugix-html:/usr/local/nginx/html/ugix-html
       - type: tmpfs
         target: /var/cache
         read_only: false  

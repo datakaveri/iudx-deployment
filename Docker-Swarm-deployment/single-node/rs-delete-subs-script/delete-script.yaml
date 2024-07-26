@@ -1,0 +1,36 @@
+version: '3.7'
+
+networks:
+  overlay-net:
+          external: true
+          driver: overlay
+
+services:
+
+  delete-script:
+    image: ghcr.io/datakaveri/rs-delete-subs-script:1.0.0
+    secrets:
+     - source: config
+       target: /usr/share/app/script-config.json
+    restart: on-failure
+    networks:
+      - overlay-net
+    logging:
+         driver: "json-file"
+         options:
+             max-file: "3"
+             max-size: "5m"
+             tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.delete-script-node==true"
+
+
+secrets:
+  config:
+    file: ./secrets/script-config.json

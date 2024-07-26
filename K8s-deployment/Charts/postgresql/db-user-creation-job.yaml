@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-user-creation-job
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+        - name: db-user-creation
+          image: ghcr.io/datakaveri/postgres-init:1.0.0
+          volumeMounts:
+            - name: db-user-creation-config
+              mountPath: /usr/share/app/config.json
+              subPath: db-user-creation-config.json
+            - name: psql-passwords
+              mountPath: /opt/bitnami/postgresql/secrets/
+              readOnly: true
+      volumes:
+        - name: db-user-creation-config
+          configMap:
+            name: db-user-creation-config
+        - name: psql-passwords
+          secret:
+            secretName: psql-passwords
+      restartPolicy: OnFailure
+  backoffLimit: 4  # Number of retries before considering the job as failed
