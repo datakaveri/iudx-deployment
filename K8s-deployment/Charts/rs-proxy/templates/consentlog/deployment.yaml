@@ -1,0 +1,175 @@
+{{- if .Values.consentlog.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: rs-proxy-consentlog
+  labels: 
+    app.kubernetes.io/component: consentlog
+    app: rs-proxy-consentlog
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.consentlog.replicaCount }}
+  {{- if .Values.consentlog.updateStrategy }}
+  strategy: {{- toYaml .Values.consentlog.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: rs-proxy-consentlog
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: rs-proxy-consentlog
+        app.kubernetes.io/component: consentlog
+        {{- if .Values.consentlog.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.consentlog.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.consentlog.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.consentlog.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.consentlog.priorityClassName }}
+      priorityClassName: {{ .Values.consentlog.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.consentlog.schedulerName }}
+      schedulerName: {{ .Values.consentlog.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.consentlog.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.consentlog.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "consentlog.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command: {}
+          
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: foo
+              mountPath: bar
+        {{- end }}
+        {{- if .Values.consentlog.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: rs-proxy-consentlog
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.consentlog.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.consentlog.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.consentlog.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.consentlog.args }}
+          args: [{{- range $index, $str := .Values.consentlog.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.consentlog.resources }}
+          resources: {{- toYaml .Values.consentlog.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.consentlog.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.consentlog.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.consentlog.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.consentlog.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.consentlog.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.consentlog.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.consentlog.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.consentlog.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.consentlog.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.consentlog.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.consentlog.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.consentlog.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.consentlog.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.consentlog.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.consentlog.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.consentlog.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.consentlog.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.consentlog.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.consentlog.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.consentlog.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.consentlog.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.consentlog.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.consentlog.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.consentlog.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.consentlog.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.consentlog.podAffinityPreset "component" "consentlog" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.consentlog.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "consentlog" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.consentlog.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.consentlog.nodeAffinityPreset.type "key" .Values.consentlog.nodeAffinityPreset.key "values" .Values.consentlog.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.consentlog.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.consentlog.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
+
