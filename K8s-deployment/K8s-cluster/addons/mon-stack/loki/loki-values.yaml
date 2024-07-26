@@ -167,7 +167,7 @@ loki:
 
   # -- Limits config
   limits_config:
-    retention_period: 744h
+    retention_period: 745h
     enforce_metric_name: false
     reject_old_samples: true
     reject_old_samples_max_age: 168h
@@ -237,7 +237,7 @@ loki:
 
   # --  Optional compactor configuration
   compactor: 
-    working_directory: /var/loki/boltdb-shipper-compactor
+    working_directory: /var/loki/compactor
     shared_store: filesystem
     compaction_interval: 10m
     retention_enabled: true
