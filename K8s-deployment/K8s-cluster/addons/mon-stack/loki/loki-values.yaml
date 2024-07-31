@@ -257,6 +257,9 @@ loki:
     grpc_listen_port: 9095
   # -- Limits config
   limits_config:
+
+    retention_period: 745h
+    enforce_metric_name: false
     reject_old_samples: true
     reject_old_samples_max_age: 168h
     max_cache_freshness_per_query: 10m
@@ -353,7 +356,17 @@ loki:
       max_per_second: 20
       up_to: 3
   # --  Optional compactor configuration
-  compactor: {}
+
+  compactor: 
+    working_directory: /var/loki/compactor
+    shared_store: filesystem
+    compaction_interval: 10m
+    retention_enabled: true
+    retention_delete_delay: 2h
+    retention_delete_worker_count: 150
+
+
+  
   # --  Optional analytics configuration
   analytics: {}
   # --  Optional querier configuration
@@ -372,6 +385,7 @@ loki:
   # -- Enable tracing
   tracing:
     enabled: false
+
 enterprise:
   # Enable enterprise features, license must be provided
   enabled: false
