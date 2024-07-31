@@ -1,17 +1,24 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: redirect-catalogue-consumer-ui
-  namespace: cat
+  name: redirect-resource-server-proxy
+  namespace: adex-rs-proxy
   labels:
-    app.kubernetes.io/name: catalogue-ui
-    app.kubernetes.io/instance: catalogue-server
+    app.kubernetes.io/name: resourceServerProxy
+    app.kubernetes.io/instance: rs-proxy
     app.kubernetes.io/component: ingress
 
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/app-root: /apis
+    nginx.ingress.kubernetes.io/global-rate-limit: "1000"
+    nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name
+    nginx.ingress.kubernetes.io/global-rate-limit-window: 1s
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
     nginx.ingress.kubernetes.io/server-snippet: |
       add_header Referrer-Policy   "no-referrer-when-downgrade" always;
       add_header X-Frame-Options   "deny" always;
@@ -19,22 +26,22 @@ metadata:
       add_header X-Permitted-Cross-Domain-Policies  "none" always;
       add_header Cross-Origin-Embedder-Policy "require-corp" always;
       add_header Cross-Origin-Resource-Policy "cross-origin" always;
-    nginx.ingress.kubernetes.io/permanent-redirect: https://catalogue.cos.iudx.org.in/consumer
+    nginx.ingress.kubernetes.io/permanent-redirect: https://gateway.ts.adex.org.in$request_uri
     nginx.ingress.kubernetes.io/permanent-redirect-code: '308'
 
 spec:
-  rules: 
-    - host: consumer.iudx.org.in 
+  rules:
+    - host: gateway.adex.org.in
       http:
         paths:
           - path: /
             pathType: ImplementationSpecific
             backend:
               service:
-                name: cat-api-server
+                name: rs-proxy-api-server
                 port:
                   name: http
   tls:
     - hosts:
-      - consumer.iudx.org.in
-      secretName: redirect-cat-consumer-ui-tls-secret
+        - gateway.adex.org.in
+      secretName: redirect-rs-proxy-tls-secret
