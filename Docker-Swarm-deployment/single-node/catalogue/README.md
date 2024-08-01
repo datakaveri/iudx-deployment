@@ -56,3 +56,26 @@ Deploy Profanity Check Sdk:
 docker stack deploy -c profanity-check-sdk.yaml  profanity-check 
 ```
 
+## Deploy Cat summary 
+
+```sh 
+docker stack deploy -c  cat-summary-stack.yaml cat_summary
+```
+
+## Add cron to update at summary at 00:30 everyday 
+
+```sh 
+crontab -e 
+```
+
+- Append the following line to run the cron everyday 
+
+```sh 
+30 0 * * * docker service update cat_summary_cat-summary --force
+```
+- Verify cron 
+
+```sh 
+crontab -l 
+```
+You should see the cron we just added
