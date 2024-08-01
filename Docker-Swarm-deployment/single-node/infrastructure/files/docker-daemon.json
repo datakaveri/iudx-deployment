@@ -1,7 +1,7 @@
 { 
   "metrics-addr" : "127.0.0.1:9323",
   "experimental" : true,
-  "dns": ["8.8.8.8", "8.8.8.4"],
+  "dns": ["8.8.8.8", "8.8.4.4"],
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "5m",
