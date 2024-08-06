@@ -16,17 +16,7 @@ services:
     configs:
       - source: pg_hba
         target: /bitnami/postgresql/conf/pg_hba.conf
-
-      - source: db-user-creation 
-        target: /docker-entrypoint-initdb.d/db-user-creation.sh
-        mode: 0755
     secrets:
-      - source: postgres-auth-password
-        target: /opt/bitnami/postgresql/secrets/postgres-auth-password
-      - source: postgres-rs-password
-        target: /opt/bitnami/postgresql/secrets/postgres-rs-password
-      - source: postgres-keycloak-password
-        target: /opt/bitnami/postgresql/secrets/postgres-keycloak-password
       - source: postgresql-password
         target: /opt/bitnami/postgresql/secrets/postgresql-password
     environment:
@@ -56,8 +46,6 @@ volumes:
   postgres-db-volume:
 
 configs:
-  db-user-creation:
-    file: init-scripts/db-user-creation.sh
   pg_hba:
     file: config/pg_hba.conf
 
@@ -65,9 +53,3 @@ configs:
 secrets:
   postgresql-password:
     file: secrets/passwords/postgresql-password
-  postgres-keycloak-password:
-    file: secrets/passwords/postgres-keycloak-password                                              
-  postgres-rs-password:
-    file: secrets/passwords/postgres-rs-password                            
-  postgres-auth-password:
-    file: secrets/passwords/postgres-auth-password

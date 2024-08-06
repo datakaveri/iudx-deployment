@@ -1,7 +1,7 @@
 version: '3.9'
 services:
     immudb-config-generator:
-      image: ghcr.io/datakaveri/immudb-config-generator:1.4.0-4
+      image: ghcr.io/datakaveri/immudb-config-generator:1.4.0-5
       read_only: true
       networks:
         - overlay-net

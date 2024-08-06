@@ -96,7 +96,7 @@ services:
     volumes:
       - type: volume
         source: logstash-update-volume
-        target: /opt/bitnami/logstash/data
+        target: /bitnami/logstash/data
     env_file:
         - ./secrets/.logstash.env
     environment:
@@ -104,7 +104,7 @@ services:
       - LOGSTASH_ENABLE_MULTIPLE_PIPELINES=yes
       - LOGSTASH_EXPOSE_API=yes
       - LOGSTASH_API_PORT_NUMBER=9600
-      - LOGSTASH_DATA_DIR=/opt/bitnami/logstash/data
+      - LOGSTASH_DATA_DIR=/bitnami/logstash/data
     logging:
       driver: "json-file"
       options:
@@ -118,9 +118,9 @@ services:
         target: /opt/bitnami/logstash/config/logstash.keystore
     configs:
       - source: logstash-pipelines
-        target: /bitnami/logstash/config/pipelines.yaml
+        target: /bitnami/logstash/config/pipelines.yml
       - source: logstash-settings
-        target: /bitnami/logstash/config/logstash.yaml
+        target: /bitnami/logstash/config/logstash.yml
       - source: logstash-resource-group-pipeline
         target: /bitnami/logstash/pipeline/resource-group.conf
 

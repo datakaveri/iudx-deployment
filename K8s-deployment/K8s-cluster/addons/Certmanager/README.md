@@ -17,7 +17,7 @@ kubectl create namespace cert-manager
 ```
 3.  Helm install cert-manager in cert-manager namespace
 ```
-helm install -f cert-manager-values.yaml -f resource-values.yaml  cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace  --version v1.9.1 --set installCRDs=true --set prometheus.enabled=false
+helm install -f cert-manager-values.yaml -f resource-values.yaml  cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace  --version v1.13.3 --set installCRDs=true --set prometheus.enabled=false
 ```
 ## Uninstalling with Helm
 1. Uninstalling cert-manager from a helm installation using the delete command on helm.
