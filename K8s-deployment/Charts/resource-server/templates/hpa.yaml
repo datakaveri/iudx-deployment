@@ -2,7 +2,7 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: resourceServer
+  name: resource-server
   labels:
     app: resourceServer
     {{- include "common.labels.standard" . | nindent 4 }}
@@ -17,7 +17,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: resourceServer
+    name: resource-server
   minReplicas: {{ .Values.resourceServer.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.resourceServer.autoscaling.maxReplicas }}
   metrics:
