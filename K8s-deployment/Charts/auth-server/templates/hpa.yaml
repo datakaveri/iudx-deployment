@@ -1,10 +1,10 @@
-{{- if .Values.apiServer.autoscaling.enabled }}
+{{- if .Values.aaa.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: aaa-api-server
+  name: aaa-server
   labels:
-    app: aaa-api-server
+    app: aaa-server
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: aaa-api-server
-  minReplicas: {{ .Values.apiServer.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.apiServer.autoscaling.maxReplicas }}
+    name: aaa-server
+  minReplicas: {{ .Values.aaa.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.aaa.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.apiServer.autoscaling.targetCPU }}
+    {{- if .Values.aaa.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.aaa.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.apiServer.autoscaling.targetMemory }}
+    {{- if .Values.aaa.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.aaa.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
