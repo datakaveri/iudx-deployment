@@ -112,7 +112,7 @@ podAnnotations:
 
 ## @section ApiServer Parameters
 
-apiServer:
+aaa:
 
   ## @param apiServer.replicaCount Number of ApiServer replicas to deploy
 
