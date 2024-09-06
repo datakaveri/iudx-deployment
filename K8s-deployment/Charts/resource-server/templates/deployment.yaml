@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: resourceServer
+  name: resource-server
   labels: 
     app.kubernetes.io/component: resourceServer
     app: resourceServer
@@ -52,7 +52,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.resourceServer.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: resourceServer
+        - name: resource-server
           image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.resourceServer.containerSecurityContext.enabled }}

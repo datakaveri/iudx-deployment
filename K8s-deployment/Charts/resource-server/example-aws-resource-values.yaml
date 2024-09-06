@@ -20,3 +20,28 @@ resourceServer:
     requests: 
       cpu: 700m
       memory: 1200Mi
+  extraVolumes:
+    - name: rs-config
+      secret:
+        secretName: rs-config
+    - name: async-dir
+      persistentVolumeClaim:
+        claimName: efs-pvc
+    - name: rs-tmp
+      emptyDir:
+        medium: Memory
+  extraVolumeMounts: 
+    - name: rs-config
+      mountPath: /usr/share/app/secrets/configs
+    - name: async-dir
+      mountPath: "/usr/share/app/storage/temp-dir"
+    - name: rs-tmp
+      mountPath: /tmp
+  persistentVolumeClaim:
+    name: efs-pvc
+    storageClassName: efs-csi-storage-class
+    resources:
+      requests:
+        storage: 5Gi
+
+  
