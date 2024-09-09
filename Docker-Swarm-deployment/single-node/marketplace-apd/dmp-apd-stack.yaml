@@ -7,7 +7,7 @@ networks:
 
 services:
   dmp-apd:
-    image: ghcr.io/datakaveri/dmp-apd-server-depl:1.0.0-alpha-8d09ca1
+    image: ghcr.io/datakaveri/dmp-apd-server-depl:1.0.0-270ef7b
     env_file:
       - ./secrets/.apd.env
     read_only: true
