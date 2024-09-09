@@ -16,9 +16,13 @@ Docker swarm stack for Elasticsearch-logstash-Kibana (ELK) Deployment.
 ```
 ./generate-keystore.sh
 ```
-4. Provide the appropriate values for env in `secrets/.logstash.env`
+4. Generate Certs
+```
+./generate-certs.sh 
+```
+5. Provide the appropriate values for env in `secrets/.logstash.env`
 
-5. Secrets directory after generation of secrets
+6. Secrets directory after generation of secrets
 ```sh
 secrets/
 ├── .logstash.env
@@ -44,7 +48,7 @@ secrets/
     └── s3-secret-key
 ```
 
-5. Snapshot and Restore 
+7. Snapshot and Restore 
 For AWS-S3, define the `s3-access-key` and `s3-secret-key` in file `secrets/passwords/snapshot-credentials.env` as shown below
 ```
 ELASTICSEARCH_KEYS=s3.client.default.access_key=<s3-access-key>,s3.client.default.secret_key=<s3-secret-key>
