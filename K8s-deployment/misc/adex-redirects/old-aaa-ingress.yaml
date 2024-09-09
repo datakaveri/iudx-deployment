@@ -1,11 +1,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: cos-catalogue
-  namespace: cat
+  name: old-auth-server-url
+  namespace: adex-aaa
   labels:
-    app.kubernetes.io/name: catalogue
-    app.kubernetes.io/instance: catalogue-server
+    app.kubernetes.io/name: authServer
+    helm.sh/chart: authServer-0.1.13
+    app.kubernetes.io/instance: auth-server
+    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: ingress
 
   annotations:
@@ -18,28 +20,20 @@ metadata:
     nginx.ingress.kubernetes.io/global-rate-limit-window: 1s
     nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
     nginx.ingress.kubernetes.io/limit-connections: "150"
-    nginx.ingress.kubernetes.io/limit-rps: "150"
-    nginx.ingress.kubernetes.io/server-snippet: |
-      add_header Referrer-Policy   "no-referrer-when-downgrade" always;
-      add_header X-Frame-Options   "deny" always;
-      add_header X-XSS-Protection  "1; mode=block" always;
-      add_header X-Permitted-Cross-Domain-Policies  "none" always;
-      add_header Cross-Origin-Embedder-Policy "require-corp" always;
-      add_header Cross-Origin-Resource-Policy "cross-origin" always;
-
+    nginx.ingress.kubernetes.io/limit-rps: "100"
 spec:
-  rules: 
-    - host: api.cos-catalogue.iudx.org.in
+  rules:
+    - host: authorization.adex.org.in
       http:
         paths:
           - path: /
             pathType: ImplementationSpecific
             backend:
               service:
-                name: cat-api-server
+                name: aaa-api-server
                 port:
                   name: http
   tls:
     - hosts:
-      - api.cos-catalogue.iudx.org.in
-      secretName: cos-cat-tls-secret
+      - authorization.adex.org.in
+      secretName: old-aaa-tls-secret
