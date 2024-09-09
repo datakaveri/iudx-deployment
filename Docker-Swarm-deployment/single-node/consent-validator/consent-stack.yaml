@@ -7,7 +7,7 @@ networks:
 
 services:
   consent:
-    image: ghcr.io/datakaveri/consent-validator:1.5.0-e3c3aec
+    image: ghcr.io/datakaveri/consent-validator:1.0.0-alpha-3e1eb9f
     env_file:
       - ./secrets/.consent.env
     read_only: true
