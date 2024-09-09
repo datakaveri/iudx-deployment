@@ -7,7 +7,7 @@ networks:
 
 services:
   acl-apd:
-    image: ghcr.io/datakaveri/acl-apd-depl:5.5.0-alpha-a71e5c8
+    image: ghcr.io/datakaveri/acl-apd-depl:1.0.1-6a3f669
     env_file:
       - ./secrets/.apd.env
     read_only: true
