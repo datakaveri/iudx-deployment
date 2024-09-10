@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.datalake-master-node=true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    secrets:
+      - source: minio.username
+        target: minio_username
+      - source: minio.password
+        target: minio_password 
+    environment:
+      MINIO_ROOT_USER: /run/secrets/minio_username
+      MINIO_ROOT_PASSWORD: /run/secrets/minio_password
+    networks:
+      - overlay-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    volumes:
+      - minio_data:/data
+    
+
+volumes:
+  minio_data:
+
+secrets:
+  minio.username: 
+    file: ./secrets/passwords/minio-username
+  minio.password:
+    file: ./secrets/passwords/minio-password
+  
