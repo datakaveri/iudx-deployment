@@ -1,5 +1,11 @@
-version: '3.8'
+version: '3.9'
 
+networks:
+  default:
+    name: overlay-net
+    driver: overlay
+    external: true
+    
 services:
   minio:
     image: minio/minio:latest
@@ -21,8 +27,6 @@ services:
     environment:
       MINIO_ROOT_USER: /run/secrets/minio_username
       MINIO_ROOT_PASSWORD: /run/secrets/minio_password
-    networks:
-      - overlay-net
     logging:
       driver: "json-file"
       options:
