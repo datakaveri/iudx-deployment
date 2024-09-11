@@ -1,20 +1,25 @@
-version: '3.9'
-
+version: "3.9"
 networks:
   default:
     name: overlay-net
     driver: overlay
     external: true
-
 services:
-  minio:
-    image: minio/minio:latest
-    command: server /data --address 0.0.0.0:9000 --console-address 0.0.0.0:9001
+  createbuckets:
+    image: minio/mc
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://tasks.minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
+      /usr/bin/mc admin info myminio;
+      /usr/bin/mc mb myminio/clickhouse;
+      /usr/bin/mc policy set public myminio/clickhouse;
+      exit 0;
+      "
     deploy:
-      replicas: 1
       placement:
         constraints:
           - "node.labels.datalake-master-node==true"
+      replicas: 1
       restart_policy:
         condition: on-failure
         delay: 5s
@@ -27,22 +32,16 @@ services:
     environment:
       MINIO_ROOT_USER: /run/secrets/minio_username
       MINIO_ROOT_PASSWORD: /run/secrets/minio_password
+    
     logging:
       driver: "json-file"
       options:
-        max-size: "5m"
         max-file: "3"
+        max-size: "5m"
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
-    volumes:
-      - minio_data:/data
-    
-
-volumes:
-  minio_data:
 
 secrets:
   minio.username: 
     file: ./secrets/passwords/minio-username
   minio.password:
     file: ./secrets/passwords/minio-password
-  
