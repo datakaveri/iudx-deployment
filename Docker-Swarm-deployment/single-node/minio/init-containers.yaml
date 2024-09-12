@@ -12,7 +12,7 @@ services:
       /usr/bin/mc alias set myminio http://tasks.minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
       /usr/bin/mc admin info myminio;
       /usr/bin/mc mb myminio/clickhouse;
-      /usr/bin/mc policy set public myminio/clickhouse;
+      /usr/bin/mc anonymous set public myminio/clickhouse;
       exit 0;
       "
     deploy:
