@@ -30,8 +30,8 @@ services:
       - source: minio.password
         target: minio_password 
     environment:
-      MINIO_ROOT_USER: /run/secrets/minio_username
-      MINIO_ROOT_PASSWORD: /run/secrets/minio_password
+      - MINIO_ROOT_USER=/run/secrets/minio_username
+      - MINIO_ROOT_PASSWORD=/run/secrets/minio_password
     
     logging:
       driver: "json-file"
