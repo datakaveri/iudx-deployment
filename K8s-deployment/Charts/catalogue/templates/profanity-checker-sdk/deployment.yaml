@@ -1,0 +1,171 @@
+{{- if .Values.profanityCheckSdk.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: profanity-check-sdk-single
+  labels: 
+    app.kubernetes.io/component: profanity-check-sdk-single
+    app: profanity-check-sdk-single
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.profanityCheckSdk.replicaCount }}
+  {{- if .Values.profanityCheckSdk.updateStrategy }}
+  strategy: {{- toYaml .Values.profanityCheckSdk.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: profanity-check-sdk-single
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: profanity-check-sdk-single
+        app.kubernetes.io/component: profanity-check-sdk-single
+        {{- if .Values.profanityCheckSdk.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.profanityCheckSdk.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.profanityCheckSdk.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.profanityCheckSdk.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.profanityCheckSdk.priorityClassName }}
+      priorityClassName: {{ .Values.profanityCheckSdk.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.profanityCheckSdk.schedulerName }}
+      schedulerName: {{ .Values.profanityCheckSdk.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.profanityCheckSdk.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.profanityCheckSdk.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "catalogue.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command: {}
+          
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: foo
+              mountPath: bar
+        {{- end }}
+        {{- if .Values.profanityCheckSdk.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: profanity-check-sdk-single
+          image: {{ template "profanityCheck.image" . }}
+          imagePullPolicy: {{ .Values.profanityCheckSdk.image.pullPolicy }}
+          {{- if .Values.profanityCheckSdk.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.profanityCheckSdk.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.profanityCheckSdk.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.profanityCheckSdk.args }}
+          args: [{{- range $index, $str := .Values.profanityCheckSdk.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.profanityCheckSdk.resources }}
+          resources: {{- toYaml .Values.profanityCheckSdk.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.profanityCheckSdk.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.profanityCheckSdk.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.profanityCheckSdk.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.profanityCheckSdk.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.profanityCheckSdk.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.profanityCheckSdk.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.profanityCheckSdk.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.profanityCheckSdk.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.profanityCheckSdk.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.profanityCheckSdk.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.profanityCheckSdk.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.profanityCheckSdk.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.profanityCheckSdk.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.profanityCheckSdk.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.profanityCheckSdk.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.profanityCheckSdk.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            {{- if .Values.profanityCheckSdk.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.profanityCheckSdk.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.profanityCheckSdk.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "profanityCheck.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.profanityCheckSdk.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.profanityCheckSdk.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.profanityCheckSdk.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.profanityCheckSdk.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.profanityCheckSdk.podAffinityPreset "component" "validator" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.profanityCheckSdk.podAntiAffinityPreset}}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.profanityCheckSdk.podAntiAffinityPreset "component" "validator" "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.profanityCheckSdk.nodeAffinityPreset.type}}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.profanityCheckSdk.nodeAffinityPreset.type "key" .Values.profanityCheckSdk.nodeAffinityPreset.key "values" .Values.profanityCheckSdk.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.profanityCheckSdk.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
