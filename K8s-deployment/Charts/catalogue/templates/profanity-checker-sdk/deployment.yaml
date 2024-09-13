@@ -2,10 +2,10 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: profanity-check-sdk-single
+  name: profanity-check-sdk
   labels: 
-    app.kubernetes.io/component: profanity-check-sdk-single
-    app: profanity-check-sdk-single
+    app.kubernetes.io/component: profanity-check-sdk
+    app: profanity-check-sdk
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,15 +19,15 @@ spec:
   {{- end }}
   selector:
     matchLabels: 
-      app: profanity-check-sdk-single
+      app: profanity-check-sdk
   template:
     metadata:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app: profanity-check-sdk-single
-        app.kubernetes.io/component: profanity-check-sdk-single
+        app: profanity-check-sdk
+        app.kubernetes.io/component: profanity-check-sdk
         {{- if .Values.profanityCheckSdk.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -66,7 +66,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.profanityCheckSdk.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: profanity-check-sdk-single
+        - name: profanity-check-sdk
           image: {{ template "profanityCheck.image" . }}
           imagePullPolicy: {{ .Values.profanityCheckSdk.image.pullPolicy }}
           {{- if .Values.profanityCheckSdk.containerSecurityContext.enabled }}
