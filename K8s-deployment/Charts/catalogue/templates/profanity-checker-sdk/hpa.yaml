@@ -2,9 +2,9 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: profanity-check-sdk-single
+  name: profanity-check-sdk
   labels:
-    app: profanity-check-sdk-single
+    app: profanity-check-sdk
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,7 +17,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: profanity-check-sdk-single
+    name: profanity-check-sdk
   minReplicas: {{ .Values.profanityCheckSdk.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.profanityCheckSdk.autoscaling.maxReplicas }}
   metrics:
