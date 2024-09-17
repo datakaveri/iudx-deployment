@@ -4,7 +4,7 @@
 
 Helm Chart for IUDX Resource Server Deployment
 
-## Pre-requisites
+## Pre-requisites 
 Deploy [Delete-script](../../misc/rs-delete-subs-script) before resourceServer
 
 ## Create secret files
