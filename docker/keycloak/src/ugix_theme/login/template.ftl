@@ -42,7 +42,7 @@
      <a href="https://catalogue.ugix.org.in/" class="logo-container">
             <img
                 src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/gdi/gdi-logo.png"
-                alt=""
+                alt="gdi-logo"
                 class="logo-image"
             />
         </a>
@@ -57,7 +57,7 @@
         <li class="nav-item ">
             <a class="nav-link" href="https://canvas.ugix.org.in/">Explorer Sandbox</a>
         </li>
-        
+
       </ul>
 </nav>
 

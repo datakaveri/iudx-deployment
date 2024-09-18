@@ -1,0 +1,48 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: redirect-resource-server
+  namespace: adex-rs
+  labels:
+    app.kubernetes.io/name: resourceServer
+    app.kubernetes.io/instance: resource-server
+    app.kubernetes.io/component: ingress
+
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/app-root: /apis
+    nginx.ingress.kubernetes.io/global-rate-limit: "1000"
+    nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name
+    nginx.ingress.kubernetes.io/global-rate-limit-window: 1s
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      add_header Referrer-Policy   "no-referrer-when-downgrade" always;
+      add_header X-Frame-Options   "deny" always;
+      add_header X-XSS-Protection  "1; mode=block" always;
+      add_header X-Permitted-Cross-Domain-Policies  "none" always;
+      add_header Cross-Origin-Embedder-Policy "require-corp" always;
+      add_header Cross-Origin-Resource-Policy "cross-origin" always;
+    nginx.ingress.kubernetes.io/permanent-redirect: https://rs.ts.adex.org.in$request_uri
+    nginx.ingress.kubernetes.io/permanent-redirect-code: '308'
+
+
+spec:
+  rules:
+    - host: rs.adex.org.in
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rs-api-server
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - rs.adex.org.in
+      secretName: redirect-rs-tls-secret
