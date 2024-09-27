@@ -9,7 +9,8 @@ services:
     image: minio/mc
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc alias set myminio http://tasks.minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD;
+      set -x;
+      /usr/bin/mc alias set myminio http://tasks.minio:10000 `cat /run/secrets/minio_username` `cat /run/secrets/minio_password`;
       /usr/bin/mc admin info myminio;
       /usr/bin/mc mb myminio/clickhouse;
       /usr/bin/mc anonymous set public myminio/clickhouse;
@@ -18,7 +19,7 @@ services:
     deploy:
       placement:
         constraints:
-          - "node.labels.datalake-master-node==true"
+          - "node.labels.minio-node==true"
       replicas: 1
       restart_policy:
         condition: on-failure
@@ -30,8 +31,8 @@ services:
       - source: minio.password
         target: minio_password 
     environment:
-      - MINIO_ROOT_USER=/run/secrets/minio_username
-      - MINIO_ROOT_PASSWORD=/run/secrets/minio_password
+      - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
+      - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
     
     logging:
       driver: "json-file"

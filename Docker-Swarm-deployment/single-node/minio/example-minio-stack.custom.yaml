@@ -2,6 +2,6 @@ version: '3.9'
 services:
   minio:
     ports: 
-      - target: 9000
-        published: 9000
+      - target: 10000
+        published: 10000
         mode: host

@@ -9,24 +9,31 @@ networks:
 services:
   minio:
     image: minio/minio:latest
-    command: server /data --address 0.0.0.0:9000 --console-address 0.0.0.0:9001
+    command: server /data --address 0.0.0.0:10000 --console-address 0.0.0.0:10001
     deploy:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.datalake-master-node==true"
+          - "node.labels.minio-node==true"
       restart_policy:
         condition: on-failure
         delay: 5s
         window: 10s
+    ports:
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host
     secrets:
       - source: minio.username
         target: minio_username
       - source: minio.password
         target: minio_password 
     environment:
-      - MINIO_ROOT_USER=/run/secrets/minio_username
-      - MINIO_ROOT_PASSWORD=/run/secrets/minio_password
+      - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
+      - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
     logging:
       driver: "json-file"
       options:
