@@ -19,7 +19,7 @@ secrets/
 ## Assign node labels
  The minio container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart and able to mount the same local docker volume.
 ```sh
-docker node update --label-add datalake-master-node=true <node_name>
+docker node update --label-add minio-node=true <node_name>
 ```
 ## Define Appropriate values of resources
 
