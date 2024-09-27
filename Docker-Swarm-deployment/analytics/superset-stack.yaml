@@ -1,0 +1,146 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:7
+    container_name: superset_cache
+    restart: unless-stopped
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G 
+        reservations:
+          cpus: '1'
+          memory: 2G
+    volumes:
+      - redis:/data
+
+  superset_init:
+    image: ghcr.io/datakaveri/superset:4.0.2-1
+    container_name: superset_init
+    env_file:
+    - .env
+    volumes:
+      - superset_home:/app/superset_home
+    command: ["/app/docker/docker-init.sh"]
+    networks:
+      - overlay-net
+
+  superset:
+    image: ghcr.io/datakaveri/superset:4.0.2-1
+    container_name: superset
+    restart: unless-stopped
+    ports:
+      - "8088:8088"
+    env_file:
+    - .env
+    depends_on:
+      - superset_init
+    environment:
+      - SUPERSET_DATABASE_URL=clickhousedb://default:911d8hni65@tasks.clickhouse:8123/default  # Connection URL
+    volumes:
+      - superset_home:/app/superset_home
+    configs:
+    - source: requirements
+      target: /app/docker/requirements-local.txt
+      mode: 0444
+      uid: "1000"
+      gid: "1000"
+    command: ["/app/docker/docker-bootstrap.sh", "app-gunicorn"]
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      resources:
+        limits:
+          cpus: '2'
+          memory: 6G 
+        reservations:
+          cpus: '2'
+          memory: 4G
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+
+  superset-worker:
+      image: ghcr.io/datakaveri/superset:4.0.2-1
+      container_name: superset_worker
+      env_file:
+        - .env # default
+      restart: unless-stopped
+      volumes:
+        - superset_home:/app/superset_home
+      deploy:
+        replicas: 1
+        restart_policy:
+          condition: any
+          max_attempts: 5
+        resources:
+         limits:
+          cpus: '2'
+          memory: 4G 
+         reservations:
+          cpus: '1'
+          memory: 2G
+      healthcheck:
+        test:
+          [
+            "CMD-SHELL",
+            "celery -A superset.tasks.celery_app:app inspect ping -d celery@$$HOSTNAME",
+          ]
+      networks:
+        - overlay-net
+      command: ["/app/docker/docker-bootstrap.sh", "worker"]
+
+
+  superset-worker-beat:
+    image: ghcr.io/datakaveri/superset:4.0.2-1
+    container_name: superset_worker_beat
+    env_file:
+      - .env # default
+    restart: unless-stopped
+    volumes:
+      - superset_home:/app/superset_home
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      resources:
+         limits:
+          cpus: '2'
+          memory: 4G 
+         reservations:
+          cpus: '1'
+          memory: 2G
+    healthcheck:
+      disable: true
+    networks:
+      - overlay-net
+    command: ["/app/docker/docker-bootstrap.sh", "beat"]
+
+
+volumes:
+  superset_home:
+  redis:
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+configs:
+  requirements:
+    file: ./docker/requirements-local.txt
+
