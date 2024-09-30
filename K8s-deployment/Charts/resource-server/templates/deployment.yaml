@@ -2,10 +2,10 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: rs-api-server
+  name: resource-server
   labels: 
-    app.kubernetes.io/component: resourceServer
-    app: rs-api-server
+    app.kubernetes.io/component: resource-server
+    app: resource-server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,15 +19,15 @@ spec:
   {{- end }}
   selector:
     matchLabels: 
-      app: rs-api-server
+      app: resource-server
   template:
     metadata:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app: rs-api-server
-        app.kubernetes.io/component: resourceServer
+        app: resource-server
+        app.kubernetes.io/component: resource-server
         {{- if .Values.resourceServer.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.resourceServer.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -66,7 +66,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.resourceServer.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: rs-api-server
+        - name: resource-server
           image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.resourceServer.containerSecurityContext.enabled }}
