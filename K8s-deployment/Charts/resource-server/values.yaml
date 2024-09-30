@@ -288,7 +288,7 @@ resourceServer:
   extraEnvVarsCM: "rs-env"
   ## @param apiServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for apiServer nodes
   ##
-  extraEnvVarsSecret:
+  extraEnvVarsSecret: "rs-s3-env"
   ## @param apiServer.extraVolumes Optionally specify extra list of additional volumes for the apiServer pod(s)
   ##
   extraVolumes:

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rs-api-server
+  name: resource-server
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: service
     {{- if .Values.commonLabels }}
