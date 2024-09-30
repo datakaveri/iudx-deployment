@@ -15,11 +15,11 @@ resourceServer:
     node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
-      cpu: 1000m
-      memory: 1200Mi
+      cpu: 2000m
+      memory: 3000Mi
     requests: 
-      cpu: 700m
-      memory: 1200Mi
+      cpu: 200m
+      memory: 512Mi
   extraVolumes:
     - name: rs-config
       secret:
