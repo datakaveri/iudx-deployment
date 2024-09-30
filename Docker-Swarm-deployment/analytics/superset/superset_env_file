@@ -19,10 +19,10 @@ ADMIN_USERNAME=<admin_password>
 ADMIN_PASSWORD=<admin_password>
 
 # database configurations (do not modify)
-DATABASE_DB=<database_name>
-DATABASE_HOST=<database_host>
+DATABASE_DB=superset
+DATABASE_HOST=tasks.postgres
 # Make sure you set this to a unique secure random value on production
-DATABASE_PASSWORD=<idatabase_password>
+DATABASE_PASSWORD=<database_password>
 DATABASE_USER=<database_user>
 
 EXAMPLES_DB=examples
@@ -34,13 +34,13 @@ EXAMPLES_PORT=5432
 
 # database engine specific environment variables
 # change the below if you prefer another database engine
-DATABASE_PORT=<database_port>
+DATABASE_PORT=5432
 
 # Select the appropriate dialect such as postgres, mysql, oracle etc.
-DATABASE_DIALECT=<database_dialect>
+DATABASE_DIALECT=postgres
 
 #pass the below values if your using postgres as database, if not please use appropriate env KEYS for specific database
-POSTGRES_DB=<postgres_db_name>
+POSTGRES_DB=superset
 POSTGRES_USER=<database_user>
 
 # Make sure you set this to a unique secure random value on production
@@ -53,8 +53,8 @@ POSTGRES_PASSWORD=<postgres_user_password>
 
 # Add the mapped in /app/pythonpath_docker which allows devs to override stuff
 PYTHONPATH=/app/pythonpath:/app/docker/pythonpath_dev
-REDIS_HOST=<redis_host>
-REDIS_PORT=<redis_port>
+REDIS_HOST=redis
+REDIS_PORT=6379
 
 FLASK_DEBUG=true
 SUPERSET_ENV=production
