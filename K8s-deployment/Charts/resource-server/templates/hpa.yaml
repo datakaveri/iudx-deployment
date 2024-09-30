@@ -1,10 +1,10 @@
-{{- if and .Values.archivesDatabase.enabled .Values.archivesDatabase.autoscaling.enabled }}
+{{- if and .Values.resourceServer.enabled .Values.resourceServer.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: rs-archives-database
+  name: resource-server
   labels:
-    app: rs-archives-database
+    app: resource-server
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: rs-archives-database
-  minReplicas: {{ .Values.archivesDatabase.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.archivesDatabase.autoscaling.maxReplicas }}
+    name: resource-server
+  minReplicas: {{ .Values.resourceServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.resourceServer.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.archivesDatabase.autoscaling.targetCPU }}
+    {{- if .Values.resourceServer.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.archivesDatabase.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.resourceServer.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.archivesDatabase.autoscaling.targetMemory }}
+    {{- if .Values.resourceServer.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.archivesDatabase.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.resourceServer.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
