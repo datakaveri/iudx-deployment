@@ -15,11 +15,11 @@ resourceServer:
     node.kubernetes.io/instance-type: Standard_B2s
   resources:
     limits:
-      cpu: 1000m
-      memory: 1.2Gi
+      cpu: 2000m
+      memory: 3Gi
     requests: 
-      cpu: 700m
-      memory: 1.2Gi
+      cpu: 200m
+      memory: 512Mi
   extraVolumes:
     - name: rs-config
       secret:
