@@ -13,6 +13,10 @@ services:
       /usr/bin/mc alias set myminio http://tasks.minio:10000 `cat /run/secrets/minio_username` `cat /run/secrets/minio_password`;
       /usr/bin/mc admin info myminio;
       /usr/bin/mc mb myminio/clickhouse;
+      /usr/bin/mc mb myminio/recovery;
+      /usr/bin/mc mb myminio/state;
+      /usr/bin/mc mb myminio/state/checkpoints;
+      /usr/bin/mc mb myminio/state/savepoints;
       /usr/bin/mc anonymous set public myminio/clickhouse;
       exit 0;
       "
