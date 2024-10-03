@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  clickhouse-server:
+    deploy:
+      resources:
+        limits:
+          cpus: '6'
+          memory: 16G
+        reservations:
+          cpus: '4'
+          memory: 16G
