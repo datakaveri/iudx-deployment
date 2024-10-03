@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  clickhouse-server:
+    ports:
+      - target: 8123
+        published: 8123
+        mode: host
+      - target: 9000
+        published: 9000
+        mode: host
