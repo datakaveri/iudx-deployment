@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  clickhouse-server:
+    image: clickhouse/clickhouse-server:24.8.4.13-alpine
+    user: 101:101
+    cap_add:
+      - sys_nice
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    configs:
+      - source: clickhouse_config
+        target: /etc/clickhouse-server/config.d/config.xml
+      - source: clickhouse_user_config
+        target: /etc/clickhouse-server/users.d/users.xml
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+        - "node.labels.datalake-master-node==true"
+      restart_policy:
+        condition: any
+        delay: 5s
+        window: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+configs:
+  clickhouse_config:
+    file:  ./etc/clickhouse-server/config.d/config.xml
+  clickhouse_user_config:
+    file:  ./etc/clickhouse-server/users.d/users.xml
+
+volumes:
+  clickhouse_data:
+
+networks:
+  default:
+    external: true
+    name: overlay-net
+    driver: overlay
