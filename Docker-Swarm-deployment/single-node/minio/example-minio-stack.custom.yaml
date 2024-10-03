@@ -5,3 +5,6 @@ services:
       - target: 10000
         published: 10000
         mode: host
+      - target: 10001
+        published: 10001
+        mode: host
