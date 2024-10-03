@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.9"
 
 networks:
   overlay-net:
@@ -7,20 +7,25 @@ networks:
 
 services:
   account-generator:
-    image: alpine
-    command: ./run.sh
+    image: ghcr.io/datakaveri/elastic-init:1.0.0
     deploy:
       replicas: 1
       restart_policy:
-        condition: on-failure
-    environment:
-      - ELASTICSEARCH_HOST=http://elasticsearch:9200
+        condition: on-failure    
+    cap_drop:
+        - ALL
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
     networks:
       - overlay-net
     configs:
-      - source: account-generator
-        target: /run.sh
-        mode: 0777
+      - source: account-generator-config
+        target: /usr/share/app/config.json 
     secrets:
       - elasticsearch-su-password
       - kibana-system-password
@@ -54,5 +59,5 @@ secrets:
   elasticsearch-fs-password:
     file: secrets/passwords/elasticsearch-fs-password
 configs:
-  account-generator:
-    file: elasticsearch/account-generator.sh
+  account-generator-config:
+    file: elasticsearch/account-generator-config.json

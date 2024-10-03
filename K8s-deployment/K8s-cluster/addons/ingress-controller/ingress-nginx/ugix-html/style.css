@@ -19,6 +19,8 @@
     align-items: center;
     justify-content: center;
 }
+
+
 hr{
     max-height: 1px;
     background: #D1FAE5;
@@ -30,7 +32,7 @@ hr{
     border: 1px solid #4b8e82;
 }
 img{
-    width: 6%;
+    width: 7%;
     position: relative;
     left: -26.5%;
 }
