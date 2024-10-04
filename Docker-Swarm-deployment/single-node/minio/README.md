@@ -36,7 +36,7 @@ docker stack deploy -c minio-stack.yaml -c minio-stack.resources.yaml minio
 ```
 
 # Note
-1. If you need to expose the psql server port or have custom stack configuration ( see [here](example-minio-stack.custom.yaml) for example configuration of 'minio-stack.custom.yaml' file)  and bring up like as follows
+1. If you need to expose the minio port or have custom stack configuration ( see [here](example-minio-stack.custom.yaml) for example configuration of 'minio-stack.custom.yaml' file)  and bring up like as follows
 ```sh
 docker stack deploy -c minio-stack.yaml -c minio-stack.resources.yaml -c minio-stack.custom.yaml minio
 ```
