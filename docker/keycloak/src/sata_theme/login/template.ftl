@@ -39,7 +39,7 @@
 
 <body class="${properties.kcBodyClass!}">
 <nav class="navbar navbar-expand-sm w-100 bg-white">
-     <a href="https://catalogue.ugix.org.in/" class="logo-container">
+     <a href="https://catalogue.cos.idxgh.com/" class="logo-container">
             <img
                 src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/Sata/iudx-logo-sata-plain.jpg"
                 alt="IDeX"
