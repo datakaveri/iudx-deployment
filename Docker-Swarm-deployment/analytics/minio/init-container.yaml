@@ -1,0 +1,52 @@
+version: "3.9"
+networks:
+  default:
+    name: overlay-net
+    driver: overlay
+    external: true
+services:
+  createbuckets:
+    image: minio/mc
+    entrypoint: >
+      /bin/sh -c "
+      set -x;
+      /usr/bin/mc alias set myminio http://tasks.minio:10000 `cat /run/secrets/minio_username` `cat /run/secrets/minio_password`;
+      /usr/bin/mc admin info myminio;
+      /usr/bin/mc mb myminio/clickhouse;
+      /usr/bin/mc mb myminio/recovery;
+      /usr/bin/mc mb myminio/state;
+      /usr/bin/mc mb myminio/state/checkpoints;
+      /usr/bin/mc mb myminio/state/savepoints;
+      /usr/bin/mc anonymous set public myminio/clickhouse;
+      exit 0;
+      "
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.minio-node==true"
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    secrets:
+      - source: minio.username
+        target: minio_username
+      - source: minio.password
+        target: minio_password 
+    environment:
+      - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
+      - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "5m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+secrets:
+  minio.username: 
+    file: ./secrets/passwords/minio-username
+  minio.password:
+    file: ./secrets/passwords/minio-password
