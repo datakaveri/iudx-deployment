@@ -10,13 +10,6 @@ services:
       restart_policy:
         condition: any
         max_attempts: 5
-      resources:
-        limits:
-          cpus: '2'
-          memory: 4G 
-        reservations:
-          cpus: '1'
-          memory: 2G
     volumes:
       - redis:/data
 
@@ -59,13 +52,6 @@ services:
       restart_policy:
         condition: any
         max_attempts: 5
-      resources:
-        limits:
-          cpus: '2'
-          memory: 6G 
-        reservations:
-          cpus: '2'
-          memory: 4G
     logging:
       driver: "json-file"
       options:
@@ -87,13 +73,6 @@ services:
         restart_policy:
           condition: any
           max_attempts: 5
-        resources:
-         limits:
-          cpus: '2'
-          memory: 4G 
-         reservations:
-          cpus: '1'
-          memory: 2G
       healthcheck:
         test:
           [
@@ -118,13 +97,6 @@ services:
       restart_policy:
         condition: any
         max_attempts: 5
-      resources:
-         limits:
-          cpus: '2'
-          memory: 4G 
-         reservations:
-          cpus: '1'
-          memory: 2G
     healthcheck:
       disable: true
     networks:
