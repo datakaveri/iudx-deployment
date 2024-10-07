@@ -1,0 +1,55 @@
+version: '3.9'
+
+networks:
+  default:
+    name: overlay-net
+    driver: overlay
+    external: true
+
+services:
+  minio:
+    image: minio/minio:latest
+    command: server /data --address 0.0.0.0:10000 --console-address 0.0.0.0:10001
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.minio-node==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    ports:
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host
+    secrets:
+      - source: minio.username
+        target: minio_username
+      - source: minio.password
+        target: minio_password 
+    environment:
+      - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
+      - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    volumes:
+      - minio_data:/data
+    
+
+volumes:
+  minio_data:
+
+secrets:
+  minio.username: 
+    file: ./secrets/passwords/minio-username
+  minio.password:
+    file: ./secrets/passwords/minio-password
+  
