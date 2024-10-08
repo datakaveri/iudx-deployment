@@ -41,7 +41,7 @@
 <nav class="navbar navbar-expand-sm w-100 bg-white">
      <a href="https://catalogue.cos.idxgh.com/" class="logo-container">
             <img
-                src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/Sata/iudx-logo-sata-plain.jpg"
+                src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/Sata/ghana-cover.png"
                 alt="IDeX"
                 class="logo-image"
             />
