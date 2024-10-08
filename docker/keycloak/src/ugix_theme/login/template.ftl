@@ -41,8 +41,8 @@
 <nav class="navbar navbar-expand-sm w-100 bg-white">
      <a href="https://catalogue.ugix.org.in/" class="logo-container">
             <img
-                src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/ugix/gsx-logo.png"
-                alt="gsx logo"
+                src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/gdi/gdi-logo.png"
+                alt="gdi-logo"
                 class="logo-image"
             />
         </a>
