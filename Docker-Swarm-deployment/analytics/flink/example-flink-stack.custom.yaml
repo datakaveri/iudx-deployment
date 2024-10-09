@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  jobmanager:
+    ports: 
+      - target: 8081  
+        published: 8081
+        mode: host 
+
