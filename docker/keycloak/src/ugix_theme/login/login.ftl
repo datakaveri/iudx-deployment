@@ -2,7 +2,7 @@
 
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('username','password') displayInfo=realm.password && realm.registrationAllowed && !registrationDisabled??; section>
     <#if section = "header">
-       <span class='logo-header-text'> Login </span> to GSX
+       <span class='logo-header-text'> Login </span> to GDI
     <#elseif section = "form">
     <div id="kc-form-444">
       <div id="kc-form-wrapper">
