@@ -15,8 +15,14 @@ Docker swarm stack for clickhouse deployment
 
 ## Assign node labels
  The clickhouse container is constrained to run on specifc node by adding node labels to only one of the nodes, refer [here](https://docs.docker.com/engine/swarm/services/#placement-constraints) for more info. This ensures the container is placed always to same node on restart and able to mount the same local docker volume.
+
+ On the node 1 add :-
 ```sh
-docker node update --label-add clickhouse-node=true <node_name>
+docker node update --label-add clickhouse-node_1=true <node_name>
+```
+  On the node 2 add :-
+```sh
+docker node update --label-add clickhouse-node_2=true <node_name>
 ```
 ## Define Appropriate values of resources
 

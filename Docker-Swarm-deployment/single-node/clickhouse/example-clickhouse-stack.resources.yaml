@@ -1,6 +1,16 @@
 version: '3.9'
 services:
-  clickhouse-server:
+  clickhouse-cluster-1:
+    deploy:
+      resources:
+        limits:
+          cpus: '6'
+          memory: 16G
+        reservations:
+          cpus: '4'
+          memory: 16G
+
+  clickhouse-cluster-2:
     deploy:
       resources:
         limits:

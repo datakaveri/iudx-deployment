@@ -10,7 +10,6 @@
     <listen_host>0.0.0.0</listen_host>
     <http_port>8123</http_port>
     <tcp_port>9000</tcp_port>
-    <interserver_http_port>9002</interserver_http_port>
     <user_directories>
         <users_xml>
             <path>users.xml</path>
@@ -24,15 +23,15 @@
           <shard>
           <internal_replication>true</internal_replication>
             <replica>
-                <host>tasks.clickhouse-server</host>
-                <port>9000</port>
+                <host>tasks.clickhouse-cluster-1</host>
+                <port>9001</port>
             </replica>
           </shard>
           <shard>
           <internal_replication>true</internal_replication>
             <replica>
-                <host>tasks.clickhouse-server-1</host>
-                <port>9001</port>
+                <host>tasks.clickhouse-cluster-2</host>
+                <port>9002</port>
             </replica>
           </shard>       
       </mycluster>
@@ -54,7 +53,7 @@
             <s3>
                 <type>s3</type>
                 <endpoint>http://tasks.minio:10000/clickhouse//</endpoint>
-                <access_key_id>miniousername</access_key_id>
+                <access_key_id>minioadmin</access_key_id>
                 <secret_access_key>miniopassword</secret_access_key>
                 <region></region>
                 <metadata_path>/var/lib/clickhouse/disks/s3/</metadata_path>
