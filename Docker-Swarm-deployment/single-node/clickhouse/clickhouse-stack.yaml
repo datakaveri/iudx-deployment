@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  clickhouse-server:
+  clickhouse-cluster-1:
     image: clickhouse/clickhouse-server:24.8.4.13-alpine
     user: 101:101
     cap_add:
@@ -11,17 +11,49 @@ services:
         soft: 262144
         hard: 262144
     configs:
-      - source: clickhouse_config
+      - source: clickhouse_config_1
         target: /etc/clickhouse-server/config.d/config.xml
       - source: clickhouse_user_config
         target: /etc/clickhouse-server/users.d/users.xml
     volumes:
-      - clickhouse_data:/var/lib/clickhouse
+      - clickhouse_data-1:/var/lib/clickhouse
     deploy:
       replicas: 1
       placement:
         constraints:
-        - "node.labels.datalake-master-node==true"
+        - "node.labels.clickhouse-node_1==true"
+      restart_policy:
+        condition: any
+        delay: 5s
+        window: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+
+  clickhouse-cluster-2:
+    image: clickhouse/clickhouse-server:24.8.4.13-alpine
+    user: 101:101
+    cap_add:
+      - sys_nice
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    configs:
+      - source: clickhouse_config_2
+        target: /etc/clickhouse-server/config.d/config.xml
+      - source: clickhouse_user_config
+        target: /etc/clickhouse-server/users.d/users.xml
+    volumes:
+      - clickhouse_data-2:/var/lib/clickhouse
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+        - "node.labels.clickhouse-node_2==true"
       restart_policy:
         condition: any
         delay: 5s
@@ -34,13 +66,16 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
 configs:
-  clickhouse_config:
-    file:  ./etc/clickhouse-server/config.d/config.xml
+  clickhouse_config_1:
+    file:  ./etc/clickhouse-server/config.d/config_1.xml
+  clickhouse_config_2:
+    file:  ./etc/clickhouse-server/config.d/config_2.xml
   clickhouse_user_config:
     file:  ./etc/clickhouse-server/users.d/users.xml
 
 volumes:
-  clickhouse_data:
+  clickhouse_data-1:
+  clickhouse_data-2:
 
 networks:
   default:
