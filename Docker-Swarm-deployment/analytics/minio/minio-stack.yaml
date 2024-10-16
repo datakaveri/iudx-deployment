@@ -14,7 +14,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.minio-node==true"
+          - "node.labels.minio-node-1==true"
       restart_policy:
         condition: on-failure
         delay: 5s
@@ -50,7 +50,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.minio-node==true"
+          - "node.labels.minio-node-2==true"
       restart_policy:
         condition: on-failure
         delay: 5s
@@ -86,7 +86,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.minio-node==true"
+          - "node.labels.minio-node-3==true"
       restart_policy:
         condition: on-failure
         delay: 5s
@@ -122,7 +122,7 @@ services:
       replicas: 1
       placement:
         constraints:
-          - "node.labels.minio-node==true"
+          - "node.labels.minio-node-4==true"
       restart_policy:
         condition: on-failure
         delay: 5s
