@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+  minio1:
+    deploy:
+      resources:
+        limits:
+          pids: 8192
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '0.1'   
+          memory: 100M
+  minio2:
+    deploy:
+      resources:
+        limits:
+          pids: 8192
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '0.1'   
+          memory: 100M
+  minio3:
+    deploy:
+      resources:
+        limits:
+          pids: 8192
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '0.1'   
+          memory: 100M
+  minio4:
+    deploy:
+      resources:
+        limits:
+          pids: 8192
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '0.1'   
+          memory: 100M
