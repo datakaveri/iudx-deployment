@@ -7,7 +7,7 @@ networks:
 
 services:
   account-generator:
-    image: ghcr.io/datakaveri/elastic-init:1.0.0
+    image: ghcr.io/datakaveri/elastic-init:1.0.1
     deploy:
       replicas: 1
       restart_policy:
