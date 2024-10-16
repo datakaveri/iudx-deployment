@@ -112,6 +112,7 @@ for user in users:
     with open(password_path) as password_file:
         password = password_file.read().strip()
     roles = user["roles"]
+    create_user(username,password,roles)
     print("user ", username ,"created")
 
 print('Removing users')
