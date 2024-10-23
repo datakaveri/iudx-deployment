@@ -26,7 +26,7 @@ kubectl create configmap grafana-dashboards-kubernetes \
   -n mon-stack
 
 kubectl create configmap grafana-dashboards-vertx \
-  --from-file=./grafana/dashboards/Vertx\ Applications/ \
+  --from-file=./grafana/dashboards/Vertx Applications/ \
   -n mon-stack
 
 kubectl label configmap grafana-dashboards-backend \
