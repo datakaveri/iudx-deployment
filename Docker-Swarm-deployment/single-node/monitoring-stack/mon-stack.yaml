@@ -104,7 +104,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   grafana:
-    image: ghcr.io/datakaveri/grafana:10.2.3
+    image: test-grafana:11.2.0
     read_only: true
     volumes:
       - type: volume
@@ -112,6 +112,9 @@ services:
         target: /var/lib/grafana
         volume:
           nocopy: true
+      - type: bind
+        source: "./grafana/conf/provisioning/dashboards/"
+        target: "/usr/share/grafana-conf/provisioning/dashboards/"  
     secrets:
       - grafana-super-admin-passwd
       - grafana-super-admin-username
@@ -285,4 +288,3 @@ secrets:
     file: secrets/passwords/grafana-super-admin-username
   blackbox-targets:
     file: secrets/configs/blackbox-targets.yaml
-  
