@@ -17,13 +17,12 @@ services:
       /usr/bin/mc mb myminio/state;
       /usr/bin/mc mb myminio/state/checkpoints;
       /usr/bin/mc mb myminio/state/savepoints;
-      /usr/bin/mc anonymous set public myminio/clickhouse;
       exit 0;
       "
     deploy:
       placement:
         constraints:
-          - "node.labels.minio-node==true"
+          - "node.labels.minio-node-1==true"
       replicas: 1
       restart_policy:
         condition: on-failure
