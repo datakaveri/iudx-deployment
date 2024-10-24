@@ -34,6 +34,7 @@ services:
     environment:
       - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
       - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+      - MINIO_BROWSER_REDIRECT_URL=https://minio.iudx.io/minio/ui
     logging:
       driver: "json-file"
       options:
@@ -57,10 +58,10 @@ services:
         window: 10s
     ports:
       - target: 10000
-        published: 10002
+        published: 10000
         mode: host
       - target: 10001
-        published: 10003
+        published: 10001
         mode: host
     secrets:
       - source: minio.username
@@ -70,6 +71,7 @@ services:
     environment:
       - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
       - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+      - MINIO_BROWSER_REDIRECT_URL=https://minio.iudx.io/minio/ui
     logging:
       driver: "json-file"
       options:
@@ -93,10 +95,10 @@ services:
         window: 10s
     ports:
       - target: 10000
-        published: 10004
+        published: 10000
         mode: host
       - target: 10001
-        published: 10005
+        published: 10001
         mode: host
     secrets:
       - source: minio.username
@@ -106,6 +108,7 @@ services:
     environment:
       - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
       - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+      - MINIO_BROWSER_REDIRECT_URL=https://minio.iudx.io/minio/ui
     logging:
       driver: "json-file"
       options:
@@ -129,10 +132,10 @@ services:
         window: 10s
     ports:
       - target: 10000
-        published: 10006
+        published: 10000
         mode: host
       - target: 10001
-        published: 10007
+        published: 10001
         mode: host
     secrets:
       - source: minio.username
@@ -142,6 +145,7 @@ services:
     environment:
       - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
       - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+      - MINIO_BROWSER_REDIRECT_URL=https://minio.iudx.io/minio/ui
     logging:
       driver: "json-file"
       options:
