@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/auditing-server-depl
-  tag: 5.5.0-b9661ba
+  tag: 5.6.0-alpha-050070f
   pullSecrets: {} 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
