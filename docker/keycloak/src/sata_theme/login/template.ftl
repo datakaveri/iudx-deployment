@@ -39,17 +39,17 @@
 
 <body class="${properties.kcBodyClass!}">
 <nav class="navbar navbar-expand-sm w-100 bg-white">
-     <a href="https://catalogue.cos.idxgh.com/" class="logo-container">
+     <a href="https://gmascatalogue.gra.gov.gh/" class="logo-container">
             <img
                 src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/Sata/ghana-cover.png"
-                alt="IDeX"
+                alt="GMAS-logo"
                 class="logo-image"
             />
         </a>
 
      <ul class="navbar-nav ms-auto">
          <li class="nav-item">
-            <a class="nav-link" href="https://catalogue.cos.idxgh.com/">Home</a>
+            <a class="nav-link" href="https://gmascatalogue.gra.gov.gh/">Home</a>
         </li>
 	</ul>
 </nav>
