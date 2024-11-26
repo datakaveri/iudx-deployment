@@ -93,35 +93,6 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     command: "jobmanager"
 
-  # jobmanager4:
-  #   image: ghcr.io/datakaveri/flink:1.20-1
-  #   hostname: jobmanager1
-  #   configs:
-  #     - source: flink-jm1-conf
-  #       target: /opt/flink/conf/flink-conf.yaml
-  #     - source: jm-console-properties
-  #       target: /opt/flink/conf/log4j-console.properties
-  #   restart: on-failure
-  #   networks:
-  #     - overlay-net
-  #   deploy:
-  #     replicas: 1
-  #     restart_policy:
-  #       condition: any
-  #       max_attempts: 5
-  #     placement:
-  #       constraints:
-  #         - "node.labels.flink-node==true"
-  #   volumes:
-  #     - jars:/tmp/flink/
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-file: "5"
-  #       max-size: "10m"
-  #       tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
-  #   command: "jobmanager"
-
   taskmanager:
     image: ghcr.io/datakaveri/flink:1.20-1
     hostname: taskmanager
