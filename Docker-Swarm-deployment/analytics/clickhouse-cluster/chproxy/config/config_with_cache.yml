@@ -1,0 +1,46 @@
+log_debug: false
+hack_me_please: true
+
+server:
+  http:
+    listen_addr: "0.0.0.0:9001"
+
+users:
+  - name: "chproxy_user"
+    password: "<password>"
+    to_cluster: "<cluster_name>"
+    to_user: "admin_user" # Maps to ClickHouse "admin" user
+    # max_concurrent_queries: 1000
+    max_execution_time: 11m
+    cache: "default_cache"
+
+clusters:
+  - name: "<cluster_name>"
+    nodes: ["tasks.clickhouse-server-1:8123", "tasks.clickhouse-server-2:8123", "tasks.clickhouse-server-3:8123", "tasks.clickhouse-server-4:8123"]
+    users:
+      - name: "admin_user"
+        password: "<password>"
+
+        max_execution_time: 300s
+        max_queue_size: 1000
+        max_queue_time: 120s
+
+    retry_number: 3
+    # User configuration for heart beat requests.
+    # Credentials of the first user in clusters.users will be used for heart beat requests to clickhouse.
+    heartbeat:
+      # An interval for checking all cluster nodes for availability
+      # By default each node is checked for every 5 seconds.
+      interval: 2m
+      # A timeout of wait response from cluster nodes
+      # By default 3s
+      timeout: 20s
+
+caches:
+  - name: "default_cache"
+    mode: "file_system"
+    file_system:
+      dir: "/data/cache"
+      max_size: 150Mb
+    expire: 10s
+    grace_time: 5s
