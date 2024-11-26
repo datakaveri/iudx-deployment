@@ -1,8 +1,9 @@
 <clickhouse>
     <logger>
         <level>trace</level>
-        <log>/var/log/clickhouse-server/clickhouse-server.log</log>
-        <errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>
+        <!-- <log>/var/log/clickhouse-server/clickhouse-server.log</log>
+        <errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog> -->
+        <console>true</console>
         <size>1000M</size>
         <count>10</count>
     </logger>
@@ -352,6 +353,13 @@
         <partition_by>event_date</partition_by>
         <ttl>event_date + INTERVAL 3 DAY</ttl>
     </asynchronous_insert_log>
+    <prometheus>
+        <endpoint>/metrics</endpoint>
+        <port>9363</port>
+        <metrics>true</metrics>
+        <events>true</events>
+        <asynchronous_metrics>true</asynchronous_metrics>
+    </prometheus>
     <backup_log>
         <database>system</database>
         <table>backup_log</table>
