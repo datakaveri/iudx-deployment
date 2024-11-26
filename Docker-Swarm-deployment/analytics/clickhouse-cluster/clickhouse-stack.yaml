@@ -20,6 +20,8 @@ services:
         target: /etc/clickhouse-keeper/keeper_config.xml
       - source: users-config
         target: /etc/clickhouse-server/users.xml
+    volumes:
+      - clickhouse_keeper_1:/var/lib/clickhouse/coordination
     deploy:
       placement:
         constraints:
@@ -44,6 +46,8 @@ services:
         target: /etc/clickhouse-keeper/keeper_config.xml
       - source: users-config
         target: /etc/clickhouse-server/users.xml
+    volumes:
+      - clickhouse_keeper_2:/var/lib/clickhouse/coordination
     deploy:
       placement:
         constraints:
@@ -68,6 +72,8 @@ services:
         target: /etc/clickhouse-keeper/keeper_config.xml
       - source: users-config
         target: /etc/clickhouse-server/users.xml
+    volumes:
+      - clickhouse_keeper_3:/var/lib/clickhouse/coordination
     deploy:
       placement:
         constraints:
@@ -142,6 +148,49 @@ services:
         constraints:
           - "node.labels.clickhouse-node-3==true"
 
+  clickhouse-server-4:
+    image: clickhouse/clickhouse-server:24.3.12.75
+    ports:
+      - target: 9000
+        published: 9003
+        mode: host
+      - target: 8123
+        published: 8125
+        mode: host
+    cap_add:
+      - SYS_NICE
+    configs:
+      - source: chs4-config
+        target: /etc/clickhouse-server/config.xml
+      - source: users-config
+        target: /etc/clickhouse-server/users.xml
+    volumes:
+      - clickhouse_data_3:/var/lib/clickhouse
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.clickhouse-node-4==true"  
+
+  chproxy:
+    image: contentsquareplatform/chproxy:v1.24.0
+    configs:
+      - source: chproxy-config
+        target: /config/config.yml
+      - source: chproxy-config2
+        target: /config/config_with_cache.yml
+      
+    ports:
+      - 9001:9001
+    command: -config /config/config.yml
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.clickhouse-node==true"  
+
 networks:
   default:
     name: overlay-net
@@ -161,10 +210,21 @@ configs:
     file: ./clickhouse-configs/chs2.xml
   chs3-config:
     file: ./clickhouse-configs/chs3.xml
+  chs4-config:
+    file: ./clickhouse-configs/chs4.xml
   users-config:
     file: ./clickhouse-configs/users.xml
+  chproxy-config:
+    file: ./chproxy/config/config.yml
+  chproxy-config2:
+    file: ./chproxy/config/config_with_cache.yml
 
 volumes:
   clickhouse_data_1:
   clickhouse_data_2:
   clickhouse_data_3:
+  clickhouse_data_4:
+  clickhouse_keeper_1:
+  clickhouse_keeper_2:
+  clickhouse_keeper_3:
+
