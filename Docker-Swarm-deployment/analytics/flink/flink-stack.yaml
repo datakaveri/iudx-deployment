@@ -126,16 +126,9 @@ volumes:
 
 configs:
   jm-console-properties:
-    file: ./secrets/flink-jobmanager/log4j-console.properties
-  flink-jm1-conf:
-    file: ./secrets/flink-jm1-conf.yaml
-  flink-jm2-conf:
-    file: ./secrets/flink-jm2-conf.yaml
-  flink-jm3-conf:
-    file: ./secrets/flink-jm3-conf.yaml
-  flink-tm-conf:
-    file: ./secrets/flink-tm-conf.yaml
+    file: ./flink-jobmanager/log4j-console.properties
   tm-console-properties:
-    file: ./secrets/flink-taskmanager/log4j-console.properties
+    file: ./flink-taskmanager/log4j-console.properties
+  config:
+    file: ./flink-conf.yaml
   
-
