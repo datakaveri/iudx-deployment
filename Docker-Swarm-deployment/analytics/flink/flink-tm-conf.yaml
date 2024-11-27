@@ -5,22 +5,21 @@ taskmanager.numberOfTaskSlots: 2
 state.backend: rocksdb
 state.checkpoints.dir: s3://state/checkpoints
 state.savepoints.dir: s3://state/savepoints
-s3.endpoint: https://minio-cluster-sadx.iudx.io
+s3.endpoint: <minio-uri>
 s3.path.style.access: true
-s3.access-key: iJvEqibjECnEapJGdQcPEhBmFTphYFBb
-s3.secret-key: ZVatpNF3Ucu0SS34PbAaIv1GoSydiJMz
+s3.access-key: <minio-access-key>
+s3.secret-key: <minio-secret-key>
 
-presto.s3.access-key: iJvEqibjECnEapJGdQcPEhBmFTphYFBb
-presto.s3.secret-key: ZVatpNF3Ucu0SS34PbAaIv1GoSydiJMz
-presto.s3.endpoint: https://minio-cluster-sadx.iudx.io
+presto.s3.access-key: <minio-access-key>
+presto.s3.secret-key: <minio-secret-key>
+presto.s3.endpoint: <minio-uri>
 presto.s3.path-style-access: true
 
 high-availability.type: zookeeper
 high-availability.storageDir: s3://flink/recovery
-high-availability.zookeeper.quorum: tasks.zookeeper:2181
+high-availability.zookeeper.quorum: <zookeeper.uri>:<zookeeper-port>
 high-availability.zookeeper.path.root: /flinkUpdated
 
-metrics.reporter.prom.class: org.apache.flink.metrics.prometheus.PrometheusReporter
 metrics.reporter.prom.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporterFactory
 
 metrics.reporter.prom.port: 9251
