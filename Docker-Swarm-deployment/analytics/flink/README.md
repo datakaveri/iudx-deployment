@@ -14,8 +14,12 @@ cp -r example-secrets/ .
 ```
 ## Replace the minio secrets in 
 ```sh
-secrets/flink-conf.yaml
+secrets/flink-tm-conf.yaml
+secrets/flink-jm1-conf.yaml
+secrets/flink-jm2-conf.yaml
+secrets/flink-jm3-conf.yaml
 ```
+Also replicate flink-jm*-conf file based on number of job managers we need.
 
 ## Define Appropriate values of resources
 
