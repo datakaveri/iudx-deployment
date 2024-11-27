@@ -26,7 +26,7 @@ services:
         constraints:
           - "node.labels.flink-jobmanager-node==true"
     volumes:
-      - jars:/tmp/flink/
+      - jars:/tmp/flink/flink-web-upload/
     logging:
       driver: "json-file"
       options:
@@ -55,7 +55,7 @@ services:
         constraints:
           - "node.labels.flink-jobmanager-node==true"
     volumes:
-      - jars:/tmp/flink/
+      - jars:/tmp/flink/flink-web-upload/
     logging:
       driver: "json-file"
       options:
@@ -84,7 +84,7 @@ services:
         constraints:
           - "node.labels.flink-jobmanager-node==true"
     volumes:
-      - jars:/tmp/flink/
+      - jars:/tmp/flink/flink-web-upload/
     logging:
       driver: "json-file"
       options:
@@ -105,7 +105,7 @@ services:
     networks:
       - overlay-net
     deploy:
-      replicas: 2
+      replicas: 4
       restart_policy:
         condition: any
         max_attempts: 5
@@ -126,9 +126,16 @@ volumes:
 
 configs:
   jm-console-properties:
-    file: ./flink-jobmanager/log4j-console.properties
+    file: ./secrets/flink-jobmanager/log4j-console.properties
+  flink-jm1-conf:
+    file: ./secrets/flink-jm1-conf.yaml
+  flink-jm2-conf:
+    file: ./secrets/flink-jm2-conf.yaml
+  flink-jm3-conf:
+    file: ./secrets/flink-jm3-conf.yaml
+  flink-tm-conf:
+    file: ./secrets/flink-tm-conf.yaml
   tm-console-properties:
-    file: ./flink-taskmanager/log4j-console.properties
-  config:
-    file: ./flink-conf.yaml
+    file: ./secrets/flink-taskmanager/log4j-console.properties
   
+

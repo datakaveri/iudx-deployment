@@ -18,7 +18,7 @@ presto.s3.path-style-access: true
 high-availability.type: zookeeper
 high-availability.storageDir: s3://flink/recovery
 high-availability.zookeeper.quorum: <zookeeper.uri>:<zookeeper-port>
-high-availability.zookeeper.path.root: /flinkUpdated
+high-availability.zookeeper.path.root: /flink
 
 metrics.reporter.prom.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporterFactory
 
