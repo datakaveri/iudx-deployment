@@ -6,11 +6,11 @@ networks:
     driver: overlay
 
 services:
-  jobmanager1:
-    image: ghcr.io/datakaveri/flink:1.20-1
-    hostname: jobmanager1
+  jobmanager:
+    image: ghcr.io/datakaveri/flink:1.20-2
+    hostname: jobmanager
     configs:
-      - source: flink-jm1-conf
+      - source: config
         target: /opt/flink/conf/flink-conf.yaml
       - source: jm-console-properties
         target: /opt/flink/conf/log4j-console.properties
@@ -24,17 +24,23 @@ services:
         max_attempts: 5
       placement:
         constraints:
+<<<<<<< HEAD
           - "node.labels.flink-jobmanager-node==true"
     volumes:
       - jars:/tmp/flink/flink-web-upload/
+=======
+          - "node.labels.flink-node==true"
+>>>>>>> parent of f88fcb1 (Updated config to support flink jobmanager clustering)
     logging:
       driver: "json-file"
       options:
         max-file: "5"
         max-size: "10m"
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    ports:
     command: "jobmanager"
 
+<<<<<<< HEAD
   jobmanager2:
     image: ghcr.io/datakaveri/flink:1.20-1
     hostname: jobmanager2
@@ -92,12 +98,15 @@ services:
         max-size: "10m"
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
     command: "jobmanager"
+=======
+
+>>>>>>> parent of f88fcb1 (Updated config to support flink jobmanager clustering)
 
   taskmanager:
-    image: ghcr.io/datakaveri/flink:1.20-1
+    image: ghcr.io/datakaveri/flink:1.20-2
     hostname: taskmanager
     configs:
-      - source: flink-tm-conf
+      - source: config
         target: /opt/flink/conf/flink-conf.yaml
       - source: tm-console-properties
         target: /opt/flink/conf/log4j-console.properties:rw
@@ -127,15 +136,8 @@ volumes:
 configs:
   jm-console-properties:
     file: ./secrets/flink-jobmanager/log4j-console.properties
-  flink-jm1-conf:
-    file: ./secrets/flink-jm1-conf.yaml
-  flink-jm2-conf:
-    file: ./secrets/flink-jm2-conf.yaml
-  flink-jm3-conf:
-    file: ./secrets/flink-jm3-conf.yaml
-  flink-tm-conf:
-    file: ./secrets/flink-tm-conf.yaml
   tm-console-properties:
     file: ./secrets/flink-taskmanager/log4j-console.properties
+  config:
+    file: ./secrets/flink-conf.yaml
   
-

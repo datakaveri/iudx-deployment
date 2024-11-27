@@ -1,19 +1,9 @@
 version: "3.9"
 
 services:
-  jobmanager1:
+  jobmanager:
     ports: 
       - target: 8081  
         published: 8081
-        mode: host 
-  jobmanager2:
-    ports: 
-      - target: 8081  
-        published: 8082
-        mode: host 
-  jobmanager3:
-    ports: 
-      - target: 8081  
-        published: 8083
         mode: host 
 
