@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  minio1:
+    ports: 
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host
+  minio2:
+    ports: 
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host  
+
+  minio3:
+    ports: 
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host
+
+  minio4:
+    ports: 
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host 
+
