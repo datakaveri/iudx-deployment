@@ -6,7 +6,7 @@ docker stack deploy -c superset-stack.yaml superset
 ```
 #### To deploy superset middleware:
 ```sh
-docker stack deploy -c ssuperset-middleware-stack.yaml superset-middleware
+docker stack deploy -c superset-middleware-stack.yaml superset-middleware
 ```
 #### To Check the status :
 ```sh
@@ -23,3 +23,6 @@ rv2yw340gsd0   superset_superset_init                replicated       0/1       
 
 **superset_superset_init** service will be down once it performs bootstrap operations.
 
+##### NOTE: 
+1. To install custom modules add them in docker/requirements-local.txt file and redeploy the stack
+2. Replace all placeholder in .env files under secrets/ and gra-superset-guesttoken-middleware/
