@@ -5,18 +5,7 @@ MinIO Webhook is a lightweight service that integrates with MinIO to enable even
 
 ## Installation
 
-### 1. Build the Docker Image
-To deploy the MinIO Webhook service, first build the Docker image using the provided Dockerfile:
-
-```bash
-# Navigate to the directory containing the Dockerfile
-cd /analytics/minio/webhook
-
-# Build the Docker image
-docker build -t minio-webhook:latest .
-```
-
-### 2. Configure the .env File
+### 1. Configure the .env File
 
 Substitute appropriate values in the .env file to configure the webhook service. Replace placeholders (<>) with actual values as per your environment. Below is an example of the .env file:
 
@@ -38,7 +27,8 @@ MINIO_BUCKET_NAME=webhook
 AUTH_TOKEN="minio-auth-token"
 ```
 
-### 3. Deploy Using Docker Stack
+### 2. Deploy Using Docker Stack
+
 
 Once the image is built and the .env file is configured, deploy the webhook service in a Docker stack using below command:
 
@@ -46,4 +36,4 @@ Once the image is built and the .env file is configured, deploy the webhook serv
 docker stack deploy -c webhook-stack.yaml minio-webhook
 ```
 
-
+The upstream code for minio-webhook is available at **[here](https://github.com/datakaveri/minio-webhook-handler)**.
