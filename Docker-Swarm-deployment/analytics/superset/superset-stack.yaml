@@ -1,8 +1,7 @@
 version: '3.9'
-
 services:
   redis:
-    image: redis:7
+    image: redis:7.4
     container_name: superset_cache
     restart: unless-stopped
     deploy:
@@ -10,22 +9,50 @@ services:
       restart_policy:
         condition: any
         max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.superset-node==true"
+      resources:
+        limits:
+          cpus: '2'
+          memory: 6G 
+        reservations:
+          cpus: '1'
+          memory: 3G
     volumes:
       - redis:/data
+    networks:
+        - overlay-net
+    configs:
+    - source: redis-conf
+      target: /usr/local/etc/redis/redis.conf
+   
 
   superset_init:
-    image: ghcr.io/datakaveri/superset:4.0.2-1
+    image: ghcr.io/datakaveri/superset:4.0.2-8
     container_name: superset_init
     env_file:
     - .env
     volumes:
       - superset_home:/app/superset_home
-    command: ["/app/docker/docker-init.sh"]
+    configs:    
+      - source: client-secret
+        target: /app/docker/pythonpath_dev/client_secret.json
+        mode: 0444
+      - source: requirements
+        target: /app/docker/requirements-local.txt
+        mode: 0444
     networks:
       - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    command: ["/app/docker/docker-init.sh"]
+
 
   superset:
-    image: ghcr.io/datakaveri/superset:4.0.2-1
+    image: ghcr.io/datakaveri/superset:4.0.2-8
     container_name: superset
     restart: unless-stopped
     ports:
@@ -33,9 +60,7 @@ services:
     env_file:
     - .env
     depends_on:
-      - superset_init
-    environment:
-      - SUPERSET_DATABASE_URL=clickhousedb://default:911d8hni65@tasks.clickhouse:8123/default  # Connection URL
+    - superset_init
     volumes:
       - superset_home:/app/superset_home
     configs:
@@ -44,6 +69,15 @@ services:
       mode: 0444
       uid: "1000"
       gid: "1000"
+    - source: client-secret
+      target: /app/docker/pythonpath_dev/client_secret.json
+      mode: 0444
+    - source: superset_config
+      target: /app/docker/pythonpath_dev/superset_config.py
+      mode: 0444
+    - source: superset_conf
+      target: /app/superset/config.py
+      mode: 0444
     command: ["/app/docker/docker-bootstrap.sh", "app-gunicorn"]
     networks:
       - overlay-net
@@ -52,6 +86,16 @@ services:
       restart_policy:
         condition: any
         max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.superset-node==true"
+      resources:
+        limits:
+          cpus: '4'
+          memory: 14G 
+        reservations:
+          cpus: '1'
+          memory: 3G
     logging:
       driver: "json-file"
       options:
@@ -61,18 +105,32 @@ services:
 
 
   superset-worker:
-      image: ghcr.io/datakaveri/superset:4.0.2-1
+      image: ghcr.io/datakaveri/superset:4.0.2-8
       container_name: superset_worker
       env_file:
         - .env # default
       restart: unless-stopped
       volumes:
         - superset_home:/app/superset_home
+      configs:
+      - source: client-secret
+        target: /app/docker/pythonpath_dev/client_secret.json
+        mode: 0444
       deploy:
         replicas: 1
         restart_policy:
           condition: any
           max_attempts: 5
+        placement:
+          constraints:
+            - "node.labels.superset-node==true"
+        resources:
+          limits:
+            cpus: '1'
+            memory: 6G 
+          reservations:
+            cpus: '0.5'
+            memory: 2G
       healthcheck:
         test:
           [
@@ -85,18 +143,32 @@ services:
 
 
   superset-worker-beat:
-    image: ghcr.io/datakaveri/superset:4.0.2-1
+    image: ghcr.io/datakaveri/superset:4.0.2-8
     container_name: superset_worker_beat
     env_file:
       - .env # default
     restart: unless-stopped
     volumes:
       - superset_home:/app/superset_home
+    configs:
+      - source: client-secret
+        target: /app/docker/pythonpath_dev/client_secret.json
+        mode: 0444
     deploy:
       replicas: 1
       restart_policy:
         condition: any
         max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.superset-node==true"
+      resources:
+        limits:
+          cpus: '1'
+          memory: 6G 
+        reservations:
+          cpus: '0.5'
+          memory: 2G
     healthcheck:
       disable: true
     networks:
@@ -104,15 +176,23 @@ services:
     command: ["/app/docker/docker-bootstrap.sh", "beat"]
 
 
+
 volumes:
   superset_home:
   redis:
 
 networks:
-  overlay-net:
-    external: true
-    driver: overlay
+    overlay-net:
+      external: true
+      driver: overlay
 configs:
   requirements:
     file: ./docker/requirements-local.txt
-
+  redis-conf:
+    file: ./redis.conf
+  client-secret:
+    file: ./secrets/client-secret.json
+  superset_config:
+    file: ./docker/pythonpath_dev/superset_config.py
+  superset_conf:
+    file: ./superset/config.py
