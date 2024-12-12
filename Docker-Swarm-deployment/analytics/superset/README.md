@@ -1,18 +1,13 @@
 ## Getting started with Superset(visualization tool) using docker swarm Deploy
 
-To be begin with, in order to deploy superset stack first we need to pass appropriate environment variables to customize superset and to establishes connection with backend components.
-
-#### Setting up environment variables:
-
-- Create `.env` (hidden) file at the same directory level as your docker stack file.
-- Copy `superset_env_file` content into `.env` file and replace placeholders with actual values.
-
-
-#### To deploy:
+#### To deploy superset dashboard:
 ```sh
 docker stack deploy -c superset-stack.yaml superset
 ```
-
+#### To deploy superset middleware:
+```sh
+docker stack deploy -c ssuperset-middleware-stack.yaml superset-middleware
+```
 #### To Check the status :
 ```sh
 docker service ls
