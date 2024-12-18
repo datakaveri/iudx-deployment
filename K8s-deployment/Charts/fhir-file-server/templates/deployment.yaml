@@ -1,0 +1,163 @@
+{{- if .Values.fhirFileServer.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: rs-api-server
+  labels: 
+    app.kubernetes.io/component: fhirFileServer
+    app: rs-api-server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.fhirFileServer.replicaCount }}
+  {{- if .Values.fhirFileServer.updateStrategy }}
+  strategy: {{- toYaml .Values.fhirFileServer.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: rs-api-server
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: rs-api-server
+        app.kubernetes.io/component: fhirFileServer
+        {{- if .Values.fhirFileServer.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.fhirFileServer.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.fhirFileServer.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.fhirFileServer.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.fhirFileServer.priorityClassName }}
+      priorityClassName: {{ .Values.fhirFileServer.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.fhirFileServer.schedulerName }}
+      schedulerName: {{ .Values.fhirFileServer.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.fhirFileServer.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.fhirFileServer.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.fhirFileServer.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: rs-api-server
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.fhirFileServer.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.fhirFileServer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.fhirFileServer.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.fhirFileServer.args }}
+          args: [{{- range $index, $str := .Values.fhirFileServer.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.fhirFileServer.resources }}
+          resources: {{- toYaml .Values.fhirFileServer.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.fhirFileServer.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.fhirFileServer.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.fhirFileServer.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+              protocol: TCP
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.fhirFileServer.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.fhirFileServer.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.fhirFileServer.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.fhirFileServer.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.fhirFileServer.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.fhirFileServer.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.fhirFileServer.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.fhirFileServer.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.fhirFileServer.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.fhirFileServer.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.fhirFileServer.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.fhirFileServer.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.fhirFileServer.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.fhirFileServer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.fhirFileServer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.fhirFileServer.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.fhirFileServer.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.fhirFileServer.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.fhirFileServer.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.fhirFileServer.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.fhirFileServer.podAffinityPreset "component" "fhirFileServer" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.fhirFileServer.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "fhirFileServer" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.fhirFileServer.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.fhirFileServer.nodeAffinityPreset.type "key" .Values.fhirFileServer.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.fhirFileServer.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
