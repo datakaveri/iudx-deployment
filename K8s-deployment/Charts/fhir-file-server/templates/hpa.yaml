@@ -1,4 +1,4 @@
-{{- if and .Values.apiServer.enabled .Values.apiServer.autoscaling.enabled }}
+{{- if and .Values.fhirFileServer.enabled .Values.fhirFileServer.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -18,23 +18,23 @@ spec:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
     name: rs-api-server
-  minReplicas: {{ .Values.apiServer.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.apiServer.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.fhirFileServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.fhirFileServer.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.apiServer.autoscaling.targetCPU }}
+    {{- if .Values.fhirFileServer.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.fhirFileServer.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.apiServer.autoscaling.targetMemory }}
+    {{- if .Values.fhirFileServer.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.fhirFileServer.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
