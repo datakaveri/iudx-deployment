@@ -2,10 +2,10 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: rs-api-server
+  name: fhir-file-server
   labels: 
     app.kubernetes.io/component: fhirFileServer
-    app: rs-api-server
+    app: fhir-file-server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,14 +19,14 @@ spec:
   {{- end }}
   selector:
     matchLabels: 
-      app: rs-api-server
+      app: fhir-file-server
   template:
     metadata:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app: rs-api-server
+        app: fhir-file-server
         app.kubernetes.io/component: fhirFileServer
         {{- if .Values.fhirFileServer.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.podLabels "context" $) | nindent 8 }}
@@ -52,7 +52,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.fhirFileServer.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: rs-api-server
+        - name: fhir-file-server
           image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.fhirFileServer.containerSecurityContext.enabled }}

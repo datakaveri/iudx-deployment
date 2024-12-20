@@ -36,7 +36,7 @@ To install the `fhir-file-server`chart:
  ./install.sh
 ```
 
-The command deploys  resource-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys  fhir-file-server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 Following script will create :
 1. create a namespace `icmr-fhir-fs`
