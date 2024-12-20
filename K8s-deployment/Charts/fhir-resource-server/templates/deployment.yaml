@@ -2,10 +2,10 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: rs-api-server
+  name: fhir-resource-server
   labels: 
     app.kubernetes.io/component: fhirResourceServer
-    app: rs-api-server
+    app: fhir-resource-server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,14 +19,14 @@ spec:
   {{- end }}
   selector:
     matchLabels: 
-      app: rs-api-server
+      app: fhir-resource-server
   template:
     metadata:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app: rs-api-server
+        app: fhir-resource-server
         app.kubernetes.io/component: fhirResourceServer
         {{- if .Values.fhirResourceServer.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.fhirResourceServer.podLabels "context" $) | nindent 8 }}
@@ -52,7 +52,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.fhirResourceServer.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: rs-api-server
+        - name: fhir-resource-server
           image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.fhirResourceServer.containerSecurityContext.enabled }}

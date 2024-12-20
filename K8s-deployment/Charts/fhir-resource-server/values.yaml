@@ -285,14 +285,14 @@ fhirResourceServer:
   extraEnvVars: []
   ## @param fhirResourceServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for fhirResourceServer nodes
   ##
-  extraEnvVarsCM: "fhir-resource-env"
+  extraEnvVarsCM: "fhir-rs-env"
   ## @param fhirResourceServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for fhirResourceServer nodes
   ##
-  extraEnvVarsSecret: "fhir-resource-config"
+  extraEnvVarsSecret: "fhir-rs-config"
   ## @param fhirResourceServer.extraVolumes Optionally specify extra list of additional volumes for the fhirResourceServer pod(s)
   ##
   extraVolumes:
-    - name: fhir-resource-tmp
+    - name: fhir-rs-tmp
       emptyDir:
         medium: Memory
     - name: application-yaml
@@ -301,7 +301,7 @@ fhirResourceServer:
   ## @param fhirResourceServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the fhirResourceServer container(s)
   ##
   extraVolumeMounts: 
-    - name: fhir-resource-tmp
+    - name: fhir-rs-tmp
       mountPath: /tmp
     - name: application-yaml
       mountPath: /app/config/application.yaml
