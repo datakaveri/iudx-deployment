@@ -179,8 +179,8 @@ fhirResourceServer:
   podSecurityContext:
     enabled: true
     runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
+    runAsUser: 65532
+    fsGroup: 65532
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param fhirResourceServer.containerSecurityContext.enabled Enabled fhirResourceServer containers' Security Context
@@ -190,7 +190,7 @@ fhirResourceServer:
   containerSecurityContext:
     enabled: true
     runAsNonRoot: true
-    runAsUser: 1001
+    runAsUser: 65532
     allowPrivilegeEscalation: false
     capabilities:
         drop:
@@ -425,8 +425,7 @@ ingress:
     nginx.ingress.kubernetes.io/global-rate-limit-window: 1s,
     nginx.ingress.kubernetes.io/limit-burst-multiplier: "1",
     nginx.ingress.kubernetes.io/limit-connections: "100",
-    nginx.ingress.kubernetes.io/limit-rps: "100",
-    nginx.ingress.kubernetes.io/app-root: "/apis"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
   }
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
