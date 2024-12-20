@@ -126,7 +126,7 @@ fhirResourceServer:
   ## @param fhirResourceServer.livenessProbe.path Path for httpGet
   ##
   livenessProbe:
-    enabled: true
+    enabled: false
     path: /metrics
     initialDelaySeconds: 60
     periodSeconds: 60
@@ -141,8 +141,11 @@ fhirResourceServer:
   ## @param fhirResourceServer.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
+    enabled: true
+    httpGet:  
+      path: /fhir/metadata
+      port: 8080
+    initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 10
     failureThreshold: 10
