@@ -333,8 +333,8 @@ fhirFileServer:
   autoscaling:
     enabled: true
     minReplicas: 1
-    maxReplicas: 7
-    targetCPU: 80
+    maxReplicas: 5
+    targetCPU: 90
     #targetMemory:
 
 ## @section Traffic Exposure Parameters
@@ -420,8 +420,7 @@ ingress:
     nginx.ingress.kubernetes.io/global-rate-limit-window: 1s,
     nginx.ingress.kubernetes.io/limit-burst-multiplier: "1",
     nginx.ingress.kubernetes.io/limit-connections: "100",
-    nginx.ingress.kubernetes.io/limit-rps: "100",
-    nginx.ingress.kubernetes.io/app-root: "/apis"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
   }
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
