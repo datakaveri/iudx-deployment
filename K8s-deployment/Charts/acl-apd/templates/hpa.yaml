@@ -1,4 +1,4 @@
-{{- if and .Values.acl-apd.enabled .Values.acl-apd.autoscaling.enabled }}
+{{- if and .Values.aclApd.enabled .Values.aclApd.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -18,23 +18,23 @@ spec:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
     name: acl-apd-server
-  minReplicas: {{ .Values.acl-apd.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.acl-apd.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.aclApd.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.aclApd.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.acl-apd.autoscaling.targetCPU }}
+    {{- if .Values.aclApd.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.aclApd.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.acl-apd.autoscaling.targetMemory }}
+    {{- if .Values.aclApd.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.acl-apd.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.aclApd.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}

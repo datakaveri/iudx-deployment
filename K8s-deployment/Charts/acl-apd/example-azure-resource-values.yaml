@@ -8,7 +8,7 @@ ingress:
 ## @param apiServer.resources.limits The resources limits for the apiServer containers
 ## @param apiServer.resources.requests The requested resources for the apiServer containers
 ##
-acl-apd:
+aclApd:
   enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: Standard_D2as_v4
