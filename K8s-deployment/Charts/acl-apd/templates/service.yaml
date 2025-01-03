@@ -1,4 +1,4 @@
-{{- if .Values.acl-apd.enabled -}}
+{{- if .Values.aclApd.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:

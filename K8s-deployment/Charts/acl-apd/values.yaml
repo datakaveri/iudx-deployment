@@ -109,7 +109,7 @@ podAnnotations:
   prometheus.io/scrape: "true"
 
 ## @section acl-apd Parameters
-acl-apd:
+aclApd:
 
 ## @param apiServer.replicaCount Number of apiServer replicas to deploy
   ##
