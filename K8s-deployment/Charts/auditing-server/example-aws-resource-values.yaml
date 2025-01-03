@@ -3,7 +3,7 @@
 ## @param apiServer.resources.limits The resources limits for the apiServer containers
 ## @param apiServer.resources.requests The requested resources for the apiServer containers
 ##
-auditing:
+auditingServer:
   enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: t3a.medium

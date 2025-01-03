@@ -1,4 +1,4 @@
-{{- if and .Values.auditing.enabled .Values.auditing.autoscaling.enabled }}
+{{- if and .Values.auditingServer.enabled .Values.auditing.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -18,23 +18,23 @@ spec:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
     name: auditing-server
-  minReplicas: {{ .Values.auditing.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.auditing.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.auditingServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.auditingServer.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.auditing.autoscaling.targetCPU }}
+    {{- if .Values.auditingServer.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.apiServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.auditingServerServer.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.auditing.autoscaling.targetMemory }}
+    {{- if .Values.auditingServer.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.auditing.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.auditingServer.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}

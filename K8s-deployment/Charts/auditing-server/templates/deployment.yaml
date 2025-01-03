@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: auditing-server
   labels: 
-    app.kubernetes.io/component: auditing
+    app.kubernetes.io/component: auditingServer
     app: auditing-server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -12,9 +12,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.auditing.replicaCount }}
-  {{- if .Values.auditing.updateStrategy }}
-  strategy: {{- toYaml .Values.auditing.updateStrategy | nindent 4 }}
+  replicas: {{ .Values.auditingServer.replicaCount }}
+  {{- if .Values.auditingServer.updateStrategy }}
+  strategy: {{- toYaml .Values.auditingServer.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: 
@@ -26,25 +26,25 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app: auditing-server
-        app.kubernetes.io/component: auditing
-        {{- if .Values.apiServer.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.auditing.podLabels "context" $) | nindent 8 }}
+        app.kubernetes.io/component: auditingServer
+        {{- if .Values.auditingServer.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      {{- if .Values.auditing.nodeSelector }}
-      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.auditing.nodeSelector "context" $) | nindent 8 }}
+      {{- if .Values.auditingServer.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.auditingServer.nodeSelector "context" $) | nindent 8 }}
       {{- end }}      
-      {{- if .Values.auditing.tolerations }}
-      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.auditing.tolerations "context" .) | nindent 8 }}
+      {{- if .Values.auditingServer.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.tolerations "context" .) | nindent 8 }}
       {{- end }}
-      {{- if .Values.auditing.priorityClassName }}
-      priorityClassName: {{ .Values.auditing.priorityClassName | quote }}
+      {{- if .Values.auditingServer.priorityClassName }}
+      priorityClassName: {{ .Values.auditingServer.priorityClassName | quote }}
       {{- end }}
-      {{- if .Values.auditing.schedulerName }}
-      schedulerName: {{ .Values.auditing.schedulerName | quote }}
+      {{- if .Values.auditingServer.schedulerName }}
+      schedulerName: {{ .Values.auditingServer.schedulerName | quote }}
       {{- end }}
-      {{- if .Values.auditing.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.auditing.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- if .Values.auditingServer.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.auditingServer.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}
@@ -61,37 +61,37 @@ spec:
             - name: foo
               mountPath: bar
         {{- end }}
-        {{- if .Values.auditing.initContainers }}
+        {{- if .Values.auditingServer.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.authenticator.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: auditing-server
           image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.auditing.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.auditing.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.auditingServer.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.auditingServer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.auditing.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.auditing.command "context" $) | nindent 12 }}
+          {{- else if .Values.auditingServer.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.command "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.auditing.args }}
-          args: [{{- range $index, $str := .Values.auditing.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- else if .Values.auditingServer.args }}
+          args: [{{- range $index, $str := .Values.auditingServer.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
           {{- end }}
           
           
-          {{- if .Values.auditing.resources }}
-          resources: {{- toYaml .Values.auditing.resources | nindent 12 }}
+          {{- if .Values.auditingServer.resources }}
+          resources: {{- toYaml .Values.auditingServer.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.auditing.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.auditing.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- if .Values.auditingServer.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-        {{- if .Values.auditing.sidecars }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.auditing.sidecars "context" $) | nindent 8 }}
+        {{- if .Values.auditingServer.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.auditingServer.sidecars "context" $) | nindent 8 }}
         {{- end }}
           ports:
             - name: http
@@ -104,31 +104,31 @@ spec:
               containerPort: {{ .Values.containerPorts.prometheus }}
               protocol: TCP
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.auditing.livenessProbe.enabled }}
+          {{- if .Values.auditingServer.livenessProbe.enabled }}
           livenessProbe:
              httpGet:
-               path: {{ .Values.auditing.livenessProbe.path }}
+               path: {{ .Values.auditingServer.livenessProbe.path }}
                port: 9000
-             initialDelaySeconds: {{ .Values.auditing.livenessProbe.initialDelaySeconds }}
-             periodSeconds: {{ .Values.auditing.livenessProbe.periodSeconds }}
-             timeoutSeconds: {{ .Values.auditing.livenessProbe.timeoutSeconds }}
+             initialDelaySeconds: {{ .Values.auditingServer.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.auditingServer.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.auditingServer.livenessProbe.timeoutSeconds }}
           
-          {{- else if .Values.auditing.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.auditing.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.auditingServer.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.auditing.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.auditing.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.auditing.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.auditing.customReadinessProbe "context" $) | nindent 12 }}
+          {{- if .Values.auditingServer.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.auditingServer.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.auditingServer.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.auditing.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.auditing.startupProbe "enabled") "context" $) | nindent 12 }}
-          {{- else if .Values.auditing.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.auditing.customStartupProbe "context" $) | nindent 12 }}
+          {{- if .Values.auditingServer.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.auditingServer.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.auditingServer.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
-          {{- if .Values.auditing.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.apiServer.lifecycleHooks "context" $) | nindent 12 }}
+          {{- if .Values.auditingServer.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: MY_POD_IP
@@ -136,41 +136,41 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
           envFrom:
-            {{- if .Values.auditing.extraEnvVarsCM }}
+            {{- if .Values.auditingServer.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.auditing.extraEnvVarsCM "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.auditingServer.extraEnvVarsCM "context" $) }}
             {{- end }}
-            {{- if .Values.auditing.extraEnvVarsSecret }}
+            {{- if .Values.auditingServer.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.auditing.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.auditingServer.extraEnvVarsSecret "context" $) }}
             {{- end }}
-            {{- if .Values.auditing.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.auditing.extraEnvVars "context" $) | nindent 12 }}
+            {{- if .Values.auditingServer.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
       {{- if .Values.serviceAccount.create }}    
       serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
       {{- end }}
       {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
       
-      {{- if .Values.auditing.hostAliases }}
-      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.auditing.hostAliases "context" $) | nindent 8 }}
+      {{- if .Values.auditingServer.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.hostAliases "context" $) | nindent 8 }}
       {{- end }}
-      {{- if .Values.auditing.affinity }}
-      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.auditing.affinity "context" $) | nindent 8 }}
+      {{- if .Values.auditingServer.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.auditingServer.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        {{- if .Values.auditing.podAffinityPreset}}
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.auditing.podAffinityPreset "component" "auditing" "context" $) | nindent 10 }}
+        {{- if .Values.auditingServer.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.auditingServer.podAffinityPreset "component" "auditing" "context" $) | nindent 10 }}
         {{- end}}
-        {{- if .Values.auditing.podAntiAffinityPreset }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "auditing" "context" $) | nindent 10 }}
+        {{- if .Values.auditingServer.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "auditingServer" "context" $) | nindent 10 }}
         {{- end}}
-        {{- if .Values.apiServer.nodeAffinityPreset.type }}
-        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.auditing.nodeAffinityPreset.type "key" .Values.auditing.nodeAffinityPreset.key "values" .Values.auditing.nodeAffinityPreset.values) | nindent 10 }}
+        {{- if .Values.auditingServer.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.auditingServer.nodeAffinityPreset.type "key" .Values.auditing.nodeAffinityPreset.key "values" .Values.auditing.nodeAffinityPreset.values) | nindent 10 }}
         {{- end }}
       {{- end }}
       volumes:
-        {{- if .Values.auditing.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.auditing.extraVolumes "context" $) | nindent 8 }}
+        {{- if .Values.auditingServer.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- end }}

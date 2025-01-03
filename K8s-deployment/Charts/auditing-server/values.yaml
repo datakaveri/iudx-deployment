@@ -113,7 +113,7 @@ podAnnotations:
   prometheus.io/scrape: "true"
 
 ## @section apiServer Parameters
-auditing:
+auditingServer:
 
   ## @param apiServer.replicaCount Number of apiServer replicas to deploy
 
