@@ -1,10 +1,10 @@
-{{- if and .Values.authenticator.enabled .Values.authenticator.autoscaling.enabled }}
+{{- if and .Values.aclApd.enabled .Values.aclApd.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: apd-authenticator
+  name: acl-apd-server
   labels:
-    app: apd-authenticator
+    app: acl-apd-server
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: apd-authenticator
-  minReplicas: {{ .Values.authenticator.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.authenticator.autoscaling.maxReplicas }}
+    name: acl-apd-server
+  minReplicas: {{ .Values.aclApd.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.aclApd.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.authenticator.autoscaling.targetCPU }}
+    {{- if .Values.aclApd.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.authenticator.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.aclApd.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.authenticator.autoscaling.targetMemory }}
+    {{- if .Values.aclApd.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.authenticator.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.aclApd.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
