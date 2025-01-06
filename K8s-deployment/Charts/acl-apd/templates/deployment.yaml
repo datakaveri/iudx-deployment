@@ -1,4 +1,4 @@
-{{- if .Values.apiServer.enabled -}}
+{{- if .Values.aclApd.enabled -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -28,7 +28,7 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app: acl-apd-server
         app.kubernetes.io/component: aclApd
-        {{- if .Values.apiServer.podLabels }}
+        {{- if .Values.aclApd.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
@@ -129,7 +129,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.aclApd.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.apiServer.lifecycleHooks "context" $) | nindent 12 }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: MY_POD_IP
@@ -166,7 +166,7 @@ spec:
         {{- if .Values.aclApd.podAntiAffinityPreset }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "aclApd" "context" $) | nindent 10 }}
         {{- end}}
-        {{- if .Values.apiServer.nodeAffinityPreset.type }}
+        {{- if .Values.aclApd.nodeAffinityPreset.type }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.aclApd.nodeAffinityPreset.type "key" .Values.aclApd.nodeAffinityPreset.key "values" .Values.aclApd.nodeAffinityPreset.values) | nindent 10 }}
         {{- end }}
       {{- end }}
