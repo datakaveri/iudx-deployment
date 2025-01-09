@@ -1,0 +1,177 @@
+{{- if .Values.aclApd.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: acl-apd-server
+  labels: 
+    app.kubernetes.io/component: aclApd
+    app: acl-apd-server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.aclApd.replicaCount }}
+  {{- if .Values.aclApd.updateStrategy }}
+  strategy: {{- toYaml .Values.aclApd.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: acl-apd-server
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: acl-apd-server
+        app.kubernetes.io/component: aclApd
+        {{- if .Values.aclApd.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.aclApd.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.aclApd.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.aclApd.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.aclApd.priorityClassName }}
+      priorityClassName: {{ .Values.aclApd.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.aclApd.schedulerName }}
+      schedulerName: {{ .Values.aclApd.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.aclApd.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.aclApd.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "catalogue.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command: {}
+          
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: foo
+              mountPath: bar
+        {{- end }}
+        {{- if .Values.aclApd.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.authenticator.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: acl-apd-server
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.aclApd.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.aclApd.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.aclApd.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.aclApd.args }}
+          args: [{{- range $index, $str := .Values.aclApd.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.aclApd.resources }}
+          resources: {{- toYaml .Values.aclApd.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.aclApd.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.aclApd.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.aclApd.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+              protocol: TCP
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.aclApd.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.aclApd.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.aclApd.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.aclApd.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.aclApd.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.aclApd.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.aclApd.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.aclApd.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.aclApd.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.aclApd.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.aclApd.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.aclApd.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.aclApd.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.aclApd.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.aclApd.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.aclApd.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.aclApd.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.aclApd.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.aclApd.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.aclApd.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.aclApd.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.aclApd.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.aclApd.podAffinityPreset "component" "aclApd" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.aclApd.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "aclApd" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.aclApd.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.aclApd.nodeAffinityPreset.type "key" .Values.aclApd.nodeAffinityPreset.key "values" .Values.aclApd.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.aclApd.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.aclApd.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
