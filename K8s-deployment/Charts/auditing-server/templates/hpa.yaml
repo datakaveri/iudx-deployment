@@ -27,7 +27,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.auditingServerServer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.auditingServer.autoscaling.targetCPU }}
     {{- end }}
     {{- if .Values.auditingServer.autoscaling.targetMemory }}
     - type: Resource
