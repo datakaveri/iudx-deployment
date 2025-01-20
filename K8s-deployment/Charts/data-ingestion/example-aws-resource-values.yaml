@@ -11,11 +11,11 @@ ingress:
 diServer:
   resources:
     limits:
-      cpu: 1000m
+      cpu: 600m
       memory: 1.2Gi
     requests: 
-      cpu: 700m
-      memory: 1.2Gi
+      cpu: 100m
+      memory: 0.4Gi
 
   nodeSelector:
     node.kubernetes.io/instance-type: t3a.medium
