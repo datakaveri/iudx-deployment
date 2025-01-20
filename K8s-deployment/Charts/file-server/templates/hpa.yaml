@@ -1,10 +1,10 @@
-{{- if .Values.postgres.autoscaling.enabled }}
+{{- if .Values.fileServer.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: fs-postgres
+  name: file-server
   labels:
-    app: fs-postgres
+    app: file-server
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: fs-postgres
-  minReplicas: {{ .Values.postgres.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.postgres.autoscaling.maxReplicas }}
+    name: file-server
+  minReplicas: {{ .Values.fileServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.fileServer.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.postgres.autoscaling.targetCPU }}
+    {{- if .Values.fileServer.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.postgres.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.fileServer.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.postgres.autoscaling.targetMemory }}
+    {{- if .Values.fileServer.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.postgres.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.fileServer.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
