@@ -276,10 +276,10 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
+  initialDelaySeconds: 20
+  periodSeconds: 15
+  timeoutSeconds: 10
+  failureThreshold: 10
   successThreshold: 1
   probeCommandTimeout: 2
 ## @param startupProbe.enabled Enable startupProbe on ZooKeeper containers
