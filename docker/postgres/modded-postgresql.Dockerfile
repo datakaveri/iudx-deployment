@@ -23,13 +23,9 @@ RUN cd /tmp/build && wget https://github.com/datakaveri/gdi-multicorn-scripts/ar
 FROM bitnami/postgresql:16.1.0
 USER root
 
-# copy APT cache and lists from builder so that packages already downloaded need not be downloaded again (only installed)
-COPY --from=builder /var/cache/apt/ /var/cache/apt/
-COPY --from=builder /var/lib/apt/lists/ /var/lib/apt/lists/
-
-# copy the built OGR extension, install libgdal-dev and then run make install to install the extension into the final container.
+# copy the built OGR extension, install gdal-bin and then run make install to install the extension into the final container.
 COPY --from=builder /tmp/build/pgsql-ogr-fdw-1.1.5 /pgsql-ogr-fdw-1.1.5
-RUN apt install -y make libgdal-dev --no-install-recommends && cd /pgsql-ogr-fdw-1.1.5 && make install
+RUN apt update && apt install -y make gdal-bin --no-install-recommends && cd /pgsql-ogr-fdw-1.1.5 && make install
 
 # copy the built multicorn extension, install python and then run make install to install the extension into the final container.
 COPY --from=builder /tmp/build/multicorn2-3.0 /multicorn2-3.0
