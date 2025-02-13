@@ -17,9 +17,6 @@ RUN wget https://github.com/pgsql-io/multicorn2/archive/refs/tags/v3.0.tar.gz &&
 # fetch the OGR code, uncompress and build
 RUN wget https://github.com/pramsey/pgsql-ogr-fdw/archive/refs/tags/v1.1.5.tar.gz && tar -xvf v1.1.5.tar.gz && cd pgsql-ogr-fdw-1.1.5 && make
 
-# fetch the GDI Python scripts and uncompress
-RUN cd /tmp/build && wget https://github.com/datakaveri/gdi-multicorn-scripts/archive/refs/heads/main.tar.gz && tar -xvf main.tar.gz 
-
 FROM bitnami/postgresql:16.1.0
 USER root
 
@@ -31,9 +28,10 @@ RUN apt update && apt install -y make gdal-bin --no-install-recommends && cd /pg
 COPY --from=builder /tmp/build/multicorn2-3.0 /multicorn2-3.0
 RUN apt install -y python3 python3-dev python3-pip gcc --no-install-recommends && cd /multicorn2-3.0 && make install && rm -rf /var/lib/apt/lists/* && apt remove -y gcc make && apt autoremove -y && apt clean -y
 
-# copy the GSX/GDI Python scripts and install them to the global Python install using pip
-COPY --from=builder /tmp/build/gdi-multicorn-scripts-main /gdi-multicorn-scripts-main
-RUN cd /gdi-multicorn-scripts-main && pip install .
+# fetch Multicorn scripts and install them to the global Python instance using pip
+# using ADD so that this layer will be rebuilt when the code in HEAD of main branch changes
+ADD https://github.com/datakaveri/gdi-multicorn-scripts/archive/refs/heads/main.tar.gz /scripts.tar.gz
+RUN pip install --no-cache-dir scripts.tar.gz && rm scripts.tar.gz
 
 # drop down to the low-priv user that the original bitnami:postgresql image uses
 USER 1001
