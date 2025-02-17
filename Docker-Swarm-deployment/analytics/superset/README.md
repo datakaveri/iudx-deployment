@@ -6,6 +6,9 @@ docker stack deploy -c superset-stack.yaml superset
 ```
 #### To deploy superset middleware:
 ```sh
+cd gra-superset-guesttoken-middlware/
+```
+```sh
 docker stack deploy -c superset-middleware-stack.yaml superset-middleware
 ```
 #### To Check the status :

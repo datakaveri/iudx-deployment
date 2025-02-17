@@ -9,7 +9,7 @@ services:
     - .env
     deploy:
       replicas: 1
-       resources:
+      resources:
          limits:
            cpus: "0.5"
            memory: "512M"
