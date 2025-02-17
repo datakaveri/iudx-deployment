@@ -39,9 +39,9 @@
 
 <body class="${properties.kcBodyClass!}">
 <nav class="navbar navbar-expand-sm w-100 bg-white">
-     <a href="https://catalogue.ugix.org.in/" class="logo-container">
+     <a href="https://catalogue.geospatial.org.in/" class="logo-container">
             <img
-                src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/ugix/gsx-logo.png"
+                src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/ugix/gdi-logo-final.png"
                 alt="gsx logo"
                 class="logo-image"
             />
@@ -49,13 +49,13 @@
 
      <ul class="navbar-nav ms-auto">
          <li class="nav-item">
-            <a class="nav-link" href="https://catalogue.ugix.org.in/">Home</a>
+            <a class="nav-link" href="https://catalogue.geospatial.org.in/">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="https://catalogue.ugix.org.in/datasets">Explore Datasets</a>
+            <a class="nav-link" href="https://catalogue.geospatial.org.in/datasets">Explore Datasets</a>
         </li>
         <li class="nav-item ">
-            <a class="nav-link" href="https://canvas.ugix.org.in/">Explorer Sandbox</a>
+            <a class="nav-link" href="https://canvas.geospatial.org.in/">Explore Canvas</a>
         </li>
 
       </ul>
