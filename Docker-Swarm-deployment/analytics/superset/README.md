@@ -28,4 +28,4 @@ rv2yw340gsd0   superset_superset_init                replicated       0/1       
 
 ##### NOTE: 
 1. To install custom modules add them in docker/requirements-local.txt file and redeploy the stack
-2. Replace all placeholder in .env files under secrets/ and gra-superset-guesttoken-middleware/
+2. Replace all placeholder in .env and client-secret.json under secrets/ and .env file under gra-superset-guesttoken-middleware/
