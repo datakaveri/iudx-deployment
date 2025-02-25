@@ -15,8 +15,8 @@ aclApd:
     node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
-      cpu: 850m
-      memory: 1.5Gi
+      cpu: 1700m
+      memory: 3.0Gi
     requests: 
       cpu: 100m
-      memory: 256Mi
+      memory: 0.4Gi
