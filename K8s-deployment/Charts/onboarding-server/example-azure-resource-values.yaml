@@ -14,8 +14,8 @@ onboardingServer:
     node.kubernetes.io/instance-type: Standard_B2s
   resources:
     limits:
-      cpu: 600m
-      memory: 750Mi
+      cpu: 1700m
+      memory: 3.0Gi
     requests: 
-      cpu: 400m
-      memory: 600Mi
+      cpu: 100m
+      memory: 0.4Gi
