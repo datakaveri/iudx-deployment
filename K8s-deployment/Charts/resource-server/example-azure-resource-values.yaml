@@ -16,10 +16,10 @@ resourceServer:
   resources:
     limits:
       cpu: 2000m
-      memory: 3Gi
+      memory: 3000Mi
     requests: 
-      cpu: 200m
-      memory: 512Mi
+      cpu: 1000m
+      memory: 2000Mi
   extraVolumes:
     - name: rs-config
       secret:
