@@ -9,8 +9,8 @@ auditingServer:
     node.kubernetes.io/instance-type: Standard_D2as_v4
   resources:
     limits:
-      cpu: 800m
-      memory: 750Mi
+      cpu: 1700m
+      memory: 3.0Gi
     requests: 
-      cpu: 600m
-      memory: 600Mi
+      cpu: 100m
+      memory: 0.4Gi
