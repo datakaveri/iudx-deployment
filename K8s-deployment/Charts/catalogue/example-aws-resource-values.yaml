@@ -12,11 +12,11 @@ apiServer:
   enabled: true
   resources:
     limits:
-      cpu: 800m
-      memory: 750Mi
+      cpu: 2
+      memory: 3Gi
     requests: 
-      cpu: 600m
-      memory: 600Mi
+      cpu: 1
+      memory: 1Gi
 
   nodeSelector:
     node.kubernetes.io/instance-type: t3a.medium
