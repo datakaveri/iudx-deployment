@@ -18,5 +18,5 @@ onboardingServer:
       cpu: 1700m
       memory: 3.0Gi
     requests: 
-      cpu: 100m
-      memory: 0.4Gi
+      cpu: 700m
+      memory: 1200Mi
