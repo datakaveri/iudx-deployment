@@ -1,10 +1,10 @@
-{{- if .Values.postgres.autoscaling.enabled }}
+{{- if and .Values.auditingServer.enabled .Values.auditing.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: auditing-postgres
+  name: auditing-server
   labels:
-    app: auditing-postgres
+    app: auditing-server
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: auditing-postgres
-  minReplicas: {{ .Values.postgres.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.postgres.autoscaling.maxReplicas }}
+    name: auditing-server
+  minReplicas: {{ .Values.auditingServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.auditingServer.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.postgres.autoscaling.targetCPU }}
+    {{- if .Values.auditingServer.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.postgres.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.auditingServer.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.postgres.autoscaling.targetMemory }}
+    {{- if .Values.auditingServer.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.postgres.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.auditingServer.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}

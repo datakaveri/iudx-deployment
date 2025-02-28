@@ -1,83 +1,16 @@
-## databroker resource requests and limits
+## auditingServer resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param databroker.resources.limits The resources limits for the databroker containers
-## @param databroker.resources.requests The requested resources for the databroker containers
+## @param auditingServer.resources.limits The resources limits for the auditingServer containers
+## @param auditingServer.resources.requests The requested resources for the auditingServer containers
 ##
-databroker:
+auditingServer:
+  enabled: true
   nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
+    node.kubernetes.io/instance-type: Standard_D2as_v4
   resources:
     limits:
-      cpu: 600m
-      memory: 750Mi
-    requests:
-      cpu: 500m
-      memory: 600Mi
-
-
-## processor resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param processor.resources.limits The resources limits for the processor containers
-## @param processor.resources.requests The requested resources for the processor containers
-##
-processor:
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 800m
-      memory: 750Mi
-    requests:
-      cpu: 600m
-      memory: 500Mi
-
-
-## metering resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param metering.resources.limits The resources limits for the metering containers
-  ## @param metering.resources.requests The requested resources for the metering containers
-  ##
-immudb:
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 600m
-      memory: 75Mi
-    requests:
-      cpu: 400m
-      memory: 600Mi
-
-
-
-## postgres resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param postgres.resources.limits The resources limits for the postgres containers
-## @param postgres.resources.requests The requested resources for the postgres containers
-##
-postgres:
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 600m
-      memory: 750Mi
-    requests:
-      cpu: 400m
-      memory: 600Mi
-
-## cache resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param cache.resources.limits The resources limits for the cache containers
-## @param cache.resources.requests The requested resources for the cache containers
-##
-cache:
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 600m
-      memory: 750Mi
-    requests:
-      cpu: 400m
-      memory: 600Mi
+      cpu: 1700m
+      memory: 3.0Gi
+    requests: 
+      cpu: 700m
+      memory: 1200Mi
