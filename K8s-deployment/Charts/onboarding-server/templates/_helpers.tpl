@@ -45,8 +45,8 @@ Compile all warnings into a single message.
 */}}
 {{- define "catalogue.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "catalogue.apiServer.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "catalogue.apiServer.validateValues.bar" .) -}}
+{{- $messages := append $messages (include "catalogue.onboardingServer.validateValues.foo" .) -}}
+{{- $messages := append $messages (include "catalogue.onboardingServer.validateValues.bar" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
