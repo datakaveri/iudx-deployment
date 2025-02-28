@@ -2,9 +2,9 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: cat-api-server
+  name: catalogue-server
   labels:
-    app: cat-api-server
+    app: catalogue-server
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,7 +17,7 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: cat-api-server
+    name: catalogue-server
   minReplicas: {{ .Values.apiServer.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.apiServer.autoscaling.maxReplicas }}
   metrics:
