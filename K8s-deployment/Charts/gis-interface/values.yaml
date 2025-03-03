@@ -109,22 +109,22 @@ podAnnotations:
   prometheus.io/port: "9000"
   prometheus.io/scrape: "true"
 
-## @section apiServer Parameters
-apiServer:
+## @section gisInterface Parameters
+gisInterface:
 
-## @param apiServer.replicaCount Number of apiServer replicas to deploy
+## @param gisInterface.replicaCount Number of gisInterface replicas to deploy
   ##
   replicaCount: 1
   
-  ## Configure extra options for apiServer containers' liveness and readiness probes
+  ## Configure extra options for gisInterface containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param apiServer.livenessProbe.enabled Enable livenessProbe on apiServer containers
-  ## @param apiServer.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param apiServer.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param apiServer.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param apiServer.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param apiServer.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param apiServer.livenessProbe.path Path for httpGet
+  ## @param gisInterface.livenessProbe.enabled Enable livenessProbe on gisInterface containers
+  ## @param gisInterface.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param gisInterface.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param gisInterface.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param gisInterface.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param gisInterface.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param gisInterface.livenessProbe.path Path for httpGet
   ##
   livenessProbe:
     enabled: true
@@ -134,12 +134,12 @@ apiServer:
     timeoutSeconds: 10
     #failureThreshold: 10
     #successThreshold: 10
-  ## @param apiServer.readinessProbe.enabled Enable readinessProbe on apiServer containers
-  ## @param apiServer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param apiServer.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param apiServer.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param apiServer.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param apiServer.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param gisInterface.readinessProbe.enabled Enable readinessProbe on gisInterface containers
+  ## @param gisInterface.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param gisInterface.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param gisInterface.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param gisInterface.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param gisInterface.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: false
@@ -148,12 +148,12 @@ apiServer:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param apiServer.startupProbe.enabled Enable startupProbe on apiServer containers
-  ## @param apiServer.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param apiServer.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param apiServer.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param apiServer.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param apiServer.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param gisInterface.startupProbe.enabled Enable startupProbe on gisInterface containers
+  ## @param gisInterface.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param gisInterface.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param gisInterface.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param gisInterface.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param gisInterface.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -162,19 +162,19 @@ apiServer:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param apiServer.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param gisInterface.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param apiServer.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param gisInterface.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param apiServer.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param gisInterface.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-  ## apiServer resource requests and limits
+  ## gisInterface resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param apiServer.resources.limits The resources limits for the apiServer containers
-  ## @param apiServer.resources.requests The requested resources for the apiServer containers
+  ## @param gisInterface.resources.limits The resources limits for the gisInterface containers
+  ## @param gisInterface.resources.requests The requested resources for the gisInterface containers
   ##
   resources:
     limits:
@@ -185,8 +185,8 @@ apiServer:
       memory: 1.2Gi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param apiServer.podSecurityContext.enabled Enabled apiServer pods' Security Context
-  ## @param apiServer.podSecurityContext.fsGroup Set apiServer pod's Security Context fsGroup
+  ## @param gisInterface.podSecurityContext.enabled Enabled gisInterface pods' Security Context
+  ## @param gisInterface.podSecurityContext.fsGroup Set gisInterface pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -195,9 +195,9 @@ apiServer:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param apiServer.containerSecurityContext.enabled Enabled apiServer containers' Security Context
-  ## @param apiServer.containerSecurityContext.runAsUser Set apiServer containers' Security Context runAsUser
-  ## @param apiServer.containerSecurityContext.runAsNonRoot Set apiServer containers' Security Context runAsNonRoot
+  ## @param gisInterface.containerSecurityContext.enabled Enabled gisInterface containers' Security Context
+  ## @param gisInterface.containerSecurityContext.runAsUser Set gisInterface containers' Security Context runAsUser
+  ## @param gisInterface.containerSecurityContext.runAsNonRoot Set gisInterface containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -209,68 +209,68 @@ apiServer:
           - ALL
     readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param apiServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for apiServer
+   ## @param gisInterface.existingConfigmap The name of an existing ConfigMap with your custom configuration for gisInterface
   ##
   existingConfigmap:
     
-  ## @param apiServer.command Override default container command (useful when using custom images)
+  ## @param gisInterface.command Override default container command (useful when using custom images)
   ##
   command: ["/bin/bash"]
-  ## @param apiServer.args Override default container args (useful when using custom images)
+  ## @param gisInterface.args Override default container args (useful when using custom images)
   ##
   
   args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.gis.server.apiserver.ApiServerVerticle"]
-  ## @param apiServer.hostAliases apiServer pods host aliases
+  ## @param gisInterface.hostAliases gisInterface pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param apiServer.podLabels Extra labels for apiServer pods
+  ## @param gisInterface.podLabels Extra labels for gisInterface pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param apiServer.podAnnotations Annotations for apiServer pods
+  ## @param gisInterface.podAnnotations Annotations for gisInterface pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  ## @param apiServer.podAffinityPreset Pod affinity preset. Ignored if `apiServer.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param gisInterface.podAffinityPreset Pod affinity preset. Ignored if `gisInterface.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param apiServer.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `apiServer.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param gisInterface.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `gisInterface.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-  ## Node apiServer.affinity preset
+  ## Node gisInterface.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param apiServer.nodeAffinityPreset.type Node affinity preset type. Ignored if `apiServer.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param gisInterface.nodeAffinityPreset.type Node affinity preset type. Ignored if `gisInterface.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param apiServer.nodeAffinityPreset.key Node label key to match. Ignored if `apiServer.affinity` is set
+    ## @param gisInterface.nodeAffinityPreset.key Node label key to match. Ignored if `gisInterface.affinity` is set
     ##
     key: ""
-    ## @param apiServer.nodeAffinityPreset.values Node label values to match. Ignored if `apiServer.affinity` is set
+    ## @param gisInterface.nodeAffinityPreset.values Node label values to match. Ignored if `gisInterface.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param apiServer.affinity Affinity for apiServer pods assignment
+  ## @param gisInterface.affinity Affinity for gisInterface pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `apiServer.podAffinityPreset`, `apiServer.podAntiAffinityPreset`, and `apiServer.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `gisInterface.podAffinityPreset`, `gisInterface.podAntiAffinityPreset`, and `gisInterface.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param apiServer.nodeSelector Node labels for apiServer pods assignment
+  ## @param gisInterface.nodeSelector Node labels for gisInterface pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
-  ## @param apiServer.tolerations Tolerations for apiServer pods assignment
+  ## @param gisInterface.tolerations Tolerations for gisInterface pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param apiServer.updateStrategy.type apiServer statefulset strategy type
+  ## @param gisInterface.updateStrategy.type gisInterface statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -278,30 +278,30 @@ apiServer:
     ## Can be set to RollingUpdate or OnDelete
     ##
     ##type: RollingUpdate
-  ## @param apiServer.priorityClassName apiServer pods' priorityClassName
+  ## @param gisInterface.priorityClassName gisInterface pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param apiServer.schedulerName Name of the k8s scheduler (other than default) for apiServer pods
+  ## @param gisInterface.schedulerName Name of the k8s scheduler (other than default) for gisInterface pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param apiServer.lifecycleHooks for the apiServer container(s) to automate configuration before or after startup
+  ## @param gisInterface.lifecycleHooks for the gisInterface container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param apiServer.extraEnvVars Array with extra environment variables to add to apiServer nodes
+  ## @param gisInterface.extraEnvVars Array with extra environment variables to add to gisInterface nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param apiServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for apiServer nodes
+  ## @param gisInterface.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for gisInterface nodes
   ##
   extraEnvVarsCM: "gis-env"
-  ## @param apiServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for apiServer nodes
+  ## @param gisInterface.extraEnvVarsSecret Name of existing Secret containing extra env vars for gisInterface nodes
   ##
   extraEnvVarsSecret:
-  ## @param apiServer.extraVolumes Optionally specify extra list of additional volumes for the apiServer pod(s)
+  ## @param gisInterface.extraVolumes Optionally specify extra list of additional volumes for the gisInterface pod(s)
   ##
   extraVolumes:
     - name: gis-config
@@ -310,7 +310,7 @@ apiServer:
     - name: gis-tmp
       emptyDir:
         medium: Memory
-  ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
+  ## @param gisInterface.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the gisInterface container(s)
   ##
   extraVolumeMounts: 
     - name: gis-config
@@ -318,7 +318,7 @@ apiServer:
     - name: gis-tmp
       mountPath: /tmp
   
-  ## @param apiServer.sidecars Add additional sidecar containers to the apiServer pod(s)
+  ## @param gisInterface.sidecars Add additional sidecar containers to the gisInterface pod(s)
   ## e.g:
   ## sidecars:
   ## - name: your-image-name
@@ -330,7 +330,7 @@ apiServer:
   ##
 
   sidecars: {}
-  ## @param apiServer.initContainers Add additional init containers to the apiServer pod(s)
+  ## @param gisInterface.initContainers Add additional init containers to the gisInterface pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -341,11 +341,11 @@ apiServer:
   ##
   initContainers: {}
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param apiServer.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param apiServer.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param apiServer.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param apiServer.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param apiServer.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param gisInterface.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param gisInterface.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param gisInterface.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param gisInterface.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param gisInterface.autoscaling.targetMemory Target Memory utilization percentage
 
   
   autoscaling:
@@ -354,1193 +354,6 @@ apiServer:
     maxReplicas: 7
     targetCPU: 80
     #targetMemory:
-
-
-## @section authenticator parameters
-authenticator:
-## @param authenticator.replicaCount Number of apiServer replicas to deploy
-  replicaCount: 1
-  
-  ## Configure extra options for authenticator containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param authenticator.livenessProbe.enabled Enable livenessProbe on authenticator containers
-  ## @param authenticator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param authenticator.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param authenticator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param authenticator.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param authenticator.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param authenticator.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param authenticator.readinessProbe.enabled Enable readinessProbe on authenticator containers
-  ## @param authenticator.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param authenticator.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param authenticator.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param authenticator.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param authenticator.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param authenticator.startupProbe.enabled Enable startupProbe on authenticator containers
-  ## @param authenticator.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param authenticator.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param authenticator.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param authenticator.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param authenticator.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param authenticator.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param authenticator.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param authenticator.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## authenticator resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param authenticator.resources.limits The resources limits for the authenticator containers
-  ## @param authenticator.resources.requests The requested resources for the authenticator containers
-  ##
-  resources:
-    limits:
-      cpu: 600m
-      memory: 750Mi
-    requests: 
-      cpu: 500m
-      memory: 500Mi
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param authenticator.podSecurityContext.enabled Enabled authenticator pods' Security Context
-  ## @param authenticator.podSecurityContext.fsGroup Set authenticator pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param authenticator.containerSecurityContext.enabled Enabled authenticator containers' Security Context
-  ## @param authenticator.containerSecurityContext.runAsUser Set authenticator containers' Security Context runAsUser
-  ## @param authenticator.containerSecurityContext.runAsNonRoot Set authenticator containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-        drop:
-          - ALL
-    readOnlyRootFilesystem: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param authenticator.existingConfigmap The name of an existing ConfigMap with your custom configuration for authenticator
-  ##
-  existingConfigmap:
-    
-  ## @param authenticator.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param authenticator.args Override default container args (useful when using custom images)
-  ##
-  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m  iudx.gis.server.authenticator.AuthenticationVerticle"]
-  ## @param authenticator.hostAliases apiServer pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param authenticator.podLabels Extra labels for authenticator pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param authenticator.podAnnotations Annotations for authenticator pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param authenticator.podAffinityPreset Pod affinity preset. Ignored if `authenticator.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param authenticator.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `authenticator.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node authenticator.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param authenticator.nodeAffinityPreset.type Node affinity preset type. Ignored if `authenticator.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param authenticator.nodeAffinityPreset.key Node label key to match. Ignored if `authenticator.affinity` is set
-    ##
-    key: ""
-    ## @param authenticator.nodeAffinityPreset.values Node label values to match. Ignored if `authenticator.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param authenticator.affinity Affinity for authenticator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `authenticator.podAffinityPreset`, `authenticator.podAntiAffinityPreset`, and `authenticator.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param authenticator.nodeSelector Node labels for authenticator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-  ## @param authenticator.tolerations Tolerations for authenticator pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param authenticator.updateStrategy.type authenticator statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param authenticator.priorityClassName authenticator pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param authenticator.schedulerName Name of the k8s scheduler (other than default) for authenticator pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param authenticator.lifecycleHooks for the authenticator container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param authenticator.extraEnvVars Array with extra environment variables to add to authenticator nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param authenticator.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for authenticator nodes
-  ##
-  extraEnvVarsCM: "gis-env"
-  ## @param authenticator.extraEnvVarsSecret Name of existing Secret containing extra env vars for authenticator nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param authenticator.extraVolumes Optionally specify extra list of additional volumes for the authenticator pod(s)
-  ##
-  extraVolumes:
-    - name: gis-config
-      secret:
-        secretName: gis-config
-    - name: gis-tmp
-      emptyDir:
-        medium: Memory
-    
-  ## @param authenticator.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the authenticator container(s)
-  ##
-  extraVolumeMounts:
-    - name: gis-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: gis-tmp
-      mountPath: /tmp
-
-  ## @param authenticator.sidecars Add additional sidecar containers to the authenticator pod(s)
-  ## e.g:
-  ## sidecars:
-  ## - name: your-image-name
-  ##   image: your-image
-  ##   imagePullPolicy: Always
-   ##  ports:
-  ##     - name: portname
-  ##       containerPort: 1234
-  ##
-  sidecars: {}
-  ## @param authenticator.initContainers Add additional init containers to the authenticator pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param authenticator.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param authenticator.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param authenticator.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param authenticator.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param authenticator.autoscaling.targetMemory Target Memory utilization percentage
-
-  
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: 80
-    #targetMemory:
-
-
-
-## @section metering parameters
-
-metering:
-## @param metering.replicaCount Number of apiServer replicas to deploy
-  replicaCount: 1  
-  ## Configure extra options for metering containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param metering.livenessProbe.enabled Enable livenessProbe on metering containers
-  ## @param metering.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param metering.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param metering.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param metering.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param metering.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param metering.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param metering.readinessProbe.enabled Enable readinessProbe on metering containers
-  ## @param metering.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param metering.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param metering.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param metering.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param metering.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param metering.startupProbe.enabled Enable startupProbe on metering containers
-  ## @param metering.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param metering.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param metering.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param metering.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param metering.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param metering.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param metering.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param metering.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## metering resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param metering.resources.limits The resources limits for the metering containers
-  ## @param metering.resources.requests The requested resources for the metering containers
-  ##
-  resources:
-    limits:
-      cpu: 700m
-      memory: 1Gi
-    requests: 
-      cpu: 500m
-      memory: 800Mi
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metering.podSecurityContext.enabled Enabled metering pods' Security Context
-  ## @param metering.podSecurityContext.fsGroup Set metering pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metering.containerSecurityContext.enabled Enabled metering containers' Security Context
-  ## @param metering.containerSecurityContext.runAsUser Set metering containers' Security Context runAsUser
-  ## @param metering.containerSecurityContext.runAsNonRoot Set metering containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-        drop:
-          - ALL
-    readOnlyRootFilesystem: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param metering.existingConfigmap The name of an existing ConfigMap with your custom configuration for metering
-  ##
-  existingConfigmap:
-    
-  ## @param metering.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param metering.args Override default container args (useful when using custom images)
-  ##
-  args: ["-c","exec java $$GIS_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.gis.server.metering.MeteringVerticle "]
-  ## @param metering.hostAliases apiServer pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param metering.podLabels Extra labels for metering pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param metering.podAnnotations Annotations for metering pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param metering.podAffinityPreset Pod affinity preset. Ignored if `metering.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param metering.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `metering.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node metering.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param metering.nodeAffinityPreset.type Node affinity preset type. Ignored if `metering.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param metering.nodeAffinityPreset.key Node label key to match. Ignored if `metering.affinity` is set
-    ##
-    key: ""
-    ## @param metering.nodeAffinityPreset.values Node label values to match. Ignored if `metering.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param metering.affinity Affinity for metering pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `metering.podAffinityPreset`, `metering.podAntiAffinityPreset`, and `metering.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param metering.nodeSelector Node labels for metering pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3.medium
-  ## @param metering.tolerations Tolerations for metering pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param metering.updateStrategy.type metering statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param metering.priorityClassName metering pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param metering.schedulerName Name of the k8s scheduler (other than default) for metering pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param metering.lifecycleHooks for the metering container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param metering.extraEnvVars Array with extra environment variables to add to metering nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param metering.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for metering nodes
-  ##
-  extraEnvVarsCM: "gis-env"
-  ## @param metering.extraEnvVarsSecret Name of existing Secret containing extra env vars for metering nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param metering.extraVolumes Optionally specify extra list of additional volumes for the metering pod(s)
-  ##
-  extraVolumes:
-    - name: gis-config
-      secret:
-        secretName: gis-config
-    - name: gis-tmp
-      emptyDir:
-        medium: Memory
-  ## @param metering.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
-  ##
-  extraVolumeMounts: 
-    - name: gis-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: gis-tmp
-      mountPath: /tmp
-  
-  ## @param metering.sidecars Add additional sidecar containers to the metering pod(s)
-  ## e.g:
-  ## sidecars:
-   #   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-   ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: {}
-  ## @param metering.initContainers Add additional init containers to the metering pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param metering.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param metering.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param metering.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param metering.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param metering.autoscaling.targetMemory Target Memory utilization percentage
-
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: 80
-    #targetMemory:
-
-
-## @section cache parameters
-cache:
-## @param cache.replicaCount Number of psqlVerticle replicas to deploy
-  replicaCount: 1
-  
-  ## Configure extra options for cache containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param cache.livenessProbe.enabled Enable livenessProbe on cache containers
-  ## @param cache.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param cache.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param cache.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param cache.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param cache.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param cache.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param cache.readinessProbe.enabled Enable readinessProbe on cache containers
-  ## @param cache.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param cache.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param cache.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param cache.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param cache.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param cache.startupProbe.enabled Enable startupProbe on cache containers
-  ## @param cache.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param cache.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param cache.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param cache.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param cache.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param cache.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param cache.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param cache.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param cache.podSecurityContext.enabled Enabled cache pods' Security Context
-  ## @param cache.podSecurityContext.fsGroup Set cache pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param cache.containerSecurityContext.enabled Enabled cache containers' Security Context
-  ## @param cache.containerSecurityContext.runAsUser Set cache containers' Security Context runAsUser
-  ## @param cache.containerSecurityContext.runAsNonRoot Set cache containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-        drop:
-          - ALL
-    readOnlyRootFilesystem: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param cache.existingConfigmap The name of an existing ConfigMap with your custom configuration for cache
-  ##
-  existingConfigmap:
-    
-  ## @param cache.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param cache.args Override default container args (useful when using custom images)
-  ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.gis.server.cache.CacheVerticle"]
-  ## @param cache.hostAliases apiServer pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param cache.podLabels Extra labels for cache pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param cache.podAnnotations Annotations for cache pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param cache.podAffinityPreset Pod affinity preset. Ignored if `cache.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param cache.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `cache.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node cache.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param cache.nodeAffinityPreset.type Node affinity preset type. Ignored if `cache.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param cache.nodeAffinityPreset.key Node label key to match. Ignored if `cache.affinity` is set
-    ##
-    key: ""
-    ## @param cache.nodeAffinityPreset.values Node label values to match. Ignored if `cache.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param cache.affinity Affinity for cache pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `cache.podAffinityPreset`, `cache.podAntiAffinityPreset`, and `cache.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param cache.nodeSelector Node labels for cache pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-
-  ## @param cache.tolerations Tolerations for cache pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param cache.updateStrategy.type cache statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param cache.priorityClassName cache pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param cache.schedulerName Name of the k8s scheduler (other than default) for cache pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param cache.lifecycleHooks for the cache container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param cache.extraEnvVars Array with extra environment variables to add to cache nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param cache.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for cache nodes
-  ##
-  extraEnvVarsCM: "gis-env"
-  ## @param cache.extraEnvVarsSecret Name of existing Secret containing extra env vars for cache nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param cache.extraVolumes Optionally specify extra list of additional volumes for the cache pod(s)
-  ##
-  extraVolumes:
-    - name: gis-config
-      secret:
-        secretName: gis-config
-    - name: gis-tmp
-      emptyDir:
-        medium: Memory
-  ## @param cache.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the cache container(s)
-  ##
-  extraVolumeMounts: 
-    - name: gis-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: gis-tmp
-      mountPath: /tmp
-  
-  ## @param cache.sidecars Add additional sidecar containers to the cache pod(s)
-  ## e.g:
-  ## sidecars:
-  ## - name: your-image-name
-  ##   image: your-image
-  ##   imagePullPolicy: Always
-   ##  ports:
-  ##     - name: portname
-  ##       containerPort: 1234
-  ##
-  sidecars: {}
-  ## @param cache.initContainers Add additional init containers to the cache pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param cache.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param cache.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param cache.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param cache.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param cache.autoscaling.targetMemory Target Memory utilization percentage
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: 80
-    #targetMemory:    
-
-
- 
-## @section postgres parameters
-postgres:
-## @param postgres.replicaCount Number of psqlVerticle replicas to deploy
-  replicaCount: 1
-  
-  ## Configure extra options for postgres containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param postgres.livenessProbe.enabled Enable livenessProbe on postgres containers
-  ## @param postgres.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param postgres.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param postgres.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param postgres.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param postgres.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param postgres.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param postgres.readinessProbe.enabled Enable readinessProbe on postgres containers
-  ## @param postgres.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param postgres.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param postgres.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param postgres.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param postgres.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param postgres.startupProbe.enabled Enable startupProbe on postgres containers
-  ## @param postgres.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param postgres.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param postgres.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param postgres.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param postgres.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param postgres.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param postgres.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param postgres.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param postgres.podSecurityContext.enabled Enabled postgres pods' Security Context
-  ## @param postgres.podSecurityContext.fsGroup Set postgres pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param postgres.containerSecurityContext.enabled Enabled postgres containers' Security Context
-  ## @param postgres.containerSecurityContext.runAsUser Set postgres containers' Security Context runAsUser
-  ## @param postgres.containerSecurityContext.runAsNonRoot Set postgres containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-        drop:
-          - ALL
-    readOnlyRootFilesystem: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param postgres.existingConfigmap The name of an existing ConfigMap with your custom configuration for postgres
-  ##
-  existingConfigmap:
-    
-  ## @param postgres.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param postgres.args Override default container args (useful when using custom images)
-  ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.gis.server.database.postgres.PostgresVerticle"]
-  ## @param postgres.hostAliases apiServer pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param postgres.podLabels Extra labels for postgres pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param postgres.podAnnotations Annotations for postgres pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param postgres.podAffinityPreset Pod affinity preset. Ignored if `postgres.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param postgres.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `postgres.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node postgres.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param postgres.nodeAffinityPreset.type Node affinity preset type. Ignored if `postgres.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param postgres.nodeAffinityPreset.key Node label key to match. Ignored if `postgres.affinity` is set
-    ##
-    key: ""
-    ## @param postgres.nodeAffinityPreset.values Node label values to match. Ignored if `postgres.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param postgres.affinity Affinity for postgres pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `postgres.podAffinityPreset`, `postgres.podAntiAffinityPreset`, and `postgres.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param postgres.nodeSelector Node labels for postgres pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-
-  ## @param postgres.tolerations Tolerations for postgres pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param postgres.updateStrategy.type postgres statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param postgres.priorityClassName postgres pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param postgres.schedulerName Name of the k8s scheduler (other than default) for postgres pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param postgres.lifecycleHooks for the postgres container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param postgres.extraEnvVars Array with extra environment variables to add to postgres nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param postgres.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for postgres nodes
-  ##
-  extraEnvVarsCM: "gis-env"
-  ## @param postgres.extraEnvVarsSecret Name of existing Secret containing extra env vars for postgres nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param postgres.extraVolumes Optionally specify extra list of additional volumes for the postgres pod(s)
-  ##
-  extraVolumes:
-    - name: gis-config
-      secret:
-        secretName: gis-config
-    - name: gis-tmp
-      emptyDir:
-        medium: Memory
-  ## @param postgres.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metering container(s)
-  ##
-  extraVolumeMounts: 
-    - name: gis-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: gis-tmp
-      mountPath: /tmp
-
-  ## @param postgres.sidecars Add additional sidecar containers to the postgres pod(s)
-  ## e.g:
-  ## sidecars:
-   #   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-   ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: {}
-  ## @param postgres.initContainers Add additional init containers to the postgres pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param postgres.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param postgres.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param postgres.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param postgres.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param postgres.autoscaling.targetMemory Target Memory utilization percentage
-
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: 80
-    #targetMemory:
-
-
-
-
-
-## @section databroker parameters
-
-databroker:
-## @param databroker.replicaCount Number of apiServer replicas to deploy
-  replicaCount: 1
-  
-  ## Configure extra options for databroker containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param databroker.livenessProbe.enabled Enable livenessProbe on databroker containers
-  ## @param databroker.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param databroker.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param databroker.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param databroker.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param databroker.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param databroker.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param databroker.readinessProbe.enabled Enable readinessProbe on databroker containers
-  ## @param databroker.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param databroker.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param databroker.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param databroker.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param databroker.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param databroker.startupProbe.enabled Enable startupProbe on databroker containers
-  ## @param databroker.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param databroker.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param databroker.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param databroker.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param databroker.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param databroker.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param databroker.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param databroker.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param databroker.podSecurityContext.enabled Enabled databroker pods' Security Context
-  ## @param databroker.podSecurityContext.fsGroup Set databroker pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param databroker.containerSecurityContext.enabled Enabled databroker containers' Security Context
-  ## @param databroker.containerSecurityContext.runAsUser Set databroker containers' Security Context runAsUser
-  ## @param databroker.containerSecurityContext.runAsNonRoot Set databroker containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-        drop:
-          - ALL
-    readOnlyRootFilesystem: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param databroker.existingConfigmap The name of an existing ConfigMap with your custom configuration for databroker
-  ##
-  existingConfigmap:
-    
-  ## @param databroker.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param databroker.args Override default container args (useful when using custom images)
-  ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory  -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.gis.server.databroker.DataBrokerVerticle"]
-  ## @param databroker.hostAliases apiServer pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param databroker.podLabels Extra labels for databroker pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param databroker.podAnnotations Annotations for databroker pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param databroker.podAffinityPreset Pod affinity preset. Ignored if `databroker.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param databroker.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `databroker.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node databroker.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param databroker.nodeAffinityPreset.type Node affinity preset type. Ignored if `databroker.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param databroker.nodeAffinityPreset.key Node label key to match. Ignored if `databroker.affinity` is set
-    ##
-    key: ""
-    ## @param databroker.nodeAffinityPreset.values Node label values to match. Ignored if `databroker.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param databroker.affinity Affinity for databroker pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `databroker.podAffinityPreset`, `databroker.podAntiAffinityPreset`, and `databroker.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param databroker.nodeSelector Node labels for databroker pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-
-  ## @param databroker.tolerations Tolerations for databroker pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param databroker.updateStrategy.type databroker statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param databroker.priorityClassName databroker pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param databroker.schedulerName Name of the k8s scheduler (other than default) for databroker pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param databroker.lifecycleHooks for the databroker container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param databroker.extraEnvVars Array with extra environment variables to add to databroker nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param databroker.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for databroker nodes
-  ##
-  extraEnvVarsCM: "gis-env"
-  ## @param databroker.extraEnvVarsSecret Name of existing Secret containing extra env vars for databroker nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param databroker.extraVolumes Optionally specify extra list of additional volumes for the databroker pod(s)
-  ##
-  extraVolumes:
-    - name: gis-config
-      secret:
-        secretName: gis-config
-    - name: gis-tmp
-      emptyDir:
-        medium: Memory
-  ## @param databroker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the databroker container(s)
-  ##
-  extraVolumeMounts: 
-    - name: gis-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: gis-tmp
-      mountPath: /tmp
-  
-  ## @param databroker.sidecars Add additional sidecar containers to the databroker pod(s)
-  ## e.g:
-  ## sidecars:
-  ## - name: your-image-name
-  ##   image: your-image
-  ##   imagePullPolicy: Always
-   ##  ports:
-  ##     - name: portname
-  ##       containerPort: 1234
-  ##
-  sidecars: {}
-  ## @param databroker.initContainers Add additional init containers to the databroker pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param databroker.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param databroker.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param databroker.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param databroker.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param databroker.autoscaling.targetMemory Target Memory utilization percentage
-
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPU: 80
-    #targetMemory:
-
-
-
 
 
 ## %%SECONDARY_CONTAINER/POD_DESCRIPTION%%
@@ -1555,7 +368,7 @@ databroker:
 
 ## @section Traffic Exposure Parameters
 
-## apiServer service parameters
+## gisInterface service parameters
 ##
 service:
   ## @param service.type ApiServers ervice type
@@ -1576,32 +389,32 @@ service:
   ## clusterIP: None
   ##
   clusterIP:
-  ## @param service.loadBalancerIP apiServer service Load Balancer IP
+  ## @param service.loadBalancerIP gisInterface service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP:
-  ## @param service.loadBalancerSourceRanges apiServer service Load Balancer sources
+  ## @param service.loadBalancerSourceRanges gisInterface service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy apiServer service external traffic policy
+  ## @param service.externalTrafficPolicy gisInterface service external traffic policy
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.annotations Additional custom annotations for apiServer service
+  ## @param service.annotations Additional custom annotations for gisInterface service
   ##
   annotations: {}
-  ## @param service.extraPorts Extra ports to expose in apiServer service (normally used with the `sidecars` value)
+  ## @param service.extraPorts Extra ports to expose in gisInterface service (normally used with the `sidecars` value)
   ##
   extraPorts: []
-## apiServer ingress parameters
+## gisInterface ingress parameters
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress record generation for apiServer
+  ## @param ingress.enabled Enable ingress record generation for gisInterface
   ##
   enabled: true
   ## @param ingress.pathType Ingress path type
@@ -1774,4 +587,3 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
-
