@@ -14,7 +14,7 @@ fileServer:
     node.kubernetes.io/instance-type: Standard_B2s
   resources:
     limits:
-      cpu: 17000m
+      cpu: 1700m
       memory: 2.0Gi
     requests: 
       cpu: 700m
