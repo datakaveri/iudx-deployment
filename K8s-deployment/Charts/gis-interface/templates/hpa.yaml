@@ -1,10 +1,10 @@
-{{- if .Values.authenticator.autoscaling.enabled }}
+{{- if .Values.gisInterface.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: gis-authenticator
+  name: gis-interface-server
   labels:
-    app: gis-authenticator
+    app: gis-interface-server
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: gis-authenticator
-  minReplicas: {{ .Values.authenticator.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.authenticator.autoscaling.maxReplicas }}
+    name: gis-interface-server
+  minReplicas: {{ .Values.gisInterface.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.gisInterface.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.authenticator.autoscaling.targetCPU }}
+    {{- if .Values.gisInterface.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.authenticator.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.gisInterface.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.authenticator.autoscaling.targetMemory }}
+    {{- if .Values.gisInterface.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.authenticator.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.gisInterface.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
