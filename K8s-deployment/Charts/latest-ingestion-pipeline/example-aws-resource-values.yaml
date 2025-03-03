@@ -10,6 +10,6 @@ lip:
       memory: 2.5Gi
     requests: 
       cpu: 600m
-      memory: 800Mi
+      memory: 1.5Gi
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
