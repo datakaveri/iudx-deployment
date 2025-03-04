@@ -1,0 +1,54 @@
+# Disable debug logging
+log_debug: false
+
+# Enable potentially unsafe features (development setting)
+hack_me_please: true
+
+# Proxy server configuration
+server:
+  http:
+    listen_addr: "0.0.0.0:9001"  # Listen on all interfaces, port 9001
+
+    read_timeout: 2m
+    idle_timeout: 30m
+
+
+# Proxy Users Configuration
+users:
+  - name: "chproxy_user"              # Username to access chproxy
+    password: "<password>"                 # Password for chproxy access 
+    to_cluster: "<cluster_name>"        # Routes requests to the "default" cluster
+    to_user: "admin_user"            # Maps to ClickHouse "admin" user
+    max_execution_time: 10m     # Maximum query execution time
+
+# ClickHouse Cluster Configuration
+clusters:
+  - name: "<cluster_name>"             # Cluster name
+    # ClickHouse nodes with HTTP interface ports
+    nodes: ["tasks.clickhouse-server-1:8123", "tasks.clickhouse-server-2:8123", "tasks.clickhouse-server-3:8123", "tasks.clickhouse-server-4:8123"]
+    users:
+      - name: "admin_user"           # ClickHouse user credentials
+        password: "<password>"         # Password for ClickHouse admin user
+
+        max_execution_time: 300s
+        max_queue_size: 1000
+        max_queue_time: 120s
+    
+    kill_query_user:
+      name: "admin_user"           # ClickHouse user credentials
+      password: "<password>"         # Password for ClickHouse admin user
+    
+    
+
+
+    retry_number: 3
+    # User configuration for heart beat requests.
+    # Credentials of the first user in clusters.users will be used for heart beat requests to clickhouse.
+    heartbeat:
+      # An interval for checking all cluster nodes for availability
+      # By default each node is checked for every 5 seconds.
+      interval: 2m
+      # A timeout of wait response from cluster nodes
+      # By default 3s
+      timeout: 20s
+
