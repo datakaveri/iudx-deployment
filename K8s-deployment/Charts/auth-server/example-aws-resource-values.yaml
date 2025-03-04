@@ -14,11 +14,11 @@ ingress:
 aaa:
   resources:
     limits:
-      cpu: 850m
-      memory: 1.5Gi
+      cpu: 1700m
+      memory: 2Gi
     requests: 
-      cpu: 100m
-      memory: 256Mi
+      cpu: 700m
+      memory: 1200Mi
 
   nodeSelector:
     node.kubernetes.io/instance-type: t3.medium
