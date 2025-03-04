@@ -1,0 +1,168 @@
+version: '3.9'
+
+networks:
+  default:
+    name: overlay-net
+    driver: overlay
+    external: true
+
+services:
+  minio1:
+    image: quay.io/minio/minio:RELEASE.2024-09-22T00-33-43Z
+    command: server http://tasks.minio1/data http://tasks.minio2/data http://tasks.minio3/data http://tasks.minio4/data --address 0.0.0.0:10000 --console-address 0.0.0.0:10001
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.minio-node-1==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    ports:
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host
+    secrets:
+      - source: minio.username
+        target: minio_username
+      - source: minio.password
+        target: minio_password 
+    environment:
+      - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
+      - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+      - MINIO_BROWSER_REDIRECT_URL=https://minio.iudx.io/minio/ui
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    volumes:
+      - minio_data1:/data
+
+  minio2:
+    image: quay.io/minio/minio:RELEASE.2024-09-22T00-33-43Z
+    command: server http://tasks.minio1/data http://tasks.minio2/data http://tasks.minio3/data http://tasks.minio4/data --address 0.0.0.0:10000 --console-address 0.0.0.0:10001
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.minio-node-2==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    ports:
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host
+    secrets:
+      - source: minio.username
+        target: minio_username
+      - source: minio.password
+        target: minio_password 
+    environment:
+      - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
+      - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+      - MINIO_BROWSER_REDIRECT_URL=https://minio.iudx.io/minio/ui
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    volumes:
+      - minio_data2:/data
+
+  minio3:
+    image: quay.io/minio/minio:RELEASE.2024-09-22T00-33-43Z
+    command: server http://tasks.minio1/data http://tasks.minio2/data http://tasks.minio3/data http://tasks.minio4/data --address 0.0.0.0:10000 --console-address 0.0.0.0:10001
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.minio-node-3==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    ports:
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host
+    secrets:
+      - source: minio.username
+        target: minio_username
+      - source: minio.password
+        target: minio_password 
+    environment:
+      - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
+      - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+      - MINIO_BROWSER_REDIRECT_URL=https://minio.iudx.io/minio/ui
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    volumes:
+      - minio_data3:/data
+
+  minio4:
+    image: quay.io/minio/minio:RELEASE.2024-09-22T00-33-43Z
+    command: server http://tasks.minio1/data http://tasks.minio2/data http://tasks.minio3/data http://tasks.minio4/data --address 0.0.0.0:10000 --console-address 0.0.0.0:10001
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - "node.labels.minio-node-4==true"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 10s
+    ports:
+      - target: 10000
+        published: 10000
+        mode: host
+      - target: 10001
+        published: 10001
+        mode: host
+    secrets:
+      - source: minio.username
+        target: minio_username
+      - source: minio.password
+        target: minio_password 
+    environment:
+      - MINIO_ROOT_USER_FILE=/run/secrets/minio_username
+      - MINIO_ROOT_PASSWORD_FILE=/run/secrets/minio_password
+      - MINIO_BROWSER_REDIRECT_URL=https://minio.iudx.io/minio/ui
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    volumes:
+      - minio_data4:/data
+
+volumes:
+  minio_data1:
+  minio_data2:
+  minio_data3:
+  minio_data4:
+
+secrets:
+  minio.username: 
+    file: ./secrets/passwords/minio-username
+  minio.password:
+    file: ./secrets/passwords/minio-password
