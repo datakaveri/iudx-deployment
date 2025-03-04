@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-server-headless
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: serviceHeadless
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.serviceHeadless.type }}
+  {{- if .Values.serviceHeadless.clusterIP }}
+  clusterIP: {{ .Values.serviceHeadless.clusterIP}}
+  {{- end }}
+  {{- if or (eq .Values.serviceHeadless.type "LoadBalancer") (eq .Values.serviceHeadless.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.serviceHeadless.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.serviceHeadless.type "LoadBalancer") (not (empty .Values.serviceHeadless.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.serviceHeadless.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.serviceHeadless.type "LoadBalancer") (not (empty .Values.serviceHeadless.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.serviceHeadless.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.serviceHeadless.ports}}
+      targetPort: {{ .Values.serviceHeadless.targetPorts }}
+    {{- if .Values.serviceHeadless.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.serviceHeadless.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector:
+    app: file-server

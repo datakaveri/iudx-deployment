@@ -12,7 +12,7 @@
             <meta name="${meta?split('==')[0]}" content="${meta?split('==')[1]}"/>
         </#list>
     </#if>
-    <title>${msg("loginTitle",(realm.displayName!''))}</title>
+    <title>${msg("loginTitle")}</title>
     <link rel="icon" href="${url.resourcesPath}/img/favicon.ico" />
     <#if properties.stylesCommon?has_content>
         <#list properties.stylesCommon?split(' ') as style>
@@ -39,17 +39,17 @@
 
 <body class="${properties.kcBodyClass!}">
 <nav class="navbar navbar-expand-sm w-100 bg-white">
-     <a href="https://catalogue.ugix.org.in/" class="logo-container">
+     <a href="https://gmascatalogue.gra.gov.gh/" class="logo-container">
             <img
-                src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/Sata/Country/logo.png"
-                alt=""
+                src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/Sata/ghana-cover.png"
+                alt="GMAS-logo"
                 class="logo-image"
             />
         </a>
 
      <ul class="navbar-nav ms-auto">
          <li class="nav-item">
-            <a class="nav-link" href="https://catalogue.cos.idxgh.com/">Home</a>
+            <a class="nav-link" href="https://gmascatalogue.gra.gov.gh/">Home</a>
         </li>
 	</ul>
 </nav>

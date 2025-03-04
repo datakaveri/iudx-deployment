@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: ghcr.io
   repository: datakaveri/onboarding-server-depl
-  tag: 1.0.0-73d255b
+  tag: 1.0.1-229ff0b
   pullSecrets: 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -108,22 +108,22 @@ podAnnotations:
   prometheus.io/port: "9000"
   prometheus.io/scrape: "true"
 
-## @section apiServer Parameters
-apiServer:
+## @section onboardingServer Parameters
+onboardingServer:
 
-## @param apiServer.replicaCount Number of apiServer replicas to deploy
+## @param onboardingServer.replicaCount Number of onboardingServer replicas to deploy
   ##
   replicaCount: 1
   
-  ## Configure extra options for apiServer containers' liveness and readiness probes
+  ## Configure extra options for onboardingServer containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param apiServer.livenessProbe.enabled Enable livenessProbe on apiServer containers
-  ## @param apiServer.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param apiServer.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param apiServer.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param apiServer.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param apiServer.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param apiServer.livenessProbe.path Path for httpGet
+  ## @param onboardingServer.livenessProbe.enabled Enable livenessProbe on onboardingServer containers
+  ## @param onboardingServer.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param onboardingServer.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param onboardingServer.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param onboardingServer.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param onboardingServer.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## @param onboardingServer.livenessProbe.path Path for httpGet
   ##
   livenessProbe:
     enabled: true
@@ -133,12 +133,12 @@ apiServer:
     timeoutSeconds: 10
     #failureThreshold: 10
     #successThreshold: 10
-  ## @param apiServer.readinessProbe.enabled Enable readinessProbe on apiServer containers
-  ## @param apiServer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param apiServer.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param apiServer.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param apiServer.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param apiServer.readinessProbe.successThreshold Success threshold for readinessProbe
+  ## @param onboardingServer.readinessProbe.enabled Enable readinessProbe on onboardingServer containers
+  ## @param onboardingServer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param onboardingServer.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param onboardingServer.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param onboardingServer.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param onboardingServer.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
     enabled: false
@@ -147,12 +147,12 @@ apiServer:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param apiServer.startupProbe.enabled Enable startupProbe on apiServer containers
-  ## @param apiServer.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param apiServer.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param apiServer.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param apiServer.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param apiServer.startupProbe.successThreshold Success threshold for startupProbe
+  ## @param onboardingServer.startupProbe.enabled Enable startupProbe on onboardingServer containers
+  ## @param onboardingServer.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param onboardingServer.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param onboardingServer.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param onboardingServer.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param onboardingServer.startupProbe.successThreshold Success threshold for startupProbe
   ##
   startupProbe:
     enabled: false
@@ -161,20 +161,20 @@ apiServer:
     timeoutSeconds: 10
     failureThreshold: 10
     successThreshold: 10
-  ## @param apiServer.customLivenessProbe Custom livenessProbe that overrides the default one
+  ## @param onboardingServer.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
-  ## @param apiServer.customReadinessProbe Custom readinessProbe that overrides the default one
+  ## @param onboardingServer.customReadinessProbe Custom readinessProbe that overrides the default one
   ##
   customReadinessProbe: {}
-  ## @param apiServer.customStartupProbe Custom startupProbe that overrides the default one
+  ## @param onboardingServer.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
 
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param apiServer.podSecurityContext.enabled Enabled apiServer pods' Security Context
-  ## @param apiServer.podSecurityContext.fsGroup Set apiServer pod's Security Context fsGroup
+  ## @param onboardingServer.podSecurityContext.enabled Enabled onboardingServer pods' Security Context
+  ## @param onboardingServer.podSecurityContext.fsGroup Set onboardingServer pod's Security Context fsGroup
   ##
   podSecurityContext:
     enabled: true
@@ -183,9 +183,9 @@ apiServer:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param apiServer.containerSecurityContext.enabled Enabled apiServer containers' Security Context
-  ## @param apiServer.containerSecurityContext.runAsUser Set apiServer containers' Security Context runAsUser
-  ## @param apiServer.containerSecurityContext.runAsNonRoot Set apiServer containers' Security Context runAsNonRoot
+  ## @param onboardingServer.containerSecurityContext.enabled Enabled onboardingServer containers' Security Context
+  ## @param onboardingServer.containerSecurityContext.runAsUser Set onboardingServer containers' Security Context runAsUser
+  ## @param onboardingServer.containerSecurityContext.runAsNonRoot Set onboardingServer containers' Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -197,68 +197,68 @@ apiServer:
           - ALL
     readOnlyRootFilesystem: true
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param apiServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for apiServer
+   ## @param onboardingServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for onboardingServer
   ##
   existingConfigmap:
     
-  ## @param apiServer.command Override default container command (useful when using custom images)
+  ## @param onboardingServer.command Override default container command (useful when using custom images)
   ##
   command: ["/bin/bash"]
-  ## @param apiServer.args Override default container args (useful when using custom images)
+  ## @param onboardingServer.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.onboarding.server.apiserver.ApiServerVerticle"]
-  ## @param apiServer.hostAliases apiServer pods host aliases
+  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json"]
+  ## @param onboardingServer.hostAliases onboardingServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param apiServer.podLabels Extra labels for apiServer pods
+  ## @param onboardingServer.podLabels Extra labels for onboardingServer pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param apiServer.podAnnotations Annotations for apiServer pods
+  ## @param onboardingServer.podAnnotations Annotations for onboardingServer pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
-  ## @param apiServer.podAffinityPreset Pod affinity preset. Ignored if `apiServer.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param onboardingServer.podAffinityPreset Pod affinity preset. Ignored if `onboardingServer.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAffinityPreset: ""
-  ## @param apiServer.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `apiServer.affinity` is set. Allowed values: `soft` or `hard`
+  ## @param onboardingServer.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `onboardingServer.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: ""
-  ## Node apiServer.affinity preset
+  ## Node onboardingServer.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
   nodeAffinityPreset:
-    ## @param apiServer.nodeAffinityPreset.type Node affinity preset type. Ignored if `apiServer.affinity` is set. Allowed values: `soft` or `hard`
+    ## @param onboardingServer.nodeAffinityPreset.type Node affinity preset type. Ignored if `onboardingServer.affinity` is set. Allowed values: `soft` or `hard`
     ##
     type: ""
-    ## @param apiServer.nodeAffinityPreset.key Node label key to match. Ignored if `apiServer.affinity` is set
+    ## @param onboardingServer.nodeAffinityPreset.key Node label key to match. Ignored if `onboardingServer.affinity` is set
     ##
     key: ""
-    ## @param apiServer.nodeAffinityPreset.values Node label values to match. Ignored if `apiServer.affinity` is set
+    ## @param onboardingServer.nodeAffinityPreset.values Node label values to match. Ignored if `onboardingServer.affinity` is set
     ## E.g.
     ## values:
     ##   - e2e-az1
     ##   - e2e-az2
     ##
     values: []
-  ## @param apiServer.affinity Affinity for apiServer pods assignment
+  ## @param onboardingServer.affinity Affinity for onboardingServer pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `apiServer.podAffinityPreset`, `apiServer.podAntiAffinityPreset`, and `apiServer.nodeAffinityPreset` will be ignored when it's set
+  ## NOTE: `onboardingServer.podAffinityPreset`, `onboardingServer.podAntiAffinityPreset`, and `onboardingServer.nodeAffinityPreset` will be ignored when it's set
   ##
   affinity: {}
-  ## @param apiServer.nodeSelector Node labels for apiServer pods assignment
+  ## @param onboardingServer.nodeSelector Node labels for onboardingServer pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
   nodeSelector:
 
-  ## @param apiServer.tolerations Tolerations for apiServer pods assignment
+  ## @param onboardingServer.tolerations Tolerations for onboardingServer pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
-  ## @param apiServer.updateStrategy.type apiServer statefulset strategy type
+  ## @param onboardingServer.updateStrategy.type onboardingServer statefulset strategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
@@ -266,30 +266,30 @@ apiServer:
     ## Can be set to RollingUpdate or OnDelete
     ##
     ##type: RollingUpdate
-  ## @param apiServer.priorityClassName apiServer pods' priorityClassName
+  ## @param onboardingServer.priorityClassName onboardingServer pods' priorityClassName
   ##
   priorityClassName: ""
-  ## @param apiServer.schedulerName Name of the k8s scheduler (other than default) for apiServer pods
+  ## @param onboardingServer.schedulerName Name of the k8s scheduler (other than default) for onboardingServer pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param apiServer.lifecycleHooks for the apiServer container(s) to automate configuration before or after startup
+  ## @param onboardingServer.lifecycleHooks for the onboardingServer container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param apiServer.extraEnvVars Array with extra environment variables to add to apiServer nodes
+  ## @param onboardingServer.extraEnvVars Array with extra environment variables to add to onboardingServer nodes
   ## e.g:
   ## extraEnvVars:
   ##   - name: FOO
   ##     value: "bar"
   ##
   extraEnvVars: []
-  ## @param apiServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for apiServer nodes
+  ## @param onboardingServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for onboardingServer nodes
   ##
   extraEnvVarsCM: "onboarding-env"
-  ## @param apiServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for apiServer nodes
+  ## @param onboardingServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for onboardingServer nodes
   ##
   extraEnvVarsSecret:
-  ## @param apiServer.extraVolumes Optionally specify extra list of additional volumes for the apiServer pod(s)
+  ## @param onboardingServer.extraVolumes Optionally specify extra list of additional volumes for the onboardingServer pod(s)
   ##
   extraVolumes:
     - name: onboarding-config
@@ -298,7 +298,7 @@ apiServer:
     - name: onboarding-tmp
       emptyDir:
         medium: Memory
-  ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
+  ## @param onboardingServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the onboardingServer container(s)
   ##
   extraVolumeMounts: 
     - name: onboarding-config
@@ -306,7 +306,7 @@ apiServer:
     - name: onboarding-tmp        
       mountPath: /tmp
   
-  ## @param apiServer.sidecars Add additional sidecar containers to the apiServer pod(s)
+  ## @param onboardingServer.sidecars Add additional sidecar containers to the onboardingServer pod(s)
   ## e.g:
   ## sidecars:
   ## - name: your-image-name
@@ -318,7 +318,7 @@ apiServer:
   ##
 
   sidecars: {}
-  ## @param apiServer.initContainers Add additional init containers to the apiServer pod(s)
+  ## @param onboardingServer.initContainers Add additional init containers to the onboardingServer pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -329,11 +329,11 @@ apiServer:
   ##
   initContainers: {}
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param apiServer.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param apiServer.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param apiServer.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param apiServer.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param apiServer.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param onboardingServer.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
+  ## @param onboardingServer.autoscaling.minReplicas Minimum number of Apache replicas
+  ## @param onboardingServer.autoscaling.maxReplicas Maximum number of Apache replicas
+  ## @param onboardingServer.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param onboardingServer.autoscaling.targetMemory Target Memory utilization percentage
 
   
   autoscaling:
@@ -342,943 +342,10 @@ apiServer:
     maxReplicas: 7
     targetCPU: 80
     #targetMemory:
-
-## @section catalogue Parameters
-catalogue:
-
-## @param catalogue.replicaCount Number of catalogue replicas to deploy
-  ##
-  replicaCount: 1
-  
-  ## Configure extra options for catalogue containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param catalogue.livenessProbe.enabled Enable livenessProbe on catalogue containers
-  ## @param catalogue.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param catalogue.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param catalogue.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param catalogue.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param catalogue.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param catalogue.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param catalogue.readinessProbe.enabled Enable readinessProbe on catalogue containers
-  ## @param catalogue.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param catalogue.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param catalogue.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param catalogue.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param catalogue.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param catalogue.startupProbe.enabled Enable startupProbe on catalogue containers
-  ## @param catalogue.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param catalogue.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param catalogue.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param catalogue.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param catalogue.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param catalogue.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param catalogue.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param catalogue.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param catalogue.podSecurityContext.enabled Enabled catalogue pods' Security Context
-  ## @param catalogue.podSecurityContext.fsGroup Set catalogue pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param catalogue.containerSecurityContext.enabled Enabled catalogue containers' Security Context
-  ## @param catalogue.containerSecurityContext.runAsUser Set catalogue containers' Security Context runAsUser
-  ## @param catalogue.containerSecurityContext.runAsNonRoot Set catalogue containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-        drop:
-          - ALL
-    readOnlyRootFilesystem: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param catalogue.existingConfigmap The name of an existing ConfigMap with your custom configuration for catalogue
-  ##
-  existingConfigmap:
-    
-  ## @param catalogue.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param catalogue.args Override default container args (useful when using custom images)
-  ##
-  
-  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.onboarding.server.catalogue.CatalogueVerticle"]
-  ## @param catalogue.hostAliases catalogue pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param catalogue.podLabels Extra labels for catalogue pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param catalogue.podAnnotations Annotations for catalogue pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param catalogue.podAffinityPreset Pod affinity preset. Ignored if `catalogue.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param catalogue.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `catalogue.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node catalogue.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param catalogue.nodeAffinityPreset.type Node affinity preset type. Ignored if `catalogue.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param catalogue.nodeAffinityPreset.key Node label key to match. Ignored if `catalogue.affinity` is set
-    ##
-    key: ""
-    ## @param catalogue.nodeAffinityPreset.values Node label values to match. Ignored if `catalogue.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param catalogue.affinity Affinity for catalogue pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `catalogue.podAffinityPreset`, `catalogue.podAntiAffinityPreset`, and `catalogue.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param catalogue.nodeSelector Node labels for catalogue pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-
-  ## @param catalogue.tolerations Tolerations for catalogue pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param catalogue.updateStrategy.type catalogue statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param catalogue.priorityClassName catalogue pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param catalogue.schedulerName Name of the k8s scheduler (other than default) for catalogue pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param catalogue.lifecycleHooks for the catalogue container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param catalogue.extraEnvVars Array with extra environment variables to add to catalogue nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param catalogue.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for catalogue nodes
-  ##
-  extraEnvVarsCM: "onboarding-env"
-  ## @param catalogue.extraEnvVarsSecret Name of existing Secret containing extra env vars for catalogue nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param catalogue.extraVolumes Optionally specify extra list of additional volumes for the catalogue pod(s)
-  ##
-  extraVolumes:
-    - name: onboarding-config
-      secret:
-        secretName: onboarding-config
-    - name: onboarding-tmp
-      emptyDir:
-        medium: Memory
-  ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
-  ##
-  extraVolumeMounts: 
-    - name: onboarding-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: onboarding-tmp        
-      mountPath: /tmp
-  
-  ## @param catalogue.sidecars Add additional sidecar containers to the catalogue pod(s)
-  ## e.g:
-  ## sidecars:
-  ## - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-
-  sidecars: {}
-  ## @param catalogue.initContainers Add additional init containers to the catalogue pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param catalogue.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param catalogue.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param catalogue.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param catalogue.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param catalogue.autoscaling.targetMemory Target Memory utilization percentage
-
-  
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 7
-    targetCPU: 80
-    #targetMemory:
-
-## @section token Parameters
-token:
-
-## @param token.replicaCount Number of token replicas to deploy
-  ##
-  replicaCount: 1
-  
-  ## Configure extra options for token containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param token.livenessProbe.enabled Enable livenessProbe on token containers
-  ## @param token.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param token.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param token.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param token.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param token.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param token.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param token.readinessProbe.enabled Enable readinessProbe on token containers
-  ## @param token.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param token.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param token.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param token.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param token.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param token.startupProbe.enabled Enable startupProbe on token containers
-  ## @param token.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param token.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param token.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param token.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param token.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param token.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param token.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param token.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param token.podSecurityContext.enabled Enabled token pods' Security Context
-  ## @param token.podSecurityContext.fsGroup Set token pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param token.containerSecurityContext.enabled Enabled token containers' Security Context
-  ## @param token.containerSecurityContext.runAsUser Set token containers' Security Context runAsUser
-  ## @param token.containerSecurityContext.runAsNonRoot Set token containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-        drop:
-          - ALL
-    readOnlyRootFilesystem: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param token.existingConfigmap The name of an existing ConfigMap with your custom configuration for token
-  ##
-  existingConfigmap:
-    
-  ## @param token.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param token.args Override default container args (useful when using custom images)
-  ##
-  
-  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.onboarding.server.token.TokenVerticle"]
-  ## @param token.hostAliases token pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param token.podLabels Extra labels for token pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param token.podAnnotations Annotations for token pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param token.podAffinityPreset Pod affinity preset. Ignored if `token.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param token.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `token.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node token.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param token.nodeAffinityPreset.type Node affinity preset type. Ignored if `token.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param token.nodeAffinityPreset.key Node label key to match. Ignored if `token.affinity` is set
-    ##
-    key: ""
-    ## @param token.nodeAffinityPreset.values Node label values to match. Ignored if `token.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param token.affinity Affinity for token pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `token.podAffinityPreset`, `token.podAntiAffinityPreset`, and `token.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param token.nodeSelector Node labels for token pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-
-  ## @param token.tolerations Tolerations for token pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param token.updateStrategy.type token statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param token.priorityClassName token pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param token.schedulerName Name of the k8s scheduler (other than default) for token pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param token.lifecycleHooks for the token container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param token.extraEnvVars Array with extra environment variables to add to token nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param token.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for token nodes
-  ##
-  extraEnvVarsCM: "onboarding-env"
-  ## @param token.extraEnvVarsSecret Name of existing Secret containing extra env vars for token nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param token.extraVolumes Optionally specify extra list of additional volumes for the token pod(s)
-  ##
-  extraVolumes:
-    - name: onboarding-config
-      secret:
-        secretName: onboarding-config
-    - name: onboarding-tmp
-      emptyDir:
-        medium: Memory
-  ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
-  ##
-  extraVolumeMounts: 
-    - name: onboarding-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: onboarding-tmp        
-      mountPath: /tmp
-  
-  ## @param token.sidecars Add additional sidecar containers to the token pod(s)
-  ## e.g:
-  ## sidecars:
-  ## - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-
-  sidecars: {}
-  ## @param token.initContainers Add additional init containers to the token pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param token.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param token.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param token.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param token.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param token.autoscaling.targetMemory Target Memory utilization percentage
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 7
-    targetCPU: 80
-    #targetMemory:
-
-## @section resourceServer Parameters
-resourceServer:
-## @param resourceServer.replicaCount Number of resourceServer replicas to deploy
-  ##
-  replicaCount: 1
-  
-  ## Configure extra options for resourceServer containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param resourceServer.livenessProbe.enabled Enable livenessProbe on resourceServer containers
-  ## @param resourceServer.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param resourceServer.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param resourceServer.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param resourceServer.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param resourceServer.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param resourceServer.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param resourceServer.readinessProbe.enabled Enable readinessProbe on resourceServer containers
-  ## @param resourceServer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param resourceServer.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param resourceServer.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param resourceServer.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param resourceServer.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param resourceServer.startupProbe.enabled Enable startupProbe on resourceServer containers
-  ## @param resourceServer.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param resourceServer.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param resourceServer.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param resourceServer.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param resourceServer.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param resourceServer.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param resourceServer.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param resourceServer.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param resourceServer.podSecurityContext.enabled Enabled resourceServer pods' Security Context
-  ## @param resourceServer.podSecurityContext.fsGroup Set resourceServer pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param resourceServer.containerSecurityContext.enabled Enabled resourceServer containers' Security Context
-  ## @param resourceServer.containerSecurityContext.runAsUser Set resourceServer containers' Security Context runAsUser
-  ## @param resourceServer.containerSecurityContext.runAsNonRoot Set resourceServer containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-        drop:
-          - ALL
-    readOnlyRootFilesystem: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param resourceServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for resourceServer
-  ##
-  existingConfigmap:
-    
-  ## @param resourceServer.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param resourceServer.args Override default container args (useful when using custom images)
-  ##
-  
-  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.onboarding.server.resourceserver.ResourceServerVerticle"]
-  ## @param resourceServer.hostAliases resourceServer pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param resourceServer.podLabels Extra labels for resourceServer pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param resourceServer.podAnnotations Annotations for resourceServer pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param resourceServer.podAffinityPreset Pod affinity preset. Ignored if `resourceServer.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param resourceServer.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `resourceServer.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node resourceServer.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param resourceServer.nodeAffinityPreset.type Node affinity preset type. Ignored if `resourceServer.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param resourceServer.nodeAffinityPreset.key Node label key to match. Ignored if `resourceServer.affinity` is set
-    ##
-    key: ""
-    ## @param resourceServer.nodeAffinityPreset.values Node label values to match. Ignored if `resourceServer.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param resourceServer.affinity Affinity for resourceServer pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `resourceServer.podAffinityPreset`, `resourceServer.podAntiAffinityPreset`, and `resourceServer.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param resourceServer.nodeSelector Node labels for resourceServer pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-
-  ## @param resourceServer.tolerations Tolerations for resourceServer pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param resourceServer.updateStrategy.type resourceServer statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param resourceServer.priorityClassName resourceServer pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param resourceServer.schedulerName Name of the k8s scheduler (other than default) for resourceServer pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param resourceServer.lifecycleHooks for the resourceServer container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param resourceServer.extraEnvVars Array with extra environment variables to add to resourceServer nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param resourceServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for resourceServer nodes
-  ##
-  extraEnvVarsCM: "onboarding-env"
-  ## @param resourceServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for resourceServer nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param resourceServer.extraVolumes Optionally specify extra list of additional volumes for the resourceServer pod(s)
-  ##
-  extraVolumes:
-    - name: onboarding-config
-      secret:
-        secretName: onboarding-config
-    - name: onboarding-tmp
-      emptyDir:
-        medium: Memory
-  ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
-  ##
-  extraVolumeMounts: 
-    - name: onboarding-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: onboarding-tmp        
-      mountPath: /tmp
-  
-  ## @param resourceServer.sidecars Add additional sidecar containers to the resourceServer pod(s)
-  ## e.g:
-  ## sidecars:
-  ## - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-
-  sidecars: {}
-  ## @param resourceServer.initContainers Add additional init containers to the resourceServer pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param resourceServer.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param resourceServer.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param resourceServer.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param resourceServer.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param resourceServer.autoscaling.targetMemory Target Memory utilization percentage
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 7
-    targetCPU: 80
-    #targetMemory:
-
-## @section ingestion Parameters
-ingestion:
-## @param ingestion.replicaCount Number of ingestion replicas to deploy
-  ##
-  replicaCount: 1
-  
-  ## Configure extra options for ingestion containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param ingestion.livenessProbe.enabled Enable livenessProbe on ingestion containers
-  ## @param ingestion.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param ingestion.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param ingestion.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param ingestion.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param ingestion.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## @param ingestion.livenessProbe.path Path for httpGet
-  ##
-  livenessProbe:
-    enabled: true
-    path: /metrics
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 10
-    #failureThreshold: 10
-    #successThreshold: 10
-  ## @param ingestion.readinessProbe.enabled Enable readinessProbe on ingestion containers
-  ## @param ingestion.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param ingestion.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param ingestion.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param ingestion.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param ingestion.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param ingestion.startupProbe.enabled Enable startupProbe on ingestion containers
-  ## @param ingestion.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param ingestion.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param ingestion.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param ingestion.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param ingestion.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    timeoutSeconds: 10
-    failureThreshold: 10
-    successThreshold: 10
-  ## @param ingestion.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param ingestion.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param ingestion.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ingestion.podSecurityContext.enabled Enabled ingestion pods' Security Context
-  ## @param ingestion.podSecurityContext.fsGroup Set ingestion pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    fsGroup: 1001
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ingestion.containerSecurityContext.enabled Enabled ingestion containers' Security Context
-  ## @param ingestion.containerSecurityContext.runAsUser Set ingestion containers' Security Context runAsUser
-  ## @param ingestion.containerSecurityContext.runAsNonRoot Set ingestion containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsNonRoot: true
-    runAsUser: 1001
-    allowPrivilegeEscalation: false
-    capabilities:
-        drop:
-          - ALL
-    readOnlyRootFilesystem: true
-   #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
-   ## @param ingestion.existingConfigmap The name of an existing ConfigMap with your custom configuration for ingestion
-  ##
-  existingConfigmap:
-    
-  ## @param ingestion.command Override default container command (useful when using custom images)
-  ##
-  command: ["/bin/bash"]
-  ## @param ingestion.args Override default container args (useful when using custom images)
-  ##
-  
-  args: ["-c","exec java $$ONBOARDING_JAVA_OPTS  -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.onboarding.server.ingestion.IngestionVerticle"]
-  ## @param ingestion.hostAliases ingestion pods host aliases
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param ingestion.podLabels Extra labels for ingestion pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param ingestion.podAnnotations Annotations for ingestion pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  ## @param ingestion.podAffinityPreset Pod affinity preset. Ignored if `ingestion.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param ingestion.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `ingestion.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: ""
-  ## Node ingestion.affinity preset
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param ingestion.nodeAffinityPreset.type Node affinity preset type. Ignored if `ingestion.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param ingestion.nodeAffinityPreset.key Node label key to match. Ignored if `ingestion.affinity` is set
-    ##
-    key: ""
-    ## @param ingestion.nodeAffinityPreset.values Node label values to match. Ignored if `ingestion.affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param ingestion.affinity Affinity for ingestion pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: `ingestion.podAffinityPreset`, `ingestion.podAntiAffinityPreset`, and `ingestion.nodeAffinityPreset` will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param ingestion.nodeSelector Node labels for ingestion pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector:
-
-  ## @param ingestion.tolerations Tolerations for ingestion pods assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param ingestion.updateStrategy.type ingestion statefulset strategy type
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-  ##
-  updateStrategy:
-    ## StrategyType
-    ## Can be set to RollingUpdate or OnDelete
-    ##
-    ##type: RollingUpdate
-  ## @param ingestion.priorityClassName ingestion pods' priorityClassName
-  ##
-  priorityClassName: ""
-  ## @param ingestion.schedulerName Name of the k8s scheduler (other than default) for ingestion pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param ingestion.lifecycleHooks for the ingestion container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param ingestion.extraEnvVars Array with extra environment variables to add to ingestion nodes
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param ingestion.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ingestion nodes
-  ##
-  extraEnvVarsCM: "onboarding-env"
-  ## @param ingestion.extraEnvVarsSecret Name of existing Secret containing extra env vars for ingestion nodes
-  ##
-  extraEnvVarsSecret:
-  ## @param ingestion.extraVolumes Optionally specify extra list of additional volumes for the ingestion pod(s)
-  ##
-  extraVolumes:
-    - name: onboarding-config
-      secret:
-        secretName: onboarding-config
-    - name: onboarding-tmp
-      emptyDir:
-        medium: Memory
-  ## @param apiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the apiServer container(s)
-  ##
-  extraVolumeMounts: 
-    - name: onboarding-config
-      mountPath: /usr/share/app/secrets/configs
-    - name: onboarding-tmp        
-      mountPath: /tmp
-  
-  ## @param ingestion.sidecars Add additional sidecar containers to the ingestion pod(s)
-  ## e.g:
-  ## sidecars:
-  ## - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-
-  sidecars: {}
-  ## @param ingestion.initContainers Add additional init containers to the ingestion pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: {}
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param ingestion.autoscaling.enabled Enable Horizontal POD autoscaling for Apache
-  ## @param ingestion.autoscaling.minReplicas Minimum number of Apache replicas
-  ## @param ingestion.autoscaling.maxReplicas Maximum number of Apache replicas
-  ## @param ingestion.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param ingestion.autoscaling.targetMemory Target Memory utilization percentage
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 7
-    targetCPU: 80
-    #targetMemory:
-
 
 ## @section Traffic Exposure Parameters
 
-## apiServer service parameters
+## onboardingServer service parameters
 ##
 service:
   ## @param service.type ApiServer service type
@@ -1299,32 +366,32 @@ service:
   ## clusterIP: None
   ##
   clusterIP:
-  ## @param service.loadBalancerIP apiServer service Load Balancer IP
+  ## @param service.loadBalancerIP onboardingServer service Load Balancer IP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP:
-  ## @param service.loadBalancerSourceRanges apiServer service Load Balancer sources
+  ## @param service.loadBalancerSourceRanges onboardingServer service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
   ##
   loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy apiServer service external traffic policy
+  ## @param service.externalTrafficPolicy onboardingServer service external traffic policy
   ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.annotations Additional custom annotations for apiServer service
+  ## @param service.annotations Additional custom annotations for onboardingServer service
   ##
   annotations: {}
-  ## @param service.extraPorts Extra ports to expose in apiServer service (normally used with the `sidecars` value)
+  ## @param service.extraPorts Extra ports to expose in onboardingServer service (normally used with the `sidecars` value)
   ##
   extraPorts: []
-## apiServer ingress parameters
+## onboardingServer ingress parameters
 ## ref: http://kubernetes.io/docs/user-guide/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress record generation for apiServer
+  ## @param ingress.enabled Enable ingress record generation for onboardingServer
   ##
   enabled: true
   ## @param ingress.pathType Ingress path type
@@ -1495,4 +562,3 @@ serviceAccount:
   ## If not set and create is true, a name is generated using the common.names.fullname template
   ##
   name: ""
-

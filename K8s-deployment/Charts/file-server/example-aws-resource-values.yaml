@@ -9,112 +9,15 @@ ingress:
 ## @param apiServer.resources.limits The resources limits for the apiServer containers
 ## @param apiServer.resources.requests The requested resources for the apiServer containers
 ##
-apiServer:
+fileServer:
   nodeSelector:
     node.kubernetes.io/instance-type: t3a.medium
   resources:
     limits:
-      cpu: 1000m
-      memory: 1200Mi
+      cpu: 1700m
+      memory: 2.0Gi
     requests: 
       cpu: 700m
       memory: 1200Mi
   persistence:
     storageClass: "ebs-csi-storage-class"
-
-## authenticator resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param authenticator.resources.limits The resources limits for the authenticator containers
-## @param authenticator.resources.requests The requested resources for the authenticator containers
-##
-authenticator:
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3a.medium
-  resources:
-    limits:
-      cpu: 600m
-      memory: 750Mi
-    requests: 
-      cpu: 500m
-      memory: 500Mi
-
-## databroker resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param databroker.resources.limits The resources limits for the databroker containers
-## @param databroker.resources.requests The requested resources for the databroker containers
-##
-databroker:
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3a.medium
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests: 
-      cpu: 400m
-      memory: 400Mi
-
-
-## Database resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param database.resources.limits The resources limits for the Database containers
-  ## @param database.resources.requests The requested resources for the Database containers
-  ##
-database:
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3a.medium
-  resources:
-    limits:
-      cpu: 600m
-      memory: 800Mi
-    requests: 
-      cpu: 400m
-      memory: 800Mi
-
-
-## Auditing resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param auditing.resources.limits The resources limits for the Auditing containers
-  ## @param auditing.resources.requests The requested resources for the Auditing containers
-  ##
-auditing:
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3a.medium
-  resources:
-    limits:
-      cpu: 500m
-      memory: 750Mi
-    requests: 
-      cpu: 500m
-      memory: 700Mi
-## postgres resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param postgres.resources.limits The resources limits for the postgres containers
-## @param postgres.resources.requests The requested resources for the postgres containers
-##
-postgres:
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3a.medium
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1Gi
-    requests: 
-      cpu: 800m
-      memory: 800Mi
-
-## cache resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param cache.resources.limits The resources limits for the cache containers
-## @param cache.resources.requests The requested resources for the cache containers
-##
-cache:
-  nodeSelector:
-    node.kubernetes.io/instance-type: t3a.medium
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1Gi
-    requests: 
-      cpu: 800m
-      memory: 800Mi

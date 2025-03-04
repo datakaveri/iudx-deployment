@@ -1,0 +1,40 @@
+{{- if .Values.diServer.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: di-server
+  labels:
+    app: di-server
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: di-server
+  minReplicas: {{ .Values.diServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.diServer.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.diServer.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.diServer.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.diServer.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.diServer.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,40 @@
+{{- if .Values.fileServer.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: file-server
+  labels:
+    app: file-server
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: file-server
+  minReplicas: {{ .Values.fileServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.fileServer.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.fileServer.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.fileServer.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.fileServer.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.fileServer.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}
