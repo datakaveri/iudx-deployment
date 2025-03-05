@@ -74,6 +74,9 @@ readinessProbe:
   httpGet:
     path: /api/health
     port: 3000
+  initialDelaySeconds: 120
+  timeoutSeconds: 5
+  failureThreshold: 5
 
 livenessProbe:
   httpGet:
@@ -695,28 +698,28 @@ alerting: {}
 ## Configure notifiers
 ## ref: http://docs.grafana.org/administration/provisioning/#alert-notification-channels
 ##
-notifiers:
-  notifiers.yaml:
-    apiVersion: 1
+#notifiers:
+# notifiers.yaml:
+#apiVersion: 1
 
-    notifiers:
-      - name: Telegram-notification
-        type: telegram
-        uid: notifier1
+  # notifiers:
+  # - name: Telegram-notification
+      #type: telegram
+      # uid: notifier1
         # either
-        org_id: 1
+        # org_id: 1
         # or
-        is_default: false
-        send_reminder: true
-        frequency: 1h
-        disable_resolve_message: false
+        #is_default: false
+        #send_reminder: true
+        #frequency: 1h
+        #disable_resolve_message: false
         # See `Supported Settings` section for settings supported for each
         # alert notification type.
-        settings:
-          chatid: $TELEGRAM_CHAT_ID
+        #settings:
+        #chatid: $TELEGRAM_CHAT_ID
         # Secure settings that will be encrypted in the database (supported since Grafana v7.2). See `Supported Settings` section for secure settings supported for each notifier.
-        secure_settings:
-          bottoken: $TELEGRAM_BOT_TOKEN
+        #secure_settings:
+          #bottoken: $TELEGRAM_BOT_TOKEN
 
 
 #  notifiers.yaml:
@@ -874,6 +877,9 @@ smtp:
 ## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
 ## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
 sidecar:
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
   image:
     # -- The Docker registry
     registry: quay.io
@@ -882,12 +888,6 @@ sidecar:
     sha: ""
   imagePullPolicy: IfNotPresent
   resources: {}
-#   limits:
-#     cpu: 100m
-#     memory: 100Mi
-#   requests:
-#     cpu: 50m
-#     memory: 50Mi
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
