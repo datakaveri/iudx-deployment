@@ -1,0 +1,143 @@
+version: '3.9'
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  jobmanager:
+    image: ghcr.io/datakaveri/flink:1.20-2
+    hostname: jobmanager
+    configs:
+      - source: config
+        target: /opt/flink/conf/flink-conf.yaml
+      - source: jm-console-properties
+        target: /opt/flink/conf/log4j-console.properties
+    restart: on-failure
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+<<<<<<< HEAD
+          - "node.labels.flink-jobmanager-node==true"
+    volumes:
+      - jars:/tmp/flink/flink-web-upload/
+=======
+          - "node.labels.flink-node==true"
+>>>>>>> parent of f88fcb1 (Updated config to support flink jobmanager clustering)
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    ports:
+    command: "jobmanager"
+
+<<<<<<< HEAD
+  jobmanager2:
+    image: ghcr.io/datakaveri/flink:1.20-1
+    hostname: jobmanager2
+    configs:
+      - source: flink-jm2-conf
+        target: /opt/flink/conf/flink-conf.yaml
+      - source: jm-console-properties
+        target: /opt/flink/conf/log4j-console.properties
+    restart: on-failure
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.flink-jobmanager-node==true"
+    volumes:
+      - jars:/tmp/flink/flink-web-upload/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    command: "jobmanager"
+
+  jobmanager3:
+    image: ghcr.io/datakaveri/flink:1.20-1
+    hostname: jobmanager3
+    configs:
+      - source: flink-jm3-conf
+        target: /opt/flink/conf/flink-conf.yaml
+      - source: jm-console-properties
+        target: /opt/flink/conf/log4j-console.properties
+    restart: on-failure
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.flink-jobmanager-node==true"
+    volumes:
+      - jars:/tmp/flink/flink-web-upload/
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    command: "jobmanager"
+=======
+
+>>>>>>> parent of f88fcb1 (Updated config to support flink jobmanager clustering)
+
+  taskmanager:
+    image: ghcr.io/datakaveri/flink:1.20-2
+    hostname: taskmanager
+    configs:
+      - source: config
+        target: /opt/flink/conf/flink-conf.yaml
+      - source: tm-console-properties
+        target: /opt/flink/conf/log4j-console.properties:rw
+    restart: on-failure
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 4
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.flink-taskmanager-node==true"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    command: "taskmanager"
+
+
+volumes:
+  jars:
+
+configs:
+  jm-console-properties:
+    file: ./secrets/flink-jobmanager/log4j-console.properties
+  tm-console-properties:
+    file: ./secrets/flink-taskmanager/log4j-console.properties
+  config:
+    file: ./secrets/flink-conf.yaml
+  

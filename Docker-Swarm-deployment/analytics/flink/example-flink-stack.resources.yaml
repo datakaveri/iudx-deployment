@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  jobmanager:
+    deploy:
+      resources: 
+        limits:
+          cpus: '1.50'
+          memory: 6G
+        reservations:
+          cpus: '0.5'   
+          memory: 3G
+  taskmanager:
+    deploy:
+      resources: 
+        limits:
+          cpus: '1.50'
+          memory: 4G
+        reservations:
+          cpus: '0.5'   
+          memory: 2G
