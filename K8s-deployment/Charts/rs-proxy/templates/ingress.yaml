@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: resource-server-proxy
+  name: rs-proxy
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: ingress
     {{- if .Values.commonLabels }}

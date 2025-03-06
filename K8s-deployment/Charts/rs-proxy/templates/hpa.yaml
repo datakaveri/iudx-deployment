@@ -1,10 +1,10 @@
-{{- if and .Values.databroker.enabled .Values.databroker.autoscaling.enabled }}
+{{- if and .Values.rsProxy.enabled .Values.rsProxy.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: rs-proxy-databroker
+  name: rs-proxy
   labels:
-    app: rs-proxy-databroker
+    app: rs-proxy
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: rs-proxy-databroker
-  minReplicas: {{ .Values.databroker.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.databroker.autoscaling.maxReplicas }}
+    name: rs-proxy
+  minReplicas: {{ .Values.rsProxy.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.rsProxy.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.databroker.autoscaling.targetCPU }}
+    {{- if .Values.rsProxy.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.databroker.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.rsProxy.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.databroker.autoscaling.targetMemory }}
+    {{- if .Values.rsProxy.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.databroker.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.rsProxy.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}

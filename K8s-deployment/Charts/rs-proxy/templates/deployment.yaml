@@ -1,0 +1,163 @@
+{{- if .Values.rsProxy.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: rs-proxy
+  labels: 
+    app.kubernetes.io/component: rsProxy
+    app: rs-proxy
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.rsProxy.replicaCount }}
+  {{- if .Values.rsProxy.updateStrategy }}
+  strategy: {{- toYaml .Values.rsProxy.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: rs-proxy
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: rs-proxy
+        app.kubernetes.io/component: rsProxy
+        {{- if .Values.rsProxy.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.rsProxy.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.rsProxy.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.rsProxy.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.rsProxy.priorityClassName }}
+      priorityClassName: {{ .Values.rsProxy.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.rsProxy.schedulerName }}
+      schedulerName: {{ .Values.rsProxy.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.rsProxy.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.rsProxy.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.rsProxy.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: rs-proxy
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.rsProxy.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.rsProxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.rsProxy.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.rsProxy.args }}
+          args: [{{- range $index, $str := .Values.rsProxy.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.rsProxy.resources }}
+          resources: {{- toYaml .Values.rsProxy.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.rsProxy.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.rsProxy.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.rsProxy.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+              protocol: TCP
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.rsProxy.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.rsProxy.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.rsProxy.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.rsProxy.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.rsProxy.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.rsProxy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.rsProxy.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rsProxy.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.rsProxy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.rsProxy.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.rsProxy.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.rsProxy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.rsProxy.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.rsProxy.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.rsProxy.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.rsProxy.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.rsProxy.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.rsProxy.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.rsProxy.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.rsProxy.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.rsProxy.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.rsProxy.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.rsProxy.podAffinityPreset "component" "rsProxy" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.rsProxy.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "rsProxy" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.rsProxy.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.rsProxy.nodeAffinityPreset.type "key" .Values.rsProxy.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.rsProxy.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.rsProxy.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

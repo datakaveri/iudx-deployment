@@ -1,8 +1,8 @@
-{{- if .Values.apiServer.enabled -}}
+{{- if .Values.rsProxy.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: rs-proxy-api-server
+  name: rs-proxy
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: service
     {{- if .Values.commonLabels }}
@@ -33,5 +33,5 @@ spec:
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector:
-    app: rs-proxy-api-server
+    app: rs-proxy
 {{- end }}
