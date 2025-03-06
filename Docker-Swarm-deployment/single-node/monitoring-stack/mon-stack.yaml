@@ -104,7 +104,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   grafana:
-    image: ghcr.io/datakaveri/grafana:10.2.3
+    image: ghcr.io/datakaveri/grafana:11.4.0
     read_only: true
     volumes:
       - type: volume
@@ -112,6 +112,12 @@ services:
         target: /var/lib/grafana
         volume:
           nocopy: true
+      - type: bind
+        source: "./grafana/conf/provisioning/dashboards/"
+        target: "/usr/share/grafana-conf/provisioning/dashboards/"  
+      - type: bind
+        source: "./grafana/conf/provisioning/alerting/"
+        target: "/usr/share/grafana-conf/provisioning/alerting/"
     secrets:
       - grafana-super-admin-passwd
       - grafana-super-admin-username
@@ -126,6 +132,8 @@ services:
         target: /usr/share/grafana-conf/custom.ini
       - source: grafana-dashboards
         target: /usr/share/grafana-conf/provisioning/dashboards/config.yaml
+      - source: grafana-alerts
+        target: /usr/share/grafana-conf/provisioning/alerting/alert_rules.yaml
       - source: grafana-datasources
         target: /usr/share/grafana-conf/provisioning/datasources/config.yaml
       # - source: grafana-notifiers
@@ -263,6 +271,8 @@ configs:
     file:  grafana/conf/custom.ini
   grafana-dashboards:
     file:  grafana/conf/provisioning/dashboards/config.yaml
+  grafana-alerts:
+    file: grafana/conf/provisioning/alerting/alert_rules.yaml
   grafana-datasources:
     file: grafana/conf/provisioning/datasources/config.yaml
   grafana-notifiers:
@@ -285,4 +295,3 @@ secrets:
     file: secrets/passwords/grafana-super-admin-username
   blackbox-targets:
     file: secrets/configs/blackbox-targets.yaml
-  
