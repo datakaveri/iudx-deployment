@@ -4,6 +4,32 @@ Configured to discover
 * Node exporters
 * Docker daemons
 
+## Update prometheus.yml config
+
+
+```sh 
+vim conf/prometheus.yml
+```
+
+#### Generate minio Job with mc cli
+ 
+1. To generate jwt for minio-job 
+
+```bash 
+mc admin prometheus generate ALIAS
+```
+
+NOTE: change ALIAS, It's the alias given when configuring the mc cli (For more infomation)[https://min.io/docs/minio/linux/reference/minio-mc.html]
+
+2. To generate jwt for minio-bucket-job 
+
+```bash 
+mc admin prometheus generate ALIAS bucket
+```
+NOTE: change ALIAS, It's the alias given when configuring the mc cli (For more infomation)[https://min.io/docs/minio/linux/reference/minio-mc.html]
+
+(Monitoring Minio with Prometheus Reference)[https://min.io/docs/minio/linux/operations/monitoring/collect-minio-metrics-using-prometheus.html]
+
 ## Build
 ```sh
 docker build -t <username>/prometheus:latest -f Dockerfile .

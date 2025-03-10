@@ -14,6 +14,7 @@ alerting:
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
   - "alertrules.yaml"
+  - "minio-alerting.yaml"
   # - "second_rules.yml"
 
 # A scrape configuration containing exactly one endpoint to scrape:
@@ -84,3 +85,17 @@ scrape_configs:
   - job_name: 'immudb-audit'
     static_configs:
       - targets: ["tasks.immudb-audit:9477"]
+
+  - job_name: minio-job
+    bearer_token: <TOKEN: Get Minio Bearer token by following README.md in prometheus directory>
+    metrics_path: /minio/v2/metrics/cluster
+    scheme: https
+    static_configs:
+    - targets: [minio.io.test]
+
+  - job_name: minio-job-bucket
+    bearer_token: <TOKEN: Get Minio Bearer token by following README.md in prometheus directory>
+    metrics_path: /minio/v2/metrics/bucket
+    scheme: https
+    static_configs:
+    - targets: [minio.io.test]
