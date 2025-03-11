@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+  redis::
+    deploy:
+      resources:
+        limits:
+          pids: 8192
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1'   
+          memory: 2M
+  superset:
+    deploy:
+      resources:
+        limits:
+          pids: 8192
+          cpus: '2.0'
+          memory: 6G
+        reservations:
+          cpus: '2'   
+          memory: 4G
+  superset-worker:
+    deploy:
+      resources:
+        limits:
+          pids: 8192
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1'   
+          memory: 2G
+  superset-worker-beat:
+    deploy:
+      resources:
+        limits:
+          pids: 8192
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1'   
+          memory: 2G
