@@ -2,10 +2,10 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: cat-api-server
+  name: catalogue-server
   labels: 
     app.kubernetes.io/component: apiServer
-    app: cat-api-server
+    app: catalogue-server
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,14 +19,14 @@ spec:
   {{- end }}
   selector:
     matchLabels: 
-      app: cat-api-server
+      app: catalogue-server
   template:
     metadata:
       {{- if .Values.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app: cat-api-server
+        app: catalogue-server
         app.kubernetes.io/component: apiServer
         {{- if .Values.apiServer.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.apiServer.podLabels "context" $) | nindent 8 }}
@@ -66,7 +66,7 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.apiServer.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: cat-api-server
+        - name: catalogue-server
           image: {{ template "catalogue.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.apiServer.containerSecurityContext.enabled }}

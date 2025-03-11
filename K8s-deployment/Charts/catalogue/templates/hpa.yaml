@@ -1,10 +1,10 @@
-{{- if and .Values.mlayer.enabled .Values.mlayer.autoscaling.enabled }}
+{{- if and .Values.apiServer.enabled .Values.apiServer.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: cat-mlayer
+  name: catalogue-server
   labels:
-    app: cat-mlayer
+    app: catalogue-server
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,24 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: cat-mlayer
-  minReplicas: {{ .Values.mlayer.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.mlayer.autoscaling.maxReplicas }}
+    name: catalogue-server
+  minReplicas: {{ .Values.apiServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.apiServer.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.mlayer.autoscaling.targetCPU }}
+    {{- if .Values.apiServer.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.mlayer.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.apiServer.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.mlayer.autoscaling.targetMemory }}
+    {{- if .Values.apiServer.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.mlayer.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.apiServer.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
