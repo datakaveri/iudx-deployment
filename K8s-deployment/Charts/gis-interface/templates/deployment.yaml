@@ -1,0 +1,175 @@
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: gis-interface-server
+  labels: 
+    app.kubernetes.io/component: gisInterface
+    app: gis-interface-server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.gisInterface.replicaCount }}
+  {{- if .Values.gisInterface.updateStrategy }}
+  strategy: {{- toYaml .Values.gisInterface.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: gis-interface-server
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: gis-interface-server
+        app.kubernetes.io/component: gisInterface
+        {{- if .Values.gisInterface.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.gisInterface.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.gisInterface.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.gisInterface.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.gisInterface.priorityClassName }}
+      priorityClassName: {{ .Values.gisInterface.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.gisInterface.schedulerName }}
+      schedulerName: {{ .Values.gisInterface.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.gisInterface.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.gisInterface.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.volumePermissions.enabled }}
+        - name: volume-permissions
+          image: {{ include "catalogue.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command: {}
+          
+          securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: foo
+              mountPath: bar
+        {{- end }}
+        {{- if .Values.gisInterface.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: gis-interface-server
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.gisInterface.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.gisInterface.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.gisInterface.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.gisInterface.args }}
+          args: [{{- range $index, $str := .Values.gisInterface.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.gisInterface.resources }}
+          resources: {{- toYaml .Values.gisInterface.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.gisInterface.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.gisInterface.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.gisInterface.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+              protocol: TCP
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.gisInterface.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.gisInterface.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.gisInterface.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.gisInterface.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.gisInterface.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.gisInterface.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.gisInterface.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.gisInterface.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.gisInterface.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.gisInterface.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.gisInterface.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.gisInterface.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.gisInterface.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.gisInterface.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.gisInterface.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.gisInterface.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.gisInterface.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.gisInterface.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.gisInterface.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.gisInterface.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.gisInterface.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.gisInterface.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.gisInterface.podAffinityPreset "component" "gisInterface" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.gisInterface.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "gisInterface" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.gisInterface.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.gisInterface.nodeAffinityPreset.type "key" .Values.gisInterface.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.gisInterface.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.gisInterface.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
