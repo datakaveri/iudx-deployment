@@ -1,0 +1,23 @@
+ingress:
+  hostname: fs-hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+  
+## fhirFileServer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param fhirFileServer.resources.limits The resources limits for the fhirFileServer containers
+## @param fhirFileServer.resources.requests The requested resources for the fhirFileServer containers
+##
+fhirFileServer:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1200Mi
+    requests: 
+      cpu: 700m
+      memory: 1200Mi
+  persistence:
+    storageClass: "azuredisk-csi-storage-class"
