@@ -1,10 +1,10 @@
-{{- if .Values.postgres.autoscaling.enabled }}
+{{- if .Values.lip.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: lip-postgres
+  name: lip
   labels:
-    app: lip-postgres
+    app: lip
     {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -17,24 +17,25 @@ spec:
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
-    name: lip-postgres
-  minReplicas: {{ .Values.postgres.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.postgres.autoscaling.maxReplicas }}
+    name: lip
+  minReplicas: {{ .Values.lip.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.lip.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.postgres.autoscaling.targetCPU }}
+    {{- if .Values.lip.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.postgres.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.lip.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.postgres.autoscaling.targetMemory }}
+    {{- if .Values.lip.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: {{ .Values.postgres.autoscaling.targetMemory  }}
+          averageUtilization: {{ .Values.lip.autoscaling.targetMemory  }}
     {{- end }}
 {{- end }}
+
