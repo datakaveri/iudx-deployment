@@ -8,118 +8,16 @@ ingress:
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 ## @param apiServer.resources.limits The resources limits for the apiServer containers
 ## @param apiServer.resources.requests The requested resources for the apiServer containers
-##
-apiServer:
+
+rsProxy:
   enabled: true
   nodeSelector:
     node.kubernetes.io/instance-type: Standard_B2s
   resources:
     limits:
-      cpu: 1000m
-      memory: 1.2Gi
+      cpu: 1400m
+      memory: 2.5Gi
     requests: 
       cpu: 700m
-      memory: 1.2Gi
-
-## authenticator resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param authenticator.resources.limits The resources limits for the authenticator containers
-## @param authenticator.resources.requests The requested resources for the authenticator containers
-##
-authenticator:
-  enabled: true
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 600m
-      memory: 750Mi
-    requests: 
-      cpu: 500m
-      memory: 500Mi
-
-## databroker resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param databroker.resources.limits The resources limits for the databroker containers
-## @param databroker.resources.requests The requested resources for the databroker containers
-##
-databroker:
-  enabled: true
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests: 
-      cpu: 400m
-      memory: 400Mi
-
-## metering resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param metering.resources.limits The resources limits for the metering containers
-## @param metering.resources.requests The requested resources for the metering containers
-##
-metering:
-  enabled: true
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 700m
-      memory: 1Gi
-    requests: 
-      cpu: 500m
-      memory: 800Mi
-
-## database resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param database.resources.limits The resources limits for the database containers
-## @param database.resources.requests The requested resources for the database containers
-##
-database:
-  enabled: true
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 600m
-      memory: 600Mi
-    requests: 
-      cpu: 400m
-      memory: 400Mi
-
-## cache resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param cache.resources.limits The resources limits for the cache containers
-## @param cache.resources.requests The requested resources for the cache containers
-##
-cache:
-  enabled: true
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 400m
-      memory: 750Mi
-    requests: 
-      cpu: 200m
-      memory: 600Mi
-
-## consentlog resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param consentlog.resources.limits The resources limits for the consentlog containers
-## @param consentlog.resources.requests The requested resources for the consentlog containers
-##
-consentlog:
-  enabled: true
-  nodeSelector:
-    node.kubernetes.io/instance-type: Standard_B2s
-  resources:
-    limits:
-      cpu: 300m
-      memory: 500Mi
-    requests: 
-      cpu: 200m
-      memory: 400Mi
+      memory: 1.5Gi
 
