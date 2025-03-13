@@ -85,9 +85,9 @@
 }
 
 .custom-pf-c-button.custom-pf-m-primary {
-  width: 100%;
+  width: 50%;
   height: auto;
-  float: left;
+  margin: auto;
   transition: 0.5s linear;
   position: relative;
   display: block;
@@ -482,4 +482,10 @@ li.active {
   a {
     color: white !important;
   }
+}
+
+.login-image-mobile {
+  min-width: 342px !important;
+  min-height: 229px;
+  margin-top: 36px;
 }

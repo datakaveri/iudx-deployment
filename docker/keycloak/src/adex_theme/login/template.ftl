@@ -38,7 +38,7 @@
 
 
 <body class="${properties.kcBodyClass!}">
-<nav class="navbar navbar-expand-sm w-100 bg-white">
+<nav class="navbar navbar-expand-lg w-100 bg-white">
      <a href="https://dataexplorer.ts.adex.org.in/" class="logo-container">
             <img
                 src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/ADeX/adex-logo.svg"
@@ -47,7 +47,7 @@
             />
         </a>
 
-     <ul class="navbar-nav ms-auto">
+     <ul class="navbar-nav ms-auto d-none d-md-block">
          <li class="nav-item">
             <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/">Home</a>
         </li>
@@ -57,16 +57,16 @@
         <li class="nav-item ">
             <a class="nav-link" href="https://canvas.ts.adex.org.in/">Explore Canvas</a>
         </li>
-        <li class="nav-item login-btn">
+        <li class="nav-item login-btn d-none d-xxl-block">
             <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/auth">Login/Register</a>
         </li>
       </ul>
 </nav>
 
-
 <div class="${properties.kcLoginClass!}">
     <div class='row'>
-        <div id='custom-card-pf' class="${properties.kcFormCardClass!} col-6">
+
+        <div id='custom-card-pf' class="${properties.kcFormCardClass!} col-12 col-xxl-6">
             <header class="${properties.kcFormHeaderClass!} ">
                 <#if realm.internationalizationEnabled  && locale.supported?size gt 1>
                     <div class="${properties.kcLocaleMainClass!}" id="kc-locale">
@@ -100,7 +100,6 @@
                     </div>
                 <#else>
                     <h1 id="kc-page-title"><#nested "header"></h1>
-                    <a href="https://dataexplorer.adex.org.in/" id="custom-logo-wrapper"></a>
                 </#if>
             <#else>
                 <#if displayRequiredFields>
@@ -175,8 +174,8 @@
             </div>
 
         </div>
-         <div class='col-6 p-0'>
-            <img  class="video" src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/ADeX/banner-logo.png" alt="" style="height: 100%">
+         <div class='col-6 p-0 d-none d-xxl-block'>
+            <img  class="video" src="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/ADeX/banner-logo.png" alt="" style="width: 100%">
         </div>
     </div>
   </div>

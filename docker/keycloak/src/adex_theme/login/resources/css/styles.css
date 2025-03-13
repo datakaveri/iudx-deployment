@@ -100,7 +100,7 @@ body {
     8px 4px 12px var(--baseDarkColor);
 }
 
-#rememberMe:checked ~ .dot {
+#rememberMe:checked~.dot {
   transform: translate3d(25%, 0, 0);
 }
 
