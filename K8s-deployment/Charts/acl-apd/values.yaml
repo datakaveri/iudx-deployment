@@ -419,7 +419,7 @@ ingress:
   ##
   ##
   ## @param ingress.serviceName Backend ingress Service Name
-  serviceName: "apd-api-server"
+  serviceName: "acl-apd-server"
   annotations: {
     kubernetes.io/tls-acme: "true",
     kubernetes.io/ingress.class: "nginx",
