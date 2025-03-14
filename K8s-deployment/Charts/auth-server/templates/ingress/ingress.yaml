@@ -30,7 +30,7 @@ metadata:
       add_header Cross-Origin-Embedder-Policy "require-corp" always;
       add_header Cross-Origin-Resource-Policy "cross-origin" always;
       # location block for serving of static image files 
-      location ~* \.(png|svg)$ {
+      location ~* \.(png|svg|css|jpg|jpeg)$ {
                         # for http to https redirect                                                                                                                                                                                           
                         rewrite_by_lua_block {                                                                                                                                                                     
                                 lua_ingress.rewrite({                                                                                                                                                              
