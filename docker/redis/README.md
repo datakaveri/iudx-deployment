@@ -20,5 +20,5 @@ Creating custom image to include the [ReJSON module](https://redis.io/docs/stack
 
 ## Build Docker Image
 ```sh
-docker build -t ghcr.io/datakaveri/redis-cluster-rejson:7.0.2-2.0.9 -f redis-cluster-rejson/Dockerfile redis-cluster-rejson
+docker build -t ghcr.io/datakaveri/redis-cluster-rejson:7.4.2-2.8.4 -f redis-cluster-rejson/Dockerfile redis-cluster-rejson
 ```
