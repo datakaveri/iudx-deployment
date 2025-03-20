@@ -23,7 +23,7 @@ controller:
     ## for backwards compatibility consider setting the full image url via the repository value below
     ## use *either* current default registry/image or repository format or installing chart by providing the values.yaml will fail
     ## repository:
-    tag: "v1.9.5"
+    tag: "v1.11.2"
     digest: sha256:54f7fe2c6c5a9db9a0ebf1131797109bb7a4d91f56b9b362bde2abd237dd1974
     digestChroot: sha256:a8466b19c621bd550b1645e27a004a5cc85009c858a9ab19490216735ac432b1
     pullPolicy: IfNotPresent
@@ -61,7 +61,7 @@ controller:
     limit-req-status-code: "429"
     log-format-escape-json: "true"
     ## json access log format
-    log-format-upstream: '{"connection_requests": "$connection_requests", "request_id": "$request_id", "request_length": "$request_length", "remote_addr": "$remote_addr", "remote_user": "$remote_user", "time_iso8601": "$time_iso8601", "request": "$request", "status": "$status", "bytes_sent": "$bytes_sent", "http_user_agent": "$http_user_agent", "http_host": "$http_host", "server_name": "$server_name", "request_time": "$request_time", "proxy_upstream_name":  "$proxy_upstream_name", "upstream_response_time": "$upstream_response_time", "upstream_response_length": "$upstream_response_length", "upstream_status": "$upstream_status", "scheme": "$scheme", "request_method": "$request_method", "server_protocol": "$server_protocol", "pipe": "$pipe", "global_rate_limit_exceeding":$global_rate_limit_exceeding"}'
+    log-format-upstream: '{"connection_requests": "$connection_requests", "request_id": "$request_id", "request_length": "$request_length", "remote_addr": "$remote_addr", "remote_user": "$remote_user", "time_iso8601": "$time_iso8601", "request": "$request", "status": "$status", "bytes_sent": "$bytes_sent", "http_user_agent": "$http_user_agent", "http_host": "$http_host", "server_name": "$server_name", "request_time": "$request_time", "proxy_upstream_name":  "$proxy_upstream_name", "upstream_response_time": "$upstream_response_time", "upstream_response_length": "$upstream_response_length", "upstream_status": "$upstream_status", "scheme": "$scheme", "request_method": "$request_method", "server_protocol": "$server_protocol", "pipe": "$pipe"}'
 
   # -- Annotations to be added to the controller config configuration configmap.
   configAnnotations: {}
@@ -707,7 +707,7 @@ controller:
         ## for backwards compatibility consider setting the full image url via the repository value below
         ## use *either* current default registry/image or repository format or installing chart by providing the values.yaml will fail
         ## repository:
-        tag: v1.3.0
+        tag: v1.4.3
         digest: sha256:549e71a6ca248c5abd51cdb73dbc3083df62cf92ed5e6147c780e30f7e007a47
         pullPolicy: IfNotPresent
       # -- Provide a priority class name to the webhook patching job
