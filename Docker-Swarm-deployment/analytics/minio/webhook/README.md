@@ -3,6 +3,11 @@
 ## Introduction
 MinIO Webhook is a lightweight service that integrates with MinIO to enable event-driven workflows. When data is uploaded to a MinIO bucket, an event is triggered that invokes the webhook. This webhook then pushes the event data to the appropriate RabbitMQ exchange.
 
+### How it works:
+- When a bucket event occurs in MinIO (e.g., an object is uploaded or deleted), MinIO sends a notification.
+- The notification is sent to a configured webhook endpoint, which is the RabbitMQ broker.
+- Other services or applications can subscribe to the RabbitMQ broker to receive and process these notifications.
+
 ## Installation
 
 ### 1. Configure the .env File
