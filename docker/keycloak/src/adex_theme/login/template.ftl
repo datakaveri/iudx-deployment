@@ -47,7 +47,7 @@
             />
         </a>
 
-     <ul class="navbar-nav ms-auto d-none d-md-block">
+     <ul class="navbar-nav ms-auto d-none d-lg-block">
          <li class="nav-item">
             <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/">Home</a>
         </li>
@@ -57,8 +57,20 @@
         <li class="nav-item ">
             <a class="nav-link" href="https://canvas.ts.adex.org.in/">Explore Canvas</a>
         </li>
+         <li class="nav-item ">
+            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/partners">Partners</a>
+        </li>
+         <li class="nav-item ">
+            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/vision">Vision</a>
+        </li>
+         <li class="nav-item ">
+            <a class="nav-link" href="https://agrijson.org/">AgriJSON</a>
+        </li>
         <li class="nav-item login-btn d-none d-xxl-block">
-            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/auth">Login/Register</a>
+            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/auth">Login</a>
+        </li>
+        <li class="nav-item register-btn d-none d-xxl-block">
+            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/auth">Register</a>
         </li>
       </ul>
 </nav>
