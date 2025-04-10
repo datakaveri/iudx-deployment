@@ -1,0 +1,417 @@
+.login-pf body {
+
+
+  background:url(../img/bg.jpg) no-repeat center center fixed, #f1f7fa;
+  background-size: cover;
+  height: 100vh;
+  padding-bottom: 30px;
+}
+
+.login-pf-page {
+  min-height: 100vh;
+}
+
+
+
+.logo-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -50px;
+  z-index: 1;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.login-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* Modify the existing card style to add margin-top for logo space */
+#custom-card-pf {
+  border: none;
+  padding: 0;
+  background-color:#e3f4f2;
+  border-radius: 10px;
+  margin: 0 auto;
+  box-shadow: var(--pf-global--BoxShadow--lg);
+  width: 460px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  border-color: var(--pf-global--primary-color--100);
+  position: absolute;
+  position: a;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+}
+/* Add media query for mobile responsiveness */
+
+#kc-form-444 {
+  padding: 0 35px 0 35px;
+  margin-top: 25px;
+}
+
+.custom-button-group {
+  float: right;
+}
+
+.custom-forgot-password a,
+.custom-button-group a {
+  color: forestgreen;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+}
+
+.custom-forgot-password a:hover,
+.custom-button-group a:hover {
+  text-decoration: none;
+}
+
+.custom-forgot-password a:hover {
+  text-decoration: none;
+}
+.form-horizontal .form-group {
+  margin: 0;
+}
+
+#form-col-full {
+  width: 100%; /* Adjust width for horizontal layout */
+  margin-bottom: 10; /* Remove bottom margin since we're using gap */
+}
+
+.custom-pf-c-form-control {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 12px 19px;
+  width: 100%;
+  outline: none;
+  color:black;
+  margin-top: 4px;
+  border-radius: 35px;
+  font-size: 12px;
+}
+
+
+
+.custom-pf-form-subTitle{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 15px;
+      padding-top: 15px;
+      color: gray;
+}
+
+/* #form-group-1,#form-group-2,#form-group-3,#form-group-4,#form-group-5{
+    width: 100%;
+} */
+
+.custom-pf-c-form-control::placeholder {
+  color: #6c6c6c;
+}
+
+.custom-pf-c-button.custom-pf-m-primary {
+  border-radius: 35px;
+  background-color: #56bfaa;
+  color: #fff;
+  border: none;
+  padding: 15px 10px;
+  width: 100%;
+  margin: 0;
+  display: block;
+  margin-bottom: 15px;
+}
+
+h1#kc-page-title {
+  font-weight: 600;
+  margin-top: 40px;
+  padding-bottom: 20px;
+}
+
+#kc-header-wrapper {
+  font-family: "Helvetica", "sans-serif";
+  display: none;
+}
+
+#custom-logo-wrapper {
+  background-image: url(../img/adex-logo.png);
+  background-size: contain;
+  width: 95px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  transform: translatey(25%);
+}
+
+.custom-pf-c-form__label-text {
+  font-weight: 400;
+  color: #6c6c6c;
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
+
+}
+
+.custom-pf-cform__otp-text{
+  font-weight: 400;
+  color: #6c6c6c;
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
+  padding-left: 50px;
+}
+
+#kc-info-wrapper {
+  background-color: transparent;
+  font-size: 14px;
+}
+
+#kc-info-wrapper a {
+  color: forestgreen;
+  font-weight: 600;
+  outline: none;
+}
+
+#kc-info-wrapper a:hover {
+  text-decoration: none;
+  color: #0088ce;
+}
+
+.custom-label-wrapper,
+.custom-input-wrapper {
+  padding: 0 20px;
+  border-radius: 40px;
+}
+
+.custom-form-group {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.custom-login-text,
+.custom-login-helper-text {
+  font-size: 14px;
+}
+
+.custom-login-text {
+  color: #0a9;
+  margin-left: 5px;
+  font-weight: 600;
+}
+
+.custom-login-helper-text {
+  text-align: start;
+}
+
+#kc-register-form {
+  padding: 0 10px 10px 10px;
+  margin-top: 25px;
+}
+
+.custom-header {
+  padding: 0 10px 0px 10px;
+  display: flex;
+  justify-content: center;
+}
+
+#kc-info {
+  margin: 0;
+}
+
+/* Password Reset */
+
+#kc-reset-password-form {
+  margin-top: 25px;
+  padding: 0 35px;
+}
+
+/* Update Password */
+
+#custom-kc-passwd-update-form{
+  padding: 0 30px;
+  margin-top: 20px
+}
+
+.pw-update-form-group{
+  margin-bottom: 20px;
+}
+
+.label-wrapper{
+  padding: 0;
+}
+
+#custom-kc-form-buttons{
+  margin: 10px 0;
+}
+/* Page expired */
+
+#custom-instruction1{
+  padding: 10px 30px;
+}
+
+#kc-form-register-buttons{
+ padding-left: 35px;
+ padding-right: 40px;
+}
+
+
+.password-fields {
+    margin-top: 20px;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  padding: 5px;
+  z-index: 10;
+}
+
+.toggle-password:hover {
+  color: #333;
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #666;
+}
+
+.row-elements{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+
+@media (max-width: 767px) {
+  #custom-card-pf {
+    position: relative;
+    transform: none;
+    left: auto;
+    right: auto;
+    width: 100%;
+    margin: 50px auto;
+}
+
+.login-pf-page {
+    align-items: flex-start;
+    /* padding: 20px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1#kc-page-title {
+  font-weight: 600;
+  margin-top: 70px;
+  padding-bottom: 20px;
+  font-size: 18px;
+}
+  .login-pf-page {
+    padding:20px;
+    text-align: start;
+  }
+
+  .login-pf body {
+    padding-bottom: 0;
+  }
+
+  #kc-header {
+    padding:0;
+  }
+
+  .custom-pf-c-form__label-text {
+    font-size: 12px;
+  }
+
+
+
+  .custom-pf-c-button.custom-pf-m-primary {
+    font-size: 16px;
+  }
+
+  .horizontal-fields {
+    flex-direction: column;
+    /* gap: 15px; */
+  }
+
+  #form-col-full {
+    width: 100%;
+  }
+
+  
+.custom-pf-form-subTitle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  padding-top: 15px;
+  color: gray;
+}
+}
+
+
+#instruction-one{
+  color:'#ddd';
+  text-align: center;
+  margin-top: 20px;
+  padding: 0 30px;
+}
+
+#instruction-two{
+  color:'#ddd'
+}
+
+#kc-registration-container{
+  text-align: start !important;
+}
+
+.labelContainer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.password-strength ul {
+  list-style: none;
+  padding: 0;
+}
+.password-strength li {
+  color: gray;
+}
+.password-strength .valid {
+  color: #0a9;
+}
+
+.otp-title{
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
