@@ -7,7 +7,7 @@ networks:
 
 services:
   minio-webhook:
-    image: minio-webhook:latest
+    image: ghcr.io/datakaveri/minio-webhook:1.0.0
     restart: on-failure
     configs:
       - source: webhook-config
