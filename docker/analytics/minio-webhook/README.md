@@ -9,5 +9,5 @@ From the root of the project (where the Dockerfile is located), run:
 
 ```bash
 # Build the Docker image
-docker build -t minio-webhook .
+docker build -t ghcr.io/datakaveri/minio-webhook:1.0.0 .
 ```
