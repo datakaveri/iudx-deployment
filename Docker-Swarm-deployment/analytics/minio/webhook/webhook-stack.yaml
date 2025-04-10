@@ -1,0 +1,36 @@
+version: '3.9'
+
+networks:
+  overlay-net:
+    external: true
+    driver: overlay
+
+services:
+  minio-webhook:
+    image: ghcr.io/datakaveri/minio-webhook:1.0.0
+    restart: on-failure
+    configs:
+      - source: webhook-config
+        target: /app/.env
+    networks:
+      - overlay-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        max_attempts: 5
+      placement:
+        constraints:
+          - "node.labels.minio-node==true"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+        tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
+    ports:
+      - 8000:8000
+
+configs:
+  webhook-config:
+    file: ./.env
