@@ -1,7 +1,7 @@
 # Grafana Installation
 ## Building Docker image
 ```sh
-docker build -t ghcr.io/datakaveri/grafana:10.2.3 --build-arg grafana_version=10.2.3 .
+docker build -t ghcr.io/datakaveri/grafana:11.6.0 --build-arg grafana_version=11.6.0 .
 ```
 ## Description
 conf directory consists of two types of configs:
