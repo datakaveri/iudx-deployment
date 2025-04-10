@@ -30,7 +30,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   prometheus:
-    image: prom/prometheus:v2.48.1
+    image: prom/prometheus:v3.2.1
     read_only: true
     volumes:
       - type: volume
@@ -67,7 +67,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
  
   loki:
-    image: grafana/loki:2.9.3
+    image: grafana/loki:3.4.3
     read_only: true
     #transfer of logs to loki over overlay
     volumes:
@@ -104,7 +104,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   grafana:
-    image: ghcr.io/datakaveri/grafana:10.2.3
+    image: ghcr.io/datakaveri/grafana:11.6.0
     read_only: true
     volumes:
       - type: volume
@@ -153,7 +153,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   promtail:
-    image: grafana/promtail:2.9.3
+    image: grafana/promtail:3.4.3
     read_only: true
     entrypoint: /run.sh
     user: root
@@ -189,7 +189,7 @@ services:
         tag: "{\"name\":\"{{.Name}}\",\"id\":\"{{.ID}}\"}"
 
   blackbox:
-    image: prom/blackbox-exporter:v0.24.0
+    image: prom/blackbox-exporter:v0.26.0
     read_only: true
     deploy:
       placement:
