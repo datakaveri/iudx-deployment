@@ -1,8 +1,6 @@
-FROM maven:latest as deps
-
 FROM flink:1.20
 
-ENV TZ=Africa/Accra
+ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
