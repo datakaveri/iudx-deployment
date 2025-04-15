@@ -74,6 +74,11 @@ spec:
           resources: {{- toYaml .Values.fhirOnboardingServer.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
           {{- if .Values.fhirOnboardingServer.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.fhirOnboardingServer.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -157,6 +162,13 @@ spec:
         {{- end }}
       {{- end }}
       volumes:
+        - name: data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: fhir-onb-data
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
         {{- if .Values.fhirOnboardingServer.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.fhirOnboardingServer.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

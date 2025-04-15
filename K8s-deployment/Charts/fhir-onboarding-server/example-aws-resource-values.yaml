@@ -19,5 +19,6 @@ fhirOnboardingServer:
     requests: 
       cpu: 700m
       memory: 1200Mi
-  persistence:
-    storageClass: "ebs-csi-storage-class"
+persistence:
+  storageClass: "ebs-csi-storage-class"
+  size: 100G
