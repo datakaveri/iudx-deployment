@@ -195,7 +195,7 @@ fhirFileServer:
     capabilities:
         drop:
           - ALL
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
    #%%OTHER_PARAMETERS_RELATED_TO_THIS_CONTAINER/POD%%
    ## @param fhirFileServer.existingConfigmap The name of an existing ConfigMap with your custom configuration for fhirFileServer
   ##
@@ -203,11 +203,11 @@ fhirFileServer:
     
   ## @param fhirFileServer.command Override default container command (useful when using custom images)
   ##
-  command: ["/bin/bash"]
+  command: ["./icmr-server"]
   ## @param fhirFileServer.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json -m iudx.resource.server.fhirFileServer.fhirFileServerVerticle"]
+  args: []
   ## @param fhirFileServer.hostAliases fhirFileServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -285,10 +285,10 @@ fhirFileServer:
   extraEnvVars: []
   ## @param fhirFileServer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for fhirFileServer nodes
   ##
-  extraEnvVarsCM: "fhir-file-env"
+  extraEnvVarsCM: "fhir-fs-env"
   ## @param fhirFileServer.extraEnvVarsSecret Name of existing Secret containing extra env vars for fhirFileServer nodes
   ##
-  extraEnvVarsSecret: "fhir-file-config"
+  extraEnvVarsSecret: "fhir-fs-config"
   ## @param fhirFileServer.extraVolumes Optionally specify extra list of additional volumes for the fhirFileServer pod(s)
   ##
   extraVolumes:
