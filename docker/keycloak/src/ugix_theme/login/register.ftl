@@ -1,7 +1,7 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('firstName','lastName','email','username','password','password-confirm'); section>
     <#if section = "header">
-        <span class="logo-header-text"> Register </span> for GDI
+        <span class="logo-header-text"> Register </span>
     <#elseif section = "form">
         <form id="kc-register-form" class="${properties.kcFormClass!} custom-form" action="${url.registrationAction}" method="post">
         <div class='form-col'>
