@@ -28,8 +28,8 @@
                         </#if>
                     </#if>
                 </div>
-                
-                
+
+
 
             <div class="${properties.kcFormGroupClass!}">
     <div class="labelContainer">
@@ -42,12 +42,9 @@
     </div>
 
     <div class="password-wrapper">
-        <input tabindex="2" id="password" class="${properties.kcInputClass!}" name="password" type="password" 
+        <input tabindex="2" id="password" class="${properties.kcInputClass!}" name="password" type="password"
                autocomplete="new-password" placeholder="Enter password"
                aria-invalid="<#if messagesPerField.existsError('username','password')>true</#if>"/>
-
-        <!-- Eye Icon for Toggling Password Visibility -->
-        <span id="togglePassword" class="eye-icon">👁️</span>
     </div>
 
     <#if messagesPerField.existsError('password')>
@@ -71,7 +68,7 @@
                             </div>
                         </#if>
                         </div>
-                        
+
 
                   </div>
 
