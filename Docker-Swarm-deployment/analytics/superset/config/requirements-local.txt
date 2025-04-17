@@ -1,0 +1,6 @@
+clickhouse-connect==0.8.6
+jsonpath-ng
+flask_oidc
+flask_openid
+console_log
+flask_cors
