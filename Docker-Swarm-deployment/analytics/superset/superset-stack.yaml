@@ -185,4 +185,4 @@ configs:
   client-secret:
     file: ./config/client-secret.json
   superset_config:
-    file: ./config/pythonpath_dev/superset_config.py
+    file: ./config/superset_config.py
