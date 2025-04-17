@@ -23,9 +23,6 @@ services:
       - redis:/data
     networks:
         - overlay-net
-    configs:
-    - source: redis-conf
-      target: /usr/local/etc/redis/redis.conf
    
 
   superset_init:
@@ -74,9 +71,6 @@ services:
       mode: 0444
     - source: superset_config
       target: /app/docker/pythonpath_dev/superset_config.py
-      mode: 0444
-    - source: superset_conf
-      target: /app/superset/config.py
       mode: 0444
     command: ["/app/docker/docker-bootstrap.sh", "app-gunicorn"]
     networks:
@@ -187,12 +181,8 @@ networks:
       driver: overlay
 configs:
   requirements:
-    file: ./docker/requirements-local.txt
-  redis-conf:
-    file: ./redis.conf
+    file: ./config/requirements-local.txt
   client-secret:
-    file: ./secrets/client-secret.json
+    file: ./config/client-secret.json
   superset_config:
-    file: ./docker/pythonpath_dev/superset_config.py
-  superset_conf:
-    file: ./superset/config.py
+    file: ./config/pythonpath_dev/superset_config.py
