@@ -1,0 +1,24 @@
+ingress:
+  hostname: fas-hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+  
+## fastApiServer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param fastApiServer.resources.limits The resources limits for the fastApiServer containers
+## @param fastApiServer.resources.requests The requested resources for the fastApiServer containers
+##
+fastApiServer:
+  nodeSelector:
+    node.kubernetes.io/instance-type: Standard_B2s
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1200Mi
+    requests: 
+      cpu: 700m
+      memory: 1200Mi
+persistence:
+  storageClass: "azuredisk-csi-storage-class"
+  size: 100G

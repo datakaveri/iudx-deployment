@@ -1,0 +1,163 @@
+{{- if .Values.fastApiServer.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: fast-api-server
+  labels: 
+    app.kubernetes.io/component: fastApiServer
+    app: fast-api-server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.fastApiServer.replicaCount }}
+  {{- if .Values.fastApiServer.updateStrategy }}
+  strategy: {{- toYaml .Values.fastApiServer.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: fast-api-server
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: fast-api-server
+        app.kubernetes.io/component: fastApiServer
+        {{- if .Values.fastApiServer.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.fastApiServer.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.fastApiServer.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.fastApiServer.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.fastApiServer.priorityClassName }}
+      priorityClassName: {{ .Values.fastApiServer.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.fastApiServer.schedulerName }}
+      schedulerName: {{ .Values.fastApiServer.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.fastApiServer.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.fastApiServer.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.fastApiServer.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: fast-api-server
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.fastApiServer.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.fastApiServer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.fastApiServer.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.fastApiServer.args }}
+          args: [{{- range $index, $str := .Values.fastApiServer.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.fastApiServer.resources }}
+          resources: {{- toYaml .Values.fastApiServer.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.fastApiServer.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.fastApiServer.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.fastApiServer.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+              protocol: TCP
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.fastApiServer.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.fastApiServer.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.fastApiServer.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.fastApiServer.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.fastApiServer.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.fastApiServer.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.fastApiServer.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.fastApiServer.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.fastApiServer.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.fastApiServer.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.fastApiServer.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.fastApiServer.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.fastApiServer.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.fastApiServer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.fastApiServer.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.fastApiServer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.fastApiServer.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.fastApiServer.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.fastApiServer.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.fastApiServer.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.fastApiServer.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.fastApiServer.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.fastApiServer.podAffinityPreset "component" "fastApiServer" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.fastApiServer.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "fastApiServer" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.fastApiServer.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.fastApiServer.nodeAffinityPreset.type "key" .Values.fastApiServer.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.fastApiServer.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.fastApiServer.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}
