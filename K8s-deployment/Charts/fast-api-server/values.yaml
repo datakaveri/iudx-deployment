@@ -141,7 +141,10 @@ fastApiServer:
   ## @param fastApiServer.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: true
+    enabled: false
+    httpGet:
+      path: /health
+      port: 8000
     initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 10
@@ -207,7 +210,7 @@ fastApiServer:
   ## @param fastApiServer.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","uvicorn", "SnomedSearch:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+  args: ["-c", "uvicorn SnomedSearch:app --host 0.0.0.0 --port 8000 --reload"]
   ## @param fastApiServer.hostAliases fastApiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -295,16 +298,11 @@ fastApiServer:
     - name: fast-api-tmp
       emptyDir:
         medium: Memory
-    - name: application-yaml
-      secret: 
-        secretName: application-yaml
   ## @param fastApiServer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the fastApiServer container(s)
   ##
   extraVolumeMounts: 
     - name: fast-api-tmp
       mountPath: /tmp
-    - name: application-yaml
-      mountPath: /app/config/application.yaml
   
   ## @param fastApiServer.sidecars Add additional sidecar containers to the fastApiServer pod(s)
   ## e.g:
@@ -419,7 +417,7 @@ ingress:
   serviceName: "fast-api-server"
   annotations: {
     kubernetes.io/tls-acme: "true",
-    kubernetes.io/ingress.class: "nginx",
+      #kubernetes.io/ingress.class: "nginx",
     nginx.ingress.kubernetes.io/global-rate-limit: "1000",
     nginx.ingress.kubernetes.io/global-rate-limit-key: $server_name,
     nginx.ingress.kubernetes.io/global-rate-limit-window: 1s,
