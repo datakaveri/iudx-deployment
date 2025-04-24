@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: dmpapd-api-server
+  name: dmpapd-server
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: service
     {{- if .Values.commonLabels }}
