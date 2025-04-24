@@ -14,11 +14,11 @@ fastApiServer:
     node.kubernetes.io/instance-type: Standard_B2s
   resources:
     limits:
-      cpu: 1000m
-      memory: 1200Mi
+      cpu: 750m
+      memory: 2250Mi
     requests: 
-      cpu: 700m
-      memory: 1200Mi
+      cpu: 500m
+      memory: 1500Mi
 persistence:
   storageClass: "azuredisk-csi-storage-class"
   size: 100G
