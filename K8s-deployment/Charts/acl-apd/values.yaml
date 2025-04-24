@@ -207,7 +207,7 @@ aclApd:
   ## @param aclApd.args Override default container args (useful when using custom images)
   ##
   
-  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$MY_POD_IP -c secrets/configs/config.json"]
+  args: ["-c","exec java $$APD_JAVA_OPTS -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar --host $$MY_POD_IP -c secrets/configs/config.json --isClustered true"]
   ## @param aclApd.hostAliases aclApd pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

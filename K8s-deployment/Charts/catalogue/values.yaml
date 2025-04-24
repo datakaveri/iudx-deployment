@@ -684,7 +684,7 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   ## @param ingress.serviceName Backend ingress Service Name 
-  serviceName: "cat-api-server"
+  serviceName: "catalogue-server"
   annotations: {
     kubernetes.io/ingress.class: "nginx",
     nginx.ingress.kubernetes.io/global-rate-limit: "1000",

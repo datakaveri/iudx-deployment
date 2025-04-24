@@ -212,7 +212,7 @@ dmpapd:
   command: ["/bin/bash"]
   ## @param apiServer.args Override default container args (useful when using custom images)
   ##
-  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json "]
+  args: ["-c","exec java -Xmx1024m -Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.Log4j2LogDelegateFactory -jar ./fatjar.jar  --host $$MY_POD_IP -c secrets/configs/config.json --isClustered true"]
   ## @param apiServer.hostAliases ApiServer pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -413,7 +413,7 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   ## @param ingress.serviceName Backend ingress Service Name 
-  serviceName: "dmpapd-api-server"
+  serviceName: "dmpapd-server"
   annotations: {
     kubernetes.io/ingress.class: "nginx",
     nginx.ingress.kubernetes.io/global-rate-limit: "1000",
