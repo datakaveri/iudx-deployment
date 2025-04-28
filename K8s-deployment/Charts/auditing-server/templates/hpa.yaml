@@ -20,6 +20,9 @@ spec:
     name: auditing-server
   minReplicas: {{ .Values.auditingServer.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.auditingServer.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.auditingServer.autoscaling.targetCPU }}
     - type: Resource

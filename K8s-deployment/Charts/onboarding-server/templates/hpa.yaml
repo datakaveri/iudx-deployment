@@ -20,6 +20,9 @@ spec:
     name: onboarding-server
   minReplicas: {{ .Values.onboardingServer.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.onboardingServer.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.onboardingServer.autoscaling.targetCPU }}
     - type: Resource
