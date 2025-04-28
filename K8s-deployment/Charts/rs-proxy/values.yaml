@@ -141,7 +141,10 @@ rsProxy:
   ## @param apiServer.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
+    httpGet:
+      path: /apis
+      port: 8080
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 10
