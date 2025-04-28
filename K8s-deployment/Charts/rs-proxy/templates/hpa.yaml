@@ -20,6 +20,9 @@ spec:
     name: rs-proxy
   minReplicas: {{ .Values.rsProxy.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.rsProxy.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.rsProxy.autoscaling.targetCPU }}
     - type: Resource

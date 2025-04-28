@@ -20,6 +20,9 @@ spec:
     name: file-server
   minReplicas: {{ .Values.fileServer.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.fileServer.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.fileServer.autoscaling.targetCPU }}
     - type: Resource

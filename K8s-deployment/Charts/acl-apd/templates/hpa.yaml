@@ -20,6 +20,9 @@ spec:
     name: acl-apd-server
   minReplicas: {{ .Values.aclApd.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.aclApd.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.aclApd.autoscaling.targetCPU }}
     - type: Resource

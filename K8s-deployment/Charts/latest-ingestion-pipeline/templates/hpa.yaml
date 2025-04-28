@@ -20,6 +20,9 @@ spec:
     name: lip
   minReplicas: {{ .Values.lip.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.lip.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.lip.autoscaling.targetCPU }}
     - type: Resource
