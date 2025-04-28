@@ -1,4 +1,4 @@
-{{- if and .Values.auditingServer.enabled .Values.auditing.autoscaling.enabled }}
+{{- if and .Values.auditingServer.enabled .Values.auditingServer.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
