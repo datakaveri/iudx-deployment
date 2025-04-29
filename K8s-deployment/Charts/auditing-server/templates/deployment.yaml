@@ -173,4 +173,3 @@ spec:
         {{- if .Values.auditingServer.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.auditingServer.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-{{- end }}
