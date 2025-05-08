@@ -4,7 +4,7 @@ global:
 
   # To help compatibility with other charts which use global.imagePullSecrets.
   # Allow either an array of {name: pullSecret} maps (k8s-style), or an array of strings (more common helm-style).
-  # Can be tempalted.
+  # Can be templated.
   # global:
   #   imagePullSecrets:
   #   - name: pullSecret1
@@ -38,15 +38,21 @@ serviceAccount:
   nameTest:
   ## ServiceAccount labels.
   labels: {}
-## Service account annotations. Can be templated.
-#  annotations:
-#    eks.amazonaws.com/role-arn: arn:aws:iam::123456789000:role/iam-role-name-here
-  autoMount: true
+  ## Service account annotations. Can be templated.
+  #  annotations:
+  #    eks.amazonaws.com/role-arn: arn:aws:iam::123456789000:role/iam-role-name-here
+
+  ## autoMount is deprecated in favor of automountServiceAccountToken
+  # autoMount: false
+  automountServiceAccountToken: false
 
 replicas: 1
 
 ## Create a headless service for the deployment
 headlessService: false
+
+## Should the service account be auto mounted on the pod
+automountServiceAccountToken: true
 
 ## Create HorizontalPodAutoscaler object for deployment type
 #
@@ -94,7 +100,7 @@ image:
   # -- Docker image repository
   repository: grafana/grafana
   # Overrides the Grafana image tag whose default is the chart appVersion
-  tag: "10.2.3"
+  tag: "11.6.0"
   sha: ""
   pullPolicy: IfNotPresent
 
@@ -108,6 +114,10 @@ image:
 
 testFramework:
   enabled: true
+  ## The type of Helm hook used to run this test. Defaults to test.
+  ## ref: https://helm.sh/docs/topics/charts_hooks/#the-available-hooks
+  ##
+  # hookType: test
   image:
     # -- The Docker registry
     registry: docker.io
@@ -115,6 +125,14 @@ testFramework:
     tag: "v1.4.1"
   imagePullPolicy: IfNotPresent
   securityContext: {}
+  containerSecurityContext: {}
+  resources: {}
+  #  limits:
+  #    cpu: 100m
+  #    memory: 128Mi
+  #  requests:
+  #    cpu: 100m
+  #    memory: 128Mi
 
 # dns configuration for pod
 dnsPolicy: ~
@@ -151,6 +169,7 @@ extraConfigmapMounts: []
   #   subPath: certificates.crt # (optional)
   #   configMap: certs-configmap
   #   readOnly: true
+  #   optional: false
 
 
 extraEmptyDirMounts: []
@@ -168,7 +187,7 @@ downloadDashboardsImage:
   # -- The Docker registry
   registry: docker.io
   repository: curlimages/curl
-  tag: 7.85.0
+  tag: 8.9.1
   sha: ""
   pullPolicy: IfNotPresent
 
@@ -192,6 +211,10 @@ downloadDashboards:
 ## Pod Annotations
 # podAnnotations: {}
 
+## ConfigMap Annotations
+# configMapAnnotations: {}
+  # argocd.argoproj.io/sync-options: Replace=true
+
 ## Pod Labels
 # podLabels: {}
 
@@ -207,6 +230,10 @@ gossipPortName: gossip
 service:
   enabled: true
   type: ClusterIP
+  # Set the ip family policy to configure dual-stack see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services)
+  ipFamilyPolicy: ""
+  # Sets the families that should be supported and the order in which they should be applied to ClusterIP as well. Can be IPv4 and/or IPv6.
+  ipFamilies: []
   loadBalancerIP: ""
   loadBalancerClass: ""
   loadBalancerSourceRanges: []
@@ -219,9 +246,10 @@ service:
   portName: service
   # Adds the appProtocol field to the service. This allows to work with istio protocol selection. Ex: "http" or "tcp"
   appProtocol: ""
+  sessionAffinity: ""
 
 serviceMonitor:
-  ## If true, a ServiceMonitor CRD is created for a prometheus operator
+  ## If true, a ServiceMonitor CR is created for a prometheus operator
   ## https://github.com/coreos/prometheus-operator
   ##
   enabled: false
@@ -234,6 +262,7 @@ serviceMonitor:
   scrapeTimeout: 30s
   relabelings: []
   metricRelabelings: []
+  basicAuth: {}
   targetLabels: []
 
 extraExposePorts: []
@@ -291,6 +320,42 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+# -- BETA: Configure the gateway routes for the chart here.
+# More routes can be added by adding a dictionary key like the 'main' route.
+# Be aware that this is an early beta of this feature,
+# kube-prometheus-stack does not guarantee this works and is subject to change.
+# Being BETA this can/will change in the future without notice, do not use unless you want to take that risk
+# [[ref]](https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io%2fv1alpha2)
+route:
+  main:
+    # -- Enables or disables the route
+    enabled: false
+
+    # -- Set the route apiVersion, e.g. gateway.networking.k8s.io/v1 or gateway.networking.k8s.io/v1alpha2
+    apiVersion: gateway.networking.k8s.io/v1
+    # -- Set the route kind
+    # Valid options are GRPCRoute, HTTPRoute, TCPRoute, TLSRoute, UDPRoute
+    kind: HTTPRoute
+
+    annotations: {}
+    labels: {}
+
+    hostnames: []
+    # - my-filter.example.com
+    parentRefs: []
+    # - name: acme-gw
+
+    matches:
+      - path:
+          type: PathPrefix
+          value: /
+
+    ## Filters define the filters that are applied to requests that match this rule.
+    filters: []
+
+    ## Additional custom rules that can be added to the route
+    additionalRules: []
 
 resources: {}
 #  limits:
@@ -352,7 +417,7 @@ extraContainerVolumes: []
 #    emptyDir: {}
 
 ## Enable persistence using Persistent Volume Claims
-## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
   type: pvc
@@ -371,6 +436,7 @@ persistence:
   # existingClaim:
   ## Extra labels to apply to a PVC.
   extraPvcLabels: {}
+  disableWarning: false
 
   ## If persistence is not enabled, this allows to mount the
   ## local storage in-memory to improve performance
@@ -382,6 +448,10 @@ persistence:
     ## here and the sum of memory limits of all containers in a pod
     ##
     # sizeLimit: 300Mi
+
+  ## If 'lookupVolumeName' is set to true, Helm will attempt to retrieve
+  ## the current value of 'spec.volumeName' and incorporate it into the template.
+  lookupVolumeName: true
 
 initChownData:
   ## If false, data ownership will not be reset at startup
@@ -497,6 +567,7 @@ envRenderSecret: {}
 ## Name is templated.
 envFromSecrets: []
 ## - name: secret-name
+##   prefix: prefix
 ##   optional: true
 
 ## The names of conifgmaps in the same kubernetes namespace which contain values to be added to the environment
@@ -505,6 +576,7 @@ envFromSecrets: []
 ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#configmapenvsource-v1-core
 envFromConfigMaps: []
 ## - name: configmap-name
+##   prefix: prefix
 ##   optional: true
 
 # Inject Kubernetes services as environment variables.
@@ -518,6 +590,7 @@ extraSecretMounts: []
   #   mountPath: /etc/secrets
   #   secretName: grafana-secret-files
   #   readOnly: true
+  #   optional: false
   #   subPath: ""
   #
   # for AWS EKS (cloudwatch) use the following (see also instruction in env: above)
@@ -589,7 +662,7 @@ plugins: []
 ## Configure grafana datasources
 ## ref: http://docs.grafana.org/administration/provisioning/#datasources
 ##
-datasources:
+datasources: 
   datasources.yaml:
     apiVersion: 1
     deleteDatasources:
@@ -606,7 +679,6 @@ datasources:
         type: prometheus
         access: proxy
         url: "http://loki:3100/loki"
-
 #  datasources.yaml:
 #    apiVersion: 1
 #    datasources:
@@ -627,9 +699,15 @@ datasources:
 #    - name: Prometheus
 
 ## Configure grafana alerting (can be templated)
-## ref: http://docs.grafana.org/administration/provisioning/#alerting
+## ref: https://docs.grafana.com/alerting/set-up/provision-alerting-resources/file-provisioning/
 ##
 alerting: {}
+  # policies.yaml:
+  #   apiVersion: 1
+  #   policies:
+  #     - orgId: 1
+  #       receiver: first_uid
+  #
   # rules.yaml:
   #   apiVersion: 1
   #   groups:
@@ -674,6 +752,7 @@ alerting: {}
   #             some_key: some_value
   #           labels:
   #             team: sre_team_1
+  #
   # contactpoints.yaml:
   #   secret:
   #     apiVersion: 1
@@ -691,6 +770,26 @@ alerting: {}
   #               group: app-stack
   #               summary: |
   #                 {{ `{{ include "default.message" . }}` }}
+  #
+  # templates.yaml:
+  #   apiVersion: 1
+  #   templates:
+  #     - orgId: 1
+  #       name: my_first_template
+  #       template: |
+  #         {{ `
+  #         {{ define "my_first_template" }}
+  #         Custom notification message
+  #         {{ end }}
+  #         ` }}
+  #
+  # mutetimes.yaml
+  #   apiVersion: 1
+  #   muteTimes:
+  #     - orgId: 1
+  #       name: mti_1
+  #       # refer to https://prometheus.io/docs/alerting/latest/configuration/#time_interval-0
+  #       time_intervals: {}
 
 ## Configure notifiers
 ## ref: http://docs.grafana.org/administration/provisioning/#alert-notification-channels
@@ -717,8 +816,6 @@ notifiers:
         # Secure settings that will be encrypted in the database (supported since Grafana v7.2). See `Supported Settings` section for secure settings supported for each notifier.
         secure_settings:
           bottoken: $TELEGRAM_BOT_TOKEN
-
-
 #  notifiers.yaml:
 #    notifiers:
 #    - name: email-notifier
@@ -837,6 +934,10 @@ grafana.ini:
   #   enabled: true
   #   allow_sign_up: true
   #   config_file: /etc/grafana/ldap.toml
+## Grafana's alerting configuration
+  # unified_alerting:
+  #   enabled: true
+  #   rule_version_record_limit: "5"
 
 ## Grafana's LDAP configuration
 ## Templated by the template in _helpers.tpl
@@ -861,6 +962,11 @@ ldap:
   #   ssl_skip_verify = false
   #   bind_dn = "uid=%s,ou=users,dc=myorg,dc=com"
 
+# When process namespace sharing is enabled, processes in a container are visible to all other containers in the same pod
+# This parameter is added because the ldap reload api is not working https://grafana.com/docs/grafana/latest/developers/http_api/admin/#reload-ldap-configuration
+# To allow an extraContainer to restart the Grafana container
+shareProcessNamespace: false
+
 ## Grafana's SMTP configuration
 ## NOTE: To enable, grafana.ini must be configured with smtp.enabled
 ## ref: http://docs.grafana.org/installation/configuration/#smtp
@@ -878,7 +984,7 @@ sidecar:
     # -- The Docker registry
     registry: quay.io
     repository: kiwigrid/k8s-sidecar
-    tag: 1.25.2
+    tag: 1.30.0
     sha: ""
   imagePullPolicy: IfNotPresent
   resources: {}
@@ -908,9 +1014,9 @@ sidecar:
     env: {}
     # Do not reprocess already processed unchanged resources on k8s API reconnect.
     # ignoreAlreadyProcessed: true
-    # label that the configmaps with alert are marked with
+    # label that the configmaps with alert are marked with (can be templated)
     label: grafana_alert
-    # value of label that the configmaps with alert are set to
+    # value of label that the configmaps with alert are set to (can be templated)
     labelValue: ""
     # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
     # logLevel: INFO
@@ -922,6 +1028,13 @@ sidecar:
     watchMethod: WATCH
     # search in configmap, secret or both
     resource: both
+    #
+    # resourceName: comma separated list of resource names to be fetched/checked by this sidecar.
+    # per default all resources of the type defined in {{ .Values.sidecar.alerts.resource }} will be checked.
+    # This e.g. allows stricter RBAC rules which are limited to the resources meant for the sidecars.
+    # resourceName: "secret/alerts-1,configmap/alerts-0"
+    resourceName: ""
+    #
     # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
     # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
     # watchServerTimeout: 3600
@@ -932,6 +1045,23 @@ sidecar:
     # defaults to 66sec (sic!)
     # watchClientTimeout: 60
     #
+    # maxTotalRetries: Total number of retries to allow for any http request.
+    # Takes precedence over other counts. Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry.
+    # maxTotalRetries: 5
+    #
+    # maxConnectRetries: How many connection-related errors to retry on for any http request.
+    # These are errors raised before the request is sent to the remote server, which we assume has not triggered the server to process the request.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxConnectRetries: 10
+    #
+    # maxReadRetries: How many times to retry on read errors for any http request
+    # These errors are raised after the request was sent to the server, so the request may have side-effects.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxReadRetries: 5
+    #
     # Endpoint to send request to reload alerts
     reloadURL: "http://localhost:3000/api/admin/provisioning/alerting/reload"
     # Absolute path to shell script to execute after a alert got reloaded
@@ -940,7 +1070,7 @@ sidecar:
     # This is needed if skipReload is true, to load any alerts defined at startup time.
     # Deploy the alert sidecar as an initContainer.
     initAlerts: false
-    # Additional alert sidecar volume mounts
+    # Additional alerts sidecar volume mounts
     extraMounts: []
     # Sets the size limit of the alert sidecar emptyDir volume
     sizeLimit: {}
@@ -948,12 +1078,25 @@ sidecar:
     enabled: true
     # Additional environment variables for the dashboards sidecar
     env: {}
+    ## "valueFrom" environment variable references that will be added to deployment pods. Name is templated.
+    ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvarsource-v1-core
+    ## Renders in container spec as:
+    ##   env:
+    ##     ...
+    ##     - name: <key>
+    ##       valueFrom:
+    ##         <value rendered as YAML>
+    envValueFrom: {}
+    #  ENV_NAME:
+    #    configMapKeyRef:
+    #      name: configmap-name
+    #      key: value_key
     # Do not reprocess already processed unchanged resources on k8s API reconnect.
     # ignoreAlreadyProcessed: true
     SCProvider: true
-    # label that the configmaps with dashboards are marked with
+    # label that the configmaps with dashboards are marked with (can be templated)
     label: grafana_dashboard
-    # value of label that the configmaps with dashboards are set to
+    # value of label that the configmaps with dashboards are set to (can be templated)
     labelValue: ""
     # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
     # logLevel: INFO
@@ -972,6 +1115,30 @@ sidecar:
     # If specified, the sidecar will look for annotation with this name to create folder and put graph here.
     # You can use this parameter together with `provider.foldersFromFilesStructure`to annotate configmaps and create folder structure.
     folderAnnotation: null
+    #
+    # resourceName: comma separated list of resource names to be fetched/checked by this sidecar.
+    # per default all resources of the type defined in {{ .Values.sidecar.dashboards.resource }} will be checked.
+    # This e.g. allows stricter RBAC rules which are limited to the resources meant for the sidecars.
+    # resourceName: "secret/dashboards-0,configmap/dashboards-1"
+    resourceName: ""
+    #
+    # maxTotalRetries: Total number of retries to allow for any http request.
+    # Takes precedence over other counts. Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry.
+    # maxTotalRetries: 5
+    #
+    # maxConnectRetries: How many connection-related errors to retry on for any http request.
+    # These are errors raised before the request is sent to the remote server, which we assume has not triggered the server to process the request.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxConnectRetries: 10
+    #
+    # maxReadRetries: How many times to retry on read errors for any http request
+    # These errors are raised after the request was sent to the server, so the request may have side-effects.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxReadRetries: 5
+    #
     # Endpoint to send request to reload alerts
     reloadURL: "http://localhost:3000/api/admin/provisioning/dashboards/reload"
     # Absolute path to shell script to execute after a configmap got reloaded
@@ -995,6 +1162,8 @@ sidecar:
       orgid: 1
       # folder in which the dashboards should be imported in grafana
       folder: ''
+      # <string> folder UID. will be automatically generated if not specified
+      folderUid: ''
       # type of the provider
       type: file
       # disableDelete to activate a import-only behaviour
@@ -1003,7 +1172,7 @@ sidecar:
       allowUiUpdates: true
       # allow Grafana to replicate dashboard structure from filesystem
       foldersFromFilesStructure: false
-    # Additional dashboard sidecar volume mounts
+    # Additional dashboards sidecar volume mounts
     extraMounts: []
     # Sets the size limit of the dashboard sidecar emptyDir volume
     sizeLimit: {}
@@ -1011,12 +1180,24 @@ sidecar:
     enabled: false
     # Additional environment variables for the datasourcessidecar
     env: {}
+    ## "valueFrom" environment variable references that will be added to deployment pods. Name is templated.
+    ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvarsource-v1-core
+    ## Renders in container spec as:
+    ##   env:
+    ##     ...
+    ##     - name: <key>
+    ##       valueFrom:
+    ##         <value rendered as YAML>
     envValueFrom: {}
+    #  ENV_NAME:
+    #    configMapKeyRef:
+    #      name: configmap-name
+    #      key: value_key
     # Do not reprocess already processed unchanged resources on k8s API reconnect.
     # ignoreAlreadyProcessed: true
-    # label that the configmaps with datasources are marked with
+    # label that the configmaps with datasources are marked with (can be templated)
     label: grafana_datasource
-    # value of label that the configmaps with datasources are set to
+    # value of label that the configmaps with datasources are set to (can be templated)
     labelValue: ""
     # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
     # logLevel: INFO
@@ -1028,6 +1209,13 @@ sidecar:
     watchMethod: WATCH
     # search in configmap, secret or both
     resource: both
+    #
+    # resourceName: comma separated list of resource names to be fetched/checked by this sidecar.
+    # per default all resources of the type defined in {{ .Values.sidecar.datasources.resource }} will be checked.
+    # This e.g. allows stricter RBAC rules which are limited to the resources meant for the sidecars.
+    # resourceName: "secret/datasources-0,configmap/datasources-15"
+    resourceName: ""
+    #
     # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
     # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
     # watchServerTimeout: 3600
@@ -1038,6 +1226,23 @@ sidecar:
     # defaults to 66sec (sic!)
     # watchClientTimeout: 60
     #
+    # maxTotalRetries: Total number of retries to allow for any http request.
+    # Takes precedence over other counts. Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry.
+    # maxTotalRetries: 5
+    #
+    # maxConnectRetries: How many connection-related errors to retry on for any http request.
+    # These are errors raised before the request is sent to the remote server, which we assume has not triggered the server to process the request.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxConnectRetries: 10
+    #
+    # maxReadRetries: How many times to retry on read errors for any http request
+    # These errors are raised after the request was sent to the server, so the request may have side-effects.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxReadRetries: 5
+    #
     # Endpoint to send request to reload datasources
     reloadURL: "http://localhost:3000/api/admin/provisioning/datasources/reload"
     # Absolute path to shell script to execute after a datasource got reloaded
@@ -1046,6 +1251,8 @@ sidecar:
     # This is needed if skipReload is true, to load any datasources defined at startup time.
     # Deploy the datasources sidecar as an initContainer.
     initDatasources: false
+    # Additional datasources sidecar volume mounts
+    extraMounts: []
     # Sets the size limit of the datasource sidecar emptyDir volume
     sizeLimit: {}
   plugins:
@@ -1054,9 +1261,9 @@ sidecar:
     env: {}
     # Do not reprocess already processed unchanged resources on k8s API reconnect.
     # ignoreAlreadyProcessed: true
-    # label that the configmaps with plugins are marked with
+    # label that the configmaps with plugins are marked with (can be templated)
     label: grafana_plugin
-    # value of label that the configmaps with plugins are set to
+    # value of label that the configmaps with plugins are set to (can be templated)
     labelValue: ""
     # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
     # logLevel: INFO
@@ -1068,6 +1275,13 @@ sidecar:
     watchMethod: WATCH
     # search in configmap, secret or both
     resource: both
+    #
+    # resourceName: comma separated list of resource names to be fetched/checked by this sidecar.
+    # per default all resources of the type defined in {{ .Values.sidecar.plugins.resource }} will be checked.
+    # This e.g. allows stricter RBAC rules which are limited to the resources meant for the sidecars.
+    # resourceName: "secret/plugins-0,configmap/plugins-1"
+    resourceName: ""
+    #
     # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
     # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
     # watchServerTimeout: 3600
@@ -1078,6 +1292,23 @@ sidecar:
     # defaults to 66sec (sic!)
     # watchClientTimeout: 60
     #
+    # maxTotalRetries: Total number of retries to allow for any http request.
+    # Takes precedence over other counts. Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry.
+    # maxTotalRetries: 5
+    #
+    # maxConnectRetries: How many connection-related errors to retry on for any http request.
+    # These are errors raised before the request is sent to the remote server, which we assume has not triggered the server to process the request.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxConnectRetries: 10
+    #
+    # maxReadRetries: How many times to retry on read errors for any http request
+    # These errors are raised after the request was sent to the server, so the request may have side-effects.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxReadRetries: 5
+    #
     # Endpoint to send request to reload plugins
     reloadURL: "http://localhost:3000/api/admin/provisioning/plugins/reload"
     # Absolute path to shell script to execute after a plugin got reloaded
@@ -1086,6 +1317,8 @@ sidecar:
     # Deploy the datasource sidecar as an initContainer in addition to a container.
     # This is needed if skipReload is true, to load any plugins defined at startup time.
     initPlugins: false
+    # Additional plugins sidecar volume mounts
+    extraMounts: []
     # Sets the size limit of the plugin sidecar emptyDir volume
     sizeLimit: {}
   notifiers:
@@ -1094,9 +1327,9 @@ sidecar:
     env: {}
     # Do not reprocess already processed unchanged resources on k8s API reconnect.
     # ignoreAlreadyProcessed: true
-    # label that the configmaps with notifiers are marked with
+    # label that the configmaps with notifiers are marked with (can be templated)
     label: grafana_notifier
-    # value of label that the configmaps with notifiers are set to
+    # value of label that the configmaps with notifiers are set to (can be templated)
     labelValue: ""
     # Log level. Can be one of: DEBUG, INFO, WARN, ERROR, CRITICAL.
     # logLevel: INFO
@@ -1108,6 +1341,13 @@ sidecar:
     watchMethod: WATCH
     # search in configmap, secret or both
     resource: both
+    #
+    # resourceName: comma separated list of resource names to be fetched/checked by this sidecar.
+    # per default all resources of the type defined in {{ .Values.sidecar.notifiers.resource }} will be checked.
+    # This e.g. allows stricter RBAC rules which are limited to the resources meant for the sidecars.
+    # resourceName: "secret/notifiers-2,configmap/notifiers-1"
+    resourceName: ""
+    #
     # watchServerTimeout: request to the server, asking it to cleanly close the connection after that.
     # defaults to 60sec; much higher values like 3600 seconds (1h) are feasible for non-Azure K8S
     # watchServerTimeout: 3600
@@ -1118,6 +1358,23 @@ sidecar:
     # defaults to 66sec (sic!)
     # watchClientTimeout: 60
     #
+    # maxTotalRetries: Total number of retries to allow for any http request.
+    # Takes precedence over other counts. Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry.
+    # maxTotalRetries: 5
+    #
+    # maxConnectRetries: How many connection-related errors to retry on for any http request.
+    # These are errors raised before the request is sent to the remote server, which we assume has not triggered the server to process the request.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxConnectRetries: 10
+    #
+    # maxReadRetries: How many times to retry on read errors for any http request
+    # These errors are raised after the request was sent to the server, so the request may have side-effects.
+    # Applies to all requests to reloadURL and k8s api requests.
+    # Set to 0 to fail on the first retry of this type.
+    # maxReadRetries: 5
+    #
     # Endpoint to send request to reload notifiers
     reloadURL: "http://localhost:3000/api/admin/provisioning/notifications/reload"
     # Absolute path to shell script to execute after a notifier got reloaded
@@ -1126,6 +1383,8 @@ sidecar:
     # Deploy the notifier sidecar as an initContainer in addition to a container.
     # This is needed if skipReload is true, to load any notifiers defined at startup time.
     initNotifiers: false
+    # Additional notifiers sidecar volume mounts
+    extraMounts: []
     # Sets the size limit of the notifier sidecar emptyDir volume
     sizeLimit: {}
 
@@ -1150,6 +1409,10 @@ imageRenderer:
     targetCPU: "60"
     targetMemory: ""
     behavior: {}
+  # The url of remote image renderer if it is not in the same namespace with the grafana instance
+  serverURL: ""
+  # The callback url of grafana instances if it is not in the same namespace with the remote image renderer
+  renderingCallbackURL: ""
   image:
     # -- The Docker registry
     registry: docker.io
@@ -1164,6 +1427,9 @@ imageRenderer:
   # extra environment variables
   env:
     HTTP_HOST: "0.0.0.0"
+    # Fixes "Error: Failed to launch the browser process!\nchrome_crashpad_handler: --database is required"
+    XDG_CONFIG_HOME: /tmp/.chromium
+    XDG_CACHE_HOME: /tmp/.chromium
     # RENDERING_ARGS: --no-sandbox,--disable-gpu,--window-size=1280x758
     # RENDERING_MODE: clustered
     # IGNORE_HTTPS_ERRORS: true
@@ -1184,6 +1450,7 @@ imageRenderer:
 
   # image-renderer deployment serviceAccount
   serviceAccountName: ""
+  automountServiceAccountToken: false
   # image-renderer deployment securityContext
   securityContext: {}
   # image-renderer deployment container securityContext
@@ -1269,6 +1536,18 @@ imageRenderer:
   ##
   # schedulerName: "default-scheduler"
 
+  # Extra configmaps to mount in image-renderer pods
+  extraConfigmapMounts: []
+
+  # Extra secrets to mount in image-renderer pods
+  extraSecretMounts: []
+
+  # Extra volumes to mount in image-renderer pods
+  extraVolumeMounts: []
+
+  # Extra volumes for image-renderer pods
+  extraVolumes: []
+
 networkPolicy:
   ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
   ##
@@ -1337,17 +1616,32 @@ networkPolicy:
 # Enable backward compatibility of kubernetes where version below 1.13 doesn't have the enableServiceLinks option
 enableKubeBackwardCompatibility: false
 useStatefulSet: false
-# Create a dynamic manifests via values:
+
+# extraObjects could be utilized to add dynamic manifests via values
 extraObjects: []
-  # - apiVersion: "kubernetes-client.io/v1"
-  #   kind: ExternalSecret
-  #   metadata:
-  #     name: grafana-secrets
-  #   spec:
-  #     backendType: gcpSecretsManager
-  #     data:
-  #       - key: grafana-admin-password
-  #         name: adminPassword
+# Examples:
+# extraObjects:
+# - apiVersion: kubernetes-client.io/v1
+#   kind: ExternalSecret
+#   metadata:
+#     name: grafana-secrets
+#   spec:
+#     backendType: gcpSecretsManager
+#     data:
+#     - key: grafana-admin-password
+#       name: adminPassword
+# Alternatively, you can use strings, which lets you use additional templating features:
+# extraObjects:
+# - |
+#   apiVersion: kubernetes-client.io/v1
+#   kind: ExternalSecret
+#   metadata:
+#     name: grafana-secrets
+#   spec:
+#     backendType: gcpSecretsManager
+#     data:
+#     - key: grafana-admin-password
+#       name: {{ include "some-other-template" }}
 
 # assertNoLeakedSecrets is a helper function defined in _helpers.tpl that checks if secret
 # values are not exposed in the rendered grafana.ini configmap. It is enabled by default.
