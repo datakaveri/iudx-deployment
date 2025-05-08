@@ -104,7 +104,7 @@
                     <#if isAppInitiatedAction??>
                         <input type="submit"
                             class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}"
-                            id="saveTOTPBtn" value="${msg("verifyOtp")}"
+                            id="saveTOTPBtn" value="${msg("doSubmit")}"
                         />
                         <button type="submit"
                                 class="${properties.kcButtonClass!} ${properties.kcButtonDefaultClass!} ${properties.kcButtonLargeClass!} ${properties.kcButtonLargeClass!}"
@@ -113,7 +113,7 @@
                     <#else>
                         <input type="submit"
                             class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}"
-                            id="saveTOTPBtn" value="${msg("verifyOtp")}"
+                            id="saveTOTPBtn" value="${msg("doSubmit")}"
                         />
                     </#if>
                 </div>

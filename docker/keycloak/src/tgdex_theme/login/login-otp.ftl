@@ -29,7 +29,7 @@
 
             <@field.input name="otp" label=msg("loginOtpOneTime") autocomplete="one-time-code" fieldName="totp" autofocus=true />
 
-            <@buttons.loginButton value="${msg("verifyOtp")}" />
+            <@buttons.loginButton />
         </form>
         <script>
             function toggleOTP(index, value) {
