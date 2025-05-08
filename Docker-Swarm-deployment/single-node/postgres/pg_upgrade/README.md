@@ -104,6 +104,7 @@ chmod +x /tmp/postgresql16/bin/postgres
 chmod +x /tmp/postgresql16/bin/pg_ctl
 chmod +x /tmp/postgresql16/bin/pg_controldata
 chmod +x /tmp/postgresql16/bin/pg_resetwal
+chmod 700 /bitnami/postgres16/data
 ```
 
   If facing permission issues, run the container as `root`.
