@@ -8,6 +8,8 @@
 
 .login-pf-page {
   min-height: 85vh;
+  position: relative;
+  top: 1rem;
 }
 
 .logo-container {
@@ -345,8 +347,6 @@ h1#kc-page-title {
     font-size: 12px;
   }
 
-
-
   .custom-pf-c-button.custom-pf-m-primary {
     font-size: 12px;
   }
@@ -436,6 +436,7 @@ h1#kc-page-title {
 
 .nav-menu {
     flex: 1;
+    padding: 0;
 }
 
 .nav-list {
@@ -854,7 +855,6 @@ h1#kc-page-title {
 .nav-list {
     display: flex;
     align-items: center;
-    gap: 30px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -873,20 +873,13 @@ h1#kc-page-title {
 }
 
 /* Desktop styles */
-@media (min-width: 1025px) {
+@media (min-width: 1024px) {
     .navbar-content {
         flex-direction: row;
         justify-content: flex-start;
         padding: 0 20px 0 30px;
     }
-
-    .nav-menu {
-        margin-left: 30px;
-        display: flex !important;
-    }
-
     .nav-list {
-        gap: 40px; 
         flex-direction: row;
     }
 

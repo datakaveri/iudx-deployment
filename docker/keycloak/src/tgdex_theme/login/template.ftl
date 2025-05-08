@@ -46,11 +46,11 @@
 
     <div class="navbar">
         <div class="navbar-content">
-            <div class="header-wrapper col-md-5 col-lg-5">
+            <div class="header-wrapper col-md-6 col-lg-6 col-xl-6 d-flex justify-content-start">
                 <div class="brand-container d-flex">
                     <img src="${url.resourcesPath}/img/telangana.png" alt="Logo" class="header-logo">
                     <div class="title-container">
-                        <a href="http://localhost:4007" class="title">
+                        <a href="https://staging.catalogue.tgdex.iudx.io" class="title">
                             
                             <span><strong>TGDeX</strong> - Telangana Data Exchange</span>
                         </a>
@@ -62,26 +62,18 @@
                 </button>
             </div>
 
-            <nav class="nav-menu col-md-7 col-lg-7" id="navMenu">
+            <nav class="nav-menu col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end" id="navMenu">
                 <ul class="nav-list">
-                    <li class="nav-item"><a href="http://localhost:4007/about-us">ABOUT</a></li>
-                    <li class="nav-item"><a href="http://localhost:4007/data-bank">DATA BANK</a></li>
-                    <li class="nav-item"><a href="http://localhost:4007/ai-model">AI MODELS</a></li>
-                    <li class="nav-item"><a href="http://localhost:4007/potential-application">POTENTIAL APPLICATION</a></li>
+                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/about-us">ABOUT</a></li>
+                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/data-bank">DATA BANK</a></li>
+                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/ai-model">AI MODELS</a></li>
+                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/potential-application">POTENTIAL APPLICATION</a></li>
                     <li class="nav-item"><a href="">SANDBOX IDE</a></li>
                     <li
 					class="nav-item divider d-none d-xl-block"
 				>
-					<span class="divider-line desktop-only">|</span>
 				</li>
-                    <li class="nav-item auth-container">
-					<div class="auth-buttons">
-						<button class="login-btn" onclick="window.location.href='${url.loginUrl}'">SIGN IN</button>
-						<button class="register-btn" onclick="window.location.href='${url.registrationUrl}'">
-							REGISTER
-						</button>
-					</div>
-				</li>
+                   
                 </ul>
             </nav>
         </div>
