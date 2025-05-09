@@ -72,17 +72,3 @@ for ((i=0; i < $users_len; i++)); do
     fi
 done
 
-# create policies
-    policies=`echo "$init_config"| jq  -r .policies`
-policies_len=`echo $policies| jq length`
-for ((i=0; i < $policies_len; i++)); do
-    vhost=`echo $policies | jq -r .[$i].policy_vhost`
-    policy_name=`echo $policies | jq -r .[$i].policy_name`
-    policy_pattern=`echo $policies | jq -r .[$i].policy_pattern`
-    policy_definition=`echo $policies | jq -r .[$i].policy_definition`
-    policy_apply=`echo $policies | jq -r .[$i].policy_apply`
-    policy_priority=`echo $policies | jq -r .[$i].policy_priority`
-
-    curl -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/policies/$vhost/$policy_name" -d "{\"pattern\":\"$policy_pattern\", \"definition\": $policy_definition , \"priority\": $policy_priority, \"apply-to\": \"$policy_apply\"}"
-    echo "policy $policy_name created"
-done
