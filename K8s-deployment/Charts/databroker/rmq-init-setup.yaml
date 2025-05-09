@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
       - name: job
-        image: ghcr.io/datakaveri/rabbitmq-init:1.0.4
+        image: ghcr.io/datakaveri/rabbitmq-init:1.0.5
         env:
           - name: RMQ_HOST
             value: rabbitmq.rabbitmq.svc.cluster.local:15672
