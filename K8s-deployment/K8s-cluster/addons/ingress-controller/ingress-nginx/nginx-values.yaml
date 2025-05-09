@@ -54,8 +54,6 @@ controller:
   # -- Global configuration passed to the ConfigMap consumed by the controller. Values may contain Helm templates.
   # Ref.: https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
   config: 
-    global-rate-limit-memcached-host: "memcached.memcached.svc.cluster.local"
-    global-rate-limit-memcached-port: "11211"
     ## some standard ssl configuration, ref: https://ssl-config.mozilla.org/#server=nginx&version=1.20&config=intermediate&openssl=1.1.1k&guideline=5.6
     server-tokens: "false"
     ssl-session-cache-size: "20m"
@@ -65,8 +63,6 @@ controller:
     ## custom error-pages 
     server-snippet: "include /etc/nginx/conf.d/error.conf;"
     lua-shared-dicts: "global-rate-limit-data: 100"
-    global-rate-limit-memcached-connect-timeout: "2000"
-    global-rate-limit-memcached-max-idle-timeout: "2000"
     limit-req-status-code: "429"
     log-format-escape-json: "true"
     ## json access log format
