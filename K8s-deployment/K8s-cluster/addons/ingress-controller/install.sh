@@ -7,5 +7,4 @@ kubectl create configmap  ugix-cos-root  --from-file=ingress-nginx/ugix-html/ -n
 kubectl create configmap  adex-cos-root  --from-file=ingress-nginx/adex-html/ -n ingress-nginx
 helm repo update ingress-nginx bitnami
 helm install --version=4.12.2 nginx ingress-nginx/ingress-nginx  -f ingress-nginx/nginx-values.yaml -f ingress-nginx/resource-values.yaml -n ingress-nginx && sleep 10 
-helm install memcached bitnami/memcached --version=7.6.0 -f memcached/memcached-values.yaml -f memcached/resource-values.yaml -n memcached
 
