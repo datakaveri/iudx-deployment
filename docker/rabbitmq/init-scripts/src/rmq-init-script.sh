@@ -40,8 +40,16 @@ for ((i=0; i < $queues_len; i++)); do
     queue_name=`echo $queues | jq -r .[$i].queue_name`
     queue_binding_exchange=`echo $queues | jq -r .[$i].queue_binding_exchange`
     queue_binding_key=`echo $queues | jq -r .[$i].queue_binding_key`
-    curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{\"x-queue-type\": \"quorum\"}}"
-    echo "queue $queue_name created"
+    queue_type=`echo $queues | jq -r .[$i].queue_type`
+    if [[ $queue_type == "quorum" ]];then
+
+       curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{\"x-queue-type\": \"quorum\"}}"
+       echo "queue $queue_name created"    
+
+    else
+       curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{}}"
+       echo "queue $queue_name created"    
+    fi
     # create exchange-queue bindings if present
     if [[ -n  $queue_binding_exchange ]]; then
         curl  -s -u "$admin_username":"$admin_password" -X POST "http://$RMQ_HOST/api/bindings/$vhost/e/$queue_binding_exchange/q/$queue_name" -d "{\"routing_key\":\"$queue_binding_key\"}"
@@ -71,4 +79,3 @@ for ((i=0; i < $users_len; i++)); do
         echo "user $username with permissions $permissions created"
     fi
 done
-
