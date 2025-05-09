@@ -40,7 +40,7 @@ for ((i=0; i < $queues_len; i++)); do
     queue_name=`echo $queues | jq -r .[$i].queue_name`
     queue_binding_exchange=`echo $queues | jq -r .[$i].queue_binding_exchange`
     queue_binding_key=`echo $queues | jq -r .[$i].queue_binding_key`
-    curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{}}"
+    curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{\"x-queue-type\": \"quorum\"}}"
     echo "queue $queue_name created"
     # create exchange-queue bindings if present
     if [[ -n  $queue_binding_exchange ]]; then
