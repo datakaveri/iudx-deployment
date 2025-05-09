@@ -20,6 +20,9 @@ spec:
     name: resource-server
   minReplicas: {{ .Values.resourceServer.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.resourceServer.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.resourceServer.autoscaling.targetCPU }}
     - type: Resource

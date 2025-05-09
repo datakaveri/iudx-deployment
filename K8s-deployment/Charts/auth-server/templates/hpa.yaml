@@ -20,6 +20,9 @@ spec:
     name: aaa-server
   minReplicas: {{ .Values.aaa.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.aaa.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.aaa.autoscaling.targetCPU }}
     - type: Resource

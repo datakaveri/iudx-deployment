@@ -20,6 +20,9 @@ spec:
     name: dmpapd
   minReplicas: {{ .Values.dmpapd.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.dmpapd.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.dmpapd.autoscaling.targetCPU }}
     - type: Resource
