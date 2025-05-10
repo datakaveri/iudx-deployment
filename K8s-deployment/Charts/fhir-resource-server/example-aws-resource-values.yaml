@@ -1,0 +1,23 @@
+ingress:
+  hostname: rs-hostname 
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+  
+## fhirResourceServer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param fhirResourceServer.resources.limits The resources limits for the fhirResourceServer containers
+## @param fhirResourceServer.resources.requests The requested resources for the fhirResourceServer containers
+##
+fhirResourceServer:
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.medium
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1200Mi
+    requests: 
+      cpu: 700m
+      memory: 1200Mi
+  persistence:
+    storageClass: "ebs-csi-storage-class"
