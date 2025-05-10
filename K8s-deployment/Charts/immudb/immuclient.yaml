@@ -18,7 +18,7 @@ spec:
     spec: 
       containers: 
         - name: immuclient
-          image: "codenotary/immuclient:1.9DOM.2"
+          image: "codenotary/immuclient:1.9.5"
           args: 
             - "while true; do sleep 30; done;"
           command: 
