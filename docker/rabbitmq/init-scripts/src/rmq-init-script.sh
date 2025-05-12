@@ -44,11 +44,11 @@ for ((i=0; i < $queues_len; i++)); do
     if [[ $queue_type == "quorum" ]];then
 
        curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{\"x-queue-type\": \"quorum\"}}"
-       echo "queue $queue_name created"    
+       echo "queue $queue_name created"
 
     else
-       curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{}}"
-       echo "queue $queue_name created"    
+      curl  -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/queues/$vhost/$queue_name" -d "{\"auto_delete\":false,\"durable\":true,\"arguments\":{}}"
+      echo "queue $queue_name created"
     fi
     # create exchange-queue bindings if present
     if [[ -n  $queue_binding_exchange ]]; then
@@ -59,7 +59,7 @@ done
 
 # create users , set permissions
 users_len=`echo $users | jq length`
-for ((i=0; i < $users_len; i++)); do 
+for ((i=0; i < $users_len; i++)); do
     username=`echo $users | jq -r .[$i].username`
     password=`cat $(echo $users | jq -r .[$i].password_file)`
     permissions=`echo $users | jq -r .[$i].permissions`
@@ -79,3 +79,19 @@ for ((i=0; i < $users_len; i++)); do
         echo "user $username with permissions $permissions created"
     fi
 done
+
+# create policies
+    policies=`echo "$init_config"| jq  -r .policies`
+policies_len=`echo $policies| jq length`
+for ((i=0; i < $policies_len; i++)); do
+    vhost=`echo $policies | jq -r .[$i].policy_vhost`
+    policy_name=`echo $policies | jq -r .[$i].policy_name`
+    policy_pattern=`echo $policies | jq -r .[$i].policy_pattern`
+    policy_definition=`echo $policies | jq -r .[$i].policy_definition`
+    policy_apply=`echo $policies | jq -r .[$i].policy_apply`
+    policy_priority=`echo $policies | jq -r .[$i].policy_priority`
+
+    curl -s -u "$admin_username":"$admin_password" -X PUT "http://$RMQ_HOST/api/policies/$vhost/$policy_name" -d "{\"pattern\":\"$policy_pattern\", \"definition\": $policy_definition , \"priority\": $policy_priority, \"apply-to\": \"$policy_apply\"}"
+    echo "policy $policy_name created"
+done
+
