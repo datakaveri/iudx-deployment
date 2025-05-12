@@ -532,7 +532,7 @@ loki:
   ingester: {}
   # --  Optional index gateway configuration
   index_gateway:
-    mode: simple
+    mode: ring
   frontend:
     scheduler_address: '{{ include "loki.querySchedulerAddress" . }}'
     tail_proxy_url: '{{ include "loki.querierAddress" . }}'
