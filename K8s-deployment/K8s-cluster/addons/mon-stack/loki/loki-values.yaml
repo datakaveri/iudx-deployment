@@ -581,7 +581,7 @@ enterprise:
   # -- Name of the external config secret to use
   externalConfigName: ""
   # -- Use GEL gateway, if false will use the default nginx gateway
-  gelGateway: true
+  gelGateway: false
   # -- If enabled, the correct admin_client storage will be configured. If disabled while running enterprise,
   # make sure auth is set to `type: trust`, or that `auth_enabled` is set to `false`.
   adminApi:
@@ -1913,7 +1913,7 @@ ingester:
     #   partition: 0
   persistence:
     # -- Enable creating PVCs which is required when using boltdb-shipper
-    enabled: false
+    enabled: true
     # -- Use emptyDir with ramdisk for storage. **Please note that all data in ingester will be lost on pod restart**
     inMemory: false
     # -- List of the ingester PVCs
