@@ -7,7 +7,7 @@ networks:
 
 services:
   elasticsearch:
-    image: docker.io/bitnami/elasticsearch:8.12.1-debian-11-r17
+    image: docker.io/bitnami/elasticsearch:8.17.3-debian-12-r0
     deploy:
       replicas: 1
       placement:
@@ -46,7 +46,7 @@ services:
         target: /opt/bitnami/elasticsearch/config/certs/elastic-certificates.p12 
 
   kibana:
-    image: docker.io/bitnami/kibana:8.12.1-debian-11-r17
+    image: docker.io/bitnami/kibana:8.17.3-debian-12-r0
     deploy:
       replicas: 1
       placement:
@@ -81,7 +81,7 @@ services:
         target: /opt/bitnami/kibana/config/kibana.keystore
 
   logstash:
-    image: docker.io/bitnami/logstash:8.12.1-debian-11-r17
+    image: docker.io/bitnami/logstash:8.17.3-debian-12-r0
     deploy:
       replicas: 1
       placement:
