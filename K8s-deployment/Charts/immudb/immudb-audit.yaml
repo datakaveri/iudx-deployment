@@ -21,7 +21,7 @@ spec:
     spec: 
       containers: 
         - name: immudb-audit
-          image: "codenotary/immuclient:1.9DOM.2"
+          image: "codenotary/immuclient:1.9.5"
           args: 
             - audit-mode
           env: 
