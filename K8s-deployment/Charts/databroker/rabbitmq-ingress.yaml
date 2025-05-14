@@ -1,0 +1,43 @@
+# Source: resourceServer/templates/ingress/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rabbitmq
+  labels:
+    app.kubernetes.io/name: rabbitmq
+    app.kubernetes.io/instance: rabbitmq
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: ingress
+  
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "1"
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      add_header Referrer-Policy   "no-referrer-when-downgrade" always;
+      add_header X-Frame-Options   "deny" always;
+      add_header X-XSS-Protection  "1; mode=block" always;
+      add_header X-Permitted-Cross-Domain-Policies  "none" always;
+      add_header Cross-Origin-Embedder-Policy "require-corp" always;
+      add_header Cross-Origin-Resource-Policy "cross-origin" always;
+spec:
+  rules:
+    - host: <hostname>
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rabbitmq
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - <hostname>
+      secretName: rabbitmq-tls-secret
+
+
