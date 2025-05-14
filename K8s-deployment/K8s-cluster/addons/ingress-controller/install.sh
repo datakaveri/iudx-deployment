@@ -1,6 +1,6 @@
 #!/bin/bash
 
-kubectl create namespace ingress-nginx && kubectl create namespace memcached
+kubectl create namespace ingress-nginx
 kubectl create configmap  error-conf --from-file=./ingress-nginx/conf/error.conf -n ingress-nginx 
 kubectl create configmap  iudx-cos-root  --from-file=ingress-nginx/iudx-html/ -n ingress-nginx
 kubectl create configmap  ugix-cos-root  --from-file=ingress-nginx/ugix-html/ -n ingress-nginx
