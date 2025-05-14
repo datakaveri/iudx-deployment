@@ -49,5 +49,5 @@ Following script will create :
 KEYCLOAK_ADMIN_PASSWORD=$(kubectl get secret --namespace keycloak keycloak-passwords -o jsonpath="{.data.admin-password}" | base64 --decode)
 KEYCLOAK_MANAGEMENT_PASSWORD=$(kubectl get secret --namespace keycloak keycloak-passwords -o jsonpath="{.data.management-password}" | base64 --decode)
 
-helm upgrade   -f values.yaml -f resource-values.yaml  --set ingress.hostname=<domain-name> --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD     --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD  keycloak  --version 9.3.1 bitnami/keycloak -n keycloak 
+helm upgrade   -f values.yaml -f resource-values.yaml  --set ingress.hostname=<domain-name> --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD     --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD  keycloak  --version 24.5.6  bitnami/keycloak -n keycloak 
 ```
