@@ -3,7 +3,7 @@ This installs a  keycloak HA with autoscaling based cpu load enabled with iudx c
 The helm chart is based on bitnami : https://github.com/bitnami/charts/tree/master/bitnami/keycloak
 
 ## Docker image
-Custom docker image ``ghcr.io/datakaveri/keycloak:18.0.1-3`` based on [bitnami keycloak image](https://hub.docker.com/r/bitnami/keycloak/) is used. The details are present at ../../Docker-Swarm-deployment/single-node/keycloak.
+Custom docker image ``ghcr.io/datakaveri/keycloak:26.2.3`` based on [bitnami keycloak image](https://hub.docker.com/r/bitnami/keycloak/) is used. The details are present at ../../Docker-Swarm-deployment/single-node/keycloak.
 
 ## Create Sealed secrets
 0. Generate keycloak-db password in postgesql ```../postgresql/secrets/postgres-keycloak-password ```.
