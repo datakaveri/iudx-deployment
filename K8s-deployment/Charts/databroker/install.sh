@@ -9,4 +9,5 @@ kubectl create configmap rmq-init-config --from-file=./secrets/init-config.json 
 kubectl apply -f external-client-service.yaml -n rabbitmq
 helm repo update bitnami
 helm install rabbitmq bitnami/rabbitmq -f values.yaml -f resource-values.yaml -n rabbitmq --version 15.4.2
+kubectl apply -f rabbitmq-ingress.yaml
 kubectl apply -f rmq-init-setup.yaml 
