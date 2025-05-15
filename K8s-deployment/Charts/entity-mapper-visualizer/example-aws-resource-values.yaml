@@ -1,0 +1,24 @@
+ingress:
+  hostname: emv-hostname 
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-staging" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+  
+## entityMapperVisualizer resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## @param entityMapperVisualizer.resources.limits The resources limits for the entityMapperVisualizer containers
+## @param entityMapperVisualizer.resources.requests The requested resources for the entityMapperVisualizer containers
+##
+entityMapperVisualizer:
+  nodeSelector:
+    node.kubernetes.io/instance-type: t3a.medium
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1200Mi
+    requests: 
+      cpu: 700m
+      memory: 1200Mi
+persistence:
+  storageClass: "ebs-csi-storage-class"
+  size: 100G
