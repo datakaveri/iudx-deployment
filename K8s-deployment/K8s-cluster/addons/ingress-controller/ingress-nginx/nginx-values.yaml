@@ -1246,8 +1246,8 @@ imagePullSecrets: []
 # -- TCP service key-value pairs
 ## Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md
 ##
-tcp: {}
-#  "8080": "default/example-tcp-svc:9000"
+tcp: 
+  "5671": "rabbitmq/rabbitmq:5671"
 
 # -- UDP service key-value pairs
 ## Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md

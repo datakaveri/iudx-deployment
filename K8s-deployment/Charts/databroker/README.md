@@ -54,12 +54,6 @@ Define Appropriate values of resources -
 
 in `resource-values.yaml` as shown in sample resource-values files for [`aws`](./example-aws-resource-values.yaml) and [`azure`](./example-azure-resource-values.yaml)
 
-Define Appropriate values of loadbalancer configuration -
-- Loadbalancer annotations
-- Loadbalancer IP
-
-in `external-client-service.yaml` as shown in sample service files for [`aws`](./external-client-aws-service.yaml) and [`azure`](./external-client-azure-service.yaml)
-
 ## Deploy
 ## Installing the Chart
 

@@ -1,3 +1,9 @@
+ingress:
+  hostname: hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+
 nodeSelector: 
   node.kubernetes.io/instance-type: Standard_B2s
 resources:
