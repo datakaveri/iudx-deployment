@@ -8,7 +8,7 @@ networks:
 
 services:
   keycloak:
-    image: ghcr.io/datakaveri/keycloak:23.0.4-IAUSDX-themes-1.1
+    image: ghcr.io/datakaveri/keycloak:26.2.3-iausdx-themes-2.6
     cap_drop:
        - ALL
 
@@ -44,10 +44,11 @@ services:
       - KEYCLOAK_DATABASE_PORT=5432
       - KEYCLOAK_DATABASE_USER=iudx_keycloak_user
       - KEYCLOAK_DATABASE_PASSWORD_FILE=/opt/bitnami/keycloak/secrets/keycloak-db-passwd
-      - KEYCLOAK_HTTP_RELATIVE_PATH=/auth 
+      - KEYCLOAK_HTTP_RELATIVE_PATH=/auth
       - KEYCLOAK_PRODUCTION=TRUE # running in production mode, https://www.keycloak.org/server/configuration#_configuring_the_server_by_using_configuration_files
-      - KEYCLOAK_PROXY=edge # proxy edge mode, allow http comm between proxy and keycloak, https://www.keycloak.org/server/reverseproxy#_proxy_modes
+      - KEYCLOAK_PROXY_HEADERS=xforwarded # Keycloak reverse proxy headers https://github.com/bitnami/containers/blob/main/bitnami/keycloak/README.md
       - KEYCLOAK_LOG_OUTPUT=json # structured logs, easier to parse and do queries in grafana/loki
+
 
 secrets:
   keycloak-db-passwd:
