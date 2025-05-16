@@ -58,9 +58,16 @@ deployment:
     targetMemoryUtilizationPercentage:
     # behavior: {}
 
-    # -- Set deployment object update strategy
-    strategy:
-      type: RollingUpdate
+  # -- Set deployment object update strategy
+  strategy:
+    type: RollingUpdate
+
+service:
+  enabled: false
+  # -- Labels for the service
+  labels: {}
+  # -- Annotations for the service
+  annotations: {}
 
 secret:
   # -- Labels for the Secret
@@ -72,20 +79,20 @@ configmap:
   # -- If enabled, promtail config will be created as a ConfigMap instead of a secret
   enabled: false
 
-initContainer: []
-  # # -- Specifies whether the init container for setting inotify max user instances is to be enabled
-  # - name: init
-  #   # -- Docker registry, image and tag for the init container image
-  #   image: docker.io/busybox:1.33
-  #   # -- Docker image pull policy for the init container image
-  #   imagePullPolicy: IfNotPresent
-  #   # -- The inotify max user instances to configure
-  #   command:
-  #     - sh
-  #     - -c
-  #     - sysctl -w fs.inotify.max_user_instances=128
-  #   securityContext:
-  #     privileged: true
+initContainer: [] 
+   # -- Specifies whether the init container for setting inotify max user instances is to be enabled
+   #- name: init
+     # -- Docker registry, image and tag for the init container image
+     #image: docker.io/busybox:1.33
+     # -- Docker image pull policy for the init container image
+     #imagePullPolicy: IfNotPresent
+     # -- The inotify max user instances to configure
+     #command:
+     #- sh
+     #- -c
+     #- sysctl -w fs.inotify.max_user_instances=128
+     #securityContext:
+     #privileged: true
 
 image:
   # -- The Docker registry
@@ -93,7 +100,7 @@ image:
   # -- Docker image repository
   repository: grafana/promtail
   # -- Overrides the image tag whose default is the chart's appVersion
-  tag: null
+  tag: ""
   # -- Docker image pull policy
   pullPolicy: IfNotPresent
 
@@ -186,6 +193,11 @@ serviceAccount:
   imagePullSecrets: []
   # -- Annotations for the service account
   annotations: {}
+  # -- Automatically mount a ServiceAccount's API credentials
+  automountServiceAccountToken: true
+
+# -- Automatically mount API credentials for a particular Pod
+automountServiceAccountToken: true
 
 # -- Node selector for pods
 nodeSelector: {}
@@ -235,8 +247,7 @@ extraVolumes: []
 extraVolumeMounts: []
 
 # Extra args for the Promtail container.
-extraArgs:
-  - "-client.external-labels=hostname=$(HOSTNAME)"
+extraArgs: []
 # -- Example:
 # -- extraArgs:
 # --   - -client.external-labels=hostname=$(HOSTNAME)
@@ -413,6 +424,7 @@ config:
   # @default -- See `values.yaml`
   clients:
     - url: http://loki:3100/loki/api/v1/push
+      tenant_id: 1
   # -- Configures where Promtail will save it's positions file, to resume reading after restarts.
   # Must be referenced in `config.file` to configure `positions`
   positions:
@@ -603,11 +615,11 @@ sidecar:
     enabled: false
     image:
       # -- The Docker registry for sidecar config-reloader
-      registry: docker.io
+      registry: ghcr.io
       # -- Docker image repository for sidecar config-reloader
       repository: jimmidyson/configmap-reload
       # -- Docker image tag for sidecar config-reloader
-      tag: v0.8.0
+      tag: v0.12.0
       # -- Docker image pull policy for sidecar config-reloader
       pullPolicy: IfNotPresent
     # Extra args for the config-reloader container.
