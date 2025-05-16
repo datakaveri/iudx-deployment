@@ -477,25 +477,30 @@ loki:
   #timeout: "500ms"
   #default_validity: "12h"
   # -- Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
-  schemaConfig: {}
+  #schemaConfig: {}
   # -- a real Loki install requires a proper schemaConfig defined above this, however for testing or playing around
   # you can enable useTestSchema
-  useTestSchema: true
-  testSchemaConfig:
+loki:
+  useTestSchema: false
+
+  storage:
+    type: filesystem
+
+  schemaConfig:
     configs:
-      - from: 2024-04-01
+      - from: "2024-04-01"
         store: tsdb
-        object_store: '{{ include "loki.testSchemaObjectStore" . }}'
+        object_store: filesystem
         schema: v13
         index:
           prefix: index_
           period: 24h
-  # -- Check https://grafana.com/docs/loki/latest/configuration/#ruler for more info on configuring ruler
+
   rulerConfig:
     wal:
       dir: /var/loki/ruler-wal
-  # -- Structured loki configuration, takes precedence over `loki.config`, `loki.schemaConfig`, `loki.storageConfig`
-  structuredConfig: {}
+
+
   # -- Additional query scheduler config
   query_scheduler: {}
   # -- Additional storage config
@@ -869,7 +874,6 @@ networkPolicy:
     # As this is cross-namespace communication, you also need the namespaceSelector.
     podSelector: {}
     # -- Specifies the namespace the alertmanager is running in
-    namespaceSelector: {}
   externalStorage:
     # -- Specify the port used for external storage, e.g. AWS S3
     ports: []

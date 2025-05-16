@@ -424,6 +424,7 @@ config:
   # @default -- See `values.yaml`
   clients:
     - url: http://loki:3100/loki/api/v1/push
+      tenant_id: 1
   # -- Configures where Promtail will save it's positions file, to resume reading after restarts.
   # Must be referenced in `config.file` to configure `positions`
   positions:
