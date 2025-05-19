@@ -343,6 +343,7 @@ loki:
     http_server_write_timeout: 600s
   # -- Limits config
   limits_config:
+    allow_structured_metadata: true
     retention_period: 745h
       #enforce_metric_name: false
     reject_old_samples: true
@@ -354,6 +355,7 @@ loki:
   # -- Provides a reloadable runtime configuration file for some specific configuration
   runtimeConfig: {}
   # -- Check https://grafana.com/docs/loki/latest/configuration/#common_config for more info on how to provide a common configuration
+loki:
   commonConfig:
     path_prefix: /var/loki
     replication_factor: 1
@@ -481,6 +483,8 @@ loki:
   # -- a real Loki install requires a proper schemaConfig defined above this, however for testing or playing around
   # you can enable useTestSchema
 loki:
+  commonConfig:
+    replication_factor: 1
   useTestSchema: false
 
   storage:
