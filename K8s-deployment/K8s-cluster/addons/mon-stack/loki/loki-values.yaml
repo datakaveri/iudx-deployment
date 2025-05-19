@@ -355,7 +355,6 @@ loki:
   # -- Provides a reloadable runtime configuration file for some specific configuration
   runtimeConfig: {}
   # -- Check https://grafana.com/docs/loki/latest/configuration/#common_config for more info on how to provide a common configuration
-loki:
   commonConfig:
     path_prefix: /var/loki
     compactor_address: '{{ include "loki.compactorAddress" . }}'
