@@ -88,9 +88,6 @@ RUN apt update && \
 
 # Fetch and install multicorn Python scripts
 ADD https://github.com/datakaveri/gdi-multicorn-scripts/archive/refs/heads/main.tar.gz /scripts.tar.gz
-RUN python3 -m venv /venv && \
-    /venv/bin/pip install --no-cache-dir /scripts.tar.gz && \
-    rm scripts.tar.gz && \
-    rm -rf /venv
+RUN pip install --no-cache-dir /scripts.tar.gz && rm scripts.tar.gz
 
 USER 1001
