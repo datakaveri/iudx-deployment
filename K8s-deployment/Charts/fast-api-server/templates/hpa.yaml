@@ -1,0 +1,40 @@
+{{- if and .Values.fastApiServer.enabled .Values.fastApiServer.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: fast-api-server
+  labels:
+    app: fast-api-server
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: fast-api-server
+  minReplicas: {{ .Values.fastApiServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.fastApiServer.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.fastApiServer.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.fastApiServer.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.fastApiServer.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.fastApiServer.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}
