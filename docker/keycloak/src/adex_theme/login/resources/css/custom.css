@@ -1,32 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap");
+
 .login-pf body {
   /* background: url("../img/keycloak-bg.png") no-repeat center center fixed;
     background-size: cover;
     height: 100%; */
-  background: #f1f7fa;
+  background: #fff;
   background-size: cover;
   height: auto;
-  padding-bottom: 30px;
 }
 
-.login-pf-page {
-  min-height: 100vh;
+.card-pf {
+  box-shadow: none;
 }
 
 #custom-card-pf {
   border: none;
   padding: 0;
-  background-color: #fff;
-  border-radius: 10px;
   margin: 0 auto;
-  box-shadow: var(--pf-global--BoxShadow--lg);
-  width: 460px;
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
-  border-color: var(--pf-global--primary-color--100);
-  position: absolute;
-  position: a;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
 }
 
 #kc-form-444 {
@@ -40,10 +31,15 @@
 
 .custom-forgot-password a,
 .custom-button-group a {
-  color: #0a9;
+  color: #059669;
   font-size: 14px;
   font-weight: 600;
   outline: none;
+  text-decoration: underline;
+}
+
+.login-pf a:hover {
+  color: #059669 !important;
 }
 
 .custom-forgot-password a:hover,
@@ -66,13 +62,20 @@
 }
 
 .custom-pf-c-form-control {
-  border: 1px solid #ccc;
+  background-color: #F3F4F6;
+  font-size: 16px;
+  border: 0;
   border-radius: 10px;
-  padding: 12px 19px;
+  padding: 12px 20px 12px;
+  margin: 0;
   width: 100%;
-  outline: none;
-  color: #2c2c2c;
-  margin-top: 4px;
+  box-shadow: inset 0 0 0 1px #ccc;
+
+  &:focus {
+    appearance: none;
+    outline: none;
+    box-shadow: inset 0 0 0 2px #0b457f;
+  }
 }
 
 /* #form-group-1,#form-group-2,#form-group-3,#form-group-4,#form-group-5{
@@ -84,21 +87,97 @@
 }
 
 .custom-pf-c-button.custom-pf-m-primary {
-  border-radius: 8px;
-  background-color: #0a9;
-  color: #fff;
-  border: none;
-  padding: 18px 40px;
-  width: 200px;
-  margin: 0 auto;
+  width: 50%;
+  height: auto;
+  margin: auto;
+  transition: 0.5s linear;
+  position: relative;
   display: block;
-  margin-bottom: 15px;
+  overflow: hidden;
+  padding: 13px 0px;
+  text-align: center;
+  background: #059669;
+  color: #fff;
+  text-transform: capitalize;
+  font-weight: 500;
+  border-radius: 5px;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
+
+.custom-pf-c-button.custom-pf-m-primary:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+  border-bottom: 4px solid transparent;
+  border-left: 4px solid transparent;
+  box-sizing: border-box;
+  transform: translateX(100%);
+}
+
+.custom-pf-c-button.custom-pf-m-primary:after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  border-top: 4px solid transparent;
+  border-right: 4px solid transparent;
+  box-sizing: border-box;
+  transform: translateX(-100%);
+}
+
+.custom-pf-c-button.custom-pf-m-primary:hover {
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.5);
+  background-color: #fff;
+  color: #059669;
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+
+.custom-pf-c-button.custom-pf-m-primary:hover:before {
+  border-color: #059669;
+  height: 100%;
+  transform: translateX(0);
+  transition: 0.3s transform linear, 0.3s height linear 0.3s;
+}
+
+.custom-pf-c-button.custom-pf-m-primary:hover:after {
+  border-color: #059669;
+  height: 100%;
+  transform: translateX(0);
+  transition: 0.3s transform linear, 0.3s height linear 0.5s;
+}
+
+.logo-header-text {
+  color: #059669;
+}
+
+button {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: transparent;
 }
 
 h1#kc-page-title {
-  font-weight: 600;
   margin-top: 25px;
   padding-bottom: 20px;
+  font-family: "Space Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 40px;
 }
 
 #kc-header-wrapper {
@@ -107,7 +186,6 @@ h1#kc-page-title {
 }
 
 #custom-logo-wrapper {
-  background-image: url(../img/adex-logo.png);
   background-size: contain;
   width: 95px;
   background-repeat: no-repeat;
@@ -115,25 +193,70 @@ h1#kc-page-title {
   transform: translatey(25%);
 }
 
+.custom-pf-c-form__label {
+  z-index: 1;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+  color: #042f5b;
+}
+
+#kc-form-options {
+  padding: 0 !important;
+}
+
 .custom-pf-c-form__label-text {
-  font-weight: 400;
-  color: #6c6c6c;
+  font-weight: 600;
+  color: #1f2937;
   font-size: 14px;
 }
+
+.col-xs-12.col-sm-12.col-md-12.col-lg-12 {
+  padding: 0 !important;
+}
+
 .custom-pf-c-form__label-text::after {
   content: " *";
-  color:#ff0000;
+  color: #ff0000;
 }
 
 #kc-info-wrapper {
   background-color: transparent;
   font-size: 14px;
+  padding: 15px !important;
+}
+
+textarea:focus,
+input:focus,
+input:hover {
+  outline: none !important;
+  box-shadow: inset 0 0 0 1px !important;
+}
+
+#kc-registration {
+  text-align: center;
+}
+
+#kc-registration span {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+  font-size: 14px;
 }
 
 #kc-info-wrapper a {
-  color: #0a9;
-  font-weight: 600;
+  color: #059669;
   outline: none;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+  font-size: 14px;
+  margin-left: 0px;
+  text-decoration: underline;
 }
 
 #kc-info-wrapper a:hover {
@@ -141,9 +264,24 @@ h1#kc-page-title {
   color: #0088ce;
 }
 
+.login-pf-page .login-pf-signup {
+  text-align: left;
+}
+
 .custom-label-wrapper,
 .custom-input-wrapper {
-  padding: 0 20px;
+  font-size: 16px;
+  border: 0;
+  border-radius: 10px;
+  margin: 0;
+  width: 100%;
+  padding: 0;
+
+  &:focus {
+    appearance: none;
+    outline: none;
+    box-shadow: inset 0 0 0 2px #0b457f;
+  }
 }
 
 .custom-form-group {
@@ -151,13 +289,17 @@ h1#kc-page-title {
   margin-bottom: 20px;
 }
 
+/* #kc-form-buttons{
+  padding: 0 15px;
+} */
 .custom-login-text,
 .custom-login-helper-text {
   font-size: 14px;
+  padding-top: 15px;
 }
 
 .custom-login-text {
-  color: #0a9;
+  color: #0b457f;
   margin-left: 5px;
   font-weight: 600;
 }
@@ -167,15 +309,16 @@ h1#kc-page-title {
 }
 
 #kc-register-form {
-  padding: 0 30px 30px 30px;
+  padding: 0 10px 30px 10px;
   margin-top: 25px;
 }
 
 .custom-header {
-  padding: 0 30px 0px 30px;
-  border-bottom: 1px solid #ccc;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  span {
+    color: #059669;
+  }
 }
 
 #kc-info {
@@ -191,29 +334,32 @@ h1#kc-page-title {
 
 /* Update Password */
 
-#custom-kc-passwd-update-form{
+#custom-kc-passwd-update-form {
   padding: 0 30px;
-  margin-top: 20px
+  margin-top: 20px;
 }
 
-.pw-update-form-group{
+.pw-update-form-group {
   margin-bottom: 20px;
 }
 
-.label-wrapper{
+.label-wrapper {
   padding: 0;
 }
 
-#custom-kc-form-buttons{
+#custom-kc-form-buttons {
   margin: 10px 0;
 }
 
 /* Page expired */
 
-#custom-instruction1{
+#custom-instruction1 {
   padding: 10px 30px;
 }
 
+.login-pf-page {
+  padding-top: 0 !important;
+}
 
 @media (max-width: 767px) {
   #custom-card-pf {
@@ -227,7 +373,7 @@ h1#kc-page-title {
   }
 
   .login-pf-page {
-    padding-top: 0;
+    padding-top: 3rem;
   }
 
   .login-pf body {
@@ -238,27 +384,124 @@ h1#kc-page-title {
     margin: 0;
   }
 
-  .custom-pf-c-form__label-text {
-    font-size: 16px;
-  }
-
   .custom-pf-c-button.custom-pf-m-primary {
     font-size: 16px;
   }
 }
 
-
-#instruction-one{
-  color:'#ddd';
+#instruction-one {
+  color: "#ddd";
   text-align: center;
   margin-top: 20px;
   padding: 0 30px;
 }
 
-#instruction-two{
-  color:'#ddd'
+#instruction-two {
+  color: "#ddd";
 }
 
+.login-div {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
 
+.header {
+  background-color: #fff;
+  height: 60px;
+}
 
+.logo {
+  padding-left: 20px;
+}
 
+.logo-container {
+  padding-left: 50px;
+}
+
+.logo-image {
+  width: 90%;
+}
+
+ul li {
+  margin: 0 0.5rem;
+  text-align: center;
+}
+
+ul li a {
+  text-decoration: none !important;
+  color: #1f2937 !important;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+  font-size: 16px;
+}
+
+li.active {
+  background-color: #e5e7eb !important;
+  border-radius: 40px;
+}
+
+.row {
+  margin: 0px;
+  height: 92vh;
+}
+
+.images-row {
+  margin: 0px;
+
+  div {
+    height: 40vh;
+
+    .video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+/* Navbar */
+
+.navbar {
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid #D1D5DB;
+  background: rgba(255, 255, 255, 0.50);
+  backdrop-filter: blur(12px);
+}
+
+.nav-link {
+  font-size: 14px;
+  text-align: end;
+  cursor: pointer;
+  color: #1f2937 !important;
+}
+
+.login-btn {
+  text-decoration: underline;
+
+  a {
+    color: #059669 !important;
+  }
+}
+
+.register-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background: #059669;
+
+  a {
+    color: white !important;
+  }
+}
+
+.login-image-mobile {
+  min-width: 342px !important;
+  min-height: 229px;
+  margin-top: 36px;
+}
