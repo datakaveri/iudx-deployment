@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: osticket-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: osticket-web
+  template:
+    metadata:
+      labels:
+        app: osticket-web
+    spec:
+      containers:
+      - name: osticket
+        image: ghcr.io/datakaveri/os-ticket:1.0.1
+        ports:
+        - containerPort: 80
+        env:
+        - name: MYSQL_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: osticket-config
+              key: MYSQL_HOST
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: osticket-config
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: osticket-config
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: osticket-config
+              key: MYSQL_DATABASE
+        volumeMounts:
+        - name: uploads
+          mountPath: /var/www/html/upload
+        - name: config
+          mountPath: /var/www/html/include/ost-config
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: osticket-uploads
+      - name: config
+        persistentVolumeClaim:
+          claimName: osticket-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: osticket-web
+spec:
+  selector:
+    app: osticket-web
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080
+  type: NodePort 
