@@ -79,16 +79,10 @@
                         <label for="password" class="${properties.kcLabelClass!}">${msg("password")}</label>
                     </div>
                     <div class="${properties.kcInputWrapperClass!}">
-                        <div class="password-wrapper">
-                            <input type="password" id="password" class="${properties.kcInputClass!}" name="password" 
-                                   autocomplete="new-password" placeholder="Enter password"
-                                   aria-invalid="<#if messagesPerField.existsError('password','password-confirm')>true</#if>"
-                            />
-                            <span id="togglePassword" class="eye-icon">
-                                <i class="fas fa-eye-slash"></i>
-                            </span>
-                        </div>
-
+                        <input type="password" id="password" class="${properties.kcInputClass!}" name="password" 
+                               autocomplete="new-password" placeholder="Enter password"
+                               aria-invalid="<#if messagesPerField.existsError('password','password-confirm')>true</#if>"
+                        />
                         <div class="password-strength" style="display: none;">
                             <p><strong>Password Level:</strong> <span id="password-level">Medium</span></p>
                             <ul>
@@ -137,6 +131,22 @@
                     </div>
                 </div>
             </#if>
+
+            <div class="${properties.kcFormGroupClass!}">
+                <div class="terms-checkbox-wrapper">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
+                        <span class="checkmark"></span>
+                        <span class="terms-text">
+                            I have read and agree with 
+                            <a href="http://localhost:4007/terms-of-service" target="_blank">Terms of Service</a> 
+                            and 
+                            <a href="http://localhost:4007/privacy-policy" target="_blank">Privacy Policy</a>
+                            of TGDeX
+                        </span>
+                    </label>
+                </div>
+            </div>
 
             <div class="${properties.kcFormGroupClass!}">
                 <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">
@@ -212,19 +222,7 @@
         });
     }
 
-    // Add password toggle functionality
-    document.getElementById("togglePassword").addEventListener("click", function() {
-        const passwordField = document.getElementById("password");
-        const icon = this.querySelector("i");
-        
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            icon.className = "fas fa-eye";
-        } else {
-            passwordField.type = "password";
-            icon.className = "fas fa-eye-slash";
-        }
-    });
+    
 });
 
 document.getElementById("kc-register-form").addEventListener("submit", function(event) {
