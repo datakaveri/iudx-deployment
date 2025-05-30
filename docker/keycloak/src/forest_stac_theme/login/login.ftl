@@ -1,7 +1,7 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('username','password') displayInfo=realm.password && realm.registrationAllowed && !registrationDisabled??; section>
     <#if section = "header">
-         <span>Login</span> for ADeX
+         <span>Login</span>
     <#elseif section = "form">
     <div id="kc-form-444">
       <div id="kc-form-wrapper">
@@ -39,10 +39,22 @@
                     </#if>
                 </div>
 
-                  <div id="kc-form-buttons" class="${properties.kcFormGroupClass!}">
-                      <input type="hidden" id="id-hidden-input" name="credentialId" <#if auth.selectedCredential?has_content>value="${auth.selectedCredential}"</#if>/>
-                      <input tabindex="4" class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}" name="login" id="kc-login" type="submit" value="${msg("doLogIn")}"/>
-                  </div>
+                 <div class="bottom-align">
+                    <div id="kc-form-buttons" class="${properties.kcFormGroupClass!}">
+                        <input type="hidden" id="id-hidden-input" name="credentialId" <#if auth.selectedCredential?has_content>value="${auth.selectedCredential}"</#if>/>
+                        <input tabindex="4" class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}" name="login" id="kc-login" type="submit" value="${msg("doLogIn")}"/>
+                    </div>
+
+                    
+                        <#if realm.password && realm.registrationAllowed && !registrationDisabled??>
+                            <div id="kc-registration-container">
+                                <div id="kc-registration">
+                                    <span>${msg("noAccount")} <a tabindex="6"
+                                        href="${url.registrationUrl}">${msg("doRegister")}</a></span>
+                                </div>
+                            </div>
+                        </#if>
+                </div>
             </form>
         </#if>
         </div>
@@ -66,15 +78,9 @@
         </#if>
 
     </div>
-    <#elseif section = "info" >
-        <#if realm.password && realm.registrationAllowed && !registrationDisabled??>
-            <div id="kc-registration-container">
-                <div id="kc-registration">
-                    <span>${msg("noAccount")} <a tabindex="6"
-                                                 href="${url.registrationUrl}">${msg("doRegister")}</a></span>
-                </div>
-            </div>
         </#if>
-    </#if>
+
+   
+   
 
 </@layout.registrationLayout>
