@@ -44,40 +44,34 @@
         DEPARTMENT OF INFORMATION TECHNOLOGY, ELECTRONICS AND COMMUNICATIONS
     </div>
 
-    <div class="navbar">
-        <div class="navbar-content">
-            <div class="header-wrapper col-md-6 col-lg-6 col-xl-6 d-flex justify-content-start">
-                <div class="brand-container d-flex">
-                    <img src="${url.resourcesPath}/img/telangana.png" alt="Logo" class="header-logo">
-                    <div class="title-container">
-                        <a href="https://staging.catalogue.tgdex.iudx.io" class="title">
-                            
-                            <span><strong>TGDeX</strong> - Telangana Data Exchange</span>
-                        </a>
-                    </div>
+   <div class="navbar">
+    <div class="navbar-content">
+        <div class="header-wrapper col-md-6 col-lg-6 col-xl-6 d-flex justify-content-start">
+            <div class="brand-container d-flex">
+                <div>
+                    <a href="https://tgdex.telangana.gov.in" class="title">
+                        <img src="${url.resourcesPath}/img/Horizontal_Green.svg" alt="Logo" class="header-logo">
+                    </a>
                 </div>
-
-                 <button class="menu-toggle d-block d-lg-none" id="menuToggle" aria-expanded="false" aria-controls="navMenu">
-                    <span class="toggle-text">Menu ⋮</span>
-                </button>
             </div>
-
-            <nav class="nav-menu col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end" id="navMenu">
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/about-us">ABOUT</a></li>
-                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/data-bank">DATA BANK</a></li>
-                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/ai-model">AI MODELS</a></li>
-                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/potential-application">POTENTIAL APPLICATION</a></li>
-                    <li class="nav-item"><a href="">SANDBOX IDE</a></li>
-                    <li
-					class="nav-item divider d-none d-xl-block"
-				>
-				</li>
-                   
-                </ul>
-            </nav>
+<button class="menu-toggle d-block d-lg-none" id="menuToggle" aria-expanded="false">
+    <span class="toggle-text">Menu ⋮</span>
+</button>
         </div>
+
+        <nav class="nav-menu d-none d-lg-flex col-md-6 col-lg-6 col-xl-6 justify-content-end" id="navMenu">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/about-us">ABOUT</a></li>
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/data-bank">DATA BANK</a></li>
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/ai-model">AI MODELS</a></li>
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/potential-application">POTENTIAL APPLICATION</a></li>
+                <li class="nav-item"><a  href="https://tgdex.telangana.gov.in/sandbox">SANDBOX IDE</a></li>
+                <li class="nav-item divider d-none d-xl-block"></li>
+            </ul>
+        </nav>
     </div>
+</div>
+
 </div>
 
 <div class="${properties.kcLoginClass!}">
@@ -106,13 +100,8 @@
         <#if !(auth?has_content && auth.showUsername() && !auth.showResetCredentials())>
             <#if displayRequiredFields>
                 <div class="${properties.kcContentWrapperClass!}">
-                    <div class="${properties.kcLabelWrapperClass!} subtitle">
-                        <span class="subtitle"><span class="required">*</span> ${msg("requiredFields")}</span>
-                    </div>
-                    <div class="col-md-10">
-                        <h1 id="kc-page-title"><#nested "header"></h1>
-                    </div>
-                    <div class="col-md-10">
+                   
+                    <div>
                         <h1 id="kc-page-title"><#nested "header"></h1>
                     </div>
                 </div>
@@ -184,22 +173,49 @@
 
     </div>
   </div>
-  <script>
+ <script>
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
 
+    // Initially hide menu on mobile
+    if (window.innerWidth < 992) {
+        navMenu.classList.add('d-none');
+    }
+
     menuToggle.addEventListener('click', function() {
         const isExpanded = this.getAttribute('aria-expanded') === 'true';
         this.setAttribute('aria-expanded', !isExpanded);
-        navMenu.classList.toggle('active');
+        
+        if (isExpanded) {
+            navMenu.classList.add('d-none');
+            navMenu.classList.remove('d-block');
+        } else {
+            navMenu.classList.remove('d-none');
+            navMenu.classList.add('d-block');
+        }
     });
 
-    // Close menu when clicking outside
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 992) {
+            navMenu.classList.remove('d-none', 'd-block');
+            navMenu.classList.add('d-lg-flex');
+        } else {
+            if (menuToggle.getAttribute('aria-expanded') === 'false') {
+                navMenu.classList.add('d-none');
+                navMenu.classList.remove('d-block');
+            }
+        }
+    });
+     // Close menu when clicking outside
     document.addEventListener('click', function(event) {
         if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
             menuToggle.setAttribute('aria-expanded', 'false');
-            navMenu.classList.remove('active');
+            if (window.innerWidth < 992) {
+                navMenu.classList.add('d-none');
+                navMenu.classList.remove('d-block');
+            }
         }
     });
 });
