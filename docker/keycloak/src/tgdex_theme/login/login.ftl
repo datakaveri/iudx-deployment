@@ -41,16 +41,9 @@
         </div>
     </div>
 
-    <div class="password-wrapper">
-        <input tabindex="2" id="password" class="${properties.kcInputClass!}" name="password" type="password" 
-               autocomplete="new-password" placeholder="Enter password"
-               aria-invalid="<#if messagesPerField.existsError('username','password')>true</#if>"/>
-
-        <!-- Eye Icon for Toggling Password Visibility -->
-        <span id="togglePassword" class="eye-icon">
-            <i class="fas fa-eye-slash"></i>
-        </span>
-    </div>
+    <input tabindex="2" id="password" class="${properties.kcInputClass!}" name="password" type="password" 
+           autocomplete="new-password" placeholder="Enter password"
+           aria-invalid="<#if messagesPerField.existsError('username','password')>true</#if>"/>
 
     <#if messagesPerField.existsError('password')>
         <span id="input-error-password" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
@@ -88,20 +81,6 @@
     });
 </script>
 
-<script>
-    document.getElementById("togglePassword").addEventListener("click", function() {
-        const passwordField = document.getElementById("password");
-        const icon = this.querySelector("i");
-        
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            icon.className = "fas fa-eye";
-        } else {
-            passwordField.type = "password";
-            icon.className = "fas fa-eye-slash";
-        }
-    });
-</script>
             </form>
         </#if>
         </div>
