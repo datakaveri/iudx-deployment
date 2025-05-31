@@ -27,14 +27,12 @@
 }
 
 .login-logo {
-  width: 80px;
-  height: 80px;
+  height: 65px;
   object-fit: contain;
 }
 
 .header-logo{
-  width: 40px;
-  height: 40px;
+  height: 30px;
   object-fit: contain;
 }
 
@@ -221,7 +219,7 @@ h1#kc-page-title {
 }
 
 .custom-header {
-  padding: 0 10px 0px 10px;
+  /* padding: 0 10px 0px 10px; */
   display: flex;
   justify-content: center;
   text-align: center;
@@ -1027,6 +1025,184 @@ h1#kc-page-title {
 
 .terms-text a:hover {
     text-decoration: underline;
+}
+
+#password-strength-bar {
+    height: 5px;
+    background-color: #ddd;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    transition: width 0.3s ease-in-out;
+}
+#password-strength-bar.weak { width: 33%; background: red; }
+#password-strength-bar.medium { width: 66%; background: orange; }
+#password-strength-bar.strong { width: 100%; background: green; }
+#password-rules li { list-style: none; color: #888; }
+#password-rules li.valid { color: green; }
+
+.rule-icon {
+    margin-right: 6px;
+}
+#password-rules li.valid .rule-icon {
+    color: green;
+}
+#password-rules li:not(.valid) .rule-icon {
+    color: red;
+}
+.login-redirect {
+    text-align: center;
+    margin-top: 20px;
+}
+.login-redirect a {
+    color: green;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+.strength-bar {
+    display: flex;
+    gap: 4px;
+    height: 10px;
+    margin-bottom: 10px;
+}
+.bar-segment {
+    flex: 1;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+.bar-segment.filled {
+    background-color: green;
+}
+.bar-segment.medium {
+    background-color: orange;
+}
+.bar-segment.weak {
+    background-color: red;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: forestgreen;
+    border: 1px solid forestgreen;
+}
+
+   .navbar {
+    position: relative;
+    background-color: #fff;
+}
+
+.brand-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-menu {
+    flex: 1;
+    padding: 0;
+}
+
+.nav-list {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.header-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menu-toggle {
+    position: relative;
+    border: 1px solid orange;
+    border-radius: 999px;
+    padding: 6px 12px;
+    color: orange;
+    font-weight: 500;
+    background-color: white;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    width: 89px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.nav-menu {
+  display: none;
+    width: 100% !important;
+    left: 0;
+  
+}
+
+.nav-menu.active {
+    display: block;
+}
+
+
+/* Update/Add these CSS rules */
+.nav-menu {
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 991px) {
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        z-index: 1000;
+        padding: 15px 0;
+    }
+
+    .nav-list {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .nav-item {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-item a {
+        display: block;
+        padding: 10px;
+    }
+}
+
+.menu-toggle {
+    cursor: pointer;
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .d-lg-flex {
+        display: flex !important;
+    }
+}
+
+/* Ensure menu toggle is hidden on larger screens */
+@media (min-width: 992px) {
+    .menu-toggle {
+        display: none !important;
+    }
 }
 
 

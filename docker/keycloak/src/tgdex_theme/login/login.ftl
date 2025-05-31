@@ -2,7 +2,7 @@
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('username','password') displayInfo=realm.password && realm.registrationAllowed && !registrationDisabled??; section>
     <#if section = "header">
      <div class="logo-container">
-            <img src="${url.resourcesPath}/img/telangana.png" alt="Logo" class="login-logo">
+            <img src="${url.resourcesPath}/img/Vertical_Green.png" alt="Logo" class="login-logo">
     </div>
     ${msg("loginAccountTitle")}
 
