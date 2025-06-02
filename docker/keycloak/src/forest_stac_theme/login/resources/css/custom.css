@@ -78,7 +78,7 @@
 
 .custom-pf-c-form-control {
   background-color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   border: 0;
   border-radius: 500px;
   padding: 12px 20px 12px;
@@ -475,7 +475,6 @@ li.active {
 .row {
   margin: 0px;
   height: 100%;
-  overflow: scroll;
 }
 
 .images-row {
@@ -606,7 +605,8 @@ li.active {
 
   #kc-content{
     overflow: scroll;
-    height: 60%;
+    height: 80%;
+    padding-bottom: 100px;
   }
 
   .form-col{
@@ -618,6 +618,15 @@ li.active {
 
   .custom-pf-c-button.custom-pf-m-primary {
     width: 70%;
+  }
+
+  #custom-card-pf{
+    
+    display: flex;
+    top: 10%;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 90%;
   }
 
 }

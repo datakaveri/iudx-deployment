@@ -11,10 +11,12 @@
                     <label for="username" class="${properties.kcLabelClass!}"><#if !realm.loginWithEmailAllowed>${msg("username")}<#elseif !realm.registrationEmailAsUsername>${msg("email")}<#else>${msg("email")}</#if></label>
 
                     <#if usernameEditDisabled??>
-                        <input tabindex="1" id="username" class="${properties.kcInputClass!}" name="username" value="${(login.username!'')}" type="text" disabled />
+                        <input tabindex="1" id="username" class="${properties.kcInputClass!}" name="username" value="${(login.username!'')}" type="text" disabled placeholder="you@example.com" />
                     <#else>
                         <input tabindex="1" id="username" class="${properties.kcInputClass!}" name="username" value="${(login.username!'')}"  type="text"  autofocus autocomplete="off"
-                               aria-invalid="<#if messagesPerField.existsError('username','password')>true</#if>"
+                            aria-invalid="<#if messagesPerField.existsError('username','password')>true</#if>"
+                            placeholder="you@example.com"
+
                         />
 
                         <#if messagesPerField.existsError('username','password')>
@@ -28,9 +30,24 @@
                 <div class="${properties.kcFormGroupClass!}">
                     <label for="password" class="${properties.kcLabelClass!}">${msg("password")}</label>
 
-                    <input tabindex="2" id="password" class="${properties.kcInputClass!}" name="password" type="password" autocomplete="off"
-                           aria-invalid="<#if messagesPerField.existsError('username','password')>true</#if>"
-                    />
+                    <div style="position: relative;">
+                        <input tabindex="2"
+                            id="password"
+                            class="${properties.kcInputClass!}"
+                            name="password"
+                            type="password"
+                            autocomplete="off"
+                            aria-invalid="<#if messagesPerField.existsError('username','password')>true</#if>"
+                            placeholder="Enter password"
+                            style="padding-right: 40px;" />
+
+                        <img id="togglePassword"
+                            src="${url.resourcesPath}/img/eye.svg"
+                            alt="Toggle Password Visibility"
+                            style="position: absolute; top: 50%; right: 16px; transform: translateY(-50%); cursor: pointer; width: 20px; height: 20px;" />
+
+                    </div>
+
 
                     <#if messagesPerField.existsError('password')>
                             <span id="input-error-password" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
@@ -39,7 +56,29 @@
                     </#if>
                 </div>
 
-                 <div class="bottom-align">
+                <div class="${properties.kcFormGroupClass!} ${properties.kcFormSettingClass!}">
+                    <div id="kc-form-options">
+                        <#if realm.rememberMe && !usernameEditDisabled??>
+                            <div class="checkbox">
+                                <label>
+                                    <#if login.rememberMe??>
+                                        <input tabindex="3" id="rememberMe" name="rememberMe" type="checkbox" checked> ${msg("rememberMe")}
+                                    <#else>
+                                        <input tabindex="3" id="rememberMe" name="rememberMe" type="checkbox"> ${msg("rememberMe")}
+                                    </#if>
+                                </label>
+                            </div>
+                        </#if>
+                        </div>
+                        <div class="${properties.kcFormOptionsWrapperClass!}">
+                            <#if realm.resetPasswordAllowed>
+                                <a tabindex="5" href="${url.loginResetCredentialsUrl}">${msg("doForgotPassword")}</a>
+                            </#if>
+                        </div>
+                </div>
+
+
+                <div class="bottom-align">
                     <div id="kc-form-buttons" class="${properties.kcFormGroupClass!}">
                         <input type="hidden" id="id-hidden-input" name="credentialId" <#if auth.selectedCredential?has_content>value="${auth.selectedCredential}"</#if>/>
                         <input tabindex="4" class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}" name="login" id="kc-login" type="submit" value="${msg("doLogIn")}"/>
@@ -84,3 +123,15 @@
    
 
 </@layout.registrationLayout>
+
+
+<script>
+  const toggleIcon = document.getElementById("togglePassword");
+  const passwordInput = document.getElementById("password");
+
+  toggleIcon.addEventListener("click", function () {
+    const isPassword = passwordInput.type === "password";
+    passwordInput.type = isPassword ? "text" : "password";
+
+  });
+</script>
