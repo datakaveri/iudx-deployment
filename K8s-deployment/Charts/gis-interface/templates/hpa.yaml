@@ -20,6 +20,9 @@ spec:
     name: gis-interface-server
   minReplicas: {{ .Values.gisInterface.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.gisInterface.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.gisInterface.autoscaling.targetCPU }}
     - type: Resource

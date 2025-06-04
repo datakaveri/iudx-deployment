@@ -20,6 +20,9 @@ spec:
     name: geoserver
   minReplicas: {{ .Values.geoserver.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.geoserver.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.geoserver.autoscaling.targetCPU }}
     - type: Resource

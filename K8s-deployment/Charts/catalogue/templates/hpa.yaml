@@ -20,6 +20,9 @@ spec:
     name: catalogue-server
   minReplicas: {{ .Values.apiServer.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.apiServer.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.apiServer.autoscaling.targetCPU }}
     - type: Resource

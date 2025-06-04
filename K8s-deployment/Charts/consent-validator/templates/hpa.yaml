@@ -20,6 +20,9 @@ spec:
     name: consent-validator
   minReplicas: {{ .Values.consentValidator.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.consentValidator.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.consentValidator.autoscaling.targetCPU }}
     - type: Resource

@@ -20,6 +20,9 @@ spec:
     name: di-server
   minReplicas: {{ .Values.diServer.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.diServer.autoscaling.maxReplicas }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 150
   metrics:
     {{- if .Values.diServer.autoscaling.targetCPU }}
     - type: Resource

@@ -1,5 +1,11 @@
+ingress:
+  hostname: hostname
+  annotations: {
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" # use letsencrypt-prod if proper letsencrypt certs are required
+  }
+
 nodeSelector: 
-  node.kubernetes.io/instance-type: c5a.large
+  node.kubernetes.io/instance-type: t3a.large
 resources:
   limits:
     cpu: 1800m
