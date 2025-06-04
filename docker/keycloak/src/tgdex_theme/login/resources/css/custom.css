@@ -159,7 +159,7 @@ h1#kc-page-title {
   font-size: 14px;
   font-weight: bold;
   color: black;
-
+  padding-left:20px
 }
 
 .custom-pf-cform__otp-text{
@@ -189,8 +189,9 @@ h1#kc-page-title {
 
 .custom-label-wrapper,
 .custom-input-wrapper {
-  padding: 0 20px;
+  padding: 0 10px;
   border-radius: 40px;
+  width: -webkit-fill-available;
 }
 
 .custom-form-group {
@@ -1206,7 +1207,62 @@ h1#kc-page-title {
 }
 
 
+/* Adjust spacing between form fields */
+.row {
+    margin-right: -20px;
+    margin-left: -20px;
+    margin-bottom: 15px; /* Reduce vertical gap between rows */
+}
+
+.col-md-6, .col-md-12 {
+    padding-right: 4px;
+    padding-left: 8px;
+}
 
 
+
+
+
+
+.form-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.label-column {
+    width: 180px;
+    min-width: 180px;
+    text-align: left;
+    padding-right: 20px;
+    padding-top: 8px;
+}
+
+.input-column {
+    flex: 1;
+}
+
+.properties.kcInputClass {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+
+    .label-column {
+        width: 100%;
+        text-align: left;
+        padding-right: 0;
+        padding-bottom: 5px;
+    }
+
+    .input-column {
+        width: 100%;
+    }
+}
 
 
