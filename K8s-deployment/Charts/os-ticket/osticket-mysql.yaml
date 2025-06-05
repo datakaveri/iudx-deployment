@@ -1,8 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: osticket-mysql
 spec:
+  serviceName: osticket-mysql
   replicas: 1
   selector:
     matchLabels:
@@ -20,31 +21,36 @@ spec:
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
-            configMapKeyRef:
-              name: osticket-config
+            secretKeyRef:
+              name: mysql-secret
               key: MYSQL_ROOT_PASSWORD
         - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:
-              name: osticket-config
+              name: mysql-config
               key: MYSQL_DATABASE
         - name: MYSQL_USER
           valueFrom:
             configMapKeyRef:
-              name: osticket-config
+              name: mysql-config
               key: MYSQL_USER
         - name: MYSQL_PASSWORD
           valueFrom:
-            configMapKeyRef:
-              name: osticket-config
+            secretKeyRef:
+              name: mysql-secret
               key: MYSQL_PASSWORD
         volumeMounts:
         - name: mysql-data
           mountPath: /var/lib/mysql
-      volumes:
-      - name: mysql-data
-        persistentVolumeClaim:
-          claimName: osticket-db-data
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "standard"
+      resources:
+        requests:
+          storage: 1Gi
 ---
 apiVersion: v1
 kind: Service

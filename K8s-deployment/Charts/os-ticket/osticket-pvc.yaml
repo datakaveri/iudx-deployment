@@ -1,21 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: osticket-db-data
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: osticket-uploads
 spec:
   accessModes:
     - ReadWriteMany
+  storageClassName: standard
   resources:
     requests:
       storage: 1Gi
@@ -27,6 +17,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
+  storageClassName: standard
   resources:
     requests:
       storage: 1Gi 

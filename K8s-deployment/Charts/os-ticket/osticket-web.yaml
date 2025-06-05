@@ -61,5 +61,25 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-    nodePort: 30080
-  type: NodePort 
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: osticket-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # Add these annotations for local development
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:  # Remove host-based routing for local development
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: osticket-web
+            port:
+              number: 80 
