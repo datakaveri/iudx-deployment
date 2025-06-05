@@ -16,12 +16,12 @@
     <#elseif section = "form">
         <form id="kc-register-form" class="${properties.kcFormClass!}" action="${url.registrationAction}" method="post">
 
-          <!-- First Name Field -->
-            <div class="${properties.kcFormGroupClass!}">
-                <div class="${properties.kcLabelWrapperClass!}">
+          <!-- First Name Field --> 
+            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+                <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="firstName" class="${properties.kcLabelClass!}">First Name</label> <span  style="color: red;"> *</span>
                 </div>
-                <div class="${properties.kcInputWrapperClass!}">
+                <div class="${properties.kcInputWrapperClass!} input-column">
                     <input type="text" id="firstName" name="firstName" class="${properties.kcInputClass!}"
                            value="${(register.formData.firstName!'')}" placeholder="Enter first name" required />
                     <#if messagesPerField.existsError('firstName')>
@@ -33,11 +33,11 @@
             </div>
 
             <!-- Last Name Field -->
-            <div class="${properties.kcFormGroupClass!}">
-                <div class="${properties.kcLabelWrapperClass!}">
+            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+                <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="lastName" class="${properties.kcLabelClass!}">${msg("lastName")}</label> <span  style="color: red;"> *</span>
                 </div>
-                <div class="${properties.kcInputWrapperClass!}">
+                <div class="${properties.kcInputWrapperClass!} input-column">
                     <input type="text" id="lastName" name="lastName" class="${properties.kcInputClass!}"
                            value="${(register.formData.lastName!'')}" placeholder="Enter last name" required />
                     <#if messagesPerField.existsError('lastName')>
@@ -49,11 +49,11 @@
             </div>
 
             <!-- Email Field -->
-            <div class="${properties.kcFormGroupClass!}">
-                <div class="${properties.kcLabelWrapperClass!}">
+            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+                <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="email" class="${properties.kcLabelClass!}">${msg("email")}</label> <span  style="color: red;"> *</span>
                 </div>
-                <div class="${properties.kcInputWrapperClass!}">
+                <div class="${properties.kcInputWrapperClass!} input-column">
                     <input type="email" id="email" name="email" class="${properties.kcInputClass!}"
                            value="${(register.formData.email!'')}" placeholder="Enter email" required />
                     <#if messagesPerField.existsError('email')>
@@ -67,11 +67,11 @@
           
 
             <!-- Password Field -->
-            <div class="${properties.kcFormGroupClass!}">
-                <div class="${properties.kcLabelWrapperClass!}">
+            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+                <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="password" class="${properties.kcLabelClass!}">${msg("password")}</label><span  style="color: red;"> *</span>
                 </div>
-                <div class="${properties.kcInputWrapperClass!}">
+                <div class="${properties.kcInputWrapperClass!} input-column">
                     <input type="password" id="password" name="password" class="${properties.kcInputClass!}"
                            autocomplete="new-password" placeholder="Enter Password"
                            aria-invalid="<#if messagesPerField.existsError('password','password-confirm')>true</#if>" required />
@@ -97,11 +97,11 @@
             </div>
 
             <!-- Confirm Password Field -->
-            <div class="${properties.kcFormGroupClass!}">
-                <div class="${properties.kcLabelWrapperClass!}">
+            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+                <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="password-confirm" class="${properties.kcLabelClass!}">${msg("passwordConfirm")}</label> <span  style="color: red;"> *</span>
                 </div>
-                <div class="${properties.kcInputWrapperClass!}">
+                <div class="${properties.kcInputWrapperClass!} input-column">
                     <input type="password" id="password-confirm" name="password-confirm" class="${properties.kcInputClass!}"
                            autocomplete="new-password" placeholder="Enter confirm password"
                            aria-invalid="<#if messagesPerField.existsError('password-confirm')>true</#if>" required />
