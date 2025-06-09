@@ -8,7 +8,7 @@
   height: 921px;
   width: auto;
   margin: 0 auto;
-  font-family: Avenir,'sanserif';
+  font-family: Avenir,'sanserif' !important;
 }
 
 .login-pf-page {
@@ -58,7 +58,7 @@
   transform: translate(-50%, -50%);
   width: 50%;
   scale:0.85;
-  min-height: 60vh;
+  min-height: 43vh;
 
 }
 /* Add media query for mobile responsiveness */
@@ -113,7 +113,9 @@
   color:black;
   margin-top: 4px;
   border-radius: 35px;
-  font-size: 12px;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  font-family: Avenir 'sanserif' !important;
 }
 
 .custom-pf-form-subTitle{
