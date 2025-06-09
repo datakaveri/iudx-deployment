@@ -17,7 +17,7 @@
         <form id="kc-register-form" class="${properties.kcFormClass!}" action="${url.registrationAction}" method="post">
 
           <!-- First Name Field --> 
-            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+            <div class="${properties.kcFormGroupClass!}  pt-2">
                 <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="firstName" class="${properties.kcLabelClass!}">First Name</label> <span  style="color: red;"> *</span>
                 </div>
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Last Name Field -->
-            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+            <div class="${properties.kcFormGroupClass!} pt-2">
                 <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="lastName" class="${properties.kcLabelClass!}">${msg("lastName")}</label> <span  style="color: red;"> *</span>
                 </div>
@@ -49,7 +49,7 @@
             </div>
 
             <!-- Email Field -->
-            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+            <div class="${properties.kcFormGroupClass!} pt-2">
                 <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="email" class="${properties.kcLabelClass!}">${msg("email")}</label> <span  style="color: red;"> *</span>
                 </div>
@@ -67,7 +67,7 @@
           
 
             <!-- Password Field -->
-            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+            <div class="${properties.kcFormGroupClass!} pt-2">
                 <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="password" class="${properties.kcLabelClass!}">${msg("password")}</label><span  style="color: red;"> *</span>
                 </div>
@@ -97,7 +97,7 @@
             </div>
 
             <!-- Confirm Password Field -->
-            <div class="${properties.kcFormGroupClass!} d-lg-flex form-row pt-2">
+            <div class="${properties.kcFormGroupClass!}  pt-2">
                 <div class="${properties.kcLabelWrapperClass!} label-column" style="width:fit-content">
                     <label for="password-confirm" class="${properties.kcLabelClass!}">${msg("passwordConfirm")}</label> <span  style="color: red;"> *</span>
                 </div>

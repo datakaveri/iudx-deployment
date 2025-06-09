@@ -5,7 +5,10 @@
             <img src="${url.resourcesPath}/img/Vertical_Green.png" alt="Logo" class="login-logo">
     </div>
     
+    <div>
     ${msg("loginAccountTitle")}
+    </div>
+    
 
      <div class="custom-pf-form-subTitle">${msg("loginAccountSubtitle")}</div>
     <#elseif section = "form">
