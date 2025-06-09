@@ -1,22 +1,26 @@
+
+@import url('https://fonts.cdnfonts.com/css/avenir');
+
+
 .login-pf body {
   background:url(../img/background.png) no-repeat center 60%;
   background-size: cover;
   height: 921px;
   width: auto;
   margin: 0 auto;
+  font-family: Avenir,'sanserif';
 }
 
 .login-pf-page {
-  min-height: 85vh;
+  min-height: 70vh;
   position: relative;
-  top: 1rem;
 }
 
 .logo-container {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: -50px;
+  top: 2rem;
   z-index: 1;
   height: 55px;
   border-radius: 50%;
@@ -44,7 +48,7 @@
   border-radius: 10px;
   margin: 0 auto;
   box-shadow: var(--pf-global--BoxShadow--lg);
-  width: 460px;
+  max-width: 600px !important;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
   border-color: var(--pf-global--primary-color--100);
   position: absolute;
@@ -53,6 +57,9 @@
   top: 56%;
   transform: translate(-50%, -50%);
   width: 50%;
+  scale:0.85;
+  min-height: 60vh;
+
 }
 /* Add media query for mobile responsiveness */
 
@@ -119,7 +126,7 @@
 }
 
 .custom-pf-c-form-control::placeholder {
-  color: #6c6c6c;
+  color: #c5c7cb;
 }
 
 .custom-pf-c-button.custom-pf-m-primary {
@@ -140,7 +147,7 @@ h1#kc-page-title {
 }
 
 #kc-header-wrapper {
-  font-family: "Helvetica", "sans-serif";
+  font-family:'Avenir', sans-serif;
   display: none;
 }
 
@@ -156,8 +163,8 @@ h1#kc-page-title {
 .custom-pf-c-form__label-text {
   font-weight: 400;
   color: #6c6c6c;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 15px;
+  font-weight: 400;
   color: black;
   padding-left:20px
 }
@@ -219,11 +226,17 @@ h1#kc-page-title {
   margin-top: 25px;
 }
 
+.header-container {
+  position: relative;
+  top: 4rem;
+}
 .custom-header {
   /* padding: 0 10px 0px 10px; */
   display: flex;
   justify-content: center;
   text-align: center;
+  height: 10vh;
+  margin-top: 4rem;
 }
 
 #kc-info {
@@ -715,7 +728,7 @@ h1#kc-page-title {
   text-decoration: none;
   color: #333;
   font-size: 14px !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   padding: 8px 12px;
   transition: color 0.3s;
 }
@@ -1017,6 +1030,9 @@ h1#kc-page-title {
 .terms-text {
     color: #333;
     line-height: 1.4;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+
 }
 
 .terms-text a {

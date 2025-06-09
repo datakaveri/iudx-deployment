@@ -62,9 +62,9 @@
         <nav class="nav-menu d-none d-lg-flex col-md-6 col-lg-6 col-xl-6 justify-content-end" id="navMenu">
             <ul class="nav-list">
                 <li class="nav-item"><a href="https://tgdex.telangana.gov.in/about-us">ABOUT</a></li>
-                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/data-bank">DATA BANK</a></li>
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/data-bank">DATA BANKS</a></li>
                 <li class="nav-item"><a href="https://tgdex.telangana.gov.in/ai-model">AI MODELS</a></li>
-                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/potential-application">POTENTIAL APPLICATION</a></li>
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/potential-application">USE CASES</a></li>
                 <li class="nav-item"><a  href="https://tgdex.telangana.gov.in/sandbox">SANDBOX IDE</a></li>
                 <li class="nav-item divider d-none d-xl-block"></li>
             </ul>
