@@ -1,9 +1,14 @@
+
+@import url('https://fonts.cdnfonts.com/css/avenir');
+
+
 .login-pf body {
   background:url(../img/background.png) no-repeat center 60%;
   background-size: cover;
   height: 921px;
   width: auto;
   margin: 0 auto;
+  font-family: Avenir,'sanserif';
 }
 
 .login-pf-page {
@@ -43,7 +48,7 @@
   border-radius: 10px;
   margin: 0 auto;
   box-shadow: var(--pf-global--BoxShadow--lg);
-  max-width: 650px !important;
+  max-width: 600px !important;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
   border-color: var(--pf-global--primary-color--100);
   position: absolute;
@@ -121,7 +126,7 @@
 }
 
 .custom-pf-c-form-control::placeholder {
-  color: #6c6c6c;
+  color: #c5c7cb;
 }
 
 .custom-pf-c-button.custom-pf-m-primary {
@@ -142,7 +147,7 @@ h1#kc-page-title {
 }
 
 #kc-header-wrapper {
-  font-family: "Helvetica", "sans-serif";
+  font-family:'Avenir', sans-serif;
   display: none;
 }
 
@@ -158,8 +163,8 @@ h1#kc-page-title {
 .custom-pf-c-form__label-text {
   font-weight: 400;
   color: #6c6c6c;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 15px;
+  font-weight: 400;
   color: black;
   padding-left:20px
 }
@@ -230,7 +235,7 @@ h1#kc-page-title {
   display: flex;
   justify-content: center;
   text-align: center;
-  height: 14vh;
+  height: 10vh;
   margin-top: 4rem;
 }
 
@@ -1025,6 +1030,9 @@ h1#kc-page-title {
 .terms-text {
     color: #333;
     line-height: 1.4;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+
 }
 
 .terms-text a {
