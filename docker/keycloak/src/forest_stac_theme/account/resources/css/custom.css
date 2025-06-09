@@ -1,0 +1,15 @@
+.navbar-title{
+    background-image: url(../img/adex-logo.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#custom-input{
+    border-radius: 10px;
+    padding:8px;
+    background: #fff;
+}
+
+.navbar-pf{
+    border-top: none;
+}
