@@ -13,7 +13,7 @@
 </p>
 <br />
 <p>
-	<Verification Link>${msg("emailVerificationBody4"),link}
+	<Verification Link>${msg("emailVerificationBody4",link)}
 
 	</Verification>
 </p>
@@ -21,6 +21,6 @@
 <p>${msg("emailVerificationBody5")}</p>
 <br />
 <p>${msg("emailVerificationBody6")}</p>
-<p>${msg("emailVerificationBody7")}</p>
+<p>${msg("emailVerificationBody")}</p>
 </body>
 </html>
