@@ -1,6 +1,5 @@
 <html>
 <body>
-${msg("emailVerificationBodyHtml",link, linkExpiration, realmName)}
 <div> ${msg("emailVerificationBody1")} </div>
 <br />
 
@@ -18,5 +17,10 @@ ${msg("emailVerificationBodyHtml",link, linkExpiration, realmName)}
 
 	</Verification>
 </p>
+<br />
+<p>${msg("emailVerificationBody5")}</p>
+<br />
+<p>${msg("emailVerificationBody6")}</p>
+<p>${msg("emailVerificationBody7")}</p>
 </body>
 </html>
