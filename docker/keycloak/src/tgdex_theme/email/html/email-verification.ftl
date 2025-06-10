@@ -1,26 +1,27 @@
 <html>
 <body>
-<div> ${msg("emailVerificationBody1")} </div>
-<br />
+<p>Hi,</p>
 
 <p>
-	${msg("emailVerificationBody2")}
+    You recently attempted to sign up on the Telangana Data Exchange (TGDeX) platform using this email address.
 </p>
-<br />
 
 <p>
-	${msg("emailVerificationBody3")}
+    To complete your registration, please verify your email by clicking the link below:
 </p>
-<br />
-<p>
-	<Verification Link>${msg("emailVerificationBody4",link)}
 
-	</Verification>
+<p>
+    <a href="${link}">Verification Link</a>
 </p>
-<br />
-<p>${msg("emailVerificationBody5")}</p>
-<br />
-<p>${msg("emailVerificationBody6")}</p>
-<p>${msg("emailVerificationBody")}</p>
+
+<p>
+    Note: This link will expire in 5 minutes.
+</p>
+
+<p>
+    If you did not request this registration, you can safely ignore this email.
+</p>
+
+<p>Thank you,<br/>TGDeX Team</p>
 </body>
 </html>
