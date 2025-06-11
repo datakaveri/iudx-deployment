@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: osticket-mysql
+  namespace: os-ticket
 spec:
   serviceName: osticket-mysql
   replicas: 1
@@ -13,9 +14,13 @@ spec:
       labels:
         app: osticket-mysql
     spec:
+      nodeSelector:
+        beta.kubernetes.io/instance-type: t3a.xlarge
       containers:
       - name: mysql
         image: mysql:5.7
+        args:
+          - "--ignore-db-dir=lost+found"
         ports:
         - containerPort: 3306
         env:
@@ -42,20 +47,28 @@ spec:
         volumeMounts:
         - name: mysql-data
           mountPath: /var/lib/mysql
+        resources:
+          requests:
+            memory: "2Gi" 
+            cpu: "1"      
+          limits:
+            memory: "4Gi"  
+            cpu: "2"       
   volumeClaimTemplates:
   - metadata:
       name: mysql-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "standard"
+      storageClassName: "ebs-csi-storage-class"
       resources:
         requests:
-          storage: 1Gi
+          storage: 10Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: osticket-mysql
+  namespace: os-ticket
 spec:
   selector:
     app: osticket-mysql
