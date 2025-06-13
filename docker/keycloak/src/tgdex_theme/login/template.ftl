@@ -45,23 +45,28 @@
     </div>
 
    <div class="navbar">
-    <div class="navbar-content">
-        <div class="header-wrapper col-md-6 col-lg-6 col-xl-6 d-flex justify-content-start">
-            <div class="brand-container d-flex">
-                <div>
-                    <a href="https://tgdex.telangana.gov.in" class="title">
-                        <img src="${url.resourcesPath}/img/Horizontal_Green.svg" alt="Logo" class="header-logo">
-                    </a>
-                </div>
-            </div>
-<button class="menu-toggle d-block d-lg-none" id="menuToggle" aria-expanded="false">
-    <span class="toggle-text">Menu ⋮</span>
-</button>
+ <div class="navbar-content">
+    <div class="header-wrapper col-md-6 col-lg-6 col-xl-6 d-flex justify-content-between align-items-center">
+        <div class="brand-container">
+            <a href="https://tgdex.telangana.gov.in" class="title d-md-block d-none">
+                <img src="${url.resourcesPath}/img/Horizontal_Green.svg" alt="Logo" class="header-logo">
+            </a>
+            <a href="https://tgdex.telangana.gov.in" class="title d-block d-md-none">
+                <img src="${url.resourcesPath}/img/Logo Unit_Green.svg" alt="Logo" class="header-logo">
+            </a>
+
+           
         </div>
+        <button class="menu-toggle d-block d-lg-none ms-auto" id="menuToggle" aria-expanded="false">
+            <span class="toggle-text">Menu ⋮</span>
+        </button>
+    </div>
+</div>
+<div class="divider d-block d-md-none"> </div>
 
         <nav class="nav-menu d-none d-lg-flex col-md-6 col-lg-6 col-xl-6 justify-content-end" id="navMenu">
             <ul class="nav-list">
-                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/about-us">ABOUT</a></li>
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/about-us">ABOUT TGDeX</a></li>
                 <li class="nav-item"><a href="https://tgdex.telangana.gov.in/data-bank">DATA BANKS</a></li>
                 <li class="nav-item"><a href="https://tgdex.telangana.gov.in/ai-model">AI MODELS</a></li>
                 <li class="nav-item"><a href="https://tgdex.telangana.gov.in/potential-application">USE CASES</a></li>
@@ -73,6 +78,8 @@
 </div>
 
 </div>
+
+<div class="divider d-md-block d-none"> </div>
 
 <div class="${properties.kcLoginClass!}">
     <div id="kc-header" class="${properties.kcHeaderClass!}">
@@ -138,7 +145,7 @@
           <#-- App-initiated actions should not see warning messages about the need to complete the action -->
           <#-- during login.                                                                               -->
           <#if displayMessage && message?has_content && (message.type != 'warning' || !isAppInitiatedAction??)>
-              <div class="alert-${message.type} ${properties.kcAlertClass!} pf-m-<#if message.type = 'error'>danger<#else>${message.type}</#if>">
+              <div class="pt-3 alert-${message.type} ${properties.kcAlertClass!} pf-m-<#if message.type = 'error'>danger<#else>${message.type}</#if>">
                   <div class="pf-c-alert__icon">
                       <#if message.type = 'success'><span class="${properties.kcFeedbackSuccessIcon!}"></span></#if>
                       <#if message.type = 'warning'><span class="${properties.kcFeedbackWarningIcon!}"></span></#if>
