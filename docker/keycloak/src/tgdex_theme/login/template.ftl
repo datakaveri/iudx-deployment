@@ -55,7 +55,7 @@
                 <img src="${url.resourcesPath}/img/Logo Unit_Green.svg" alt="Logo" class="header-logo">
             </a>
 
-           
+
         </div>
         <button class="menu-toggle d-block d-lg-none ms-auto" id="menuToggle" aria-expanded="false">
             <span class="toggle-text">Menu ⋮</span>
@@ -107,7 +107,7 @@
         <#if !(auth?has_content && auth.showUsername() && !auth.showResetCredentials())>
             <#if displayRequiredFields>
                 <div class="${properties.kcContentWrapperClass!}">
-                   
+
                     <div>
                         <h1 id="kc-page-title"><#nested "header"></h1>
                     </div>
@@ -124,7 +124,7 @@
                     <div class="col-md-10">
                         <#nested "show-username">
                         <div id="kc-username" class="${properties.kcFormGroupClass!}">
-                           
+
                         </div>
                     </div>
                 </div>
@@ -145,7 +145,7 @@
           <#-- App-initiated actions should not see warning messages about the need to complete the action -->
           <#-- during login.                                                                               -->
           <#if displayMessage && message?has_content && (message.type != 'warning' || !isAppInitiatedAction??)>
-              <div class="pt-3 alert-${message.type} ${properties.kcAlertClass!} pf-m-<#if message.type = 'error'>danger<#else>${message.type}</#if>">
+              <div class="pt-3 d-flex justify-content-center alert-${message.type} ${properties.kcAlertClass!} pf-m-<#if message.type = 'error'>danger<#else>${message.type}</#if>">
                   <div class="pf-c-alert__icon">
                       <#if message.type = 'success'><span class="${properties.kcFeedbackSuccessIcon!}"></span></#if>
                       <#if message.type = 'warning'><span class="${properties.kcFeedbackWarningIcon!}"></span></#if>
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
     menuToggle.addEventListener('click', function() {
         const isExpanded = this.getAttribute('aria-expanded') === 'true';
         this.setAttribute('aria-expanded', !isExpanded);
-        
+
         if (isExpanded) {
             navMenu.classList.add('d-none');
             navMenu.classList.remove('d-block');
