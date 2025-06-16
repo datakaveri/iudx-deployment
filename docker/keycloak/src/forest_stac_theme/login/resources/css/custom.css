@@ -494,6 +494,8 @@ li.active {
 /* Navbar */
 
 .navbar {
+  height: 80px;
+  padding: 0 80px;
   margin-bottom: 0 !important;
   border-bottom: 1px solid #d1d5db;
   background: rgba(255, 255, 255, 0.5);
@@ -543,15 +545,14 @@ li.active {
 .logo-name {
   position: relative;
   top: 5px;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
 }
 
 .logo-department {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   position: relative;
-  top: -5px;
 }
 
 .menu-item-desktop {
@@ -580,7 +581,14 @@ li.active {
   text-align: center;
 }
 
+@media (max-width: 1400px) {
+  .navbar {
+    padding: 0;
+  }
+}
+
 @media (max-width: 767px) {
+ 
   .login-pf-page {
     height: 100%;
     position: absolute;

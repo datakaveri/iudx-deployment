@@ -39,7 +39,7 @@
 
 <body class="${properties.kcBodyClass!}">
 <nav class="navbar navbar-expand-lg w-100 bg-white">
-     <a href="https://dataexplorer.ts.adex.org.in/" class="logo-container">
+     <a href="https://catalogue.forest.iudx.io/" class="logo-container">
         <img
             src="${url.resourcesPath}/img/logo.svg"
             alt="gsx logo"
@@ -50,27 +50,22 @@
     <div
         class="d-flex justify-content-center align-items-left flex-column"
     >
-        <p class="logo-name m-0">Government of Rajasthan</p>
-        <p class="logo-department m-0">Forest Department</p>
+        <p class="logo-name m-0">Forest stack</p>
+        <p class="logo-department m-0">Rajsthan</p>
     </div>
 
      <ul class="navbar-nav ms-auto d-none d-lg-block">
          <li class="nav-item">
-            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/">Datasets</a>
+            <a class="nav-link" href="https://catalogue.forest.iudx.io/datasets">Datasets</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/datasets">Models</a>
+            <a class="nav-link" href="https://catalogue.forest.iudx.io/models">Models</a>
         </li>
         <li class="nav-item ">
-            <a class="nav-link" href="https://canvas.ts.adex.org.in/">Use Cases</a>
+            <a class="nav-link" href="https://catalogue.forest.iudx.io/usecases">Use Cases</a>
         </li>
-         <li class="nav-item ">
-            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/partners">About Us</a>
         </li>
-         <li class="nav-item ">
-            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/vision">Others</a>
-        </li>
-         <li>
+         <#--  <li>
             <div class="menu-item-desktop">
 				<button class="white-btn me-1">
 					<img
@@ -80,12 +75,12 @@
 					Search Datasets
 				</button>
 			</div>
-        </li>
+        </li>  -->
         <#--  <li class="nav-item login-btn d-none d-xxl-block">
-            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/auth">Login</a>
+            <a class="nav-link" href="https://catalogue.forest.iudx.io/auth">Login</a>
         </li>
         <li class="nav-item register-btn d-none d-xxl-block">
-            <a class="nav-link" href="https://dataexplorer.ts.adex.org.in/auth">Register</a>
+            <a class="nav-link" href="https://catalogue.forest.iudx.io/auth">Register</a>
         </li>  -->
 
         
