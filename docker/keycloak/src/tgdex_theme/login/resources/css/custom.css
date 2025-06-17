@@ -4,6 +4,7 @@
   height: 921px;
   width: auto;
   margin: 0 auto;
+  font-size: 13px;
 }
 
 .login-pf-page {
@@ -53,7 +54,7 @@
   transform: translate(-50%, -50%);
   width: 50%;
   scale: 0.85;
-  min-height: 43vh;
+  min-height: 30vh !important;
 }
 /* Add media query for mobile responsiveness */
 
@@ -152,6 +153,11 @@ h1#kc-page-title {
   background-repeat: no-repeat;
   display: inline-block;
   transform: translatey(25%);
+}
+
+.instruction{
+  display: flex;
+  justify-content: center;
 }
 
 .custom-pf-c-form__label-text {
@@ -705,7 +711,6 @@ h1#kc-page-title {
   text-decoration: none;
   color: #333;
   font-size: 1.125rem;
-  font-weight: 500 !important;
   transition: color 0.3s;
 }
 
@@ -1268,8 +1273,8 @@ h1#kc-page-title {
 
 @media (max-width: 768px) {
   .nav-item a {
-    font-size: 1.125rem !important;
-    font-weight: 500;
+    font-size: 0.9rem !important;
+    font-weight: 600;
   }
 }
 
