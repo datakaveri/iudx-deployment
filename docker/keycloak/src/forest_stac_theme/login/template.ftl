@@ -12,7 +12,7 @@
             <meta name="${meta?split('==')[0]}" content="${meta?split('==')[1]}"/>
         </#list>
     </#if>
-    <title>${msg("loginTitle",(realm.displayName!''))}</title>
+    <title>${msg("loginTitle",('Forest Stack'))}</title>
     <link rel="icon" href="${url.resourcesPath}/img/favicon.ico" />
     <#if properties.stylesCommon?has_content>
         <#list properties.stylesCommon?split(' ') as style>
@@ -42,17 +42,18 @@
      <a href="https://catalogue.forest.iudx.io/" class="logo-container">
         <img
             src="${url.resourcesPath}/img/logo.svg"
-            alt="gsx logo"
+            alt="forest stack logo"
             class="logo-image"
         />
+        <div
+        class="d-flex justify-content-center align-items-left flex-column mx-3"
+        >
+            <p class="logo-name m-0">Forest stack</p>
+            <p class="logo-department m-0">Rajsthan</p>
+        </div>
     </a>
 
-    <div
-        class="d-flex justify-content-center align-items-left flex-column"
-    >
-        <p class="logo-name m-0">Forest stack</p>
-        <p class="logo-department m-0">Rajsthan</p>
-    </div>
+    
 
      <ul class="navbar-nav ms-auto d-none d-lg-block">
          <li class="nav-item">
