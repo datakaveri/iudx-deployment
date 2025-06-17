@@ -12,7 +12,7 @@
             <meta name="${meta?split('==')[0]}" content="${meta?split('==')[1]}"/>
         </#list>
     </#if>
-    <title>${msg("loginTitle",('Forest Stack'))}</title>
+    <title>${msg("loginTitle",('Forest Stack | Rajasthan'))}</title>
     <link rel="icon" href="${url.resourcesPath}/img/favicon.ico" />
     <#if properties.stylesCommon?has_content>
         <#list properties.stylesCommon?split(' ') as style>
@@ -39,7 +39,7 @@
 
 <body class="${properties.kcBodyClass!}">
 <nav class="navbar navbar-expand-lg w-100 bg-white">
-     <a href="https://catalogue.forest.iudx.io/" class="logo-container">
+     <a href="https://catalogue.forest-stack.iudx.io/" class="logo-container">
         <img
             src="${url.resourcesPath}/img/logo.svg"
             alt="forest stack logo"
@@ -49,7 +49,7 @@
         class="d-flex justify-content-center align-items-left flex-column mx-3"
         >
             <p class="logo-name m-0">Forest stack</p>
-            <p class="logo-department m-0">Rajsthan</p>
+            <p class="logo-department m-0">Rajasthan</p>
         </div>
     </a>
 
@@ -57,13 +57,13 @@
 
      <ul class="navbar-nav ms-auto d-none d-lg-block">
          <li class="nav-item">
-            <a class="nav-link" href="https://catalogue.forest.iudx.io/datasets">Datasets</a>
+            <a class="nav-link" href="https://catalogue.forest-stack.iudx.io/datasets">Datasets</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="https://catalogue.forest.iudx.io/models">Models</a>
+            <a class="nav-link" href="https://catalogue.forest-stack.iudx.io/models">Models</a>
         </li>
         <li class="nav-item ">
-            <a class="nav-link" href="https://catalogue.forest.iudx.io/usecases">Use Cases</a>
+            <a class="nav-link" href="https://catalogue.forest-stack.iudx.io/usecases">Use Cases</a>
         </li>
         </li>
          <#--  <li>
@@ -78,10 +78,10 @@
 			</div>
         </li>  -->
         <#--  <li class="nav-item login-btn d-none d-xxl-block">
-            <a class="nav-link" href="https://catalogue.forest.iudx.io/auth">Login</a>
+            <a class="nav-link" href="https://catalogue.forest-stack.iudx.io/auth">Login</a>
         </li>
         <li class="nav-item register-btn d-none d-xxl-block">
-            <a class="nav-link" href="https://catalogue.forest.iudx.io/auth">Register</a>
+            <a class="nav-link" href="https://catalogue.forest-stack.iudx.io/auth">Register</a>
         </li>  -->
 
         
