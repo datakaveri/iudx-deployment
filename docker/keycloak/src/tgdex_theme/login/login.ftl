@@ -2,9 +2,13 @@
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('username','password') displayInfo=realm.password && realm.registrationAllowed && !registrationDisabled??; section>
     <#if section = "header">
      <div class="logo-container">
-            <img src="${url.resourcesPath}/img/telangana.png" alt="Logo" class="login-logo">
+            <img src="${url.resourcesPath}/img/Vertical_Green.png" alt="Logo" class="login-logo">
     </div>
+    
+    <div>
     ${msg("loginAccountTitle")}
+    </div>
+    
 
      <div class="custom-pf-form-subTitle">${msg("loginAccountSubtitle")}</div>
     <#elseif section = "form">
@@ -88,7 +92,6 @@
         <#if realm.password && social.providers??>
             <div id="kc-social-providers" class="${properties.kcFormSocialAccountSectionClass!}">
                 <hr/>
-                <h4>${msg("identity-provider-login-label")}</h4>
 
                 <ul class="${properties.kcFormSocialAccountListClass!} <#if social.providers?size gt 3>${properties.kcFormSocialAccountListGridClass!}</#if>">
                     <#list social.providers as p>

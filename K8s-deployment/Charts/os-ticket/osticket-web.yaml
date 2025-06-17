@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: osticket-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: osticket-web
+  template:
+    metadata:
+      labels:
+        app: osticket-web
+    spec:
+      containers:
+      - name: osticket
+        image: ghcr.io/datakaveri/os-ticket:1.0.1
+        ports:
+        - containerPort: 80
+        env:
+        - name: MYSQL_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: osticket-config
+              key: MYSQL_HOST
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: osticket-config
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: osticket-config
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: osticket-config
+              key: MYSQL_DATABASE
+        volumeMounts:
+        - name: uploads
+          mountPath: /var/www/html/upload
+        - name: config
+          mountPath: /var/www/html/include/ost-config
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: osticket-uploads
+      - name: config
+        persistentVolumeClaim:
+          claimName: osticket-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: osticket-web
+spec:
+  selector:
+    app: osticket-web
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: osticket-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # Add these annotations for local development
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:  # Remove host-based routing for local development
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: osticket-web
+            port:
+              number: 80 
