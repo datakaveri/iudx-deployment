@@ -14,6 +14,7 @@
 
     <p>${msg("emailVerification.ignore")}</p>
 
+
     <p>
       ${msg("emailVerification.thanks")}<br/>
       ${msg("emailVerification.team")}
