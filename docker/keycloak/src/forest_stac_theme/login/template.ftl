@@ -77,10 +77,10 @@
 				</button>
 			</div>
         </li>  -->
-        <#--  <li class="nav-item login-btn d-none d-xxl-block">
+        <#--  <li class="nav-item login-btn d-none d-xl-block">
             <a class="nav-link" href="https://catalogue.forest-stack.iudx.io/auth">Login</a>
         </li>
-        <li class="nav-item register-btn d-none d-xxl-block">
+        <li class="nav-item register-btn d-none d-xl-block">
             <a class="nav-link" href="https://catalogue.forest-stack.iudx.io/auth">Register</a>
         </li>  -->
 
@@ -93,7 +93,7 @@
 <div class="${properties.kcLoginClass!}">
     <div class='row'>
 
-        <div id='custom-card-pf' class="${properties.kcFormCardClass!} col-12 col-xxl-6 bg-img">
+        <div id='custom-card-pf' class="${properties.kcFormCardClass!} col-12 col-xl-6 bg-img">
             <header class="${properties.kcFormHeaderClass!} ">
                 <#if realm.internationalizationEnabled  && locale.supported?size gt 1>
                     <div class="${properties.kcLocaleMainClass!}" id="kc-locale">
@@ -202,7 +202,7 @@
 
         </div>
         
-         <div class='col-6 p-0 d-none d-xxl-block'>
+         <div class='col-6 p-0 d-none d-xl-block'>
             <img  class="video" src="${url.resourcesPath}/img/banner-image.png" alt="" style="width: 90%">
         </div>
     </div>
