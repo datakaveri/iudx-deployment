@@ -44,7 +44,7 @@
         DEPARTMENT OF INFORMATION TECHNOLOGY, ELECTRONICS AND COMMUNICATIONS
     </div>
 
-   <div class="navbar">
+   <div class="navbar m-0 p-0">
  <div class="navbar-content">
     <div class="header-wrapper col-md-6 col-lg-6 col-xl-6 d-flex justify-content-between align-items-center">
         <div class="brand-container">
@@ -61,10 +61,8 @@
             <span class="toggle-text">Menu ⋮</span>
         </button>
     </div>
-</div>
-<div class="divider d-block d-md-none"> </div>
 
-        <nav class="nav-menu d-none d-lg-flex col-md-6 col-lg-6 col-xl-6 justify-content-end" id="navMenu">
+    <nav class="nav-menu d-none d-lg-flex col-md-6 col-lg-6 col-xl-6 justify-content-end" id="navMenu">
             <ul class="nav-list">
                 <li class="nav-item"><a href="https://tgdex.telangana.gov.in/about-us">ABOUT TGDeX</a></li>
                 <li class="nav-item"><a href="https://tgdex.telangana.gov.in/data-bank">DATA BANKS</a></li>
@@ -74,6 +72,10 @@
                 <li class="nav-item divider d-none d-xl-block"></li>
             </ul>
         </nav>
+</div>
+<div class="divider d-block d-md-none"> </div>
+
+        
     </div>
 </div>
 
