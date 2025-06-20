@@ -384,7 +384,7 @@ input:hover {
   padding-top: 0 !important;
 }
 
-@media (max-width: 1439px) {
+@media (max-width: 1200px) {
   #custom-card-pf {
     position: relative;
     transform: none;
@@ -449,7 +449,7 @@ input:hover {
   flex-direction: row;
   justify-content: start;
 
-  p{
+  p {
     color: #363636;
   }
 }
@@ -584,7 +584,7 @@ li.active {
   text-align: center;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1200px) {
   .navbar {
     padding: 0;
   }
