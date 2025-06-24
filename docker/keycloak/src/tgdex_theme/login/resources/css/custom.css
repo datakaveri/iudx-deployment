@@ -50,10 +50,11 @@
   left: 50%;
   top: 56%;
   transform: translate(-50%, -50%);
-  width: 50%;
+  width: 60%;
   scale: 0.85;
   max-height: 96vh !important;
   overflow: auto;
+  max-width: 625px;
 }
 
 #kc-form-444 {
