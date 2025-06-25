@@ -20,14 +20,14 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: "nginx"
     # nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "<Enter issuer name here>"
 spec:
   tls:
   - hosts:
-    - helpdesk.tgdex.telangana.gov.in
+    - <Enter host name here>
     secretName: osticket-tls
   rules:
-  - host: helpdesk.tgdex.telangana.gov.in
+  - host: <Enter host name here>
     http: 
       paths:
       - path: /

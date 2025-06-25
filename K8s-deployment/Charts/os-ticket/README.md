@@ -2,7 +2,7 @@
 This installs osTicket helpdesk system with MySQL database and persistent storage for uploads and configuration.
 
 ## Docker image
-Custom docker image `ghcr.io/datakaveri/os-ticket:1.0.2` is used for the deployment.
+Custom docker image `ghcr.io/datakaveri/os-ticket:1.0.4` is used for the deployment.
 
 ## Create Secrets
 1. Generate required secrets using the example template:
@@ -54,8 +54,7 @@ The installation script will:
 - **Web Deployment**: Serves the osTicket application
 - **MySQL StatefulSet**: Handles the database
 - **Persistent Volumes**: 
-  - `osticket-uploads`: For file uploads
-  - `osticket-config`: For configuration persistence
+  - `osticket-uploads`: For file uploads and config file
 - **Ingress**: Routes external traffic to the application
 
 ## Resource Requirements
@@ -68,7 +67,6 @@ The deployment uses the following resource specifications:
   - Memory: 2Gi-4Gi
 - Storage:
   - Uploads: 5Gi
-  - Config: 2Gi
   - MySQL Data: 10Gi
 
 ## Note
