@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@100..900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@100..900&display=swap");
 
-*{
-  font-family: 'DM Sans', "Inter", sans-serif;
+* {
+  font-family: "DM Sans", "Inter", sans-serif;
 }
 
 .login-pf body {
@@ -251,8 +251,8 @@ input:hover {
 #kc-registration {
   text-align: center;
 
-  a{
-    color: #4D7C0F;
+  a {
+    color: #4d7c0f;
   }
 }
 
@@ -445,10 +445,13 @@ input:hover {
 
 .logo-container {
   padding-left: 50px;
-}
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
 
-.logo-image {
-  width: 90%;
+  p{
+    color: #363636;
+  }
 }
 
 ul li {
@@ -494,8 +497,10 @@ li.active {
 /* Navbar */
 
 .navbar {
+  height: 80px;
+  padding: 0 80px;
   margin-bottom: 0 !important;
-  border-bottom: 1px solid #d1d5db;
+  border-bottom: 0px !important;
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(12px);
   justify-content: start;
@@ -543,15 +548,14 @@ li.active {
 .logo-name {
   position: relative;
   top: 5px;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
 }
 
 .logo-department {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   position: relative;
-  top: -5px;
 }
 
 .menu-item-desktop {
@@ -580,6 +584,12 @@ li.active {
   text-align: center;
 }
 
+@media (max-width: 1400px) {
+  .navbar {
+    padding: 0;
+  }
+}
+
 @media (max-width: 767px) {
   .login-pf-page {
     height: 100%;
@@ -594,7 +604,7 @@ li.active {
   }
 
   .bottom-align {
-    border-top: solid 1px #E5E7EB;
+    border-top: solid 1px #e5e7eb;
     background-color: #f8fafc;
     position: absolute;
     bottom: 0;
@@ -603,16 +613,16 @@ li.active {
     padding: 10px 0 20px 0;
   }
 
-  #kc-content{
+  #kc-content {
     overflow: scroll;
     height: 80%;
     padding-bottom: 100px;
   }
 
-  .form-col{
+  .form-col {
     flex-direction: column;
   }
-  .custom-form-group{
+  .custom-form-group {
     width: 100%;
   }
 
@@ -620,13 +630,11 @@ li.active {
     width: 70%;
   }
 
-  #custom-card-pf{
-    
+  #custom-card-pf {
     display: flex;
     top: 10%;
     flex-direction: column;
     justify-content: flex-start;
     height: 90%;
   }
-
 }
