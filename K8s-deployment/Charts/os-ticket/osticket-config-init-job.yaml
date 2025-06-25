@@ -13,16 +13,15 @@ spec:
         args:
         - |
           echo "Checking if config already exists..."
-          if [ -f "/config-storage/ost-config.php" ]; then
+          if [ ! -s "/config-storage/ost-config.php" ]; then
+            echo "Creating initial config file from sample..."
+            cp -f /var/www/html/include/ost-sampleconfig.php /config-storage/ost-config.php
+            chmod 666 /config-storage/ost-config.php
+            echo "Config file created successfully!"
+          else
             echo "Config file already exists, skipping initialization"
-            exit 0
           fi
-          
-          echo "Creating initial config file from sample..."
-          cp /var/www/html/include/ost-sampleconfig.php /config-storage/ost-config.php
-          chmod 666 /config-storage/ost-config.php
-          
-          echo "Config file created successfully!"
+
           echo "First few lines of config file:"
           head -10 /config-storage/ost-config.php
         volumeMounts:
@@ -31,6 +30,6 @@ spec:
       volumes:
       - name: config-volume
         persistentVolumeClaim:
-          claimName: osticket-config
+          claimName: osticket-uploads
       restartPolicy: Never
   backoffLimit: 3
