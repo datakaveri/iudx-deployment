@@ -38,7 +38,7 @@
 
         <div class="form-group ${messagesPerField.printIfExists('firstName','has-error')}">
             <div class="col-sm-2 col-md-2">
-                <label for="firstName" class="control-label">1212</label> <span class="required">*</span>
+                <label for="firstName" class="control-label">${msg("firstName")}</label> <span class="required">*</span>
             </div>
 
             <div class="col-sm-10 col-md-10">

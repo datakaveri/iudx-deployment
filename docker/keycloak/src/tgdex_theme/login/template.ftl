@@ -13,8 +13,8 @@
             <meta name="${meta?split('==')[0]}" content="${meta?split('==')[1]}"/>
         </#list>
     </#if>
-    <title>${msg("loginTitle",(realm.displayName!''))}</title>
-    <link rel="icon" href="${url.resourcesPath}/img/favicon.ico" />
+    <title>TGDeX | Telangana Data ExChange</title>
+    <link rel="icon" href="${url.resourcesPath}/img/fav_icon.png" />
     <#if properties.stylesCommon?has_content>
         <#list properties.stylesCommon?split(' ') as style>
             <link href="${url.resourcesCommonPath}/${style}" rel="stylesheet" />
@@ -44,41 +44,44 @@
         DEPARTMENT OF INFORMATION TECHNOLOGY, ELECTRONICS AND COMMUNICATIONS
     </div>
 
-    <div class="navbar">
-        <div class="navbar-content">
-            <div class="header-wrapper col-md-6 col-lg-6 col-xl-6 d-flex justify-content-start">
-                <div class="brand-container d-flex">
-                    <img src="${url.resourcesPath}/img/telangana.png" alt="Logo" class="header-logo">
-                    <div class="title-container">
-                        <a href="https://staging.catalogue.tgdex.iudx.io" class="title">
-                            
-                            <span><strong>TGDeX</strong> - Telangana Data Exchange</span>
-                        </a>
-                    </div>
-                </div>
+   <div class="navbar m-0 p-0">
+ <div class="navbar-content">
+    <div class="header-wrapper col-md-6 col-lg-6 col-xl-6 d-flex justify-content-between align-items-center">
+        <div class="brand-container">
+            <a href="https://tgdex.telangana.gov.in" class="title d-md-block d-none">
+                <img src="${url.resourcesPath}/img/Horizontal_Green.svg" alt="Logo" class="header-logo">
+            </a>
+            <a href="https://tgdex.telangana.gov.in" class="title d-block d-md-none">
+                <img src="${url.resourcesPath}/img/Logo Unit_Green.svg" alt="Logo" class="header-logo">
+            </a>
 
-                 <button class="menu-toggle d-block d-lg-none" id="menuToggle" aria-expanded="false" aria-controls="navMenu">
-                    <span class="toggle-text">Menu ⋮</span>
-                </button>
-            </div>
 
-            <nav class="nav-menu col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end" id="navMenu">
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/about-us">ABOUT</a></li>
-                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/data-bank">DATA BANK</a></li>
-                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/ai-model">AI MODELS</a></li>
-                    <li class="nav-item"><a href="https://staging.catalogue.tgdex.iudx.io/potential-application">POTENTIAL APPLICATION</a></li>
-                    <li class="nav-item"><a href="">SANDBOX IDE</a></li>
-                    <li
-					class="nav-item divider d-none d-xl-block"
-				>
-				</li>
-                   
-                </ul>
-            </nav>
         </div>
+        <button class="menu-toggle d-block d-lg-none ms-auto" id="menuToggle" aria-expanded="false">
+            <span class="toggle-text">Menu ⋮</span>
+        </button>
+    </div>
+
+    <nav class="nav-menu d-none d-lg-flex col-md-6 col-lg-6 col-xl-6 justify-content-end" id="navMenu">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/about-us">ABOUT TGDeX</a></li>
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/data-bank">DATA BANKS</a></li>
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/ai-model">AI MODELS</a></li>
+                <li class="nav-item"><a href="https://tgdex.telangana.gov.in/potential-application">USE CASES</a></li>
+                <li class="nav-item"><a  href="https://tgdex.telangana.gov.in/sandbox">SANDBOX IDE</a></li>
+                <li class="nav-item divider d-none d-xl-block"></li>
+            </ul>
+        </nav>
+</div>
+<div class="divider d-block d-md-none"> </div>
+
+        
     </div>
 </div>
+
+</div>
+
+<div class="divider d-md-block d-none"> </div>
 
 <div class="${properties.kcLoginClass!}">
     <div id="kc-header" class="${properties.kcHeaderClass!}">
@@ -106,13 +109,8 @@
         <#if !(auth?has_content && auth.showUsername() && !auth.showResetCredentials())>
             <#if displayRequiredFields>
                 <div class="${properties.kcContentWrapperClass!}">
-                    <div class="${properties.kcLabelWrapperClass!} subtitle">
-                        <span class="subtitle"><span class="required">*</span> ${msg("requiredFields")}</span>
-                    </div>
-                    <div class="col-md-10">
-                        <h1 id="kc-page-title"><#nested "header"></h1>
-                    </div>
-                    <div class="col-md-10">
+
+                    <div>
                         <h1 id="kc-page-title"><#nested "header"></h1>
                     </div>
                 </div>
@@ -128,7 +126,7 @@
                     <div class="col-md-10">
                         <#nested "show-username">
                         <div id="kc-username" class="${properties.kcFormGroupClass!}">
-                           
+
                         </div>
                     </div>
                 </div>
@@ -149,7 +147,7 @@
           <#-- App-initiated actions should not see warning messages about the need to complete the action -->
           <#-- during login.                                                                               -->
           <#if displayMessage && message?has_content && (message.type != 'warning' || !isAppInitiatedAction??)>
-              <div class="alert-${message.type} ${properties.kcAlertClass!} pf-m-<#if message.type = 'error'>danger<#else>${message.type}</#if>">
+              <div class="mt-3 d-flex justify-content-center alert-${message.type} ${properties.kcAlertClass!} pf-m-<#if message.type = 'error'>danger<#else>${message.type}</#if>">
                   <div class="pf-c-alert__icon">
                       <#if message.type = 'success'><span class="${properties.kcFeedbackSuccessIcon!}"></span></#if>
                       <#if message.type = 'warning'><span class="${properties.kcFeedbackWarningIcon!}"></span></#if>
@@ -184,22 +182,49 @@
 
     </div>
   </div>
-  <script>
+ <script>
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
 
+    // Initially hide menu on mobile
+    if (window.innerWidth < 992) {
+        navMenu.classList.add('d-none');
+    }
+
     menuToggle.addEventListener('click', function() {
         const isExpanded = this.getAttribute('aria-expanded') === 'true';
         this.setAttribute('aria-expanded', !isExpanded);
-        navMenu.classList.toggle('active');
+
+        if (isExpanded) {
+            navMenu.classList.add('d-none');
+            navMenu.classList.remove('d-block');
+        } else {
+            navMenu.classList.remove('d-none');
+            navMenu.classList.add('d-block');
+        }
     });
 
-    // Close menu when clicking outside
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 992) {
+            navMenu.classList.remove('d-none', 'd-block');
+            navMenu.classList.add('d-lg-flex');
+        } else {
+            if (menuToggle.getAttribute('aria-expanded') === 'false') {
+                navMenu.classList.add('d-none');
+                navMenu.classList.remove('d-block');
+            }
+        }
+    });
+     // Close menu when clicking outside
     document.addEventListener('click', function(event) {
         if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
             menuToggle.setAttribute('aria-expanded', 'false');
-            navMenu.classList.remove('active');
+            if (window.innerWidth < 992) {
+                navMenu.classList.add('d-none');
+                navMenu.classList.remove('d-block');
+            }
         }
     });
 });
