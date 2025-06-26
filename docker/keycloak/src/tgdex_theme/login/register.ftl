@@ -57,7 +57,7 @@
                     <input type="email" id="email" name="email" class="${properties.kcInputClass!}"
                            value="${(register.formData.email!'')}" placeholder="Enter email" required />
                     <#if messagesPerField.existsError('email')>
-                        <span id="input-error-email" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
+                        <span id="input-error-email" class="${properties.kcInputErrorMessageClass!} emailExistsError" aria-live="polite">
                             ${kcSanitize(messagesPerField.get('email'))?no_esc}
                         </span>
                     </#if>
