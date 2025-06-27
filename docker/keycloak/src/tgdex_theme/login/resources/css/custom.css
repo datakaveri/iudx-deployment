@@ -1150,3 +1150,9 @@ h1#kc-page-title {
     display: flex !important;
   }
 }
+
+.pf-c-input-group {
+  .button {
+    display: none;
+  }
+}
