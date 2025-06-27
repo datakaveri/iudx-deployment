@@ -1,4 +1,5 @@
-<#import "template.ftl" as layout>
-<@layout.emailLayout>
-${kcSanitize(msg("passwordResetBodyHtml",link, linkExpiration, realmName, linkExpirationFormatter(linkExpiration)))?no_esc}
-</@layout.emailLayout>
+<html>
+<body>
+${msg("passwordResetBodyHtml",link,(linkExpiration/60)?string["0"],realmName)}
+</body>
+</html>
