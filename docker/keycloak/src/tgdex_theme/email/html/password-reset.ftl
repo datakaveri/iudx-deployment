@@ -11,7 +11,7 @@
 </p>
 
 <p>
-  <a href="${linkExpiration}" style="color: #1a73e8; text-decoration: underline;">Link to reset credentials</a>
+  <a  href="${link}" style="color: #1a73e8; text-decoration: underline;">Link to reset credentials</a>
 </p>
 
 <p><em>Note: This link will expire in 5 minutes.</em></p>
