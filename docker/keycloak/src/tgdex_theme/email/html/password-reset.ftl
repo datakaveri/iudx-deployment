@@ -1,13 +1,24 @@
 <html>
 <body>
-<p>Someone just requested to change your <strong>${realmName}</strong> account's credentials.</p>
+<p>Hi,</p>
 
-<p>If this was you, click on the link below to reset them:</p>
+<p>
+  You recently attempted to reset your credentials on the <strong>Telangana Data Exchange (TGDeX)</strong> platform using this email address.
+</p>
 
-<p><a href="${link}">Reset your credentials</a></p>
+<p>
+  To complete your credential reset, please continue by clicking the link below:
+</p>
 
-<p>This link will expire within ${linkExpiration}.</p>
+<p>
+  <a href="${linkExpiration}" style="color: #1a73e8; text-decoration: underline;">Link to reset credentials</a>
+</p>
 
-<p>If you didn’t request this, you can safely ignore this message — no changes will be made to your account.</p>
+<p><em>Note: This link will expire in ${expiryMinutes} minutes.</em></p>
+
+<p>
+  If you did not request this, you can safely ignore this email.
+</p>
 </body>
 </html>
+
