@@ -16,11 +16,11 @@
             <div class="${properties.kcFormGroupClass!} ${properties.kcFormSettingClass!}">
                 <div id="kc-form-options" class="${properties.kcFormOptionsClass!}">
                     <div class="${properties.kcFormOptionsWrapperClass!}">
-                        <span><a href="${url.loginUrl}">${kcSanitize(msg("backToLogin"))?no_esc}</a></span>
+                        <span>Go back to <a href="${url.loginUrl}">${kcSanitize(msg("backToLogin"))?no_esc}</a> page</span>
                     </div>
                 </div>
 
-                <div id="kc-form-buttons" class="login-div">
+                <div id="kc-form-buttons" class="login-div" style="width:100%">
                     <button class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" type="submit" value="${msg("doSubmit")}">${msg("doSubmit")}</button>
                 </div>
             </div>
