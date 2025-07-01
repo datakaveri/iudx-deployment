@@ -1,7 +1,7 @@
-<#macro main>
-  <html>
-    <body>
-      <#nested>
-    </body>
-  </html>
-</#macro>
+    <#macro emailLayout>
+      <html>
+        <body>
+          <#nested>
+        </body>
+      </html>
+    </#macro>
