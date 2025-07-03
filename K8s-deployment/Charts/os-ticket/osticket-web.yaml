@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: osticket-web
+  namespace: os-ticket
 spec:
   replicas: 1
   selector:
@@ -12,49 +13,65 @@ spec:
       labels:
         app: osticket-web
     spec:
+      nodeSelector:
+         beta.kubernetes.io/instance-type: t3a.large
       containers:
       - name: osticket
-        image: ghcr.io/datakaveri/os-ticket:1.0.1
+        image: ghcr.io/datakaveri/os-ticket:1.0.4
         ports:
         - containerPort: 80
         env:
         - name: MYSQL_HOST
           valueFrom:
             configMapKeyRef:
-              name: osticket-config
+              name: mysql-config
               key: MYSQL_HOST
         - name: MYSQL_USER
           valueFrom:
             configMapKeyRef:
-              name: osticket-config
+              name: mysql-config
               key: MYSQL_USER
         - name: MYSQL_PASSWORD
           valueFrom:
-            configMapKeyRef:
-              name: osticket-config
+            secretKeyRef:
+              name: mysql-secret
               key: MYSQL_PASSWORD
         - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:
-              name: osticket-config
+              name: mysql-config
               key: MYSQL_DATABASE
         volumeMounts:
         - name: uploads
           mountPath: /var/www/html/upload
-        - name: config
-          mountPath: /var/www/html/include/ost-config
+        - name: uploads
+          mountPath: /var/www/html/upload/ost-config.php
+          subPath: ost-config.php
+        # - name: data
+        #   mountPath: /var/www/html/data
+        resources:
+          limits:
+            cpu: 1400m
+            memory: 1.5Gi
+          requests:
+            cpu: 1000m
+            memory: 1.0Gi
       volumes:
       - name: uploads
         persistentVolumeClaim:
           claimName: osticket-uploads
-      - name: config
-        persistentVolumeClaim:
-          claimName: osticket-config
+      # - name: config
+      #   persistentVolumeClaim:
+      #     claimName: osticket-config
+      # - name: data
+      #   persistentVolumeClaim:
+      #     claimName: osticket-data
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: osticket-web
+  namespace: os-ticket
 spec:
   selector:
     app: osticket-web
@@ -62,24 +79,3 @@ spec:
   - port: 80
     targetPort: 80
   type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: osticket-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    # Add these annotations for local development
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-spec:
-  rules:
-  - http:  # Remove host-based routing for local development
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: osticket-web
-            port:
-              number: 80 

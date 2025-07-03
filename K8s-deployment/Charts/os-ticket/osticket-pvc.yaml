@@ -2,22 +2,24 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: osticket-uploads
+  namespace: os-ticket
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: standard
+    - ReadWriteOnce
+  storageClassName: ebs-csi-storage-class
   resources:
     requests:
-      storage: 1Gi
+      storage: 5Gi
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: osticket-config
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: standard
-  resources:
-    requests:
-      storage: 1Gi 
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: osticket-config
+#   namespace: os-ticket
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   storageClassName: ebs-csi-storage-class
+#   resources:
+#     requests:
+#       storage: 2Gi
