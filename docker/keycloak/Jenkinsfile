@@ -1,0 +1,126 @@
+pipeline {
+  agent {
+    node { label 'slave1' }
+  }
+
+  environment {
+    registryUri        = 'https://ghcr.io'
+    registryCredential = 'datakaveri-ghcr'
+    GIT_HASH           = "${GIT_COMMIT.take(7)}"
+    TAG_26             = "26.2.3-tgdex-${GIT_HASH}"
+    TAG_23             = "23.0.4-iausdx-themes-${GIT_HASH}"
+    IMAGE              = "ghcr.io/datakaveri/keycloak"
+  }
+
+  stages {
+
+    stage('Detect Changed Files') {
+      steps {
+        script {
+          changedFiles = sh(script: "git diff --name-only HEAD~1 HEAD", returnStdout: true).trim().split('\n')
+          echo "Changed files:\n${changedFiles.join('\n')}"
+        }
+      }
+    }
+
+    stage('Build Image v26 (tgdex_theme)') {
+      when {
+        expression {
+          return changedFiles.any { it.startsWith("docker/keycloak/src/tgdex_theme/") }
+        }
+      }
+      steps {
+        script {
+          echo "Building v26 image with tag: ${TAG_26}"
+          tgImage26 = docker.build("${IMAGE}", "-f docker/keycloak/Dockerfile-v26 docker/keycloak")
+        }
+      }
+    }
+
+    stage('Push Image v26 (tgdex_theme)') {
+      when {
+        expression { return binding.hasVariable('tgImage26') && tgImage26 != null }
+      }
+      steps {
+        script {
+          echo "Pushing image: ${IMAGE}:${TAG_26}"
+          docker.withRegistry(registryUri, registryCredential) {
+            tgImage26.push("${TAG_26}")
+          }
+        }
+      }
+    }
+
+    stage('Build & Push Wrapper Image(sandbox-v26)') {
+      when {
+        expression { return binding.hasVariable('tgImage26') && tgImage26 != null }
+      }
+      steps {
+        script {
+          withCredentials([usernamePassword(credentialsId: 'datakaveri-ghprb', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+            sh 'rm -rf sandbox-keycloak-spi && git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/datakaveri/sandbox-keycloak-spi.git'
+          }
+
+          dir('sandbox-keycloak-spi') {
+            sh """
+              sed -i 's|FROM ghcr.io/datakaveri/keycloak:.*|FROM ghcr.io/datakaveri/keycloak:${TAG_26}|' Dockerfile
+            """
+
+            def wrapperTag = "sandbox-${TAG_26}"
+            echo "Building and pushing wrapper image with tag: ${wrapperTag}"
+            def wrapperImage = docker.build("${IMAGE}", ".")
+            docker.withRegistry(registryUri, registryCredential) {
+              wrapperImage.push(wrapperTag)
+            }
+          }
+        }
+      }
+    }
+
+    stage('Build Image v23') {
+      when {
+        expression {
+          return changedFiles.any {
+            it.startsWith("docker/keycloak/src/") && !it.startsWith("docker/keycloak/src/tgdex_theme/")
+          }
+        }
+      }
+      steps {
+        script {
+          echo "Building v23 image with tag: ${TAG_23}"
+          image23 = docker.build("${IMAGE}", "-f docker/keycloak/Dockerfile-v23 docker/keycloak")
+        }
+      }
+    }
+
+    stage('Push Image v23') {
+      when {
+        expression { return binding.hasVariable('image23') && image23 != null }
+      }
+      steps {
+        script {
+          echo "Pushing image: ${IMAGE}:${TAG_23}"
+          docker.withRegistry(registryUri, registryCredential) {
+            image23.push("${TAG_23}")
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    failure {
+      script {
+        if (env.GIT_BRANCH == 'origin/master' || env.GIT_BRANCH == 'master') {
+          emailext(
+            recipientProviders: [buildUser(), developers()],
+            to: '$RS_RECIPIENTS, $DEFAULT_RECIPIENTS',
+            subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - FAILED',
+            body: """$PROJECT_NAME - Build # $BUILD_NUMBER - FAILED.
+Check console output at $BUILD_URL to view the results."""
+          )
+        }
+      }
+    }
+  }
+}
