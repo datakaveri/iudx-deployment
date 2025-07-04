@@ -138,7 +138,7 @@
             <div class="${properties.kcFormGroupClassCustom!}" id="form-col-full">
                 <div class="${properties.kcInputWrapperClass!}">
                     <input type="checkbox" id="terms" name="terms" required style="margin-right: 8px;" />
-                    <label for="terms" style="display: inline;">I have read and agree with <a href="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/IUDX/TermsAndCondition/pdf/termsandcondIudx.pdf" target="_blank" style="text-decoration: underline;">Terms of service</a> of IUDX.</label>
+                    <label for="terms" style="display: inline;">By continuing, you acknowledge that you have read and understood our  <a href="https://iudx-catalogue-assets.s3.ap-south-1.amazonaws.com/IUDX/TermsAndCondition/pdf/termsandcondIudx.pdf" target="_blank" style="text-decoration: underline;">Terms and Conditions</a></label>
                 </div>
             </div>
 
