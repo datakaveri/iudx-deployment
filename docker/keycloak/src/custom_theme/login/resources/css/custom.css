@@ -14,7 +14,7 @@
   border-radius: 10px;
   margin: 0 auto;
   box-shadow: var(--pf-global--BoxShadow--lg);
-  width: 460px;
+  width: 500px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
   border-color: var(--pf-global--primary-color--100);
   position: absolute;
@@ -254,7 +254,7 @@ h1#kc-page-title {
 }
 
 #kc-register-form {
-  padding: 0 30px 30px 30px;
+  padding: 0 20px 30px 20px;
   margin-top: 25px;
 }
 
