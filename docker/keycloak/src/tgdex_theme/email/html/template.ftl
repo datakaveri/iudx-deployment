@@ -1,26 +1,19 @@
-<#macro emailLayout>
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <title>${msg("emailTitle")!}</title>
+    <meta charset="UTF-8">
+    <title>TGDeX Platform Login OTP</title>
   </head>
-  <body style="font-family: Arial, sans-serif; background-color: #f6f6f6; padding: 20px; color: #333;">
-    <#assign subject = "TGDeX Platform Login OTP" />
+  <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <p>If you are trying to login to the <strong>TGDeX Platform</strong>, please use the temporary login code below:</p>
 
-<p>If you are trying to login to the TGDeX Platform, please use the temporary login code below:</p>
+    <p style="font-size: 24px; font-weight: bold; letter-spacing: 4px; text-align: center; margin: 20px 0;">
+ 
+    </p>
 
-<h2 style="text-align: center; font-size: 24px; letter-spacing: 4px;">
-    ${otp}
-</h2>
+    <p>This code is valid for 5 minutes.</p>
 
-<p>This code is valid for 5 minutes.</p>
-
-<br/>
-
-<p>Regards,</p>
-<p><strong>TGDEX Team</strong></p>
+    <p>Regards,<br>
+    <strong>TGDeX Team</strong></p>
   </body>
 </html>
-
-</#macro>
