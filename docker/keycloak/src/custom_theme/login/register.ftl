@@ -134,14 +134,6 @@
                 </div>
             </#if>
 
-            <!-- Terms and Conditions Checkbox -->
-            <div class="${properties.kcFormGroupClassCustom!}" id="form-col-full">
-                <div class="${properties.kcInputWrapperClass!}">
-                    <input type="checkbox" id="terms" name="terms" required style="margin-right: 8px;" />
-                    <label for="terms" style="display: inline;">I have read and agree with <a href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" target="_blank" style="text-decoration: underline;">Terms of service</a> of IUDX.</label>
-                </div>
-            </div>
-
             <div class="${properties.kcFormGroupClass!}">
                 <div id="kc-form-buttons" class="login-div">
                     <button class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" type="submit" value="${msg("doRegister")}">${msg("doRegister")}</button>
