@@ -13,9 +13,7 @@
         </td>
       </tr>
     </table>
-    <p style="text-align: center; font-size: 12px; color: #999;">
-      &copy; ${.now?string("yyyy")} Your Company. All rights reserved.
-    </p>
   </body>
+  <p>Regards,<br/>TGDEX Team</p>
 </html>
 </#macro>
