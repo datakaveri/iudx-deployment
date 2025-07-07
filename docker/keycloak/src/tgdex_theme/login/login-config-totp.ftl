@@ -9,6 +9,7 @@
     <#elseif section = "form">
         <ol id="kc-totp-settings" class="pf-v5-c-list pf-v5-u-mb-md">
             <li>
+            <p>checking totp</p>
                 <p>${msg("loginTotpStep1")}</p>
 
                 <ul id="kc-totp-supported-apps">
