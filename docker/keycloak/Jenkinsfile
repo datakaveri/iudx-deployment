@@ -57,7 +57,7 @@ pipeline {
       }
       steps {
         script {
-          withCredentials([usernamePassword(credentialsId: 'datakaveri-ghprb', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+          withCredentials([usernamePassword(credentialsId: 'datakaveri-ghcr', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
             sh 'rm -rf sandbox-keycloak-spi && git clone https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/datakaveri/sandbox-keycloak-spi.git'
           }
 
