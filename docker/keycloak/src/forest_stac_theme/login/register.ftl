@@ -125,6 +125,25 @@
             </div>
             </#if>
         </div>
+        <div class="${properties.kcFormGroupClass!}">
+            <div class="${properties.kcInputWrapperClass!}">
+                <label for="acceptTerms" class="checkbox-container" style="display: flex; align-items: flex-start; gap: 10px;padding-top:20px">
+                    <input type="checkbox" id="acceptTerms" name="acceptTerms" required style="margin-top: 3px;">
+                    <span class="terms-text" style="font-size: 14px;">
+                        I have read and agree with 
+                        <a href="https://tgdex.telangana.gov.in/terms-of-service" target="_blank">Terms of Service</a> 
+                        and 
+                        <a href="https://tgdex.telangana.gov.in/privacy-policy" target="_blank">Privacy Policy</a>
+                        of Forest Stack.
+                    </span>
+                </label>
+                <#if messagesPerField.existsError('acceptTerms')>
+                    <span id="input-error-acceptTerms" class="${properties.kcInputErrorMessageClass!}" aria-live="polite">
+                        ${kcSanitize(messagesPerField.get('acceptTerms'))?no_esc}
+                    </span>
+                </#if>
+            </div>
+        </div>
 
         <#if recaptchaRequired??>
             <div class="form-group">
