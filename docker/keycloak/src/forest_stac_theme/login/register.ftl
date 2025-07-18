@@ -131,9 +131,9 @@
                     <input type="checkbox" id="acceptTerms" name="acceptTerms" required style="margin-top: 3px;">
                     <span class="terms-text" style="font-size: 14px;">
                         I have read and agree with 
-                        <a href="" target="_blank">Terms of Service</a> 
+                        <a href="https://tgdex.telangana.gov.in/terms-of-service" target="_blank">Terms of Service</a> 
                         and 
-                        <a href="" target="_blank">Privacy Policy</a>
+                        <a href="https://tgdex.telangana.gov.in/privacy-policy" target="_blank">Privacy Policy</a>
                         of Forest Stack.
                     </span>
                 </label>
