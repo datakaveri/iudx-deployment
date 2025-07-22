@@ -1,9 +1,7 @@
 <html>
   <body style="font-family: Arial, sans-serif; line-height: 1.6;">
     <p>${msg("emailVerification.greeting")}</p>
-
-    <p>${msg("emailVerification.intro")}</p>
-
+    
     <p>${msg("emailVerification.instructions")}</p>
 
     <p>
@@ -17,7 +15,6 @@
 
     <p>
       ${msg("emailVerification.thanks")}<br/>
-      ${msg("emailVerification.team")}
     </p>
   </body>
 </html>
