@@ -1,14 +1,50 @@
 #!/bin/bash
 
+# Create the namespace
 kubectl create namespace mon-stack
-# certificate fro certmanager
-# kubectl create secret tls grafana-tls-secret -n mon-stack --key secrets/pki/privkey.pem --cert secrets/pki/fullchain.pem
-# Depreacting sealed secrets
-# kubectl apply -f sealed-secrets/
-kubectl create secret generic grafana-env-secret   --from-env-file=secrets/grafana-env-secret -n mon-stack
-kubectl create secret generic grafana-credentials   --from-file=./secrets/admin-user --from-file=./secrets/admin-password -n mon-stack
-kubectl create secret generic blackbox-targets  --from-file=./secrets/blackbox-targets.yaml -n mon-stack
 
+# Create secrets
+kubectl create secret generic grafana-env-secret --from-env-file=secrets/grafana-env-secret -n mon-stack
+kubectl create secret generic grafana-credentials --from-file=./secrets/admin-user --from-file=./secrets/admin-password -n mon-stack
+kubectl create secret generic blackbox-targets --from-file=./secrets/blackbox-targets.yaml -n mon-stack
+
+# Create the ConfigMap for Grafana dashboards from the dashboards directory
+kubectl create configmap grafana-dashboards-backend \
+  --from-file=./grafana/dashboards/Backend/ \
+  -n mon-stack
+
+kubectl create configmap grafana-dashboards-general \
+  --from-file=./grafana/dashboards/General/ \
+  -n mon-stack
+
+kubectl create configmap grafana-dashboards-gateway \
+  --from-file=./grafana/dashboards/Gateway/ \
+  -n mon-stack
+
+kubectl create configmap grafana-dashboards-kubernetes \
+  --from-file=./grafana/dashboards/Kubernetes/ \
+  -n mon-stack
+
+kubectl create configmap grafana-dashboards-vertx \
+  --from-file=./grafana/dashboards/Vertx\ Applications/ \
+  -n mon-stack
+
+kubectl label configmap grafana-dashboards-backend \
+  grafana_dashboard=true -n mon-stack
+
+kubectl label configmap grafana-dashboards-general \
+  grafana_dashboard=true -n mon-stack
+
+kubectl label configmap grafana-dashboards-gateway \
+  grafana_dashboard=true -n mon-stack
+
+kubectl label configmap grafana-dashboards-kubernetes \
+  grafana_dashboard=true -n mon-stack
+
+kubectl label configmap grafana-dashboards-vertx \
+  grafana_dashboard=true -n mon-stack
+
+# Install Prometheus, Loki, Grafana, Promtail, Blackbox with Helm
 helm repo update prometheus-community kube-state-metrics grafana
 
 helm install --version=27.8.0 -n mon-stack prometheus -f prometheus/prometheus-values.yaml -f prometheus/resource-values.yaml prometheus-community/prometheus
