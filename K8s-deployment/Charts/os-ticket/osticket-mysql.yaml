@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: osticket-mysql
+  namespace: os-ticket
+spec:
+  serviceName: osticket-mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: osticket-mysql
+  template:
+    metadata:
+      labels:
+        app: osticket-mysql
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/instance-type: t3a.xlarge
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        args:
+          - "--ignore-db-dir=lost+found"
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_PASSWORD
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        resources:
+          requests:
+            memory: "2Gi" 
+            cpu: "1"      
+          limits:
+            memory: "4Gi"  
+            cpu: "2"       
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "ebs-csi-storage-class"
+      resources:
+        requests:
+          storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: osticket-mysql
+  namespace: os-ticket
+spec:
+  selector:
+    app: osticket-mysql
+  ports:
+  - port: 3306
+    targetPort: 3306
+  clusterIP: None 

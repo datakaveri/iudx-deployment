@@ -188,7 +188,7 @@
           "pluginVersion": "8.1.2",
           "targets": [
             {
-              "expr": "sum(up{kubernetes_namespace=\"$cluster\"})",
+              "expr": "sum(up{namespace=\"$cluster\"})",
               "interval": "",
               "legendFormat": "",
               "refId": "A"
@@ -270,7 +270,7 @@
           "pluginVersion": "8.1.2",
           "targets": [
             {
-              "expr": "process_cpu_usage{kubernetes_pod_name=\"$instance\"} ",
+              "expr": "process_cpu_usage{pod=\"$instance\"} ",
               "format": "time_series",
               "groupBy": [],
               "instant": true,
@@ -389,7 +389,7 @@
           "pluginVersion": "8.1.2",
           "targets": [
             {
-              "expr": "sum(jvm_memory_used_bytes{kubernetes_pod_name=\"$instance\", area=\"nonheap\"})*100/sum(jvm_memory_max_bytes{kubernetes_pod_name=\"$instance\", area=\"nonheap\"})",
+              "expr": "sum(jvm_memory_used_bytes{pod=\"$instance\", area=\"nonheap\"})*100/sum(jvm_memory_max_bytes{pod=\"$instance\", area=\"nonheap\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -469,7 +469,7 @@
           "pluginVersion": "8.1.2",
           "targets": [
             {
-              "expr": "sum(jvm_memory_used_bytes{kubernetes_pod_name=\"$instance\", area=\"heap\"})*100/sum(jvm_memory_max_bytes{kubernetes_pod_name=\"$instance\", area=\"heap\"})",
+              "expr": "sum(jvm_memory_used_bytes{pod=\"$instance\", area=\"heap\"})*100/sum(jvm_memory_max_bytes{pod=\"$instance\", area=\"heap\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -553,7 +553,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(jvm_memory_used_bytes{kubernetes_pod_name=\"$instance\", area=\"nonheap\"})",
+              "expr": "sum(jvm_memory_used_bytes{pod=\"$instance\", area=\"nonheap\"})",
               "format": "time_series",
               "instant": false,
               "interval": "",
@@ -564,7 +564,7 @@
               "step": 2400
             },
             {
-              "expr": "sum(jvm_memory_committed_bytes{kubernetes_pod_name=\"$instance\", area=\"nonheap\"})",
+              "expr": "sum(jvm_memory_committed_bytes{pod=\"$instance\", area=\"nonheap\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -573,7 +573,7 @@
               "step": 2400
             },
             {
-              "expr": "sum(jvm_memory_max_bytes{kubernetes_pod_name=\"$instance\", area=\"nonheap\"})",
+              "expr": "sum(jvm_memory_max_bytes{pod=\"$instance\", area=\"nonheap\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -685,7 +685,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(jvm_memory_used_bytes{kubernetes_pod_name=\"$instance\", area=\"heap\"})",
+              "expr": "sum(jvm_memory_used_bytes{pod=\"$instance\", area=\"heap\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -695,7 +695,7 @@
               "step": 2400
             },
             {
-              "expr": "sum(jvm_memory_committed_bytes{kubernetes_pod_name=\"$instance\", area=\"heap\"})",
+              "expr": "sum(jvm_memory_committed_bytes{pod=\"$instance\", area=\"heap\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -704,7 +704,7 @@
               "step": 2400
             },
             {
-              "expr": "sum(jvm_memory_max_bytes{kubernetes_pod_name=\"$instance\", area=\"heap\"})",
+              "expr": "sum(jvm_memory_max_bytes{pod=\"$instance\", area=\"heap\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -815,7 +815,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(jvm_memory_used_bytes{kubernetes_pod_name=\"$instance\"})",
+              "expr": "sum(jvm_memory_used_bytes{pod=\"$instance\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -825,7 +825,7 @@
               "step": 2400
             },
             {
-              "expr": "sum(jvm_memory_committed_bytes{kubernetes_pod_name=\"$instance\"})",
+              "expr": "sum(jvm_memory_committed_bytes{pod=\"$instance\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -834,7 +834,7 @@
               "step": 2400
             },
             {
-              "expr": "sum(jvm_memory_max_bytes{kubernetes_pod_name=\"$instance\"})",
+              "expr": "sum(jvm_memory_max_bytes{pod=\"$instance\"})",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -960,7 +960,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "system_cpu_usage{kubernetes_pod_name=\"$instance\"}",
+              "expr": "system_cpu_usage{pod=\"$instance\"}",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -971,7 +971,7 @@
               "step": 2400
             },
             {
-              "expr": "process_cpu_usage{kubernetes_pod_name=\"$instance\"}",
+              "expr": "process_cpu_usage{pod=\"$instance\"}",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -1082,7 +1082,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "system_load_average_1m{kubernetes_pod_name=\"$instance\"}",
+              "expr": "system_load_average_1m{pod=\"$instance\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1092,7 +1092,7 @@
               "step": 2400
             },
             {
-              "expr": "system_cpu_count{kubernetes_pod_name=\"$instance\"}",
+              "expr": "system_cpu_count{pod=\"$instance\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1202,7 +1202,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "jvm_threads_live_threads{kubernetes_pod_name=\"$instance\"}",
+              "expr": "jvm_threads_live_threads{pod=\"$instance\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1212,7 +1212,7 @@
               "step": 2400
             },
             {
-              "expr": "jvm_threads_daemon_threads{kubernetes_pod_name=\"$instance\"}",
+              "expr": "jvm_threads_daemon_threads{pod=\"$instance\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1222,7 +1222,7 @@
               "step": 2400
             },
             {
-              "expr": "jvm_threads_peak_threads{kubernetes_pod_name=\"$instance\"}",
+              "expr": "jvm_threads_peak_threads{pod=\"$instance\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1332,7 +1332,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "jvm_threads_states_threads{kubernetes_pod_name=\"$instance\"}",
+              "expr": "jvm_threads_states_threads{pod=\"$instance\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1440,7 +1440,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(vertx_http_server_active_connections{kubernetes_namespace=\"$cluster\",kubernetes_pod_name=\"$instance\"}) ",
+              "expr": "sum(vertx_http_server_active_connections{namespace=\"$cluster\",pod=\"$instance\"}) ",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1535,7 +1535,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(irate(vertx_http_server_response_time_seconds_sum{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}[2m])) by (code) / sum(irate(vertx_http_server_response_time_seconds_count{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}[2m])) by (code)",
+              "expr": "sum(irate(vertx_http_server_response_time_seconds_sum{namespace=\"$cluster\", pod=\"$instance\"}[2m])) by (code) / sum(irate(vertx_http_server_response_time_seconds_count{namespace=\"$cluster\", pod=\"$instance\"}[2m])) by (code)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1647,7 +1647,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "round(sum(rate(vertx_http_server_requests_total{kubernetes_namespace=\"$cluster\",kubernetes_pod_name=\"$instance\"}[2m])) by (code), 0.001)",
+              "expr": "round(sum(rate(vertx_http_server_requests_total{namespace=\"$cluster\",pod=\"$instance\"}[2m])) by (code), 0.001)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1742,7 +1742,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(irate(vertx_http_server_response_time_seconds_sum{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}[2m])) / sum(irate(vertx_http_server_response_time_seconds_count{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}[2m])) ",
+              "expr": "sum(irate(vertx_http_server_response_time_seconds_sum{namespace=\"$cluster\", pod=\"$instance\"}[2m])) / sum(irate(vertx_http_server_response_time_seconds_count{namespace=\"$cluster\", pod=\"$instance\"}[2m])) ",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -1775,7 +1775,7 @@
             },
             {
               "exemplar": true,
-              "expr": "sum(rate(vertx_http_server_response_time_seconds_sum{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}[2m]))  / sum(rate(vertx_http_server_response_time_seconds_count{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}[2m])) ",
+              "expr": "sum(rate(vertx_http_server_response_time_seconds_sum{namespace=\"$cluster\", pod=\"$instance\"}[2m]))  / sum(rate(vertx_http_server_response_time_seconds_count{namespace=\"$cluster\", pod=\"$instance\"}[2m])) ",
               "interval": "",
               "legendFormat": "2 minute avg latency ",
               "refId": "E"
@@ -1865,14 +1865,14 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(rate(vertx_http_server_response_time_seconds_count{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\",code=\"200\"}[2m])) /sum(rate(vertx_http_server_response_time_seconds_sum{kubernetes_namespace=\"$cluster\",kubernetes_pod_name=\"$instance\",code=\"200\"} [2m])) ",
+              "expr": "sum(rate(vertx_http_server_response_time_seconds_count{namespace=\"$cluster\", pod=\"$instance\",code=\"200\"}[2m])) /sum(rate(vertx_http_server_response_time_seconds_sum{namespace=\"$cluster\",pod=\"$instance\",code=\"200\"} [2m])) ",
               "interval": "",
               "legendFormat": "{{code}} 2 miniute avg ",
               "refId": "A"
             },
             {
               "exemplar": true,
-              "expr": "sum(irate(vertx_http_server_response_time_seconds_count{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\", code=\"200\"}[1m]))  by (code) /sum(irate(vertx_http_server_response_time_seconds_sum{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\",code=\"200\"} [1m])) by (code) ",
+              "expr": "sum(irate(vertx_http_server_response_time_seconds_count{namespace=\"$cluster\", pod=\"$instance\", code=\"200\"}[1m]))  by (code) /sum(irate(vertx_http_server_response_time_seconds_sum{namespace=\"$cluster\", pod=\"$instance\",code=\"200\"} [1m])) by (code) ",
               "interval": "",
               "legendFormat": "{{code}} 2 minute instant ",
               "refId": "B"
@@ -1965,7 +1965,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(rate(vertx_http_server_response_bytes_sum{kubernetes_namespace=\"$cluster\",kubernetes_pod_name=\"$instance\"}[2m])) / sum(rate(vertx_http_server_response_bytes_count{kubernetes_namespace=\"$cluster\",kubernetes_pod_name=\"$instance\"}[2m]))",
+              "expr": "sum(rate(vertx_http_server_response_bytes_sum{namespace=\"$cluster\",pod=\"$instance\"}[2m])) / sum(rate(vertx_http_server_response_bytes_count{namespace=\"$cluster\",pod=\"$instance\"}[2m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -2087,7 +2087,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(rate(vertx_http_server_request_bytes_sum{kubernetes_namespace=\"$cluster\",kubernetes_pod_name=\"$instance\"}[2m])) / sum(rate(vertx_http_server_request_bytes_count{kubernetes_namespace=\"$cluster\",kubernetes_pod_name=\"$instance\"}[2m]))",
+              "expr": "sum(rate(vertx_http_server_request_bytes_sum{namespace=\"$cluster\",pod=\"$instance\"}[2m])) / sum(rate(vertx_http_server_request_bytes_count{namespace=\"$cluster\",pod=\"$instance\"}[2m]))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -2233,7 +2233,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(vertx_eventbus_handlers{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}) by (address)",
+              "expr": "sum(vertx_eventbus_handlers{namespace=\"$cluster\", pod=\"$instance\"}) by (address)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -2328,7 +2328,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(vertx_eventbus_pending{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}) by (address)",
+              "expr": "sum(vertx_eventbus_pending{namespace=\"$cluster\", pod=\"$instance\"}) by (address)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -2423,7 +2423,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(irate(vertx_eventbus_sent_total{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}[2m]))",
+              "expr": "sum(irate(vertx_eventbus_sent_total{namespace=\"$cluster\", pod=\"$instance\"}[2m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -2544,7 +2544,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(irate(vertx_eventbus_received_total{kubernetes_namespace=\"$cluster\", kubernetes_pod_name=\"$instance\"}[2m]))",
+              "expr": "sum(irate(vertx_eventbus_received_total{namespace=\"$cluster\", pod=\"$instance\"}[2m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -2665,7 +2665,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(rate(vertx_eventbus_processed_total{kubernetes_namespace=\"$cluster\",kubernetes_pod_name=\"$instance\"}[2m]))",
+              "expr": "sum(rate(vertx_eventbus_processed_total{namespace=\"$cluster\",pod=\"$instance\"}[2m]))",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -2784,7 +2784,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum(rate(vertx_eventbus_processed_total{kubernetes_namespace=\"$cluster\",kubernetes_pod_name=\"$instance\"}[2m])) by (address)",
+              "expr": "sum(rate(vertx_eventbus_processed_total{namespace=\"$cluster\",pod=\"$instance\"}[2m])) by (address)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
@@ -2901,7 +2901,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_PROMETHEUS}",
-        "definition": "label_values(kubernetes_namespace)",
+        "definition": "label_values(namespace)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -2911,7 +2911,7 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(kubernetes_namespace)",
+          "query": "label_values(namespace)",
           "refId": "Prometheus-cluster-Variable-Query"
         },
         "refresh": 1,
@@ -2927,7 +2927,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_PROMETHEUS}",
-        "definition": "label_values(up{kubernetes_namespace=\"$cluster\"},kubernetes_pod_name)",
+        "definition": "label_values(up{namespace=\"$cluster\"},pod)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -2937,7 +2937,7 @@
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(up{kubernetes_namespace=\"$cluster\"},kubernetes_pod_name)",
+          "query": "label_values(up{namespace=\"$cluster\"},pod)",
           "refId": "Prometheus-instance-Variable-Query"
         },
         "refresh": 1,

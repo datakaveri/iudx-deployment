@@ -1,0 +1,163 @@
+{{- if .Values.entityMapperVisualizer.enabled -}}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: entity-mapper-visualizer
+  labels: 
+    app.kubernetes.io/component: entityMapperVisualizer
+    app: entity-mapper-visualizer
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.entityMapperVisualizer.replicaCount }}
+  {{- if .Values.entityMapperVisualizer.updateStrategy }}
+  strategy: {{- toYaml .Values.entityMapperVisualizer.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      app: entity-mapper-visualizer
+  template:
+    metadata:
+      {{- if .Values.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app: entity-mapper-visualizer
+        app.kubernetes.io/component: entityMapperVisualizer
+        {{- if .Values.entityMapperVisualizer.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.entityMapperVisualizer.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.entityMapperVisualizer.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}      
+      {{- if .Values.entityMapperVisualizer.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.entityMapperVisualizer.priorityClassName }}
+      priorityClassName: {{ .Values.entityMapperVisualizer.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.entityMapperVisualizer.schedulerName }}
+      schedulerName: {{ .Values.entityMapperVisualizer.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.entityMapperVisualizer.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.entityMapperVisualizer.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.entityMapperVisualizer.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: entity-mapper-visualizer
+          image: {{ template "catalogue.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.entityMapperVisualizer.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.entityMapperVisualizer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.entityMapperVisualizer.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.entityMapperVisualizer.args }}
+          args: [{{- range $index, $str := .Values.entityMapperVisualizer.args }}{{ if eq $index 0 }}{{- . | quote }} {{ else }},{{  . | quote }} {{- end }}{{- end }}]
+          {{- end }}
+          
+          
+          {{- if .Values.entityMapperVisualizer.resources }}
+          resources: {{- toYaml .Values.entityMapperVisualizer.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.entityMapperVisualizer.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.entityMapperVisualizer.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.entityMapperVisualizer.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+              protocol: TCP
+            - name: hazelcast
+              containerPort: {{ .Values.containerPorts.hazelcast }}
+              protocol: TCP
+            - name: prometheus
+              containerPort: {{ .Values.containerPorts.prometheus }}
+              protocol: TCP
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.entityMapperVisualizer.livenessProbe.enabled }}
+          livenessProbe:
+             httpGet:
+               path: {{ .Values.entityMapperVisualizer.livenessProbe.path }}
+               port: 9000
+             initialDelaySeconds: {{ .Values.entityMapperVisualizer.livenessProbe.initialDelaySeconds }}
+             periodSeconds: {{ .Values.entityMapperVisualizer.livenessProbe.periodSeconds }}
+             timeoutSeconds: {{ .Values.entityMapperVisualizer.livenessProbe.timeoutSeconds }}
+          
+          {{- else if .Values.entityMapperVisualizer.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.customLivenessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.entityMapperVisualizer.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.entityMapperVisualizer.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.entityMapperVisualizer.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.entityMapperVisualizer.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.entityMapperVisualizer.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- else if .Values.entityMapperVisualizer.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.customStartupProbe "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.entityMapperVisualizer.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            {{- if .Values.entityMapperVisualizer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.entityMapperVisualizer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+            {{- if .Values.entityMapperVisualizer.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+      {{- if .Values.serviceAccount.create }}    
+      serviceAccountName: {{ template "catalogue.serviceAccountName" . }}
+      {{- end }}
+      {{- include "catalogue.imagePullSecrets" . | nindent 6 }}
+      
+      {{- if .Values.entityMapperVisualizer.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.entityMapperVisualizer.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.entityMapperVisualizer.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if .Values.entityMapperVisualizer.podAffinityPreset}}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.entityMapperVisualizer.podAffinityPreset "component" "entityMapperVisualizer" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.entityMapperVisualizer.podAntiAffinityPreset }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "entityMapperVisualizer" "context" $) | nindent 10 }}
+        {{- end}}
+        {{- if .Values.entityMapperVisualizer.nodeAffinityPreset.type }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.entityMapperVisualizer.nodeAffinityPreset.type "key" .Values.entityMapperVisualizer.nodeAffinityPreset.key "values" .Values.catalogue.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+        {{- if .Values.entityMapperVisualizer.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.entityMapperVisualizer.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

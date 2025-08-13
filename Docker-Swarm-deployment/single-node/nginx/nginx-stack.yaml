@@ -7,7 +7,7 @@ networks:
 
 services:
   nginx-acme:
-    image: ghcr.io/datakaveri/nginx-acme:1.25
+    image: ghcr.io/datakaveri/nginx-acme:1.27.1
     user: 1001:1001
     # command: sh -c "while true; do sleep 3600; done"
     volumes:
@@ -73,8 +73,6 @@ services:
         target: /etc/nginx/conf.d/di.conf
       - source: gis-conf
         target: /etc/nginx/conf.d/gis.conf
-      - source: onboarding-conf
-        target: /etc/nginx/conf.d/onboarding.conf
       - source: acl-apd-conf
         target: /etc/nginx/conf.d/acl-apd.conf
 
@@ -118,8 +116,6 @@ configs:
     file: conf/rs-proxy.conf
   di-conf:
     file: conf/di.conf
-  onboarding-conf:
-    file: conf/onboarding.conf
   acl-apd-conf:
     file: conf/acl-apd.conf
 

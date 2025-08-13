@@ -1,5 +1,5 @@
 {
-    "clustered": false,
+    "clustered": true,
     "elastic_username": "elastic",
     "elastic_password_path": "/run/secrets/elasticsearch-su-password",
     "elasticsearch_host": "http://elasticsearch:9200",

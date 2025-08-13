@@ -1,0 +1,40 @@
+{{- if and .Values.fhirFileServer.enabled .Values.fhirFileServer.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: fhir-file-server
+  labels:
+    app: fhir-file-server
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+    
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: fhir-file-server
+  minReplicas: {{ .Values.fhirFileServer.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.fhirFileServer.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.fhirFileServer.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.fhirFileServer.autoscaling.targetCPU }}
+    {{- end }}
+    {{- if .Values.fhirFileServer.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.fhirFileServer.autoscaling.targetMemory  }}
+    {{- end }}
+{{- end }}

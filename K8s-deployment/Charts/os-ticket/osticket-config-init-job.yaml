@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: osticket-config-init-job
+  namespace: os-ticket
+spec:
+  template:
+    spec:
+      containers:
+      - name: config-init
+        image: ghcr.io/datakaveri/os-ticket:1.0.2
+        command: ['sh', '-c']
+        args:
+        - |
+          echo "Checking if config already exists..."
+          if [ ! -s "/config-storage/ost-config.php" ]; then
+            echo "Creating initial config file from sample..."
+            cp -f /var/www/html/include/ost-sampleconfig.php /config-storage/ost-config.php
+            chmod 666 /config-storage/ost-config.php
+            echo "Config file created successfully!"
+          else
+            echo "Config file already exists, skipping initialization"
+          fi
+
+          echo "First few lines of config file:"
+          head -10 /config-storage/ost-config.php
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config-storage
+      volumes:
+      - name: config-volume
+        persistentVolumeClaim:
+          claimName: osticket-uploads
+      restartPolicy: Never
+  backoffLimit: 3

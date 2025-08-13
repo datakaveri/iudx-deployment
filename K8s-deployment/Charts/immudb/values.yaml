@@ -71,7 +71,7 @@ diagnosticMode:
 image:
   registry: codenotary
   repository: immudb
-  tag: 1.9DOM.2
+  tag: 1.9.5
   pullSecrets: {} 
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
