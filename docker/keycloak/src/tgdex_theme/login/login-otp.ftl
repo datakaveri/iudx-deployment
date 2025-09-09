@@ -29,7 +29,11 @@
 
             <@field.input name="otp" label=msg("loginOtpOneTime") autocomplete="one-time-code" fieldName="totp" autofocus=true />
 
-            <@buttons.loginButton />
+            <div class="${properties.kcFormGroupClass!}">
+                <a href="${url.loginUrl}" class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!}" style="text-decoration: none; display: block; text-align: center; padding: 10px;">
+                    Back to login
+                </a>
+            </div>
         </form>
         <script>
             function toggleOTP(index, value) {
