@@ -6,7 +6,7 @@ init_config=`cat /usr/share/app/init-config.json`
 users=`echo "$init_config"| jq  -r .users`
 admin_username=`echo $users | jq -r .[0].username`
 admin_password=`cat $(echo $users | jq -r .[0].password_file)`
-until [ "$(curl -s -X GET -u "$admin_username":"$admin_password" http://$RMQ_HOST/api/aliveness-test/%2F | jq -r .status | grep 'ok')" ];
+until [ "$(curl -s -X GET -u '$admin_username:$admin_password' http://$RMQ_HOST/api/aliveness-test/%2F | jq -r .status | grep 'ok')" ];
 do
     echo --- waiting for rabbitmq to start ---
     sleep 10
